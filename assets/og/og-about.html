@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: 'Bauhaus Bool';
+    src: url('../../fonts/BauhausBoolDisplay-Bold.woff') format('woff');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'Bauhaus Bool';
+    src: url('../../fonts/BauhausBoolDisplay-ExtraBold.woff') format('woff');
+    font-weight: 800;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #f2efe8; }
+  .og {
+    width: 1200px; height: 630px;
+    background: #f2efe8;
+    position: relative;
+    overflow: hidden;
+  }
+  .og::before {
+    content: '';
+    position: absolute;
+    top: 50%; right: -140px;
+    width: 380px; height: 380px;
+    border: 2px dashed rgba(40,40,40,0.22);
+    border-radius: 50%;
+    transform: translateY(-50%);
+  }
+  /* TOP — logo left, stamp right */
+  .og__logo {
+    position: absolute;
+    top: 45px; left: 70px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .og__logo svg { width: 64px; height: 42px; display: block; }
+  .og__brand {
+    font-family: 'Bauhaus Bool', 'Futura', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: #03599B;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+  }
+  .og__meta {
+    position: absolute;
+    top: 48px; right: 70px;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #282828;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border: 1.5px solid #282828;
+    font-weight: 500;
+  }
+  .og__meta b {
+    color: #EC008C;
+    font-weight: 800;
+    font-family: 'Bauhaus Bool', sans-serif;
+    font-size: 14px;
+    letter-spacing: -0.02em;
+    margin: 0 6px;
+  }
+  /* HEADLINE — vertically centered in middle zone */
+  .og__h {
+    position: absolute;
+    left: 70px; right: 70px;
+    top: 175px;
+    font-family: 'Bauhaus Bool', 'Futura', sans-serif;
+    font-weight: 800;
+    font-size: 90px;
+    line-height: 0.98;
+    color: #282828;
+    text-transform: lowercase;
+    letter-spacing: -0.04em;
+  }
+  .og__h em {
+    font-style: italic;
+    color: #EC008C;
+  }
+  /* BOTTOM — tag left, URL right, with rule above */
+  .og__rule {
+    position: absolute;
+    left: 70px; right: 70px;
+    bottom: 80px;
+    height: 2px;
+    background: #282828;
+  }
+  .og__tag {
+    position: absolute;
+    left: 70px;
+    bottom: 40px;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 13px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #282828;
+    font-weight: 500;
+  }
+  .og__url {
+    position: absolute;
+    right: 70px;
+    bottom: 36px;
+    font-family: 'Bauhaus Bool', 'Futura', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: #282828;
+    letter-spacing: -0.01em;
+  }
+</style>
+</head>
+<body>
+<div class="og">
+  <div class="og__logo">
+    <svg viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#EC008C" fill-rule="evenodd"
+        d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>
+    </svg>
+    <div class="og__brand">caboodle<br>design</div>
+  </div>
+  <div class="og__meta">SUBJECT <b>001</b> · EMILY GREEN</div>
+  <h1 class="og__h">meet<br><em>emily.</em></h1>
+  <div class="og__rule"></div>
+  <div class="og__tag">14+ YEARS · BYRON CENTER, MI</div>
+  <div class="og__url">caboodledesign.info</div>
+</div>
+</body>
+</html>

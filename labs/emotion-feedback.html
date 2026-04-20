@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>emotion-aware feedback · lab 002 · caboodle design</title>
+<meta name="description" content="Same response. Different emotional state. Completely different coaching. An interactive prototype exploring how emotional context changes feedback." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+
+<style>
+/* Lab hero */
+.labero {
+  background: var(--ink); color: var(--white);
+  padding: clamp(6rem, 12vw, 9rem) var(--pad-x) clamp(4rem, 8vw, 6rem);
+  position: relative; overflow: hidden; border-bottom: 1px solid var(--dark-2);
+}
+.labero__back {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--lime); text-decoration: none; margin-bottom: 2.5rem;
+  transition: gap 0.3s var(--ease), opacity 0.3s var(--ease); opacity: 0.85;
+}
+.labero__back:hover { gap: 0.8rem; opacity: 1; }
+.labero__stamp {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem;
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 2rem;
+}
+.labero__stamp b { color: var(--lime); font-weight: 500; }
+.labero__watermark {
+  font-family: var(--display); font-size: clamp(8rem, 20vw, 16rem);
+  font-weight: 800; line-height: 0.85; letter-spacing: -0.06em;
+  color: rgba(255,255,255,0.04); position: absolute; right: var(--pad-x);
+  bottom: -0.1em; pointer-events: none; user-select: none;
+}
+.labero__inner { max-width: var(--maxw); margin: 0 auto; position: relative; }
+.labero__h {
+  font-family: var(--display); font-size: clamp(2.75rem, 6vw, 5.5rem);
+  font-weight: 800; line-height: 1; letter-spacing: -0.04em;
+  color: var(--white); text-transform: lowercase; max-width: 18ch; margin: 0 0 1.25rem;
+}
+.labero__h em { color: var(--lime); font-style: normal; }
+.labero__lede {
+  font-size: clamp(1rem, 1.4vw, 1.15rem); line-height: 1.6;
+  color: rgba(255,255,255,0.6); max-width: 52ch; margin-bottom: 2rem;
+}
+.labero__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.labero__tags li {
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 0.3em 0.65em;
+  border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.4);
+}
+
+/* Section base */
+.lab-s { padding: clamp(3.5rem, 7vw, 5.5rem) var(--pad-x); background: var(--paper); border-top: 1px solid var(--rule); }
+.lab-s--alt { background: var(--paper-2); }
+.lab-s__inner { max-width: var(--maxw); margin: 0 auto; }
+.lab-s__kicker { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--magenta); display: block; margin-bottom: 0.75rem; }
+.lab-s__h { font-family: var(--display); font-weight: 700; font-size: clamp(1.6rem, 2.8vw, 2.4rem); letter-spacing: -0.03em; text-transform: lowercase; line-height: 1.05; margin: 0 0 0.75rem; }
+.lab-s__h em { font-style: italic; }
+.lab-s__p { max-width: 60ch; line-height: 1.65; color: var(--ink-2); margin: 0 0 2rem; }
+
+/* How it works steps */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; border: 1px solid var(--rule); background: var(--rule); margin-bottom: 3rem; }
+@media (max-width: 600px) { .steps { grid-template-columns: 1fr; } }
+.step { background: var(--paper); padding: 1.5rem; }
+.step__n { font-family: var(--display); font-weight: 800; font-size: 2.5rem; line-height: 0.9; letter-spacing: -0.06em; color: rgba(236,0,140,0.15); margin-bottom: 0.75rem; }
+.step__h { font-family: var(--display); font-weight: 700; font-size: 0.95rem; text-transform: lowercase; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
+.step__p { font-size: 0.825rem; line-height: 1.5; color: var(--ink-2); }
+
+/* === Interactive demo === */
+.demo { max-width: 860px; margin: 0 auto; }
+
+/* Scenario tabs */
+.scenario-tabs { display: flex; gap: 0; border: 1px solid var(--rule); margin-bottom: 2rem; }
+.scenario-tab {
+  flex: 1; padding: 0.7rem 1rem; font-family: var(--mono); font-size: 0.62rem;
+  letter-spacing: 0.08em; text-transform: uppercase; background: var(--paper-2);
+  border: none; border-right: 1px solid var(--rule); cursor: pointer; color: var(--ink-2);
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+.scenario-tab:last-child { border-right: none; }
+.scenario-tab:hover { background: var(--paper); color: var(--ink); }
+.scenario-tab.active { background: var(--ink); color: var(--lime); }
+
+/* Scenario text */
+.scenario-text {
+  font-size: 0.9rem; line-height: 1.6; color: var(--ink); padding: 1.25rem 1.5rem;
+  background: var(--paper-2); border-left: 3px solid var(--rule); margin-bottom: 1.5rem;
+}
+
+/* Textarea */
+.demo-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); display: block; margin-bottom: 0.5rem; }
+.demo-textarea {
+  width: 100%; min-height: 100px; padding: 0.85rem 1rem;
+  font-family: var(--body); font-size: 0.9rem; line-height: 1.55;
+  border: 1px solid var(--rule); background: var(--white); color: var(--ink);
+  resize: vertical; transition: border-color 0.2s var(--ease); margin-bottom: 1.5rem;
+  box-sizing: border-box;
+}
+.demo-textarea:focus { outline: none; border-color: var(--blue); }
+
+/* Slider section */
+.slider-wrap { margin-bottom: 2rem; }
+.slider-labels { display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
+.slider-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+.emotion-track {
+  position: relative; height: 8px;
+  background: linear-gradient(to right, #EC008C 0%, #EC008C 33%, #03599B 33%, #03599B 66%, #96E650 66%, #96E650 100%);
+  margin-bottom: 0.6rem;
+}
+.emotion-slider {
+  width: 100%; height: 8px; opacity: 0; position: absolute; top: 0; left: 0;
+  margin: 0; cursor: pointer; -webkit-appearance: none; appearance: none;
+}
+.emotion-indicator {
+  position: absolute; top: 50%; transform: translate(-50%, -50%);
+  width: 18px; height: 18px; border-radius: 50%; background: var(--white);
+  border: 2px solid var(--ink); pointer-events: none; transition: left 0.1s;
+}
+.slider-zone-label {
+  text-align: center; font-family: var(--mono); font-size: 0.62rem;
+  letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+  transition: color 0.2s;
+}
+
+/* Submit */
+.demo-submit {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 0.75em 1.5em;
+  background: var(--ink); color: var(--lime); border: none; cursor: pointer;
+  transition: background 0.2s var(--ease), transform 0.2s var(--ease);
+  margin-bottom: 2.5rem;
+}
+.demo-submit:hover:not(:disabled) { background: var(--dark-2); transform: translateY(-1px); }
+.demo-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Result cards */
+.results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; border: 1px solid var(--rule); background: var(--rule); }
+@media (max-width: 700px) { .results-grid { grid-template-columns: 1fr; } }
+.result-card {
+  padding: 1.5rem; background: var(--paper); position: relative;
+  transition: background 0.3s var(--ease);
+}
+.result-card--active { background: var(--white); }
+.result-card__state {
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+  display: block; margin-bottom: 0.75rem; font-weight: 600;
+}
+.result-card--distressed .result-card__state { color: var(--magenta); }
+.result-card--okay .result-card__state { color: var(--blue); }
+.result-card--confident .result-card__state { color: #4a9c20; }
+.result-card__dot {
+  width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 0.4rem;
+}
+.result-card--distressed .result-card__dot { background: var(--magenta); }
+.result-card--okay .result-card__dot { background: var(--blue); }
+.result-card--confident .result-card__dot { background: var(--lime); }
+.result-card__text { font-size: 0.85rem; line-height: 1.6; color: var(--ink-2); }
+.result-card--active .result-card__text { color: var(--ink); }
+.result-card__highlight {
+  margin-top: 0.75rem; padding: 0.6rem 0.75rem; font-size: 0.75rem; font-style: italic;
+  border-left: 2px solid; color: var(--ink-2); background: var(--paper-2);
+}
+.result-card--distressed .result-card__highlight { border-color: var(--magenta); }
+.result-card--okay .result-card__highlight { border-color: var(--blue); }
+.result-card--confident .result-card__highlight { border-color: var(--lime); }
+.results-empty {
+  grid-column: 1 / -1; padding: 2.5rem; text-align: center;
+  font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--rule); background: var(--paper);
+}
+
+/* Reset link */
+.demo-reset { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); cursor: pointer; background: none; border: none; padding: 0; text-decoration: underline; text-underline-offset: 3px; }
+.demo-reset:hover { color: var(--ink); }
+
+/* Desperation notice */
+.desperation-notice {
+  display: none; padding: 0.75rem 1rem; margin-bottom: 1.5rem;
+  background: rgba(236,0,140,0.06); border-left: 3px solid var(--magenta);
+  font-size: 0.825rem; color: var(--ink-2); line-height: 1.5;
+}
+.desperation-notice.visible { display: block; }
+.desperation-notice strong { color: var(--magenta); }
+
+/* Limitations grid */
+.limits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.limit { padding: 1.25rem; border: 1px solid var(--rule); background: var(--paper); }
+.limit__h { font-family: var(--display); font-weight: 700; font-size: 0.9rem; text-transform: lowercase; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
+.limit__p { font-size: 0.8rem; line-height: 1.55; color: var(--ink-2); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="nav__mark" href="../index.html">
+    <svg class="cd-logo" viewBox="0 0 260 56" xmlns="http://www.w3.org/2000/svg" aria-label="caboodle design" role="img">
+      <path class="cd-logo__mark" fill-rule="evenodd" d="M 5 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0 M 33 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0"/>
+      <text class="cd-logo__word" x="95" y="26" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">caboodle</text>
+      <text class="cd-logo__word" x="95" y="50" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">design</text>
+    </svg>
+  </a>
+  <nav class="nav__links">
+    <a href="../approach.html">approach</a>
+    <a href="../index.html#work">work</a>
+    <a href="../labs.html">labs</a>
+    <a href="../about.html">about emily</a>
+    <a href="../contact.html" class="nav__cta">let's talk</a>
+  </nav>
+</header>
+
+<!-- Lab hero -->
+<section class="labero">
+  <div class="labero__inner">
+    <a class="labero__back" href="../labs.html">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      <span>back to labs</span>
+    </a>
+    <div class="labero__stamp">
+      <span>lab experiment</span>
+      <b>LAB-002</b>
+      <span>feedback design · 2025</span>
+      <span>ai prototype · supabase</span>
+    </div>
+    <h1 class="labero__h">
+      emotion-aware<br />
+      <em>feedback.</em>
+    </h1>
+    <p class="labero__lede">
+      Same response. Different emotional state. Completely different coaching. An interactive prototype that adapts what good feedback looks like based on how the learner is actually showing up.
+    </p>
+    <ul class="labero__tags">
+      <li>ai prototype</li>
+      <li>feedback design</li>
+      <li>emotion detection</li>
+      <li>adaptive ux</li>
+    </ul>
+  </div>
+  <span class="labero__watermark" aria-hidden="true">002</span>
+</section>
+
+<!-- How it works -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">the mechanic</span>
+    <h2 class="lab-s__h">three steps. <em>one insight.</em></h2>
+    <p class="lab-s__p">
+      Respond to a real workplace scenario, report how you're feeling, and watch the same response generate completely different coaching across three emotional states.
+    </p>
+    <div class="steps">
+      <div class="step">
+        <div class="step__n">1</div>
+        <h3 class="step__h">respond</h3>
+        <p class="step__p">Answer a workplace scenario in your own words — no right or wrong answer.</p>
+      </div>
+      <div class="step">
+        <div class="step__n">2</div>
+        <h3 class="step__h">set your state</h3>
+        <p class="step__p">Slide to where you actually are right now — distressed, okay, or confident.</p>
+      </div>
+      <div class="step">
+        <div class="step__n">3</div>
+        <h3 class="step__h">see the difference</h3>
+        <p class="step__p">Get coaching tuned to all three emotional states simultaneously.</p>
+      </div>
+    </div>
+
+    <!-- Interactive demo -->
+    <div class="demo">
+      <span class="lab-s__kicker">try it</span>
+      <h2 class="lab-s__h" style="margin-bottom:1.5rem">the interactive demo</h2>
+
+      <!-- Scenario tabs -->
+      <label class="demo-label">choose a scenario</label>
+      <div class="scenario-tabs" role="tablist">
+        <button class="scenario-tab active" data-scenario="ai-fluency" role="tab">AI fluency</button>
+        <button class="scenario-tab" data-scenario="difficult-conversations" role="tab">Difficult conversations</button>
+        <button class="scenario-tab" data-scenario="leadership-development" role="tab">Leadership development</button>
+      </div>
+      <div class="scenario-text" id="scenario-text"></div>
+
+      <!-- Response textarea -->
+      <label class="demo-label" for="response-input">your response</label>
+      <textarea
+        class="demo-textarea"
+        id="response-input"
+        placeholder="Describe how you'd approach this situation..."
+      ></textarea>
+
+      <!-- Emotion slider -->
+      <div class="slider-wrap">
+        <label class="demo-label">how are you showing up right now?</label>
+        <div class="slider-labels">
+          <span class="slider-label" style="color:var(--magenta)">distressed</span>
+          <span class="slider-label" style="color:var(--blue)">okay</span>
+          <span class="slider-label" style="color:#4a9c20">confident</span>
+        </div>
+        <div class="emotion-track" id="emotion-track">
+          <input type="range" class="emotion-slider" id="emotion-slider" min="0" max="100" value="50" />
+          <div class="emotion-indicator" id="emotion-indicator" style="left:50%"></div>
+        </div>
+        <div class="slider-zone-label" id="slider-zone-label" style="color:var(--blue)">showing up okay</div>
+      </div>
+
+      <!-- Desperation notice (shows after 3 submits) -->
+      <div class="desperation-notice" id="desperation-notice">
+        <strong>desperation detected.</strong> You've submitted this scenario multiple times. The slider has been overridden — this is what the feedback looks like when the system reads repeated struggle as distress, regardless of what you report.
+      </div>
+
+      <!-- Submit -->
+      <button class="demo-submit" id="demo-submit" disabled>
+        <span>get feedback</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </button>
+
+      <!-- Results -->
+      <div class="results-grid" id="results-grid">
+        <div class="results-empty">submit your response to see emotion-aware feedback</div>
+      </div>
+
+      <div style="margin-top:1rem; text-align:right;">
+        <button class="demo-reset" id="demo-reset">reset</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About this experiment -->
+<section class="lab-s lab-s--alt" data-reveal>
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">the thesis</span>
+    <h2 class="lab-s__h">accuracy isn't <em>the only variable.</em></h2>
+    <p class="lab-s__p" style="max-width:64ch">
+      Most feedback systems optimize for accuracy — is the feedback correct? But accurate feedback delivered to someone in distress lands differently than accurate feedback delivered to someone confident. The emotional state of the learner isn't noise. It's signal. This prototype asks: what if the feedback system read that signal and responded to it?
+    </p>
+
+    <div class="limits-grid">
+      <div class="limit">
+        <h3 class="limit__h">self-reporting limits</h3>
+        <p class="limit__p">You pick your emotional state manually. A production system would infer it from behavioral signals — response time, revision patterns, session history — without asking.</p>
+      </div>
+      <div class="limit">
+        <h3 class="limit__h">three states is simplified</h3>
+        <p class="limit__p">Distressed / okay / confident is a useful starting framework, not a complete emotional taxonomy. Real learner states are messier and more contextual.</p>
+      </div>
+      <div class="limit">
+        <h3 class="limit__h">tone vs. substance</h3>
+        <p class="limit__p">This demo primarily adjusts tone and emphasis. A full system would also modulate content depth, pacing, and what it chooses not to say.</p>
+      </div>
+      <div class="limit">
+        <h3 class="limit__h">the desperation signal</h3>
+        <p class="limit__p">Submit the same scenario three times and watch the system override your reported state. Repeated struggle is a behavioral signal the slider can't capture.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Closing card -->
+<section class="closing" id="next">
+  <div class="closing__card">
+    <div class="closing__stamp" aria-hidden="true">
+      <svg class="cd-stamp-mark" viewBox="0 0 90 60" aria-hidden="true">
+        <path class="cd-stamp-mark__fill" fill-rule="evenodd" d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>
+      </svg>
+      <small>next experiment</small>
+      <small>LAB-003</small>
+    </div>
+    <div class="closing__body">
+      <span class="closing__kicker">next in the lab</span>
+      <h2 class="closing__h">
+        content ops<br />
+        <em>dashboard.</em>
+      </h2>
+      <p class="closing__p">
+        What happens when you apply instructional systems thinking to your own workflow — and automate the entire stack with Claude Code.
+      </p>
+      <a class="closing__cta" href="content-ops-dashboard.html">
+        <span>explore the experiment</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+      <a class="closing__email" href="../labs.html">← all experiments</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot__row">
+    <span class="foot__mark">caboodle design</span>
+    <span class="foot__tag">strategy, media, and behavioral science — it's the whole caboodle</span>
+  </div>
+  <div class="foot__cols">
+    <div>
+      <h4>navigation</h4>
+      <ul>
+        <li><a href="../approach.html">approach</a></li>
+        <li><a href="../index.html#work">work</a></li>
+        <li><a href="../about.html">about emily</a></li>
+        <li><a href="../labs.html">labs</a></li>
+        <li><a href="../field-notes.html">field notes</a></li>
+        <li><a href="../resources.html">free resources</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>get in touch</h4>
+      <ul>
+        <li><a href="mailto:hello@caboodledesign.info">let's talk</a></li>
+        <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
+        <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot__row foot__row--small">
+    <span>&copy; 2026 caboodle design · founded by emily green</span>
+    <span>byron center, mi</span>
+  </div>
+</footer>
+
+<script src="../script.js" defer></script>
+<script>
+// ============================================================
+// Emotion-aware feedback interactive demo
+// ============================================================
+(function() {
+  const SCENARIOS = {
+    'ai-fluency': {
+      text: "Your company expects you to be fluent in AI within 90 days. You've tried a few tools, you're not sure what 'fluent' even means in this context, and the deadline is making everything feel urgent and vague.",
+      feedback: {
+        distressed: {
+          text: "The urgency you're feeling is real — but it's pulling you toward frantic exploration instead of deliberate practice. 90 days of anxious tool-testing won't build fluency. Define what AI-fluent means for your two most important job tasks. Not ten. Two. Build one deliberate practice session around each. That's your 90 days.",
+          highlight: "Overwhelm is a signal, not a roadblock. Narrow the scope before you touch another tool."
+        },
+        okay: {
+          text: "You have enough distance from the pressure to think clearly — use it. The gap between 'tried a few tools' and 'fluent' is mostly a definition problem. What decisions do you make in your work where AI could meaningfully help? Start with one real workflow, not a tour of tools. Specific beats broad.",
+          highlight: "Define fluency by what you can do with it, not by which tools you've tried."
+        },
+        confident: {
+          text: "Good positioning. The practitioners who build real AI fluency aren't the ones who tried the most tools — they're the ones who went deep on the right ones. In the next 30 days: can you use one AI tool to meaningfully change how you do one core piece of your job? If yes, you're fluent. Keep iterating.",
+          highlight: "Depth beats breadth. Fluency is a practice, not a credential."
+        }
+      }
+    },
+    'difficult-conversations': {
+      text: "You need to tell a direct report that their recent presentation to leadership landed poorly. Your manager has asked you to address it before the next quarterly review. The employee has been with the company for eight years and has never received critical feedback before.",
+      feedback: {
+        distressed: {
+          text: "You're walking in already bracing for impact — that's useful information. Before you say anything, write out the SBI sequence: Situation (when), Behavior (what they did), Impact (what resulted). Then start with 'I noticed...' instead of 'You did...' Lead with genuine curiosity, not cushioning. Eight years of history means they deserve directness.",
+          highlight: "Write the SBI sequence before the meeting. Don't try to construct it in the room."
+        },
+        okay: {
+          text: "You have the framework — use it. Name the situation, the behavior, and the impact clearly. Then ask one open question and stop talking. You might be missing context about why the presentation landed the way it did. Eight years with this employee means they've earned a real conversation, not a performance-managed one.",
+          highlight: "Ask a genuine question after naming the impact. Then listen. Silence isn't awkward — it's the conversation working."
+        },
+        confident: {
+          text: "If you're going in confident, watch the risk: confident feedback-givers often over-explain. Name the situation, name the impact, ask one open question — then let the silence do its job. If you've framed it right, you don't need to fill the space.",
+          highlight: "Say less. The clearer the feedback, the less explanation it needs."
+        }
+      }
+    },
+    'leadership-development': {
+      text: "You're a new manager six months into your role. Your team missed a key deadline and your director is asking you to identify who was responsible. You believe the failure was systemic, not individual — but your director is pushing for accountability.",
+      feedback: {
+        distressed: {
+          text: "This situation has you caught between your team and your director — that's genuinely hard. Before the conversation: get clear on what you actually believe happened. Your instinct that this is systemic matters. You don't have to choose between honesty with your director and fairness to your team. Bring the evidence and the diagnosis.",
+          highlight: "You can be both honest with your director and fair to your team. Those aren't in conflict if you lead with data."
+        },
+        okay: {
+          text: "You're correctly framing this as systemic vs. individual. The critical move: go to your director with a diagnosis, not just a narrative. 'Here's what I found when I traced the timeline' is more convincing than 'it was the system's fault.' Let the evidence carry the argument.",
+          highlight: "A diagnosis backed by timeline evidence is more credible than a framing backed by your belief."
+        },
+        confident: {
+          text: "Confidence here can work against you. If you walk in with the systemic narrative already decided, your director may read it as protecting your team. Bring the data — what actually happened in the timeline? Let the conclusion follow from the evidence. Your credibility is in the rigor, not the certainty.",
+          highlight: "Let the data lead. If the evidence supports the systemic framing, that's your argument — not your confidence in it."
+        }
+      }
+    }
+  };
+
+  let currentScenario = 'ai-fluency';
+  let submissionCounts = { 'ai-fluency': 0, 'difficult-conversations': 0, 'leadership-development': 0 };
+  let submitted = false;
+
+  const scenarioText = document.getElementById('scenario-text');
+  const responseInput = document.getElementById('response-input');
+  const emotionSlider = document.getElementById('emotion-slider');
+  const emotionIndicator = document.getElementById('emotion-indicator');
+  const sliderZoneLabel = document.getElementById('slider-zone-label');
+  const submitBtn = document.getElementById('demo-submit');
+  const resultsGrid = document.getElementById('results-grid');
+  const resetBtn = document.getElementById('demo-reset');
+  const desperationNotice = document.getElementById('desperation-notice');
+  const tabs = document.querySelectorAll('.scenario-tab');
+
+  function getEmotion(val) {
+    if (val <= 33) return 'distressed';
+    if (val <= 66) return 'okay';
+    return 'confident';
+  }
+
+  function getZoneColor(emotion) {
+    if (emotion === 'distressed') return 'var(--magenta)';
+    if (emotion === 'okay') return 'var(--blue)';
+    return '#4a9c20';
+  }
+
+  function getZoneText(emotion) {
+    if (emotion === 'distressed') return 'showing up frustrated';
+    if (emotion === 'okay') return 'showing up okay';
+    return 'showing up confident';
+  }
+
+  function updateSlider() {
+    const val = parseInt(emotionSlider.value);
+    emotionIndicator.style.left = val + '%';
+    const emotion = getEmotion(val);
+    sliderZoneLabel.style.color = getZoneColor(emotion);
+    sliderZoneLabel.textContent = getZoneText(emotion);
+  }
+
+  function updateScenario(key) {
+    currentScenario = key;
+    scenarioText.textContent = SCENARIOS[key].text;
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.scenario === key));
+    clearResults();
+  }
+
+  function clearResults() {
+    submitted = false;
+    desperationNotice.classList.remove('visible');
+    resultsGrid.innerHTML = '<div class="results-empty">submit your response to see emotion-aware feedback</div>';
+  }
+
+  function renderResults(overrideEmotion) {
+    const scenario = SCENARIOS[currentScenario];
+    const sliderVal = parseInt(emotionSlider.value);
+    const userEmotion = overrideEmotion || getEmotion(sliderVal);
+    const states = ['distressed', 'okay', 'confident'];
+
+    resultsGrid.innerHTML = states.map(state => {
+      const f = scenario.feedback[state];
+      const isActive = state === userEmotion;
+      return `
+        <div class="result-card result-card--${state}${isActive ? ' result-card--active' : ''}">
+          <span class="result-card__state">
+            <span class="result-card__dot"></span>
+            ${state}${isActive ? ' ← your state' : ''}
+          </span>
+          <p class="result-card__text">${f.text}</p>
+          ${isActive ? `<div class="result-card__highlight">${f.highlight}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+
+  function handleSubmit() {
+    if (!responseInput.value.trim()) return;
+    submissionCounts[currentScenario]++;
+    submitted = true;
+
+    const isDesperate = submissionCounts[currentScenario] >= 3;
+    if (isDesperate) {
+      desperationNotice.classList.add('visible');
+      emotionSlider.value = 15;
+      updateSlider();
+      renderResults('distressed');
+    } else {
+      renderResults(null);
+    }
+  }
+
+  // Wire up events
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      responseInput.value = '';
+      emotionSlider.value = 50;
+      updateSlider();
+      updateScenario(tab.dataset.scenario);
+    });
+  });
+
+  emotionSlider.addEventListener('input', updateSlider);
+
+  responseInput.addEventListener('input', () => {
+    submitBtn.disabled = !responseInput.value.trim();
+  });
+
+  submitBtn.addEventListener('click', handleSubmit);
+
+  resetBtn.addEventListener('click', () => {
+    responseInput.value = '';
+    emotionSlider.value = 50;
+    updateSlider();
+    submissionCounts = { 'ai-fluency': 0, 'difficult-conversations': 0, 'leadership-development': 0 };
+    submitBtn.disabled = true;
+    clearResults();
+  });
+
+  // Init
+  updateScenario('ai-fluency');
+  updateSlider();
+})();
+</script>
+</body>
+</html>

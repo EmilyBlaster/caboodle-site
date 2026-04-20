@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Skip or Watch</title>
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Courier+Prime:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:520px;max-height:520px;overflow:hidden}
+    body{font-family:'Inter',sans-serif;background-color:#f5f0e6;background-image:linear-gradient(90deg,transparent 30px,#d9a3b3 30px,#d9a3b3 32px,transparent 32px),repeating-linear-gradient(transparent,transparent 27px,#b8d4e3 27px,#b8d4e3 28px);height:520px;padding:24px 0;display:flex;align-items:center;justify-content:center}
+    .container{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:80px;width:100%;max-width:1600px;height:480px;padding:0 80px;position:relative}
+    .left-section{display:flex;flex-direction:column;align-items:flex-start;gap:16px;flex-shrink:0;width:340px}
+    .title{font-family:'Permanent Marker',cursive;font-size:36px;color:#1a1a1a;line-height:1.1;margin-bottom:6px}
+    .subtitle{font-family:'Courier Prime',monospace;font-size:14px;color:rgba(26,26,26,0.6)}
+    .strategy-badge{display:inline-block;background-color:#0077b3;color:white;font-family:'Permanent Marker',cursive;font-size:16px;padding:8px 18px;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.2)}
+    .compare-label{font-family:'Permanent Marker',cursive;font-size:28px;color:#1a1a1a;display:flex;align-items:center;gap:10px;transform:rotate(-2deg)}
+    .center-section{display:flex;justify-content:center;align-items:center;flex-shrink:0}
+    .phone-wrapper{position:relative;cursor:pointer;transition:transform 0.3s ease}
+    .phone-wrapper.skip-mode{transform:rotate(3deg)}
+    .phone-wrapper.watch-mode{transform:rotate(0deg)}
+    .phone{width:280px;background:white;border:6px solid #1a1a1a;border-radius:40px;padding:10px;box-shadow:12px 12px 0 rgba(26,26,26,0.15);transition:all 0.3s ease}
+    .notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:82px;height:23px;background:#1a1a1a;border-radius:12px;z-index:10}
+    .screen{border-radius:32px;aspect-ratio:9/16;position:relative;overflow:hidden;transition:filter 0.3s ease}
+    .screen.skip-mode{filter:grayscale(60%)}
+    .screen.watch-mode{filter:grayscale(0%)}
+    .video-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .video-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.25) 0%,transparent 25%,transparent 45%,rgba(0,0,0,0.75) 100%);pointer-events:none}
+    .creator-handle{position:absolute;bottom:74px;left:14px;color:white;font-weight:700;font-size:13px;text-shadow:0 1px 3px rgba(0,0,0,0.5)}
+    .caption{position:absolute;bottom:20px;left:14px;right:50px;color:white;font-size:11px;line-height:1.4;text-shadow:0 1px 3px rgba(0,0,0,0.5);transition:opacity 0.3s ease}
+    .tiktok-icons{position:absolute;right:10px;bottom:90px;display:flex;flex-direction:column;gap:8px;align-items:center}
+    .tiktok-icon{width:28px;height:28px;background:rgba(255,255,255,0.2);backdrop-filter:blur(4px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;transition:opacity 0.3s,transform 0.3s}
+    .skip-mode .tiktok-icon{opacity:0.4;transform:scale(0.9)}
+    .watch-mode .tiktok-icon{opacity:1;transform:scale(1)}
+    .progress-bar{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,0.3)}
+    .progress-fill{height:100%;background:white;transition:width 0.6s ease}
+    .skip-mode .progress-fill{width:15%}
+    .watch-mode .progress-fill{width:65%}
+    .badge{position:absolute;top:-10px;right:-10px;font-family:'Permanent Marker',cursive;font-size:14px;padding:6px 10px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.25);transition:transform 0.3s,opacity 0.3s;color:white}
+    .badge.skip{background:#ff6b9d;transform:rotate(-12deg)}
+    .badge.watch{background:#00b359;transform:rotate(8deg)}
+    .badge.hidden{opacity:0;transform:scale(0)}
+    .swipe-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:20;opacity:0;transition:opacity 0.3s}
+    .skip-mode .swipe-overlay{opacity:1}
+    .swipe-arrow{display:flex;flex-direction:column;align-items:center;animation:swipeUp 1s ease-in-out infinite}
+    @keyframes swipeUp{0%,100%{transform:translateY(0);opacity:0.8}50%{transform:translateY(-16px);opacity:0.3}}
+    .swipe-arrow svg{width:44px;height:44px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))}
+    .swipe-text{color:white;font-size:11px;font-weight:700;margin-top:2px;text-shadow:0 1px 3px rgba(0,0,0,0.5)}
+    .engagement-dot{position:absolute;top:40px;right:12px;width:12px;height:12px;background:#00b359;border-radius:50%;opacity:0;transition:opacity 0.3s}
+    .watch-mode .engagement-dot{opacity:1;animation:pulse 1.5s ease-in-out infinite}
+    @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:0.7}}
+    .motion-lines{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+    .motion-line{position:absolute;left:0;right:0;height:2px;background:rgba(255,255,255,0.2);opacity:0}
+    .skip-mode .motion-line{animation:motionBlur 0.5s ease-out infinite}
+    .motion-line:nth-child(1){top:20%;animation-delay:0s}
+    .motion-line:nth-child(2){top:35%;animation-delay:0.1s}
+    .motion-line:nth-child(3){top:50%;animation-delay:0.2s}
+    .motion-line:nth-child(4){top:65%;animation-delay:0.3s}
+    .motion-line:nth-child(5){top:80%;animation-delay:0.4s}
+    @keyframes motionBlur{0%{transform:translateY(0);opacity:0.3}100%{transform:translateY(-20px);opacity:0}}
+    .right-section{display:flex;flex-direction:column;align-items:center;gap:16px;flex-shrink:0;width:320px}
+    .buttons{display:flex;flex-direction:row;justify-content:center;gap:16px}
+    .btn{font-family:'Permanent Marker',cursive;font-size:18px;padding:10px 24px;border-radius:10px;border:3px solid;cursor:pointer;min-width:110px;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.3s;background:transparent}
+    .btn:hover{transform:scale(1.02)}
+    .btn:active{transform:scale(0.95)}
+    .btn-skip{border-color:#ff6b9d;color:#ff6b9d}
+    .btn-skip.active{background:#ff6b9d;color:white;box-shadow:4px 4px 0 rgba(255,107,157,0.5)}
+    .btn-watch{border-color:#00b359;color:#00b359}
+    .btn-watch.active{background:#00b359;color:white;box-shadow:4px 4px 0 rgba(0,179,89,0.5)}
+    .reason-card{text-align:center;padding:14px 20px;border-radius:10px;border:2px solid;transition:all 0.3s;width:100%;max-width:300px}
+    .reason-card.skip{background:rgba(255,107,157,0.1);border-color:rgba(255,107,157,0.3)}
+    .reason-card.watch{background:rgba(0,179,89,0.1);border-color:rgba(0,179,89,0.3)}
+    .reason-text{font-family:'Courier Prime',monospace;font-size:14px;line-height:1.4}
+    .reason-text.skip{color:#ff6b9d}
+    .reason-text.watch{color:#00b359}
+    .hint{font-family:'Courier Prime',monospace;color:rgba(26,26,26,0.4);font-size:11px;text-align:center}
+    .deco-star{position:absolute;pointer-events:none;z-index:0}
+    .deco-star-1{top:25px;left:45px;width:42px;transform:rotate(-22deg)}
+    .deco-star-2{top:35px;right:55px;width:34px;transform:rotate(15deg)}
+    .deco-star-3{bottom:30px;left:60px;width:32px;transform:rotate(-8deg)}
+    .deco-star-4{bottom:40px;right:40px;width:38px;transform:rotate(22deg)}
+  </style>
+</head>
+<body>
+  <svg class="deco-star deco-star-1" viewBox="0 0 20 16" fill="none"><polygon points="10,1 12,7 19,7 13,11 15,16 10,12 5,16 7,11 1,7 8,7" fill="#FFE042"/></svg>
+  <svg class="deco-star deco-star-2" viewBox="0 0 20 16" fill="none"><polygon points="10,1 12,7 19,7 13,11 15,16 10,12 5,16 7,11 1,7 8,7" fill="#FF6B9D"/></svg>
+  <svg class="deco-star deco-star-3" viewBox="0 0 20 16" fill="none"><polygon points="10,1 12,7 19,7 13,11 15,16 10,12 5,16 7,11 1,7 8,7" fill="#1a1a1a"/></svg>
+  <svg class="deco-star deco-star-4" viewBox="0 0 20 16" fill="none"><polygon points="10,1 12,7 19,7 13,11 15,16 10,12 5,16 7,11 1,7 8,7" fill="#FFE042"/></svg>
+
+  <div class="container">
+    <div class="left-section">
+      <div>
+        <h1 class="title">Skip or Watch?</h1>
+        <p class="subtitle">See how captions change viewer behavior</p>
+      </div>
+      <span class="strategy-badge">Strategy 1: Hook</span>
+      <span class="compare-label">&#x2696;&#xFE0F; COMPARE IT</span>
+    </div>
+
+    <div class="center-section">
+      <div class="phone-wrapper skip-mode" id="phoneWrapper" onclick="toggleMode()">
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="screen skip-mode" id="screen">
+            <img class="video-bg" src="https://i.ibb.co/FL4xS7Kq/52cee0f8-a898-4f59-a1b2-2df10fcf0c53.jpg" alt="Creator"/>
+            <div class="video-overlay"></div>
+            <div class="swipe-overlay">
+              <div class="swipe-arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                <span class="swipe-text">SWIPED</span>
+              </div>
+            </div>
+            <div class="motion-lines">
+              <div class="motion-line"></div><div class="motion-line"></div><div class="motion-line"></div><div class="motion-line"></div><div class="motion-line"></div>
+            </div>
+            <div class="engagement-dot"></div>
+            <div class="tiktok-icons">
+              <div class="tiktok-icon">&#x2764;&#xFE0F;</div>
+              <div class="tiktok-icon">&#x1F4AC;</div>
+              <div class="tiktok-icon">&#x1F517;</div>
+            </div>
+            <span class="creator-handle">@glamguru</span>
+            <p class="caption" id="caption">Today I'm going to show you an eyeshadow technique</p>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+          </div>
+        </div>
+        <div class="badge skip" id="badgeSkip">&#x1F44E; SKIP</div>
+        <div class="badge watch hidden" id="badgeWatch">&#x1F44D; WATCH</div>
+      </div>
+    </div>
+
+    <div class="right-section">
+      <div class="buttons">
+        <button class="btn btn-skip active" id="btnSkip" onclick="setMode('skip')">&#x1F44E; Skip</button>
+        <button class="btn btn-watch" id="btnWatch" onclick="setMode('watch')">&#x1F44D; Watch</button>
+      </div>
+      <div class="reason-card skip" id="reasonCard">
+        <p class="reason-text skip" id="reasonText">&#x274C; Generic, no hook &mdash; viewers scroll past instantly</p>
+      </div>
+      <p class="hint">Tap the phone or buttons to compare</p>
+    </div>
+  </div>
+
+  <script>
+    let currentMode = 'skip';
+    function toggleMode() { setMode(currentMode === 'skip' ? 'watch' : 'skip'); }
+    function setMode(mode) {
+      currentMode = mode;
+      const wrap = document.getElementById('phoneWrapper');
+      const scr  = document.getElementById('screen');
+      const bs   = document.getElementById('badgeSkip');
+      const bw   = document.getElementById('badgeWatch');
+      const btnS = document.getElementById('btnSkip');
+      const btnW = document.getElementById('btnWatch');
+      const cap  = document.getElementById('caption');
+      const rc   = document.getElementById('reasonCard');
+      const rt   = document.getElementById('reasonText');
+      if (mode === 'skip') {
+        wrap.className = 'phone-wrapper skip-mode';
+        scr.className  = 'screen skip-mode';
+        bs.className = 'badge skip'; bw.className = 'badge watch hidden';
+        btnS.className = 'btn btn-skip active'; btnW.className = 'btn btn-watch';
+        cap.textContent = "Today I'm going to show you an eyeshadow technique";
+        rc.className = 'reason-card skip'; rt.className = 'reason-text skip';
+        rt.innerHTML = '&#x274C; Generic, no hook &mdash; viewers scroll past instantly';
+      } else {
+        wrap.className = 'phone-wrapper watch-mode';
+        scr.className  = 'screen watch-mode';
+        bs.className = 'badge skip hidden'; bw.className = 'badge watch';
+        btnS.className = 'btn btn-skip'; btnW.className = 'btn btn-watch active';
+        cap.textContent = 'POV: Your eyeshadow always creases by noon 😩';
+        rc.className = 'reason-card watch'; rt.className = 'reason-text watch';
+        rt.innerHTML = '&#x2713; Immediate identification with viewer\'s pain point';
+      }
+    }
+    setMode('skip');
+  </script>
+</body>
+</html>

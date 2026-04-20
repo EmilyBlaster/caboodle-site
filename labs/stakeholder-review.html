@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>inline stakeholder review · lab 001 · caboodle design</title>
+<meta name="description" content="A feedback workspace built directly into a client landing page using Claude Code — pins, color-coded reviewers, and threaded comments with resolve tracking." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+
+<style>
+/* ==========================================================================
+   Lab pages — shared base styles
+   ========================================================================== */
+
+.labero {
+  background: var(--ink);
+  color: var(--white);
+  padding: clamp(6rem, 12vw, 9rem) var(--pad-x) clamp(4rem, 8vw, 6rem);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--dark-2);
+}
+.labero__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lime);
+  text-decoration: none;
+  margin-bottom: 2.5rem;
+  transition: gap 0.3s var(--ease), opacity 0.3s var(--ease);
+  opacity: 0.85;
+}
+.labero__back:hover { gap: 0.8rem; opacity: 1; }
+.labero__stamp {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 2rem;
+}
+.labero__stamp b { color: var(--lime); font-weight: 500; }
+.labero__watermark {
+  font-family: var(--display);
+  font-size: clamp(8rem, 20vw, 16rem);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  color: rgba(255,255,255,0.04);
+  position: absolute;
+  right: var(--pad-x);
+  bottom: -0.1em;
+  pointer-events: none;
+  user-select: none;
+}
+.labero__inner { max-width: var(--maxw); margin: 0 auto; position: relative; }
+.labero__h {
+  font-family: var(--display);
+  font-size: clamp(2.75rem, 6vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--white);
+  text-transform: lowercase;
+  max-width: 18ch;
+  margin: 0 0 1.25rem;
+}
+.labero__h em { color: var(--lime); font-style: normal; }
+.labero__lede {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.6;
+  color: rgba(255,255,255,0.6);
+  max-width: 52ch;
+  margin-bottom: 2rem;
+}
+.labero__tags {
+  list-style: none;
+  padding: 0; margin: 0;
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+}
+.labero__tags li {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3em 0.65em;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.4);
+}
+
+/* Section base */
+.lab-s {
+  padding: clamp(3.5rem, 7vw, 5.5rem) var(--pad-x);
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+}
+.lab-s--alt { background: var(--paper-2); }
+.lab-s__inner { max-width: var(--maxw); margin: 0 auto; }
+.lab-s__kicker {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--magenta);
+  display: block;
+  margin-bottom: 0.75rem;
+}
+.lab-s__h {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  line-height: 1.05;
+  margin: 0 0 0.75rem;
+}
+.lab-s__h em { font-style: italic; }
+.lab-s__p {
+  max-width: 60ch;
+  line-height: 1.65;
+  color: var(--ink-2);
+  margin: 0 0 2.5rem;
+}
+
+/* Video embed */
+.lab-video {
+  border-radius: 4px;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  margin-bottom: 3rem;
+  border: 1px solid var(--rule);
+}
+.lab-video iframe { width: 100%; height: 100%; display: block; border: 0; }
+
+/* Before / After */
+.ba {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--rule);
+  margin-bottom: 3rem;
+}
+@media (max-width: 640px) { .ba { grid-template-columns: 1fr; } }
+.ba__col { padding: 2rem; }
+.ba__col + .ba__col { border-left: 1px solid var(--rule); }
+@media (max-width: 640px) { .ba__col + .ba__col { border-left: none; border-top: 1px solid var(--rule); } }
+.ba__label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.ba__label--before { color: var(--ink-2); }
+.ba__label--after { color: var(--lime); }
+.ba__label--after { background: var(--ink); color: var(--lime); margin: -2rem -2rem 1.25rem; padding: 0.6rem 2rem; }
+.ba__label--before { background: var(--paper-2); color: var(--ink-2); margin: -2rem -2rem 1.25rem; padding: 0.6rem 2rem; }
+.ba__list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+.ba__list li {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  padding-left: 1.2rem;
+  position: relative;
+}
+.ba__list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--rule);
+  font-size: 0.75rem;
+}
+.ba__col--after .ba__list li { color: var(--ink); }
+.ba__col--after .ba__list li::before { color: var(--lime); content: '✓'; font-size: 0.7rem; top: 0.1em; }
+
+/* Feature grid */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1px;
+  border: 1px solid var(--rule);
+  margin-bottom: 3rem;
+  background: var(--rule);
+}
+.feature {
+  padding: 1.75rem;
+  background: var(--paper);
+  position: relative;
+  transition: background 0.3s var(--ease);
+}
+.feature:hover { background: var(--white); }
+.feature__num {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 3rem;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  color: rgba(150, 230, 80, 0.18);
+  margin-bottom: 0.75rem;
+}
+.feature__h {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-transform: lowercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+}
+.feature__p {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+/* Thesis callout */
+.thesis {
+  border-left: 3px solid var(--magenta);
+  padding: 1.5rem 2rem;
+  background: var(--paper-2);
+  margin-bottom: 3rem;
+}
+.thesis p {
+  font-family: var(--display);
+  font-size: clamp(1rem, 1.8vw, 1.35rem);
+  font-weight: 700;
+  text-transform: lowercase;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  color: var(--ink);
+  margin: 0;
+}
+.thesis p em { font-style: italic; color: var(--magenta); }
+
+/* Tools */
+.tool-list {
+  display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 2.5rem;
+}
+.tool-pill {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3em 0.65em;
+  border: 1px solid var(--rule);
+  color: var(--ink-2);
+  background: var(--paper);
+}
+
+/* CTA link */
+.lab-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blue);
+  text-decoration: none;
+  border: 1px solid var(--blue);
+  padding: 0.7em 1.25em;
+  transition: background 0.3s var(--ease), color 0.3s var(--ease);
+}
+.lab-cta-link:hover { background: var(--blue); color: var(--white); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="nav__mark" href="../index.html">
+    <svg class="cd-logo" viewBox="0 0 260 56" xmlns="http://www.w3.org/2000/svg" aria-label="caboodle design" role="img">
+      <path class="cd-logo__mark" fill-rule="evenodd"
+        d="M 5 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0 M 33 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0"/>
+      <text class="cd-logo__word" x="95" y="26" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">caboodle</text>
+      <text class="cd-logo__word" x="95" y="50" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">design</text>
+    </svg>
+  </a>
+  <nav class="nav__links">
+    <a href="../approach.html">approach</a>
+    <a href="../index.html#work">work</a>
+    <a href="../labs.html">labs</a>
+    <a href="../about.html">about emily</a>
+    <a href="../contact.html" class="nav__cta">let's talk</a>
+  </nav>
+</header>
+
+<!-- Lab hero -->
+<section class="labero">
+  <div class="labero__inner">
+    <a class="labero__back" href="../labs.html">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      <span>back to labs</span>
+    </a>
+    <div class="labero__stamp">
+      <span>lab experiment</span>
+      <b>LAB-001</b>
+      <span>workflow design · 2025</span>
+      <span>ai prototype · claude code</span>
+    </div>
+    <h1 class="labero__h">
+      inline stakeholder<br />
+      <em>review.</em>
+    </h1>
+    <p class="labero__lede">
+      A feedback workspace built directly into a client landing page — pins, color-coded reviewers, threaded comments, and resolve tracking. No email threads. No annotated PDFs.
+    </p>
+    <ul class="labero__tags">
+      <li>ai prototype</li>
+      <li>workflow design</li>
+      <li>claude code</li>
+      <li>vibe coding</li>
+    </ul>
+  </div>
+  <span class="labero__watermark" aria-hidden="true">001</span>
+</section>
+
+<!-- Video walkthrough -->
+<section class="lab-s" data-reveal>
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">see it in action</span>
+    <h2 class="lab-s__h">the walkthrough</h2>
+    <p class="lab-s__p">
+      A three-minute demo of the feedback workspace built into the BrightPath client landing page. Inline pinning, reviewer color-coding, and a slide-out panel with resolve tracking — all built with Claude Code, no external feedback tool.
+    </p>
+    <div class="lab-video">
+      <iframe
+        src="https://player.vimeo.com/video/1177417802?title=0&byline=0&portrait=0"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen
+        title="Inline Stakeholder Review System Walkthrough"
+      ></iframe>
+    </div>
+
+    <!-- Before / After -->
+    <span class="lab-s__kicker">the problem</span>
+    <h2 class="lab-s__h">before <em>vs.</em> after</h2>
+    <div class="ba">
+      <div class="ba__col ba__col--before">
+        <div class="ba__label ba__label--before">without this</div>
+        <ul class="ba__list">
+          <li>Email threads with annotated screenshots</li>
+          <li>"Version 3 FINAL comments Emily.pdf"</li>
+          <li>3 rounds of back-and-forth before anything gets resolved</li>
+          <li>Comments buried in email chains nobody can find later</li>
+        </ul>
+      </div>
+      <div class="ba__col ba__col--after">
+        <div class="ba__label ba__label--after">with inline review</div>
+        <ul class="ba__list">
+          <li>Feedback pinned directly to the relevant section</li>
+          <li>Color-coded by reviewer — instantly scannable</li>
+          <li>Resolve tracking with a single click</li>
+          <li>Threaded comments grouped in a slide-out panel</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="lab-s lab-s--alt" data-reveal>
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">the design</span>
+    <h2 class="lab-s__h">four features. <em>one workflow.</em></h2>
+    <p class="lab-s__p">
+      Built from scratch with Claude Code. Every feature maps directly to a real friction point in the stakeholder feedback process.
+    </p>
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="feature__num">01</div>
+        <h3 class="feature__h">inline pins</h3>
+        <p class="feature__p">Click anywhere on the page to leave a comment. No screenshots, no email, no "where exactly?" confusion.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">02</div>
+        <h3 class="feature__h">color-coded reviewers</h3>
+        <p class="feature__p">Each stakeholder gets a color. Instantly see who said what, without reading every comment.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">03</div>
+        <h3 class="feature__h">threaded side panel</h3>
+        <p class="feature__p">All feedback lives in a slide-out panel, grouped by section. Scroll through everything without losing context.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">04</div>
+        <h3 class="feature__h">resolve tracking</h3>
+        <p class="feature__p">Mark feedback resolved with a click. Visual confirmation it's been addressed — no follow-up email required.</p>
+      </div>
+    </div>
+
+    <!-- Thesis -->
+    <div class="thesis">
+      <p>
+        stakeholder feedback loops are one of the biggest drags on any learning project.
+        email chains, annotated pdfs, screenshots of screenshots.
+        the real problem isn't that stakeholders give <em>bad feedback</em> — it's that
+        the feedback process creates noise instead of signal.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Live demo + tools -->
+<section class="lab-s" data-reveal>
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">try it yourself</span>
+    <h2 class="lab-s__h">the live demo</h2>
+    <p class="lab-s__p">
+      The BrightPath landing page — the actual client page this review system was built into — is live. Click through and leave a pin.
+    </p>
+    <a class="lab-cta-link" href="https://emilyblaster.github.io/BrightPath-2026/" target="_blank" rel="noopener">
+      <span>open brightpath demo</span>
+      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+    </a>
+
+    <h3 class="lab-s__h" style="margin-top:3rem">tools used</h3>
+    <div class="tool-list">
+      <span class="tool-pill">claude code</span>
+      <span class="tool-pill">html/css/js</span>
+      <span class="tool-pill">vibe coding</span>
+      <span class="tool-pill">netlify</span>
+    </div>
+  </div>
+</section>
+
+<!-- Closing card -->
+<section class="closing" id="next">
+  <div class="closing__card">
+    <div class="closing__stamp" aria-hidden="true">
+      <svg class="cd-stamp-mark" viewBox="0 0 90 60" aria-hidden="true">
+        <path class="cd-stamp-mark__fill" fill-rule="evenodd"
+          d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>
+      </svg>
+      <small>next experiment</small>
+      <small>LAB-002</small>
+    </div>
+    <div class="closing__body">
+      <span class="closing__kicker">next in the lab</span>
+      <h2 class="closing__h">
+        emotion-aware<br />
+        <em>feedback.</em>
+      </h2>
+      <p class="closing__p">
+        Same response. Different emotional state. Completely different coaching. An interactive prototype exploring how emotional context changes what good feedback looks like.
+      </p>
+      <a class="closing__cta" href="emotion-feedback.html">
+        <span>explore the experiment</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+      <a class="closing__email" href="../labs.html">← all experiments</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot__row">
+    <span class="foot__mark">caboodle design</span>
+    <span class="foot__tag">strategy, media, and behavioral science — it's the whole caboodle</span>
+  </div>
+  <div class="foot__cols">
+    <div>
+      <h4>navigation</h4>
+      <ul>
+        <li><a href="../approach.html">approach</a></li>
+        <li><a href="../index.html#work">work</a></li>
+        <li><a href="../about.html">about emily</a></li>
+        <li><a href="../labs.html">labs</a></li>
+        <li><a href="../field-notes.html">field notes</a></li>
+        <li><a href="../resources.html">free resources</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>get in touch</h4>
+      <ul>
+        <li><a href="mailto:hello@caboodledesign.info">let's talk</a></li>
+        <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
+        <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot__row foot__row--small">
+    <span>&copy; 2026 caboodle design · founded by emily green</span>
+    <span>byron center, mi</span>
+  </div>
+</footer>
+
+<script src="../script.js" defer></script>
+</body>
+</html>

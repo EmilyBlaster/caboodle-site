@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>behavior design 101 · lab 006 · caboodle design</title>
+<meta name="description" content="An interactive, personalized micro-lesson that adapts to your role and experience level. This is what behavior-driven learning design looks like in practice." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+
+<style>
+.labero { background: var(--ink); color: var(--white); padding: clamp(6rem,12vw,9rem) var(--pad-x) clamp(4rem,8vw,6rem); position: relative; overflow: hidden; border-bottom: 1px solid var(--dark-2); }
+.labero__back { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); text-decoration: none; margin-bottom: 2.5rem; transition: gap 0.3s var(--ease), opacity 0.3s var(--ease); opacity: 0.85; }
+.labero__back:hover { gap: 0.8rem; opacity: 1; }
+.labero__stamp { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 2rem; }
+.labero__stamp b { color: var(--lime); font-weight: 500; }
+.labero__watermark { font-family: var(--display); font-size: clamp(8rem,20vw,16rem); font-weight: 800; line-height: 0.85; letter-spacing: -0.06em; color: rgba(255,255,255,0.04); position: absolute; right: var(--pad-x); bottom: -0.1em; pointer-events: none; user-select: none; }
+.labero__inner { max-width: var(--maxw); margin: 0 auto; position: relative; }
+.labero__h { font-family: var(--display); font-size: clamp(2.75rem,6vw,5.5rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; color: var(--white); text-transform: lowercase; max-width: 18ch; margin: 0 0 1.25rem; }
+.labero__h em { color: var(--lime); font-style: normal; }
+.labero__lede { font-size: clamp(1rem,1.4vw,1.15rem); line-height: 1.6; color: rgba(255,255,255,0.6); max-width: 52ch; margin-bottom: 2rem; }
+.labero__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.labero__tags li { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3em 0.65em; border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.4); }
+
+.lab-s { padding: clamp(3.5rem,7vw,5.5rem) var(--pad-x); background: var(--paper); border-top: 1px solid var(--rule); }
+.lab-s--alt { background: var(--paper-2); }
+.lab-s__inner { max-width: var(--maxw); margin: 0 auto; }
+.lab-s__kicker { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--magenta); display: block; margin-bottom: 0.75rem; }
+.lab-s__h { font-family: var(--display); font-weight: 700; font-size: clamp(1.6rem,2.8vw,2.4rem); letter-spacing: -0.03em; text-transform: lowercase; line-height: 1.05; margin: 0 0 0.75rem; }
+.lab-s__h em { font-style: italic; }
+.lab-s__p { max-width: 60ch; line-height: 1.65; color: var(--ink-2); margin: 0 0 2.5rem; }
+
+/* === Micro-lesson demo shell === */
+.lesson-shell {
+  max-width: 760px;
+  border: 1px solid var(--rule);
+  background: var(--white);
+  overflow: hidden;
+}
+
+/* Progress bar */
+.lesson-progress {
+  height: 4px;
+  background: var(--paper-2);
+  position: relative;
+}
+.lesson-progress__fill {
+  height: 100%;
+  background: var(--lime);
+  transition: width 0.5s var(--ease);
+}
+.lesson-progress__label {
+  padding: 0.6rem 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Step content area */
+.lesson-body {
+  padding: 2rem 2.5rem;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 600px) { .lesson-body { padding: 1.5rem; } }
+
+/* Nav buttons */
+.lesson-nav {
+  padding: 1rem 2.5rem;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--paper);
+}
+@media (max-width: 600px) { .lesson-nav { padding: 1rem 1.5rem; } }
+.lesson-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.65em 1.25em; border: 1px solid var(--rule);
+  background: var(--paper); color: var(--ink-2); cursor: pointer;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.lesson-btn:hover:not(:disabled) { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.lesson-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.lesson-btn--primary { background: var(--ink); color: var(--lime); border-color: var(--ink); }
+.lesson-btn--primary:hover:not(:disabled) { background: var(--dark-2); }
+
+/* Step: intake form */
+.intake-field { margin-bottom: 1.25rem; }
+.intake-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); display: block; margin-bottom: 0.4rem; }
+.intake-input {
+  width: 100%; padding: 0.7rem 0.85rem; border: 1px solid var(--rule);
+  font-family: var(--body); font-size: 0.9rem; color: var(--ink); background: var(--paper);
+  transition: border-color 0.2s; box-sizing: border-box;
+}
+.intake-input:focus { outline: none; border-color: var(--blue); }
+.role-btns, .exp-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.role-btn, .exp-btn {
+  padding: 0.55em 1em; border: 1px solid var(--rule); background: var(--paper);
+  font-size: 0.85rem; cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s; color: var(--ink-2);
+}
+.role-btn:hover, .exp-btn:hover { border-color: var(--blue); color: var(--ink); }
+.role-btn.active, .exp-btn.active { border-color: var(--blue); background: var(--blue); color: var(--white); }
+
+/* Intro */
+.intro-greeting { font-family: var(--display); font-weight: 700; font-size: clamp(1.75rem, 3.5vw, 2.75rem); letter-spacing: -0.04em; text-transform: lowercase; line-height: 1.05; margin-bottom: 1rem; }
+.intro-greeting em { color: var(--magenta); font-style: normal; }
+.intro-body { font-size: 0.9rem; line-height: 1.7; color: var(--ink-2); max-width: 52ch; }
+.intro-body + .intro-body { margin-top: 0.75rem; }
+
+/* Principles (tap-to-reveal) */
+.principle-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 0.75rem; }
+@media (max-width: 560px) { .principle-cards { grid-template-columns: 1fr; } }
+.principle-card {
+  border: 1px solid var(--rule); padding: 1.25rem; cursor: pointer;
+  background: var(--paper-2); transition: background 0.2s, border-color 0.2s;
+  user-select: none; -webkit-user-select: none;
+}
+.principle-card:hover { border-color: var(--blue); }
+.principle-card.revealed { background: var(--white); border-color: var(--rule); cursor: default; }
+.principle-card__label { font-family: var(--display); font-weight: 700; font-size: 1rem; text-transform: lowercase; letter-spacing: -0.01em; margin-bottom: 0.35rem; }
+.principle-card__hint { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); }
+.principle-card__detail { font-size: 0.8rem; line-height: 1.55; color: var(--ink-2); display: none; margin-top: 0.6rem; }
+.principle-card.revealed .principle-card__detail { display: block; }
+.principle-card.revealed .principle-card__hint { display: none; }
+
+/* Designer's note */
+.designer-note {
+  border-left: 3px solid rgba(236,0,140,0.4); padding: 0.6rem 0.85rem;
+  background: rgba(236,0,140,0.04); margin-top: 1.25rem;
+}
+.designer-note__label { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--magenta); display: block; margin-bottom: 0.25rem; }
+.designer-note__text { font-size: 0.78rem; line-height: 1.5; color: var(--ink-2); font-style: italic; }
+
+/* Scenario */
+.scenario-situation { padding: 1rem 1.25rem; background: var(--paper-2); border-left: 3px solid var(--rule); font-size: 0.9rem; line-height: 1.6; color: var(--ink); margin-bottom: 1rem; }
+.scenario-quote { font-size: 0.85rem; font-style: italic; color: var(--ink-2); margin-bottom: 1.25rem; padding-left: 1rem; border-left: 2px solid var(--magenta); }
+.choice-btns { display: flex; flex-direction: column; gap: 0.6rem; }
+.choice-btn {
+  padding: 1rem 1.25rem; border: 1px solid var(--rule); background: var(--paper);
+  text-align: left; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  display: grid; grid-template-columns: auto 1fr; gap: 0.75rem; align-items: start;
+}
+.choice-btn:hover:not(:disabled) { border-color: var(--blue); background: var(--white); }
+.choice-btn:disabled { cursor: default; }
+.choice-btn--best:disabled { border-color: #4a9c20; background: rgba(150,230,80,0.05); }
+.choice-btn--okay:disabled { border-color: var(--blue); background: rgba(3,89,155,0.05); }
+.choice-btn--poor:disabled { border-color: var(--magenta); background: rgba(236,0,140,0.04); }
+.choice-icon { font-size: 1.1rem; margin-top: 2px; }
+.choice-label { font-weight: 600; font-size: 0.9rem; color: var(--ink); margin-bottom: 0.2rem; }
+.choice-desc { font-size: 0.8rem; color: var(--ink-2); line-height: 1.4; }
+.choice-feedback {
+  margin-top: 0.5rem; padding: 0.65rem 0.85rem;
+  border-left: 2px solid; font-size: 0.78rem; line-height: 1.5; display: none;
+}
+.choice-feedback.visible { display: block; }
+.choice-btn--best .choice-feedback { border-color: #4a9c20; background: rgba(150,230,80,0.04); color: var(--ink-2); }
+.choice-btn--okay .choice-feedback { border-color: var(--blue); background: rgba(3,89,155,0.04); color: var(--ink-2); }
+.choice-btn--poor .choice-feedback { border-color: var(--magenta); background: rgba(236,0,140,0.04); color: var(--ink-2); }
+.consequence { margin-top: 0.4rem; font-size: 0.75rem; color: var(--ink-2); font-style: italic; display: none; }
+.consequence.visible { display: block; }
+
+/* Reflection */
+.reflection-q { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 0.75rem; line-height: 1.4; }
+.reflection-area {
+  width: 100%; min-height: 90px; padding: 0.75rem 0.85rem;
+  font-family: var(--body); font-size: 0.875rem; line-height: 1.6;
+  border: 1px solid var(--rule); background: var(--paper); color: var(--ink);
+  resize: vertical; box-sizing: border-box; transition: border-color 0.2s;
+}
+.reflection-area:focus { outline: none; border-color: var(--blue); }
+
+/* Summary */
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; }
+.summary-item { padding: 1rem; border: 1px solid var(--rule); background: var(--paper-2); }
+.summary-item__icon { font-size: 1.25rem; margin-bottom: 0.4rem; }
+.summary-item__h { font-family: var(--display); font-weight: 700; font-size: 0.9rem; text-transform: lowercase; letter-spacing: -0.01em; margin-bottom: 0.25rem; }
+.summary-item__p { font-size: 0.75rem; line-height: 1.45; color: var(--ink-2); }
+.summary-cta { margin-top: 1.5rem; text-align: center; }
+.summary-back { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); cursor: pointer; background: none; border: none; text-decoration: underline; text-underline-offset: 3px; padding: 0; }
+
+/* About section */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+@media (max-width: 600px) { .about-grid { grid-template-columns: 1fr; } }
+.about-item { padding: 1.25rem; border: 1px solid var(--rule); background: var(--paper); }
+.about-item__label { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--magenta); display: block; margin-bottom: 0.4rem; }
+.about-item__p { font-size: 0.875rem; line-height: 1.6; color: var(--ink-2); }
+.about-item__p strong { color: var(--ink); }
+
+/* Limits */
+.limits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.limit { padding: 1.25rem; border: 1px solid var(--rule); background: var(--paper); }
+.limit__h { font-family: var(--display); font-weight: 700; font-size: 0.9rem; text-transform: lowercase; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
+.limit__p { font-size: 0.8rem; line-height: 1.55; color: var(--ink-2); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="nav__mark" href="../index.html">
+    <svg class="cd-logo" viewBox="0 0 260 56" xmlns="http://www.w3.org/2000/svg" aria-label="caboodle design" role="img">
+      <path class="cd-logo__mark" fill-rule="evenodd" d="M 5 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0 M 33 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0"/>
+      <text class="cd-logo__word" x="95" y="26" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">caboodle</text>
+      <text class="cd-logo__word" x="95" y="50" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">design</text>
+    </svg>
+  </a>
+  <nav class="nav__links">
+    <a href="../approach.html">approach</a>
+    <a href="../index.html#work">work</a>
+    <a href="../labs.html">labs</a>
+    <a href="../about.html">about emily</a>
+    <a href="../contact.html" class="nav__cta">let's talk</a>
+  </nav>
+</header>
+
+<section class="labero">
+  <div class="labero__inner">
+    <a class="labero__back" href="../labs.html">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      <span>back to labs</span>
+    </a>
+    <div class="labero__stamp">
+      <span>lab experiment</span>
+      <b>LAB-006</b>
+      <span>personalized learning · 2025</span>
+      <span>adaptive design · behavior change</span>
+    </div>
+    <h1 class="labero__h">
+      behavior design<br />
+      <em>101.</em>
+    </h1>
+    <p class="labero__lede">
+      An interactive micro-lesson that adapts to your role and experience level. Personalized framing, active recall, role-specific scenarios, and a designer's annotation track running alongside. This is what behavior-driven learning design looks like in practice.
+    </p>
+    <ul class="labero__tags">
+      <li>adaptive learning</li>
+      <li>behavior change</li>
+      <li>personalized</li>
+      <li>interactive demo</li>
+    </ul>
+  </div>
+  <span class="labero__watermark" aria-hidden="true">006</span>
+</section>
+
+<!-- Micro-lesson -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">try it</span>
+    <h2 class="lab-s__h">the interactive <em>micro-lesson</em></h2>
+    <p class="lab-s__p">
+      Tell the system who you are and how you work. Watch the content adapt in real time — different framing, different depth, different scenario.
+    </p>
+
+    <div class="lesson-shell" id="lesson-shell">
+      <div class="lesson-progress">
+        <div class="lesson-progress__fill" id="lesson-fill" style="width:16.6%"></div>
+      </div>
+      <div class="lesson-progress__label">
+        <span id="step-label">step 1 of 6</span>
+        <span id="step-name">meet the learner</span>
+      </div>
+      <div class="lesson-body" id="lesson-body">
+        <!-- Rendered by JS -->
+      </div>
+      <div class="lesson-nav">
+        <button class="lesson-btn" id="btn-prev" disabled>
+          <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+          back
+        </button>
+        <button class="lesson-btn lesson-btn--primary" id="btn-next" disabled>
+          next
+          <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About this experiment -->
+<section class="lab-s lab-s--alt" data-reveal>
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">the design</span>
+    <h2 class="lab-s__h">what this <em>demonstrates</em></h2>
+    <div class="about-grid">
+      <div class="about-item">
+        <span class="about-item__label">the problem</span>
+        <p class="about-item__p">Most digital learning is one-size-fits-all — same content, same depth, same examples regardless of who the learner is.</p>
+      </div>
+      <div class="about-item">
+        <span class="about-item__label">the demonstration</span>
+        <p class="about-item__p">How a micro-lesson can adapt its framing, depth, and scenarios in real-time based on a few simple learner inputs — role and experience level.</p>
+      </div>
+      <div class="about-item">
+        <span class="about-item__label">design techniques</span>
+        <p class="about-item__p">Branching logic, text-based personalization, tap-to-reveal active recall, role-specific scenarios, and open-ended reflection with contextual framing.</p>
+      </div>
+      <div class="about-item">
+        <span class="about-item__label">the annotation track</span>
+        <p class="about-item__p"><strong>Watch for the designer's notes</strong> alongside each step — they surface the design decision and its rationale. This is the thinking behind the thing.</p>
+      </div>
+    </div>
+
+    <h3 class="lab-s__h" style="font-size:clamp(1.2rem,2vw,1.6rem)">limitations &amp; <em>what's next</em></h3>
+    <div class="limits-grid">
+      <div class="limit">
+        <h4 class="limit__h">personalization depth</h4>
+        <p class="limit__p">Adapts by role and experience, but doesn't yet adjust based on learner performance within the session (true adaptive learning).</p>
+      </div>
+      <div class="limit">
+        <h4 class="limit__h">active recall</h4>
+        <p class="limit__p">Tap-to-reveal tests recognition. Genuine retrieval practice would ask learners to generate answers before seeing them.</p>
+      </div>
+      <div class="limit">
+        <h4 class="limit__h">practice volume</h4>
+        <p class="limit__p">One scenario per role. Real mastery requires varied practice across multiple contexts and situations.</p>
+      </div>
+      <div class="limit">
+        <h4 class="limit__h">transfer</h4>
+        <p class="limit__p">The reflection is open-ended. A stronger design would include a concrete action plan tied to the learner's actual work.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Closing card -->
+<section class="closing" id="contact">
+  <div class="closing__card">
+    <div class="closing__stamp" aria-hidden="true">
+      <svg class="cd-stamp-mark" viewBox="0 0 90 60" aria-hidden="true">
+        <path class="cd-stamp-mark__fill" fill-rule="evenodd" d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>
+      </svg>
+      <small>end of the lab</small>
+      <small>LAB-006</small>
+    </div>
+    <div class="closing__body">
+      <span class="closing__kicker">want this kind of thinking?</span>
+      <h2 class="closing__h">
+        let's build<br />
+        <em>something.</em>
+      </h2>
+      <p class="closing__p">
+        Behavior change over checkbox training. Send the shape of your problem and I'll tell you whether training is the answer — and what works better if it isn't.
+      </p>
+      <a class="closing__cta" href="../contact.html">
+        <span>start a conversation</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+      <a class="closing__email" href="../labs.html">← all experiments</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot__row">
+    <span class="foot__mark">caboodle design</span>
+    <span class="foot__tag">strategy, media, and behavioral science — it's the whole caboodle</span>
+  </div>
+  <div class="foot__cols">
+    <div>
+      <h4>navigation</h4>
+      <ul>
+        <li><a href="../approach.html">approach</a></li>
+        <li><a href="../index.html#work">work</a></li>
+        <li><a href="../about.html">about emily</a></li>
+        <li><a href="../labs.html">labs</a></li>
+        <li><a href="../field-notes.html">field notes</a></li>
+        <li><a href="../resources.html">free resources</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>get in touch</h4>
+      <ul>
+        <li><a href="mailto:hello@caboodledesign.info">let's talk</a></li>
+        <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
+        <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot__row foot__row--small">
+    <span>&copy; 2026 caboodle design · founded by emily green</span>
+    <span>byron center, mi</span>
+  </div>
+</footer>
+
+<script src="../script.js" defer></script>
+<script>
+// ============================================================
+// Behavior Design 101 — personalized micro-lesson
+// ============================================================
+(function() {
+  const TOTAL_STEPS = 6;
+  const STEP_NAMES = ['meet the learner', 'personalized intro', 'the behavior model', 'transition', 'apply it', 'reflect + summary'];
+  const NOTES = {
+    0: "In production, this data comes from an HRIS or LMS profile — no intake form needed.",
+    1: "3 content variants were authored. An AI-driven version could generate unlimited role-specific framings.",
+    2: "Tap-to-reveal tests recognition, not recall. Genuine retrieval practice asks learners to generate answers first.",
+    3: "This transition reduces cognitive load before the scenario. Without it, learners feel 'dropped in.'",
+    4: "Each role gets a different scenario. A full system pulls from a scenario library matched to actual job tasks.",
+    5: "Open-ended reflection activates elaborative encoding. A stronger design prompts a concrete action plan."
+  };
+
+  const ROLES = {
+    designer: "Designer",
+    manager: "Manager",
+    ld_pro: "L&D Professional"
+  };
+  const EXPERIENCES = {
+    none: "Brand new to it",
+    some: "I know the basics",
+    advanced: "I use it regularly"
+  };
+
+  const INTROS = {
+    designer: {
+      role: "As a designer, you already think about how people interact with what you build. Behavior design gives you a framework to go deeper — designing not just for usability, but for action.",
+    },
+    manager: {
+      role: "As a manager, you see the gap between what people know and what they actually do. Behavior design helps you close that gap — moving your team from 'trained' to 'changed.'",
+    },
+    ld_pro: {
+      role: "As an L&D professional, you've probably felt the frustration of building training that checks boxes but doesn't change behavior. This framework puts behavior change at the center of everything you design.",
+    }
+  };
+
+  const EXP_FRAMES = {
+    none: "We'll start from the fundamentals and build up — no jargon, just practical concepts you can use immediately.",
+    some: "Since you've got some foundation, we'll move quickly through the basics and focus on application.",
+    advanced: "You already know the territory, so we'll focus on a nuanced scenario that challenges even experienced practitioners."
+  };
+
+  const PRINCIPLES = {
+    none: [
+      { label: "Motivation", detail: "The person needs a reason to act. This could be a reward, avoiding pain, or social pressure. But motivation alone isn't enough.", hint: "tap to reveal" },
+      { label: "Ability", detail: "The behavior needs to be easy enough to do. If something is too hard or time-consuming, even motivated people won't do it.", hint: "tap to reveal" },
+      { label: "Prompt", detail: "Something has to trigger the behavior at the right moment. A notification, a visual cue, a question — without a prompt, nothing happens.", hint: "tap to reveal" }
+    ],
+    some: [
+      { label: "Motivation", detail: "The person needs a reason to act. This could be a reward, avoiding pain, or social pressure. But motivation alone isn't enough.", hint: "tap to reveal" },
+      { label: "Ability", detail: "The behavior needs to be easy enough to do. If something is too hard or time-consuming, even motivated people won't do it.", hint: "tap to reveal" },
+      { label: "Prompt", detail: "Something has to trigger the behavior at the right moment. A notification, a visual cue, a question — without a prompt, nothing happens.", hint: "tap to reveal" }
+    ],
+    advanced: [
+      { label: "Motivation", detail: "Motivation is unreliable. Designing for motivation alone is designing for failure. The real lever is reducing friction.", hint: "tap to pressure-test" },
+      { label: "Ability", detail: "Ability is where the real leverage is. Reduce friction before trying to increase motivation. The easier the behavior, the less motivation required.", hint: "tap to pressure-test" },
+      { label: "Prompt", detail: "Without a well-timed prompt, even motivated, able people won't act. This is where most training falls apart — no prompt at the moment of performance.", hint: "tap to pressure-test" }
+    ]
+  };
+
+  const SCENARIOS = {
+    designer: {
+      situation: "You've designed a beautiful onboarding flow for a new app. Analytics show 90% of users complete it — but only 15% use the key feature it teaches within the first week.",
+      character: "Product Lead",
+      quote: "The onboarding metrics look great, but feature adoption is flat. What should we try?",
+      options: [
+        { label: "Add more detail", desc: "Expand the onboarding to explain the feature more thoroughly.", quality: "poor", icon: "📖", feedback: "More information rarely changes behavior. The users completed the onboarding — they have the knowledge. The gap is between knowing and doing.", consequence: "You'd likely see completion rates drop with no improvement in feature adoption." },
+        { label: "Add contextual prompts", desc: "Surface the feature with a nudge when users hit the natural moment they'd need it.", quality: "best", icon: "🎯", feedback: "The knowledge is there, so the gap is a missing prompt at the right moment. A contextual nudge when users encounter the problem the feature solves closes the loop.", consequence: "Feature adoption jumps to 40% in the first week. Users feel like the app 'just gets them.'" },
+        { label: "Simplify the feature", desc: "Reduce the number of steps required to use the feature for the first time.", quality: "okay", icon: "🔧", feedback: "Good instinct — reducing friction is a strong lever. But first check: is the feature actually hard to use, or are users just not reaching for it?", consequence: "Adoption improves slightly, but the core issue — users forgetting the feature exists — remains." }
+      ]
+    },
+    manager: {
+      situation: "Your team completed a new compliance training last month. Pass rates were 95%. But you're still seeing the same mistakes in the field.",
+      character: "Team Member",
+      quote: "I passed the training, I know the rules. I just... forget in the moment when things get busy.",
+      options: [
+        { label: "Retake the training", desc: "Require the team to complete the course again, with a higher pass threshold.", quality: "poor", icon: "🔄", feedback: "If they passed at 95%, they know the content. Repeating information they've already learned won't change behavior — it'll just frustrate your team.", consequence: "Morale drops. Mistakes continue at the same rate because the problem was never knowledge." },
+        { label: "Add point-of-action aids", desc: "Place job aids, checklists, and visual cues at the exact locations where mistakes happen.", quality: "best", icon: "👁", feedback: "This addresses the prompt and ability components. People forget in the moment — a checklist at the point of action bridges the gap between training and performance.", consequence: "Error rates drop 60% in two weeks. The aids become part of the workflow." },
+        { label: "Real-time coaching", desc: "Have managers observe and provide coaching during the task as it happens.", quality: "okay", icon: "👥", feedback: "Real-time coaching provides both a prompt and social motivation. But it's resource-intensive and doesn't scale.", consequence: "Mistakes decrease while managers are watching. But errors creep back when attention moves elsewhere." }
+      ]
+    },
+    ld_pro: {
+      situation: "A stakeholder asks you to build a 45-minute e-learning module on 'data privacy best practices.' They've already written 30 slides of content.",
+      character: "Stakeholder",
+      quote: "Here are the slides — can you just make them interactive? Maybe add some quizzes? We need this by Friday.",
+      options: [
+        { label: "Build as requested", desc: "Convert the 30 slides into an interactive module with knowledge checks throughout.", quality: "poor", icon: "📋", feedback: "This is the path of least resistance, but also the path to shelf-ware. 30 slides is information, not behavior change. Your role is to challenge 'more content = better training.'", consequence: "The module launches on time. Six months later, the same data breaches are happening." },
+        { label: "Reframe around behaviors", desc: "Ask 'What mistakes are people making?' and design around those specific behaviors instead.", quality: "best", icon: "🎯", feedback: "This is action mapping in practice. By identifying actual performance gaps, you design targeted practice around the 3-4 decisions that matter most.", consequence: "You co-design 4 scenario-based micro-experiences targeting real mistakes. 12 minutes, not 45. Incident reports drop 35%." },
+        { label: "Shorten the content", desc: "Suggest condensing the 30 slides into a focused 15-minute micro-lesson.", quality: "okay", icon: "⏱", feedback: "Shorter is often better, but shorter information is still just information. The format isn't the problem — the approach is.", consequence: "Learners appreciate the brevity. But behavior doesn't change because the content still teaches knowledge, not action." }
+      ]
+    }
+  };
+
+  // State
+  let step = 0;
+  let profile = { name: '', role: null, experience: null };
+  let revealedPrinciples = [];
+  let selectedChoice = null;
+  let reflection = '';
+
+  const body = document.getElementById('lesson-body');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+  const fill = document.getElementById('lesson-fill');
+  const stepLabel = document.getElementById('step-label');
+  const stepName = document.getElementById('step-name');
+
+  function updateProgress() {
+    fill.style.width = ((step + 1) / TOTAL_STEPS * 100) + '%';
+    stepLabel.textContent = 'step ' + (step + 1) + ' of ' + TOTAL_STEPS;
+    stepName.textContent = STEP_NAMES[step];
+    btnPrev.disabled = step === 0;
+  }
+
+  function canAdvance() {
+    if (step === 0) return profile.name.trim() && profile.role && profile.experience;
+    if (step === 2) return revealedPrinciples.length === 3;
+    if (step === 4) return selectedChoice !== null;
+    return true;
+  }
+
+  function updateNextBtn() {
+    const ok = canAdvance();
+    btnNext.disabled = !ok;
+    btnNext.textContent = step === TOTAL_STEPS - 1 ? 'restart' : 'next →';
+  }
+
+  function noteHtml(stepNum) {
+    const text = NOTES[stepNum];
+    if (!text) return '';
+    return `<div class="designer-note"><span class="designer-note__label">✏ designer's note</span><p class="designer-note__text">${text}</p></div>`;
+  }
+
+  function renderStep() {
+    body.innerHTML = '';
+    updateProgress();
+
+    if (step === 0) {
+      body.innerHTML = `
+        <div>
+          <p style="font-size:0.95rem;color:var(--ink-2);margin-bottom:1.5rem;line-height:1.6">Tell the system who you are. This shapes everything that follows — framing, depth, and the scenario you'll work through.</p>
+          <div class="intake-field">
+            <label class="intake-label" for="il-name">your name</label>
+            <input class="intake-input" id="il-name" type="text" placeholder="first name" value="${profile.name}" autocomplete="off" />
+          </div>
+          <div class="intake-field">
+            <label class="intake-label">your role</label>
+            <div class="role-btns">
+              ${Object.entries(ROLES).map(([k,v]) => `<button class="role-btn${profile.role===k?' active':''}" data-role="${k}">${v}</button>`).join('')}
+            </div>
+          </div>
+          <div class="intake-field">
+            <label class="intake-label">experience with behavior design</label>
+            <div class="exp-btns">
+              ${Object.entries(EXPERIENCES).map(([k,v]) => `<button class="exp-btn${profile.experience===k?' active':''}" data-exp="${k}">${v}</button>`).join('')}
+            </div>
+          </div>
+          ${noteHtml(0)}
+        </div>
+      `;
+      body.querySelector('#il-name').addEventListener('input', e => { profile.name = e.target.value; updateNextBtn(); });
+      body.querySelectorAll('.role-btn').forEach(b => b.addEventListener('click', () => { profile.role = b.dataset.role; body.querySelectorAll('.role-btn').forEach(x => x.classList.toggle('active', x===b)); updateNextBtn(); }));
+      body.querySelectorAll('.exp-btn').forEach(b => b.addEventListener('click', () => { profile.experience = b.dataset.exp; body.querySelectorAll('.exp-btn').forEach(x => x.classList.toggle('active', x===b)); updateNextBtn(); }));
+    }
+
+    else if (step === 1) {
+      const first = (profile.name.split(' ')[0] || 'there');
+      const intro = INTROS[profile.role] || INTROS.ld_pro;
+      const expFrame = EXP_FRAMES[profile.experience] || EXP_FRAMES.none;
+      body.innerHTML = `
+        <div>
+          <div class="intro-greeting">hey <em>${first}.</em></div>
+          <p class="intro-body">${intro.role}</p>
+          <p class="intro-body">${expFrame}</p>
+          ${noteHtml(1)}
+        </div>
+      `;
+    }
+
+    else if (step === 2) {
+      const principles = PRINCIPLES[profile.experience] || PRINCIPLES.none;
+      const title = profile.experience === 'advanced' ? 'the behavior model — pressure-test it.' : profile.experience === 'some' ? 'the behavior model — quick review.' : 'the behavior model.';
+      const subtitle = profile.experience === 'none'
+        ? 'Every behavior requires three things to happen at the same moment. Tap each to reveal.'
+        : profile.experience === 'advanced'
+        ? 'You know this. Tap each to challenge your assumptions.'
+        : 'Three components, one moment. Tap each to confirm the foundation.';
+      body.innerHTML = `
+        <div>
+          <h3 style="font-family:var(--display);font-weight:700;font-size:1.25rem;text-transform:lowercase;letter-spacing:-0.02em;margin-bottom:0.4rem">${title}</h3>
+          <p style="font-size:0.85rem;color:var(--ink-2);margin-bottom:1rem">${subtitle}</p>
+          <div class="principle-cards" id="principle-cards">
+            ${principles.map((p, i) => `
+              <div class="principle-card${revealedPrinciples.includes(i)?' revealed':''}" data-i="${i}">
+                <div class="principle-card__label">${p.label}</div>
+                <div class="principle-card__hint">${p.hint}</div>
+                <div class="principle-card__detail">${p.detail}</div>
+              </div>
+            `).join('')}
+          </div>
+          ${noteHtml(2)}
+        </div>
+      `;
+      body.querySelectorAll('.principle-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const i = parseInt(card.dataset.i);
+          if (!revealedPrinciples.includes(i)) { revealedPrinciples.push(i); card.classList.add('revealed'); updateNextBtn(); }
+        });
+      });
+    }
+
+    else if (step === 3) {
+      const role = ROLES[profile.role] || 'Learner';
+      body.innerHTML = `
+        <div style="display:flex;flex-direction:column;justify-content:center;flex:1;padding:1rem 0">
+          <p style="font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--magenta);margin-bottom:0.5rem">up next</p>
+          <h3 style="font-family:var(--display);font-weight:700;font-size:clamp(1.5rem,3vw,2.25rem);letter-spacing:-0.04em;text-transform:lowercase;line-height:1.05;margin-bottom:0.75rem">a scenario<br><em>built for ${role.toLowerCase()}s.</em></h3>
+          <p style="font-size:0.9rem;color:var(--ink-2);max-width:44ch;line-height:1.6">You've seen the model. Now apply it. Read the situation, consider the character's question, and pick the best response — then see why it works (or doesn't).</p>
+          ${noteHtml(3)}
+        </div>
+      `;
+    }
+
+    else if (step === 4) {
+      const scenario = SCENARIOS[profile.role] || SCENARIOS.ld_pro;
+      body.innerHTML = `
+        <div>
+          <div class="scenario-situation">${scenario.situation}</div>
+          <div class="scenario-quote">"${scenario.quote}" — ${scenario.character}</div>
+          <div class="choice-btns" id="choice-btns">
+            ${scenario.options.map((opt, i) => `
+              <button class="choice-btn choice-btn--${opt.quality}${selectedChoice!==null?' selected':''}" data-i="${i}" ${selectedChoice!==null?'disabled':''}>
+                <span class="choice-icon">${opt.icon}</span>
+                <div>
+                  <div class="choice-label">${opt.label}</div>
+                  <div class="choice-desc">${opt.desc}</div>
+                  <div class="choice-feedback${selectedChoice===i?' visible':''}"><strong>${opt.quality==='best'?'✓ best choice':opt.quality==='okay'?'partial':'not quite'}</strong> — ${opt.feedback}</div>
+                  <div class="consequence${selectedChoice===i?' visible':''}">${opt.consequence}</div>
+                </div>
+              </button>
+            `).join('')}
+          </div>
+          ${noteHtml(4)}
+        </div>
+      `;
+      if (selectedChoice === null) {
+        body.querySelectorAll('.choice-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            selectedChoice = parseInt(btn.dataset.i);
+            body.querySelectorAll('.choice-btn').forEach(b => { b.disabled = true; });
+            body.querySelectorAll('.choice-feedback').forEach((el, j) => { if (j === selectedChoice) el.classList.add('visible'); });
+            body.querySelectorAll('.consequence').forEach((el, j) => { if (j === selectedChoice) el.classList.add('visible'); });
+            updateNextBtn();
+          });
+        });
+      }
+    }
+
+    else if (step === 5) {
+      body.innerHTML = `
+        <div>
+          <h3 style="font-family:var(--display);font-weight:700;font-size:1.2rem;text-transform:lowercase;letter-spacing:-0.02em;margin-bottom:0.3rem">reflect.</h3>
+          <p class="reflection-q">Where in your actual work could you apply the behavior model this week? Be specific — name the context, the behavior, and the lever you'd pull.</p>
+          <textarea class="reflection-area" id="reflection-area" placeholder="Your answer...">${reflection}</textarea>
+          ${noteHtml(5)}
+          <h4 style="font-family:var(--display);font-weight:700;font-size:1rem;text-transform:lowercase;letter-spacing:-0.01em;margin:1.5rem 0 0.75rem">what this lesson demonstrated</h4>
+          <div class="summary-grid">
+            <div class="summary-item"><div class="summary-item__icon">✨</div><div class="summary-item__h">personalization</div><p class="summary-item__p">Content adapted to your role and experience</p></div>
+            <div class="summary-item"><div class="summary-item__icon">💡</div><div class="summary-item__h">active recall</div><p class="summary-item__p">Tap-to-reveal instead of passive reading</p></div>
+            <div class="summary-item"><div class="summary-item__icon">🎯</div><div class="summary-item__h">scenario-based</div><p class="summary-item__p">Applying concepts to realistic situations</p></div>
+            <div class="summary-item"><div class="summary-item__icon">💬</div><div class="summary-item__h">contextual feedback</div><p class="summary-item__p">Explaining the why, not just right/wrong</p></div>
+          </div>
+        </div>
+      `;
+      body.querySelector('#reflection-area').addEventListener('input', e => { reflection = e.target.value; });
+    }
+
+    updateNextBtn();
+  }
+
+  btnNext.addEventListener('click', () => {
+    if (step === TOTAL_STEPS - 1) {
+      step = 0; revealedPrinciples = []; selectedChoice = null; reflection = '';
+      profile = { name: '', role: null, experience: null };
+    } else {
+      step++;
+    }
+    renderStep();
+  });
+
+  btnPrev.addEventListener('click', () => {
+    if (step > 0) { step--; renderStep(); }
+  });
+
+  renderStep();
+})();
+</script>
+</body>
+</html>

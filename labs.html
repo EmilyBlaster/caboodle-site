@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>caboodle labs · caboodle design</title>
+<meta name="description" content="Where behavior design meets AI experimentation. Personal projects, prototypes, and proof-of-concepts from caboodle design." />
+
+<!-- Open Graph / social preview -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="caboodle design" />
+<meta property="og:title" content="caboodle labs · where behavior meets AI" />
+<meta property="og:description" content="Personal projects, prototypes, and proofs-of-concept. Each one exploring whether AI can solve a real L&D workflow problem." />
+<meta property="og:url" content="https://caboodledesign.info/labs.html" />
+<meta property="og:image" content="https://caboodledesign.info/assets/og/og-labs.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://caboodledesign.info/assets/og/og-labs.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+</head>
+<body>
+
+<!-- Field log -->
+<aside class="fieldlog" aria-hidden="true">
+  <div class="fieldlog__head">
+    <span class="fieldlog__dot"></span>
+    <span class="fieldlog__label">field log · lab notebook</span>
+    <span class="fieldlog__time" id="logTime">--:--</span>
+  </div>
+  <ul class="fieldlog__entries" id="logEntries">
+    <li class="fieldlog__entry is-active"><span>001</span> lab notebook opened</li>
+  </ul>
+</aside>
+
+<!-- Nav -->
+<header class="nav">
+  <a class="nav__mark" href="index.html">
+    <svg class="cd-logo" viewBox="0 0 260 56" xmlns="http://www.w3.org/2000/svg" aria-label="caboodle design" role="img">
+      <path class="cd-logo__mark" fill-rule="evenodd"
+        d="M 5 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0 M 33 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0"/>
+      <text class="cd-logo__word" x="95" y="26" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">caboodle</text>
+      <text class="cd-logo__word" x="95" y="50" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">design</text>
+    </svg>
+  </a>
+  <nav class="nav__links">
+    <a href="approach.html">approach</a>
+    <a href="index.html#work">work</a>
+    <a href="labs.html">labs</a>
+    <a href="about.html">about emily</a>
+    <a href="contact.html" class="nav__cta">let's talk</a>
+  </nav>
+</header>
+
+<!-- Hero -->
+<section class="labshero" data-log="001 — lab notebook opened">
+  <div class="labshero__stamp">
+    <span>lab notebook</span>
+    <b>005 / active</b>
+    <span>prototypes · proofs · in progress</span>
+  </div>
+
+  <span class="labshero__kicker">chapter iii · caboodle labs</span>
+  <h1 class="labshero__h">
+    where behavior design<br />
+    meets <em>ai experimentation.</em>
+  </h1>
+  <p class="labshero__lede">
+    Personal projects, prototypes, and proofs-of-concept. Each one
+    exploring whether AI can solve a real L&amp;D workflow problem,
+    not just build features.
+  </p>
+
+  <!-- Thesis triptych -->
+  <ol class="labshero__thesis">
+    <li>
+      <span>01</span>
+      <p>Build the tool, not the feature. Labs exist to solve actual friction points that show up mid-project.</p>
+    </li>
+    <li>
+      <span>02</span>
+      <p>Ground every prototype in learning science. Novelty is cheap. Behavioral evidence is the bar.</p>
+    </li>
+    <li>
+      <span>03</span>
+      <p>Ship in public. Every experiment is a working URL you can visit, not a case study of what could be.</p>
+    </li>
+  </ol>
+</section>
+
+<!-- Current Experiments -->
+<section class="experiments" data-log="002 — entering the bench">
+  <header class="experiments__head">
+    <span class="experiments__kicker">current experiments · 2026</span>
+    <h2 class="experiments__title">the bench.</h2>
+    <p class="experiments__dek">
+      Five prototypes currently in rotation. Each has a live URL,
+      a thesis, and a next-step roadmap. Click through to the
+      working version.
+    </p>
+  </header>
+
+  <ol class="experiments__list">
+
+    <!-- LAB-001 Stakeholder Review -->
+    <article id="lab-001" class="experiment experiment--left" data-log="003 — lab-001 · stakeholder review">
+      <div class="experiment__num" aria-hidden="true">LAB<br />001</div>
+      <div class="experiment__body">
+        <div class="experiment__tab">
+          <span>ai-built tool · workflow design</span>
+          <span>live · 24-hour build</span>
+        </div>
+        <h3 class="experiment__h">inline stakeholder review system.</h3>
+        <p class="experiment__p">
+          A feedback workspace built directly into a client landing
+          page using Claude Code. Pins anchored to exact positions,
+          color-coded reviewers, a slide-out panel that groups
+          comments by section with resolve tracking. No email
+          threads. No annotated screenshots. No "jump on a quick
+          call?"
+        </p>
+        <p class="experiment__p experiment__p--alt">
+          <em>Thesis:</em> Exploring whether AI-assisted code
+          generation can solve real workflow problems mid-project,
+          not just build features, but build tools, with a 24-hour
+          turnaround and no design system to start from.
+        </p>
+        <ul class="experiment__stack">
+          <li>claude code</li>
+          <li>vibe coding</li>
+          <li>workflow design</li>
+        </ul>
+        <a class="experiment__cta" href="labs/stakeholder-review.html">
+          <span>view experiment</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- LAB-002 Emotion-Aware -->
+    <article id="lab-002" class="experiment experiment--right" data-log="004 — lab-002 · emotion-aware feedback">
+      <div class="experiment__num" aria-hidden="true">LAB<br />002</div>
+      <div class="experiment__body">
+        <div class="experiment__tab">
+          <span>feedback design · adaptive ux</span>
+          <span>live · prototype</span>
+        </div>
+        <h3 class="experiment__h">emotion-aware feedback system.</h3>
+        <p class="experiment__p">
+          Same scenario. Same learner response. Three completely
+          different coaching outputs depending on emotional state.
+          Submit once, see all three patterns. Submit three times
+          and the system overrides your slider when it detects
+          repeated struggle.
+        </p>
+        <p class="experiment__p experiment__p--alt">
+          <em>Thesis:</em> Grounded in Anthropic's April 2026
+          interpretability research on functional emotion in LLMs.
+          Testing whether acknowledging emotional context before
+          delivering feedback improves receptivity, and what that
+          design pattern looks like in practice.
+        </p>
+        <ul class="experiment__stack">
+          <li>emotion detection</li>
+          <li>adaptive ux</li>
+          <li>self-report signal</li>
+          <li>multi-turn coaching</li>
+        </ul>
+        <a class="experiment__cta" href="labs/emotion-feedback.html">
+          <span>try it</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- LAB-003 Content Ops -->
+    <article id="lab-003" class="experiment experiment--left" data-log="005 — lab-003 · content ops dashboard">
+      <div class="experiment__num" aria-hidden="true">LAB<br />003</div>
+      <div class="experiment__body">
+        <div class="experiment__tab">
+          <span>systems thinking · workflow automation</span>
+          <span>in production</span>
+        </div>
+        <h3 class="experiment__h">content ops dashboard.</h3>
+        <p class="experiment__p">
+          What happens when you apply instructional systems
+          thinking to your own workflow. The daily brief, Canva
+          carousel automation, a research pipeline scraping
+          Reddit/TikTok/YouTube, and an analytics report — all
+          automated with Claude Code. Powered by one markdown
+          brand guide that every session reads.
+        </p>
+        <p class="experiment__p experiment__p--alt">
+          <em>Thesis:</em> If L&amp;D teams thought about their own
+          operations the way they think about learner operations,
+          what would change? Turns out: a lot.
+        </p>
+        <ul class="experiment__stack">
+          <li>claude code</li>
+          <li>cowork</li>
+          <li>notion</li>
+          <li>canva</li>
+          <li>apify</li>
+          <li>gmail api</li>
+          <li>google calendar</li>
+          <li>netlify</li>
+        </ul>
+        <a class="experiment__cta" href="labs/content-ops-dashboard.html">
+          <span>view experiment</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- LAB-004 Programmatic Video -->
+    <article id="lab-004" class="experiment experiment--right" data-log="006 — lab-004 · programmatic video">
+      <div class="experiment__num" aria-hidden="true">LAB<br />004</div>
+      <div class="experiment__body">
+        <div class="experiment__tab">
+          <span>programmatic media · mcp</span>
+          <span>live · early stage</span>
+        </div>
+        <h3 class="experiment__h">programmatic video &amp; content automation.</h3>
+        <p class="experiment__p">
+          Remotion for version-controlled video templates. Claude
+          Code + MCP for automated Canva carousel generation. From
+          a structured content queue to published assets with no
+          manual design work.
+        </p>
+        <p class="experiment__p experiment__p--alt">
+          <em>Thesis:</em> Exploring whether programmatic video
+          generation and MCP-driven design tools can replace
+          manual asset production for L&amp;D teams building job
+          aids, micro-videos, onboarding, and visual guides.
+        </p>
+        <ul class="experiment__stack">
+          <li>remotion</li>
+          <li>claude code</li>
+          <li>mcp</li>
+          <li>canva</li>
+          <li>react</li>
+        </ul>
+        <a class="experiment__cta" href="labs/video-automation.html">
+          <span>view experiment</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- LAB-005 Microlearning -->
+    <article id="lab-005" class="experiment experiment--left" data-log="007 — lab-005 · context-aware microlearning">
+      <div class="experiment__num" aria-hidden="true">LAB<br />005</div>
+      <div class="experiment__body">
+        <div class="experiment__tab">
+          <span>microlearning · behavioral nudges</span>
+          <span>live · demo</span>
+        </div>
+        <h3 class="experiment__h">context-aware microlearning.</h3>
+        <p class="experiment__p">
+          Pick a moment. Giving difficult feedback. Onboarding
+          someone new. Stuck on a design decision. Prepping for a
+          stakeholder meeting. The phone comes alive with a
+          personalized micro-intervention designed for that exact
+          context.
+        </p>
+        <p class="experiment__p experiment__p--alt">
+          <em>Thesis:</em> The 2026 definition of microlearning is
+          not shorter content. It is content that shows up at the
+          moment of need, adapts to context, and triggers a
+          specific decision or habit.
+        </p>
+        <ul class="experiment__stack">
+          <li>moment-of-need</li>
+          <li>behavioral nudges</li>
+          <li>context routing</li>
+        </ul>
+        <a class="experiment__cta" href="labs/microlearning.html">
+          <span>try it</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </a>
+      </div>
+    </article>
+
+  </ol>
+</section>
+
+<!-- Dark pull-quote · why labs -->
+<section class="quote" data-log="008 — why labs exist">
+  <div class="quote__inner">
+    <span class="quote__kicker">why labs exist</span>
+    <blockquote class="quote__body">
+      the thinking is the job.<br />
+      the labs are where the <em>thinking gets tested.</em>
+    </blockquote>
+    <span class="quote__attr">caboodle design · 2026</span>
+  </div>
+</section>
+
+<!-- Closing card -->
+<section class="closing" id="contact" data-log="009 — bench closed · chain to field notes">
+  <div class="closing__card">
+    <div class="closing__stamp" aria-hidden="true">
+      <svg class="cd-stamp-mark" viewBox="0 0 90 60" aria-hidden="true">
+        <path class="cd-stamp-mark__fill" fill-rule="evenodd"
+          d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>
+      </svg>
+      <small>bench closed</small>
+      <small>next: field notes</small>
+    </div>
+    <div class="closing__body">
+      <span class="closing__kicker">next field note</span>
+      <h2 class="closing__h">
+        read the <em>notebook.</em>
+      </h2>
+      <p class="closing__p">
+        The thinking behind the experiments, plus weekly
+        observations on what's actually shifting in L&amp;D.
+      </p>
+      <a class="closing__cta" href="field-notes.html">
+        <span>field notes</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+      <span class="closing__email">hello@caboodledesign.info</span>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot__row">
+    <span class="foot__mark">caboodle design</span>
+    <span class="foot__tag">strategy, media, and behavioral science — it's the whole caboodle</span>
+  </div>
+  <div class="foot__cols">
+    <div>
+      <h4>navigation</h4>
+      <ul>
+        <li><a href="approach.html">approach</a></li>
+        <li><a href="index.html#work">work</a></li>
+        <li><a href="about.html">about emily</a></li>
+        <li><a href="labs.html">labs</a></li>
+        <li><a href="field-notes.html">field notes</a></li>
+        <li><a href="resources.html">free resources</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>get in touch</h4>
+      <ul>
+        <li><a href="mailto:hello@caboodledesign.info">let's talk</a></li>
+        <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
+        <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot__row foot__row--small">
+    <span>&copy; 2026 caboodle design · founded by emily green</span>
+    <span>byron center, mi</span>
+  </div>
+</footer>
+
+<script src="script.js" defer></script>
+</body>
+</html>

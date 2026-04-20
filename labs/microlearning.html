@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>context-aware microlearning · lab 005 · caboodle design</title>
+<meta name="description" content="An interactive demo that simulates moment-of-need learning delivery. Pick a work scenario and receive a contextually relevant micro-intervention." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+
+<style>
+.labero { background: var(--ink); color: var(--white); padding: clamp(6rem,12vw,9rem) var(--pad-x) clamp(4rem,8vw,6rem); position: relative; overflow: hidden; border-bottom: 1px solid var(--dark-2); }
+.labero__back { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); text-decoration: none; margin-bottom: 2.5rem; transition: gap 0.3s var(--ease), opacity 0.3s var(--ease); opacity: 0.85; }
+.labero__back:hover { gap: 0.8rem; opacity: 1; }
+.labero__stamp { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 2rem; }
+.labero__stamp b { color: var(--lime); font-weight: 500; }
+.labero__watermark { font-family: var(--display); font-size: clamp(8rem,20vw,16rem); font-weight: 800; line-height: 0.85; letter-spacing: -0.06em; color: rgba(255,255,255,0.04); position: absolute; right: var(--pad-x); bottom: -0.1em; pointer-events: none; user-select: none; }
+.labero__inner { max-width: var(--maxw); margin: 0 auto; position: relative; }
+.labero__h { font-family: var(--display); font-size: clamp(2.75rem,6vw,5.5rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; color: var(--white); text-transform: lowercase; max-width: 18ch; margin: 0 0 1.25rem; }
+.labero__h em { color: var(--lime); font-style: normal; }
+.labero__lede { font-size: clamp(1rem,1.4vw,1.15rem); line-height: 1.6; color: rgba(255,255,255,0.6); max-width: 52ch; margin-bottom: 2rem; }
+.labero__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.labero__tags li { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3em 0.65em; border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.4); }
+
+.lab-s { padding: clamp(3.5rem,7vw,5.5rem) var(--pad-x); background: var(--paper); border-top: 1px solid var(--rule); }
+.lab-s--alt { background: var(--paper-2); }
+.lab-s__inner { max-width: var(--maxw); margin: 0 auto; }
+.lab-s__kicker { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--magenta); display: block; margin-bottom: 0.75rem; }
+.lab-s__h { font-family: var(--display); font-weight: 700; font-size: clamp(1.6rem,2.8vw,2.4rem); letter-spacing: -0.03em; text-transform: lowercase; line-height: 1.05; margin: 0 0 0.75rem; }
+.lab-s__h em { font-style: italic; }
+.lab-s__p { max-width: 60ch; line-height: 1.65; color: var(--ink-2); margin: 0 0 2.5rem; }
+
+/* === Microlearning demo === */
+.ml-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 3rem;
+  align-items: start;
+  max-width: 900px;
+}
+@media (max-width: 780px) {
+  .ml-layout { grid-template-columns: 1fr; }
+  .ml-phone { order: -1; max-width: 280px; }
+}
+
+/* Scenario picker */
+.ml-panel { border: 2px dashed rgba(236,0,140,0.25); padding: 1.75rem; background: rgba(236,0,140,0.02); }
+.ml-panel__h { font-family: var(--display); font-weight: 700; font-size: 1rem; text-transform: lowercase; letter-spacing: -0.01em; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.ml-panel__prompt { font-size: 0.875rem; color: var(--ink-2); margin-bottom: 1.25rem; line-height: 1.5; }
+.scenario-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+@media (max-width: 500px) { .scenario-btns { grid-template-columns: 1fr; } }
+.scenario-btn {
+  padding: 0.75rem 1rem; border: 1px solid var(--rule); background: var(--paper);
+  text-align: left; cursor: pointer; transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.scenario-btn:hover { border-color: var(--magenta); background: var(--white); }
+.scenario-btn.active { border-color: var(--magenta); background: var(--white); }
+.scenario-btn__label { font-size: 0.85rem; font-weight: 500; color: var(--ink); line-height: 1.3; }
+
+/* Context box */
+.ml-context {
+  margin-top: 1.25rem; padding: 1rem 1.25rem;
+  background: var(--paper-2); border-left: 3px solid var(--rule);
+  font-size: 0.85rem; line-height: 1.55; color: var(--ink-2);
+  display: none;
+}
+.ml-context.visible { display: block; }
+.ml-context strong { color: var(--ink); font-weight: 600; display: block; margin-bottom: 0.3rem; font-size: 0.72rem; font-family: var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* Comparison toggle */
+.ml-compare-btn {
+  margin-top: 1.25rem; width: 100%; padding: 0.65rem 1rem;
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase;
+  border: 1px solid var(--magenta); color: var(--magenta); background: transparent;
+  cursor: pointer; transition: background 0.2s var(--ease), color 0.2s var(--ease);
+  display: none;
+}
+.ml-compare-btn.visible { display: block; }
+.ml-compare-btn:hover { background: var(--magenta); color: var(--white); }
+
+.ml-comparison { margin-top: 1rem; display: none; }
+.ml-comparison.visible { display: grid; gap: 0.75rem; }
+.ml-comp-row { padding: 1rem 1.25rem; border: 1px solid var(--rule); }
+.ml-comp-row--old { background: var(--paper-2); }
+.ml-comp-row--new { background: rgba(150,230,80,0.06); border-color: rgba(150,230,80,0.3); }
+.ml-comp-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 0.4rem; }
+.ml-comp-row--old .ml-comp-label { color: var(--ink-2); }
+.ml-comp-row--new .ml-comp-label { color: #4a9c20; }
+.ml-comp-text { font-size: 0.825rem; line-height: 1.5; color: var(--ink-2); }
+
+/* Phone mockup */
+.ml-phone { position: sticky; top: 6rem; }
+.phone-shell {
+  background: var(--dark);
+  border-radius: 28px;
+  padding: 12px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.25);
+  max-width: 260px;
+  margin: 0 auto;
+}
+.phone-screen {
+  background: var(--paper);
+  border-radius: 18px;
+  overflow: hidden;
+  min-height: 420px;
+}
+.phone-status {
+  background: var(--dark-2);
+  padding: 8px 16px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.phone-time { font-family: var(--mono); font-size: 0.65rem; color: rgba(255,255,255,0.7); }
+.phone-icons { display: flex; gap: 4px; }
+.phone-icon { width: 6px; height: 6px; background: rgba(255,255,255,0.4); border-radius: 1px; }
+.phone-body { padding: 12px; }
+.phone-idle {
+  padding: 2rem 1rem;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rule);
+  line-height: 1.6;
+}
+/* Nudge notification */
+.nudge {
+  background: var(--white);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: none;
+}
+.nudge.visible { display: block; animation: nudge-in 0.4s var(--ease); }
+@keyframes nudge-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.nudge__header {
+  background: linear-gradient(135deg, rgba(236,0,140,0.08), rgba(3,89,155,0.06));
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+}
+.nudge__app {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--magenta);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.nudge__dot { width: 5px; height: 5px; border-radius: 50%; background: var(--magenta); }
+.nudge__time { font-family: var(--mono); font-size: 0.5rem; color: var(--ink-2); }
+.nudge__content { padding: 10px 12px; }
+.nudge__title { font-family: var(--display); font-weight: 700; font-size: 0.8rem; text-transform: lowercase; letter-spacing: -0.01em; margin-bottom: 5px; line-height: 1.2; }
+.nudge__text { font-size: 0.72rem; line-height: 1.55; color: var(--ink-2); margin-bottom: 8px; }
+.nudge__action {
+  padding: 6px 8px; background: rgba(3,89,155,0.06);
+  border-left: 2px solid var(--blue); border-radius: 2px;
+}
+.nudge__action-text { font-size: 0.65rem; line-height: 1.4; color: var(--ink); font-weight: 500; }
+.nudge__footer {
+  padding: 6px 12px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--paper-2);
+}
+.nudge__feedback { font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+.nudge__feedback-btns { display: flex; gap: 4px; }
+.nudge__fb-btn { padding: 2px 6px; border: 1px solid var(--rule); background: none; font-size: 0.6rem; cursor: pointer; border-radius: 2px; transition: background 0.15s; }
+.nudge__fb-btn:hover { background: var(--rule); }
+.phone-idle-text { display: block; }
+
+/* Limits */
+.limits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.limit { padding: 1.25rem; border: 1px solid var(--rule); background: var(--paper); }
+.limit__h { font-family: var(--display); font-weight: 700; font-size: 0.9rem; text-transform: lowercase; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
+.limit__p { font-size: 0.8rem; line-height: 1.55; color: var(--ink-2); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="nav__mark" href="../index.html">
+    <svg class="cd-logo" viewBox="0 0 260 56" xmlns="http://www.w3.org/2000/svg" aria-label="caboodle design" role="img">
+      <path class="cd-logo__mark" fill-rule="evenodd" d="M 5 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0 M 33 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0"/>
+      <text class="cd-logo__word" x="95" y="26" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">caboodle</text>
+      <text class="cd-logo__word" x="95" y="50" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">design</text>
+    </svg>
+  </a>
+  <nav class="nav__links">
+    <a href="../approach.html">approach</a>
+    <a href="../index.html#work">work</a>
+    <a href="../labs.html">labs</a>
+    <a href="../about.html">about emily</a>
+    <a href="../contact.html" class="nav__cta">let's talk</a>
+  </nav>
+</header>
+
+<section class="labero">
+  <div class="labero__inner">
+    <a class="labero__back" href="../labs.html">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      <span>back to labs</span>
+    </a>
+    <div class="labero__stamp">
+      <span>lab experiment</span>
+      <b>LAB-005</b>
+      <span>microlearning design · 2025</span>
+      <span>moment-of-need · behavioral nudges</span>
+    </div>
+    <h1 class="labero__h">
+      context-aware<br />
+      <em>microlearning.</em>
+    </h1>
+    <p class="labero__lede">
+      What if learning showed up at the exact moment you needed it — not as a course, but as a 30-second intervention that helps you act right now?
+    </p>
+    <ul class="labero__tags">
+      <li>ai prototype</li>
+      <li>microlearning</li>
+      <li>moment-of-need</li>
+      <li>behavioral nudges</li>
+    </ul>
+  </div>
+  <span class="labero__watermark" aria-hidden="true">005</span>
+</section>
+
+<!-- Interactive demo -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">try it</span>
+    <h2 class="lab-s__h">pick your moment. <em>watch the phone.</em></h2>
+    <p class="lab-s__p">
+      Choose a real work situation you're about to walk into. The phone simulates a context-aware nudge arriving at the right moment — not a course, not a module, just the one framework you need right now.
+    </p>
+
+    <div class="ml-layout">
+      <!-- Left: scenario panel -->
+      <div>
+        <div class="ml-panel">
+          <div class="ml-panel__h">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none"/><polyline points="12 6 12 12 16 14" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+            pick your moment
+          </div>
+          <p class="ml-panel__prompt">What are you about to walk into right now?</p>
+          <div class="scenario-btns" id="scenario-btns">
+            <button class="scenario-btn" data-id="feedback">
+              <span class="scenario-btn__label">Giving difficult feedback</span>
+            </button>
+            <button class="scenario-btn" data-id="onboarding">
+              <span class="scenario-btn__label">Onboarding someone new</span>
+            </button>
+            <button class="scenario-btn" data-id="decision">
+              <span class="scenario-btn__label">Stuck on a design decision</span>
+            </button>
+            <button class="scenario-btn" data-id="stakeholder">
+              <span class="scenario-btn__label">Prepping a stakeholder meeting</span>
+            </button>
+          </div>
+
+          <div class="ml-context" id="ml-context">
+            <strong>your context</strong>
+            <span id="ml-context-text"></span>
+          </div>
+
+          <button class="ml-compare-btn" id="ml-compare-btn">see the difference →</button>
+          <div class="ml-comparison" id="ml-comparison">
+            <div class="ml-comp-row ml-comp-row--old">
+              <span class="ml-comp-label">traditional microlearning</span>
+              <p class="ml-comp-text" id="comp-traditional"></p>
+            </div>
+            <div class="ml-comp-row ml-comp-row--new">
+              <span class="ml-comp-label">context-aware</span>
+              <p class="ml-comp-text" id="comp-contextual"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: phone -->
+      <div class="ml-phone">
+        <div class="phone-shell">
+          <div class="phone-screen">
+            <div class="phone-status">
+              <span class="phone-time" id="phone-time">9:41</span>
+              <div class="phone-icons">
+                <div class="phone-icon"></div>
+                <div class="phone-icon" style="width:10px;border-radius:3px;"></div>
+                <div class="phone-icon" style="width:8px;border-radius:50%;"></div>
+              </div>
+            </div>
+            <div class="phone-body">
+              <div class="phone-idle" id="phone-idle">
+                <span class="phone-idle-text">pick a scenario<br />to trigger your nudge</span>
+              </div>
+              <div class="nudge" id="nudge">
+                <div class="nudge__header">
+                  <span class="nudge__app">
+                    <span class="nudge__dot"></span>
+                    nudge
+                  </span>
+                  <span class="nudge__time">just now</span>
+                </div>
+                <div class="nudge__content">
+                  <div class="nudge__title" id="nudge-title"></div>
+                  <div class="nudge__text" id="nudge-text"></div>
+                  <div class="nudge__action">
+                    <div class="nudge__action-text" id="nudge-action"></div>
+                  </div>
+                </div>
+                <div class="nudge__footer">
+                  <span class="nudge__feedback">did this help?</span>
+                  <div class="nudge__feedback-btns">
+                    <button class="nudge__fb-btn" onclick="this.textContent='👍'">👍</button>
+                    <button class="nudge__fb-btn" onclick="this.textContent='👎'">👎</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Thesis + Limits -->
+<section class="lab-s lab-s--alt" data-reveal>
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">the thesis</span>
+    <h2 class="lab-s__h">microlearning in 2026 <em>isn't shorter courses.</em></h2>
+    <p class="lab-s__p">
+      The evolved definition: learning that shows up at the moment of need, adapts to the specific context, and triggers a decision or habit — not content you consume and apply later, but a tool that's active at the moment of performance.
+    </p>
+
+    <h3 class="lab-s__h" style="font-size:clamp(1.2rem,2vw,1.6rem); margin-top:0">limitations &amp; <em>what's next</em></h3>
+    <p class="lab-s__p" style="margin-bottom:1.5rem">This is a simulated demo — real context-aware delivery would be far more powerful.</p>
+    <div class="limits-grid">
+      <div class="limit">
+        <h4 class="limit__h">real context signals</h4>
+        <p class="limit__p">Here you pick a scenario manually. A real system reads your calendar, detects you have a 1:1 in 15 minutes, and pushes the nudge automatically.</p>
+      </div>
+      <div class="limit">
+        <h4 class="limit__h">spaced repetition</h4>
+        <p class="limit__p">This is single delivery. A real system would track whether you applied the framework and resurface it at increasing intervals.</p>
+      </div>
+      <div class="limit">
+        <h4 class="limit__h">feedback loops</h4>
+        <p class="limit__p">No data on whether the nudge actually helped. Production would capture: did you use it? Did it change the outcome? Then refine.</p>
+      </div>
+      <div class="limit">
+        <h4 class="limit__h">role-aware content</h4>
+        <p class="limit__p">Same interventions for everyone. A full system would tailor frameworks to seniority, team size, and past challenges.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Closing card -->
+<section class="closing" id="next">
+  <div class="closing__card">
+    <div class="closing__stamp" aria-hidden="true">
+      <svg class="cd-stamp-mark" viewBox="0 0 90 60" aria-hidden="true">
+        <path class="cd-stamp-mark__fill" fill-rule="evenodd" d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>
+      </svg>
+      <small>next experiment</small>
+      <small>LAB-006</small>
+    </div>
+    <div class="closing__body">
+      <span class="closing__kicker">next in the lab</span>
+      <h2 class="closing__h">
+        behavior design<br />
+        <em>101.</em>
+      </h2>
+      <p class="closing__p">
+        An interactive micro-lesson that adapts to your role and experience level. This is what behavior-driven learning design looks like in practice.
+      </p>
+      <a class="closing__cta" href="behavior-design.html">
+        <span>try the lesson</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+      <a class="closing__email" href="../labs.html">← all experiments</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot__row">
+    <span class="foot__mark">caboodle design</span>
+    <span class="foot__tag">strategy, media, and behavioral science — it's the whole caboodle</span>
+  </div>
+  <div class="foot__cols">
+    <div>
+      <h4>navigation</h4>
+      <ul>
+        <li><a href="../approach.html">approach</a></li>
+        <li><a href="../index.html#work">work</a></li>
+        <li><a href="../about.html">about emily</a></li>
+        <li><a href="../labs.html">labs</a></li>
+        <li><a href="../field-notes.html">field notes</a></li>
+        <li><a href="../resources.html">free resources</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>get in touch</h4>
+      <ul>
+        <li><a href="mailto:hello@caboodledesign.info">let's talk</a></li>
+        <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
+        <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot__row foot__row--small">
+    <span>&copy; 2026 caboodle design · founded by emily green</span>
+    <span>byron center, mi</span>
+  </div>
+</footer>
+
+<script src="../script.js" defer></script>
+<script>
+// ============================================================
+// Context-aware microlearning interactive demo
+// ============================================================
+(function() {
+  const SCENARIOS = {
+    feedback: {
+      context: "You have a 1:1 with a direct report in 15 minutes. You need to address a pattern of missed deadlines.",
+      nudge: {
+        title: "SBI Framework — Quick Prep",
+        text: "Name the Situation (when/where), the specific Behavior (what they did), and the Impact (what resulted). Lead with curiosity: 'I noticed X — can you walk me through what happened?'",
+        action: "Draft your opening line using SBI before you walk in."
+      },
+      traditional: "A 5-minute video titled 'How to Give Feedback' with generic tips and a knowledge check quiz.",
+      contextual: "A 30-second framework delivered 15 minutes before your meeting, with a specific prompt to draft your opening line."
+    },
+    onboarding: {
+      context: "A new team member starts Monday. You're their buddy and haven't prepped anything yet.",
+      nudge: {
+        title: "First-Week Checklist",
+        text: "Focus on belonging before productivity. Day 1: introductions + tool access. Day 2-3: shadow a workflow. Day 4-5: own a small task with support. Ask daily: 'What's unclear right now?'",
+        action: "Block 30 minutes on your calendar for a Day 1 welcome walkthrough."
+      },
+      traditional: "A 20-slide onboarding deck covering company history, org charts, and HR policies.",
+      contextual: "A first-week checklist focused on the buddy's responsibilities, delivered the Friday before the new hire starts."
+    },
+    decision: {
+      context: "You've been going back and forth on two approaches for 30 minutes. Neither feels right and the deadline is tomorrow.",
+      nudge: {
+        title: "The 'Reversible or Not?' Filter",
+        text: "Ask: Is this decision easily reversible? If yes — pick the faster option, ship it, and learn from real data. If no — identify the one constraint that matters most and let that decide.",
+        action: "Write: 'This decision is [reversible/irreversible] because ___.' Then act."
+      },
+      traditional: "A course module on 'Decision-Making Frameworks' comparing 6 different models.",
+      contextual: "A single decision filter delivered when you've been stuck for 30+ minutes, designed to unblock you in 60 seconds."
+    },
+    stakeholder: {
+      context: "You're presenting project progress to leadership in an hour. You have data but no narrative.",
+      nudge: {
+        title: "The 'So What?' Stack",
+        text: "For each data point, answer: 'So what does this mean for the business?' Stack your narrative: start with the decision you need from them, then the 2-3 data points that support it. End with a clear ask.",
+        action: "Rewrite your first slide to lead with the decision, not the data."
+      },
+      traditional: "A LinkedIn Learning course on 'Presenting to Executives' — 45 minutes, 8 modules.",
+      contextual: "A narrative framework delivered one hour before your meeting, with a specific prompt to restructure your opening slide."
+    }
+  };
+
+  const scenarioBtns = document.querySelectorAll('.scenario-btn');
+  const contextBox = document.getElementById('ml-context');
+  const contextText = document.getElementById('ml-context-text');
+  const compareBtn = document.getElementById('ml-compare-btn');
+  const comparison = document.getElementById('ml-comparison');
+  const compTraditional = document.getElementById('comp-traditional');
+  const compContextual = document.getElementById('comp-contextual');
+  const phoneIdle = document.getElementById('phone-idle');
+  const nudgeEl = document.getElementById('nudge');
+  const nudgeTitle = document.getElementById('nudge-title');
+  const nudgeText = document.getElementById('nudge-text');
+  const nudgeAction = document.getElementById('nudge-action');
+
+  // Update clock
+  function updateClock() {
+    const now = new Date();
+    let h = now.getHours(), m = now.getMinutes();
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    document.getElementById('phone-time').textContent = h + ':' + String(m).padStart(2, '0') + ' ' + ampm;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  function selectScenario(id) {
+    const s = SCENARIOS[id];
+    scenarioBtns.forEach(b => b.classList.toggle('active', b.dataset.id === id));
+
+    // Show context
+    contextText.textContent = s.context;
+    contextBox.classList.add('visible');
+
+    // Show compare button
+    compareBtn.classList.add('visible');
+    comparison.classList.remove('visible');
+
+    // Animate nudge in
+    phoneIdle.style.display = 'none';
+    nudgeEl.classList.remove('visible');
+    // Small delay for animation reset
+    setTimeout(() => {
+      nudgeTitle.textContent = s.nudge.title;
+      nudgeText.textContent = s.nudge.text;
+      nudgeAction.textContent = s.nudge.action;
+      nudgeEl.classList.add('visible');
+    }, 80);
+  }
+
+  scenarioBtns.forEach(btn => {
+    btn.addEventListener('click', () => selectScenario(btn.dataset.id));
+  });
+
+  compareBtn.addEventListener('click', () => {
+    const activBtn = document.querySelector('.scenario-btn.active');
+    if (!activBtn) return;
+    const s = SCENARIOS[activBtn.dataset.id];
+    compTraditional.textContent = s.traditional;
+    compContextual.textContent = s.contextual;
+    comparison.classList.toggle('visible');
+    compareBtn.textContent = comparison.classList.contains('visible') ? 'hide comparison ↑' : 'see the difference →';
+  });
+})();
+</script>
+</body>
+</html>

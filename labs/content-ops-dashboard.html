@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>content ops dashboard · lab 003 · caboodle design</title>
+<meta name="description" content="Automated an entire content operations stack with Claude Code — daily briefs, Canva generation, research pipelines, analytics. Every piece maps to L&D workflows." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+
+<style>
+.labero { background: var(--ink); color: var(--white); padding: clamp(6rem,12vw,9rem) var(--pad-x) clamp(4rem,8vw,6rem); position: relative; overflow: hidden; border-bottom: 1px solid var(--dark-2); }
+.labero__back { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); text-decoration: none; margin-bottom: 2.5rem; transition: gap 0.3s var(--ease), opacity 0.3s var(--ease); opacity: 0.85; }
+.labero__back:hover { gap: 0.8rem; opacity: 1; }
+.labero__stamp { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 2rem; }
+.labero__stamp b { color: var(--lime); font-weight: 500; }
+.labero__watermark { font-family: var(--display); font-size: clamp(8rem,20vw,16rem); font-weight: 800; line-height: 0.85; letter-spacing: -0.06em; color: rgba(255,255,255,0.04); position: absolute; right: var(--pad-x); bottom: -0.1em; pointer-events: none; user-select: none; }
+.labero__inner { max-width: var(--maxw); margin: 0 auto; position: relative; }
+.labero__h { font-family: var(--display); font-size: clamp(2.75rem,6vw,5.5rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; color: var(--white); text-transform: lowercase; max-width: 18ch; margin: 0 0 1.25rem; }
+.labero__h em { color: var(--lime); font-style: normal; }
+.labero__lede { font-size: clamp(1rem,1.4vw,1.15rem); line-height: 1.6; color: rgba(255,255,255,0.6); max-width: 52ch; margin-bottom: 2rem; }
+.labero__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.labero__tags li { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3em 0.65em; border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.4); }
+
+.lab-s { padding: clamp(3.5rem,7vw,5.5rem) var(--pad-x); background: var(--paper); border-top: 1px solid var(--rule); }
+.lab-s--alt { background: var(--paper-2); }
+.lab-s__inner { max-width: var(--maxw); margin: 0 auto; }
+.lab-s__kicker { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--magenta); display: block; margin-bottom: 0.75rem; }
+.lab-s__h { font-family: var(--display); font-weight: 700; font-size: clamp(1.6rem,2.8vw,2.4rem); letter-spacing: -0.03em; text-transform: lowercase; line-height: 1.05; margin: 0 0 0.75rem; }
+.lab-s__h em { font-style: italic; }
+.lab-s__p { max-width: 60ch; line-height: 1.65; color: var(--ink-2); margin: 0 0 2.5rem; }
+
+.lab-video { border-radius: 4px; overflow: hidden; aspect-ratio: 16/9; margin-bottom: 3rem; border: 1px solid var(--rule); }
+.lab-video iframe { width: 100%; height: 100%; display: block; border: 0; }
+
+/* Automation cards */
+.auto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; border: 1px solid var(--rule); background: var(--rule); margin-bottom: 3rem; }
+.auto-card { background: var(--paper); padding: 1.75rem; transition: background 0.3s var(--ease); }
+.auto-card:hover { background: var(--white); }
+.auto-card__num { font-family: var(--display); font-weight: 800; font-size: 2.75rem; line-height: 0.9; letter-spacing: -0.06em; color: rgba(150,230,80,0.15); margin-bottom: 0.75rem; }
+.auto-card__h { font-family: var(--display); font-weight: 700; font-size: 1rem; text-transform: lowercase; letter-spacing: -0.01em; margin-bottom: 0.5rem; }
+.auto-card__p { font-size: 0.85rem; line-height: 1.55; color: var(--ink-2); margin-bottom: 0.75rem; }
+.auto-card__ld { padding: 0.65rem 0.85rem; background: rgba(3,89,155,0.06); border-left: 2px solid var(--blue); }
+.auto-card__ld-label { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); display: block; margin-bottom: 0.25rem; }
+.auto-card__ld-p { font-size: 0.78rem; line-height: 1.45; color: var(--ink-2); }
+
+/* Secret ingredient callout */
+.secret { border: 2px dashed rgba(236,0,140,0.3); padding: 2rem; margin-bottom: 3rem; background: rgba(236,0,140,0.03); }
+.secret__h { font-family: var(--display); font-weight: 700; font-size: 1.1rem; text-transform: lowercase; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+.secret__p { font-size: 0.875rem; line-height: 1.6; color: var(--ink-2); max-width: 56ch; }
+.secret__p strong { color: var(--ink); }
+
+/* Tools */
+.tool-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 2.5rem; }
+.tool-pill { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3em 0.65em; border: 1px solid var(--rule); color: var(--ink-2); background: var(--paper); }
+
+.lab-cta-link { display: inline-flex; align-items: center; gap: 0.6rem; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); text-decoration: none; border: 1px solid var(--blue); padding: 0.7em 1.25em; transition: background 0.3s var(--ease), color 0.3s var(--ease); }
+.lab-cta-link:hover { background: var(--blue); color: var(--white); }
+
+/* Limits */
+.limits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.limit { padding: 1.25rem; border: 1px solid var(--rule); background: var(--paper); }
+.limit__h { font-family: var(--display); font-weight: 700; font-size: 0.9rem; text-transform: lowercase; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
+.limit__p { font-size: 0.8rem; line-height: 1.55; color: var(--ink-2); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="nav__mark" href="../index.html">
+    <svg class="cd-logo" viewBox="0 0 260 56" xmlns="http://www.w3.org/2000/svg" aria-label="caboodle design" role="img">
+      <path class="cd-logo__mark" fill-rule="evenodd" d="M 5 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0 M 33 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0"/>
+      <text class="cd-logo__word" x="95" y="26" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">caboodle</text>
+      <text class="cd-logo__word" x="95" y="50" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">design</text>
+    </svg>
+  </a>
+  <nav class="nav__links">
+    <a href="../approach.html">approach</a>
+    <a href="../index.html#work">work</a>
+    <a href="../labs.html">labs</a>
+    <a href="../about.html">about emily</a>
+    <a href="../contact.html" class="nav__cta">let's talk</a>
+  </nav>
+</header>
+
+<section class="labero">
+  <div class="labero__inner">
+    <a class="labero__back" href="../labs.html">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      <span>back to labs</span>
+    </a>
+    <div class="labero__stamp">
+      <span>lab experiment</span>
+      <b>LAB-003</b>
+      <span>workflow automation · 2025</span>
+      <span>claude code · systems thinking</span>
+    </div>
+    <h1 class="labero__h">
+      content ops<br />
+      <em>dashboard.</em>
+    </h1>
+    <p class="labero__lede">
+      What happens when you apply instructional systems thinking to your own workflow — and automate the entire stack with Claude Code. Daily briefs, Canva generation, research pipelines, analytics. None of it required a developer.
+    </p>
+    <ul class="labero__tags">
+      <li>ai prototype</li>
+      <li>workflow automation</li>
+      <li>claude code</li>
+      <li>systems thinking</li>
+    </ul>
+  </div>
+  <span class="labero__watermark" aria-hidden="true">003</span>
+</section>
+
+<!-- Video -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">see it in action</span>
+    <h2 class="lab-s__h">the walkthrough</h2>
+    <p class="lab-s__p">
+      A full tour of the automated content operations dashboard — from the morning brief that synthesizes email and calendar, to the Sunday night analytics report that generates itself.
+    </p>
+    <div class="lab-video">
+      <iframe
+        src="https://player.vimeo.com/video/1178935376?title=0&byline=0&portrait=0"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen
+        title="Content Ops Dashboard Walkthrough"
+      ></iframe>
+    </div>
+
+    <!-- About this experiment -->
+    <span class="lab-s__kicker">the thesis</span>
+    <h2 class="lab-s__h">this isn't about <em>social media.</em></h2>
+    <p class="lab-s__p">
+      I spent several weeks automating my entire content operations stack with Claude Code. Every piece of it — the daily brief, the content generation, the research pipeline, the analytics — maps directly to problems learning designers face every day. None of this required a developer. It required systems thinking, which is exactly what we already do.
+    </p>
+  </div>
+</section>
+
+<!-- Automations -->
+<section class="lab-s lab-s--alt" data-reveal>
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">the automations</span>
+    <h2 class="lab-s__h">four workflows. <em>zero manual triggers.</em></h2>
+    <p class="lab-s__p">Each automation has a direct L&D parallel — the same logic applies whether you're managing content or managing learning operations.</p>
+    <div class="auto-grid">
+      <div class="auto-card">
+        <div class="auto-card__num">01</div>
+        <h3 class="auto-card__h">the daily brief</h3>
+        <p class="auto-card__p">Every morning: top emails, calendar events, and Notion projects — synthesized into one prioritized brief. No context switching before coffee.</p>
+        <div class="auto-card__ld">
+          <span class="auto-card__ld-label">for L&amp;D</span>
+          <p class="auto-card__ld-p">A project status digest. Client deliverables, SME review threads, LMS feedback — one view, every morning.</p>
+        </div>
+      </div>
+      <div class="auto-card">
+        <div class="auto-card__num">02</div>
+        <h3 class="auto-card__h">canva automation</h3>
+        <p class="auto-card__p">A Notion queue feeds Claude Code every Sunday. It opens designated Canva templates, builds every carousel marked ready, and marks them done. Monday morning, the content exists.</p>
+        <div class="auto-card__ld">
+          <span class="auto-card__ld-label">for L&amp;D</span>
+          <p class="auto-card__ld-p">Job aids. One-pagers. Slide decks. If you have a Canva template and a content queue, this builds your materials while you sleep.</p>
+        </div>
+      </div>
+      <div class="auto-card">
+        <div class="auto-card__num">03</div>
+        <h3 class="auto-card__h">research pipeline</h3>
+        <p class="auto-card__p">Three Apify scrapers run every Wednesday — Reddit, TikTok, YouTube — pulling what the audience is struggling with right now. Results go to Notion with a Perplexity report.</p>
+        <div class="auto-card__ld">
+          <span class="auto-card__ld-label">for L&amp;D</span>
+          <p class="auto-card__ld-p">Needs analysis. Replace manual community lurking with structured scraping of forums, LinkedIn groups, and industry channels. Real pain points, updated weekly.</p>
+        </div>
+      </div>
+      <div class="auto-card">
+        <div class="auto-card__num">04</div>
+        <h3 class="auto-card__h">analytics report</h3>
+        <p class="auto-card__p">Every Sunday night, a performance report generates itself and surfaces inside the dashboard. No logging into apps. No manual data pulling.</p>
+        <div class="auto-card__ld">
+          <span class="auto-card__ld-label">for L&amp;D</span>
+          <p class="auto-card__ld-p">Evaluation data. LMS exports, survey results, completion rates — piped into one place, automatically. Kirkpatrick Level 1 and 2 data that actually gets reviewed.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Secret ingredient -->
+    <div class="secret">
+      <h3 class="secret__h">the secret ingredient</h3>
+      <p class="secret__p">One single markdown file contains the entire brand guide — colors, fonts, tone of voice, writing rules. Every Claude Code session reads it automatically. Every output follows it. <strong>I wrote it once. It runs everything.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- Tools + CTA -->
+<section class="lab-s" data-reveal>
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">tools used</span>
+    <h2 class="lab-s__h" style="margin-bottom:1.25rem">the stack</h2>
+    <div class="tool-list">
+      <span class="tool-pill">claude code</span>
+      <span class="tool-pill">cowork</span>
+      <span class="tool-pill">notion</span>
+      <span class="tool-pill">canva</span>
+      <span class="tool-pill">apify</span>
+      <span class="tool-pill">gmail api</span>
+      <span class="tool-pill">google calendar api</span>
+      <span class="tool-pill">netlify</span>
+      <span class="tool-pill">react</span>
+      <span class="tool-pill">perplexity</span>
+    </div>
+
+    <h3 class="lab-s__h" style="margin-top:2.5rem">see it live</h3>
+    <p class="lab-s__p">The actual dashboard — running the daily brief, research pipeline, and analytics reports on a real schedule.</p>
+    <a class="lab-cta-link" href="https://caboodledashboard.netlify.app" target="_blank" rel="noopener">
+      <span>open the dashboard</span>
+      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+    </a>
+
+    <!-- Limitations -->
+    <h3 class="lab-s__h" style="margin-top:3rem">limitations &amp; <em>what's next</em></h3>
+    <p class="lab-s__p" style="margin-bottom:1.5rem">This is a working system, not a finished product.</p>
+    <div class="limits-grid">
+      <div class="limit">
+        <h4 class="limit__h">deeper analytics</h4>
+        <p class="limit__p">Current reports surface top-level metrics. Next: trend analysis across weeks, content type performance, and audience growth patterns.</p>
+      </div>
+      <div class="limit">
+        <h4 class="limit__h">smarter content briefs</h4>
+        <p class="limit__p">Research pipeline delivers raw findings. Next: AI-generated content briefs that connect audience pain points to specific content formats and angles.</p>
+      </div>
+      <div class="limit">
+        <h4 class="limit__h">end-to-end automation</h4>
+        <p class="limit__p">Some steps still need manual triggers. Goal: fully autonomous pipeline from research insight to published content with human review gates.</p>
+      </div>
+      <div class="limit">
+        <h4 class="limit__h">template expansion</h4>
+        <p class="limit__p">Currently handles carousel templates. Expanding to video thumbnails, story templates, and long-form article layouts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Closing card -->
+<section class="closing" id="next">
+  <div class="closing__card">
+    <div class="closing__stamp" aria-hidden="true">
+      <svg class="cd-stamp-mark" viewBox="0 0 90 60" aria-hidden="true">
+        <path class="cd-stamp-mark__fill" fill-rule="evenodd" d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>
+      </svg>
+      <small>next experiment</small>
+      <small>LAB-004</small>
+    </div>
+    <div class="closing__body">
+      <span class="closing__kicker">next in the lab</span>
+      <h2 class="closing__h">
+        programmatic video<br />
+        <em>&amp; automation.</em>
+      </h2>
+      <p class="closing__p">
+        Code-driven video templates with Remotion and automated Canva carousel generation — from template to published content with no manual design work.
+      </p>
+      <a class="closing__cta" href="video-automation.html">
+        <span>explore the experiment</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+      <a class="closing__email" href="../labs.html">← all experiments</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot__row">
+    <span class="foot__mark">caboodle design</span>
+    <span class="foot__tag">strategy, media, and behavioral science — it's the whole caboodle</span>
+  </div>
+  <div class="foot__cols">
+    <div>
+      <h4>navigation</h4>
+      <ul>
+        <li><a href="../approach.html">approach</a></li>
+        <li><a href="../index.html#work">work</a></li>
+        <li><a href="../about.html">about emily</a></li>
+        <li><a href="../labs.html">labs</a></li>
+        <li><a href="../field-notes.html">field notes</a></li>
+        <li><a href="../resources.html">free resources</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>get in touch</h4>
+      <ul>
+        <li><a href="mailto:hello@caboodledesign.info">let's talk</a></li>
+        <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
+        <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot__row foot__row--small">
+    <span>&copy; 2026 caboodle design · founded by emily green</span>
+    <span>byron center, mi</span>
+  </div>
+</footer>
+
+<script src="../script.js" defer></script>
+</body>
+</html>
