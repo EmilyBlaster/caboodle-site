@@ -189,7 +189,8 @@
 
 /* Limits */
 .limits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
-.limit { padding: 1.25rem; border: 1px solid var(--rule); background: var(--paper); }
+.limit { padding: 1.25rem; border: 1px solid var(--rule); background: var(--paper); transition: background 0.3s var(--ease); }
+.limit:hover { background: var(--white); }
 .limit__h { font-family: var(--display); font-weight: 700; font-size: 0.9rem; text-transform: lowercase; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
 .limit__p { font-size: 0.8rem; line-height: 1.55; color: var(--ink-2); }
 </style>

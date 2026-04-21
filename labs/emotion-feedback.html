@@ -68,7 +68,8 @@
 /* How it works steps */
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; border: 1px solid var(--rule); background: var(--rule); margin-bottom: 3rem; }
 @media (max-width: 600px) { .steps { grid-template-columns: 1fr; } }
-.step { background: var(--paper); padding: 1.5rem; }
+.step { background: var(--paper); padding: 1.5rem; transition: background 0.3s var(--ease); }
+.step:hover { background: var(--white); }
 .step__n { font-family: var(--display); font-weight: 800; font-size: 2.5rem; line-height: 0.9; letter-spacing: -0.06em; color: rgba(236,0,140,0.15); margin-bottom: 0.75rem; }
 .step__h { font-family: var(--display); font-weight: 700; font-size: 0.95rem; text-transform: lowercase; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
 .step__p { font-size: 0.825rem; line-height: 1.5; color: var(--ink-2); }

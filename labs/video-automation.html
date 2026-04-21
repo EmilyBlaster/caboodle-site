@@ -40,7 +40,8 @@
 /* Two-workflow callout */
 .workflows { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; border: 1px solid var(--rule); background: var(--rule); margin-bottom: 3rem; }
 @media (max-width: 600px) { .workflows { grid-template-columns: 1fr; } }
-.workflow { background: var(--paper); padding: 2rem; }
+.workflow { background: var(--paper); padding: 2rem; transition: background 0.3s var(--ease); }
+.workflow:hover { background: var(--white); }
 .workflow__num { font-family: var(--display); font-weight: 800; font-size: 3.5rem; line-height: 0.9; letter-spacing: -0.06em; color: rgba(150,230,80,0.14); margin-bottom: 0.75rem; }
 .workflow__h { font-family: var(--display); font-weight: 700; font-size: 1.1rem; text-transform: lowercase; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
 .workflow__p { font-size: 0.875rem; line-height: 1.6; color: var(--ink-2); }
@@ -56,9 +57,43 @@
 
 /* Limits */
 .limits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
-.limit { padding: 1.25rem; border: 1px solid var(--rule); background: var(--paper); }
+.limit { padding: 1.25rem; border: 1px solid var(--rule); background: var(--paper); transition: background 0.3s var(--ease); }
+.limit:hover { background: var(--white); }
 .limit__h { font-family: var(--display); font-weight: 700; font-size: 0.9rem; text-transform: lowercase; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
 .limit__p { font-size: 0.8rem; line-height: 1.55; color: var(--ink-2); }
+
+/* Carousel fan */
+.fan-section { background: var(--ink); padding: clamp(2.5rem,4vw,3.5rem) var(--pad-x) clamp(4rem,7vw,6rem); border-top: 1px solid rgba(255,255,255,0.06); }
+.fan-section__inner { max-width: var(--maxw); margin: 0 auto; }
+.fan-section__kicker { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lime); display: block; margin-bottom: 0.75rem; }
+.fan-section__h { font-family: var(--display); font-weight: 700; font-size: clamp(1.6rem,2.8vw,2.4rem); letter-spacing: -0.03em; text-transform: lowercase; color: var(--white); margin: 0 0 0.5rem; }
+.fan-section__sub { font-size: 0.9rem; color: rgba(255,255,255,0.45); margin-bottom: clamp(1.5rem,3vw,2.5rem); }
+
+.fan-wrap {
+  position: relative;
+  height: clamp(240px, 30vw, 380px);
+  margin: 0 auto;
+  max-width: 900px;
+}
+.fan-slide {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: clamp(90px, 11vw, 155px);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+  transform-origin: bottom center;
+  transform: translateX(-50%) translateX(var(--tx, 0px)) rotate(var(--r, 0deg));
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s cubic-bezier(0.16,1,0.3,1);
+  cursor: pointer;
+}
+.fan-slide:hover {
+  transform: translateX(-50%) translateX(var(--tx, 0px)) rotate(var(--r, 0deg)) translateY(-28px) scale(1.07);
+  box-shadow: 0 24px 72px rgba(0,0,0,0.7);
+  z-index: 20 !important;
+}
+.fan-slide img { width: 100%; display: block; }
 </style>
 </head>
 <body>
@@ -157,6 +192,24 @@
     <div class="ld-callout">
       <span class="ld-callout__label">for L&amp;D teams</span>
       <p class="ld-callout__p">This is the blueprint for scalable asset production — job aids, micro-videos, onboarding materials, and visual guides all generated programmatically from structured content, not manual design work. The same logic that builds a carousel builds a job aid template.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Carousel output fan -->
+<section class="fan-section">
+  <div class="fan-section__inner">
+    <span class="fan-section__kicker">the output</span>
+    <h2 class="fan-section__h">7 slides. <em style="color:var(--lime);font-style:normal">zero manual design.</em></h2>
+    <p class="fan-section__sub">hover any slide to pull it forward</p>
+    <div class="fan-wrap">
+      <div class="fan-slide" style="--tx:-200px;--r:-21deg;z-index:1"><img src="../assets/labs/video-automation/4.png" alt="carousel slide 4"></div>
+      <div class="fan-slide" style="--tx:-130px;--r:-14deg;z-index:2"><img src="../assets/labs/video-automation/3.png" alt="carousel slide 3"></div>
+      <div class="fan-slide" style="--tx:-65px;--r:-7deg;z-index:3"><img src="../assets/labs/video-automation/2.png" alt="carousel slide 2"></div>
+      <div class="fan-slide" style="--tx:0px;--r:0deg;z-index:7"><img src="../assets/labs/video-automation/1.png" alt="carousel cover slide"></div>
+      <div class="fan-slide" style="--tx:65px;--r:7deg;z-index:3"><img src="../assets/labs/video-automation/5.png" alt="carousel slide 5"></div>
+      <div class="fan-slide" style="--tx:130px;--r:14deg;z-index:2"><img src="../assets/labs/video-automation/6.png" alt="carousel slide 6"></div>
+      <div class="fan-slide" style="--tx:200px;--r:21deg;z-index:1"><img src="../assets/labs/video-automation/7.png" alt="carousel slide 7"></div>
     </div>
   </div>
 </section>

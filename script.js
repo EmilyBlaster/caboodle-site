@@ -19,6 +19,7 @@
 
   /* ---------- Field log: time ticker ----------------------------------- */
   const updateTime = () => {
+    if (!logTime) return;
     const now = new Date();
     const hh = String(now.getHours()).padStart(2, '0');
     const mm = String(now.getMinutes()).padStart(2, '0');
@@ -44,7 +45,7 @@
   window.addEventListener('resize', measureHero, { passive: true });
 
   const showAfterScroll = () => {
-    fieldlog.classList.toggle('is-live', window.scrollY > heroBottom - 80);
+    if (fieldlog) fieldlog.classList.toggle('is-live', window.scrollY > heroBottom - 80);
   };
   showAfterScroll();
 
@@ -67,7 +68,7 @@
   if (footer) {
     const footerObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        fieldlog.classList.toggle('is-docked', entry.isIntersecting);
+        if (fieldlog) fieldlog.classList.toggle('is-docked', entry.isIntersecting);
       });
     }, { rootMargin: '0px 0px -5% 0px', threshold: 0 });
     footerObserver.observe(footer);
@@ -85,6 +86,7 @@
   ];
 
   const renderLog = () => {
+    if (!logEntries) return;
     logEntries.innerHTML = logHistory
       .slice(-MAX_LOG)
       .map((entry, i, arr) => {

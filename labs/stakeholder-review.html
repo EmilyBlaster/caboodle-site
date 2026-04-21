@@ -317,7 +317,7 @@
       <em>review.</em>
     </h1>
     <p class="labero__lede">
-      A feedback workspace built directly into a client landing page — pins, color-coded reviewers, threaded comments, and resolve tracking. No email threads. No annotated PDFs.
+      Built mid-project with Claude Code — a feedback tool embedded directly into a client landing page, with a 24-hour turnaround and no design system to start from.
     </p>
     <ul class="labero__tags">
       <li>ai prototype</li>
@@ -329,99 +329,116 @@
   <span class="labero__watermark" aria-hidden="true">001</span>
 </section>
 
+<!-- About this experiment -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">about this experiment</span>
+    <h2 class="lab-s__h">the problem, <em>solved mid-project.</em></h2>
+    <div class="thesis" style="margin-bottom:2rem">
+      <p>
+        <strong style="font-style:normal;color:var(--ink)">the problem:</strong>
+        collecting design feedback without drowning in email threads, annotated screenshots, or "can you jump on a quick call?"
+      </p>
+    </div>
+    <div class="thesis" style="margin-bottom:2rem;border-color:var(--blue)">
+      <p>
+        <strong style="font-style:normal;color:var(--ink)">what this demonstrates:</strong>
+        using AI not just to write code, but to build workflow tools that solve the actual problems you hit mid-project — with a 24-hour turnaround, no Figma file or design system.
+      </p>
+    </div>
+    <div class="thesis" style="margin-bottom:2rem;border-color:var(--lime)">
+      <p>
+        <strong style="font-style:normal;color:var(--ink)">how it works:</strong>
+        click "Review Mode" and the page transforms into a feedback workspace. each reviewer gets a brand color. comments anchor to exact positions and persist across sessions. a slide-out panel groups all feedback by section with resolve tracking.
+      </p>
+    </div>
+    <p class="lab-s__p" style="font-style:italic;color:var(--ink-2);margin-bottom:0">
+      The prototype was built conversationally in Claude Code — this is the workflow I'm most excited about.
+    </p>
+  </div>
+</section>
+
+<!-- Key features -->
+<section class="lab-s lab-s--alt">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">the design</span>
+    <h2 class="lab-s__h">four features. <em>one workflow.</em></h2>
+    <p class="lab-s__p">
+      Every feature maps directly to a real friction point in the stakeholder feedback process.
+    </p>
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="feature__num">01</div>
+        <h3 class="feature__h">no more context-switching</h3>
+        <p class="feature__p">One click transforms the live page into a feedback workspace — pins, comments, and all — without leaving the design.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">02</div>
+        <h3 class="feature__h">instantly see who said what</h3>
+        <p class="feature__p">Each stakeholder is auto-assigned a brand color, eliminating the guesswork of anonymous feedback threads.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">03</div>
+        <h3 class="feature__h">stop hunting through threads</h3>
+        <p class="feature__p">All comments grouped by page section with open/resolved counts and one-click resolve. Everything in one panel.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">04</div>
+        <h3 class="feature__h">nothing gets lost</h3>
+        <p class="feature__p">Connected to an external database so feedback persists across sessions and review cycles. Swap in whatever backend works for you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- The Shift: Before / After -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">the shift</span>
+    <h2 class="lab-s__h">before <em>vs.</em> after</h2>
+    <div class="ba">
+      <div class="ba__col ba__col--before">
+        <div class="ba__label ba__label--before">before</div>
+        <ul class="ba__list">
+          <li>Feedback buried in email threads</li>
+          <li>Annotated screenshots across tools</li>
+          <li>"Can you jump on a quick call?"</li>
+          <li>Comments lost after review cycles</li>
+        </ul>
+      </div>
+      <div class="ba__col ba__col--after">
+        <div class="ba__label ba__label--after">after</div>
+        <ul class="ba__list">
+          <li>Pins anchored to exact page positions</li>
+          <li>Color-coded reviewers at a glance</li>
+          <li>Grouped panel with resolve tracking</li>
+          <li>Persistent storage — nothing lost</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Video walkthrough -->
-<section class="lab-s" data-reveal>
+<section class="lab-s lab-s--alt">
   <div class="lab-s__inner">
     <span class="lab-s__kicker">see it in action</span>
     <h2 class="lab-s__h">the walkthrough</h2>
     <p class="lab-s__p">
-      A three-minute demo of the feedback workspace built into the BrightPath client landing page. Inline pinning, reviewer color-coding, and a slide-out panel with resolve tracking — all built with Claude Code, no external feedback tool.
+      A quick demo of the feedback workspace in action — inline pinning, reviewer color-coding, and the slide-out panel with resolve tracking.
     </p>
     <div class="lab-video">
       <iframe
-        src="https://player.vimeo.com/video/1177417802?title=0&byline=0&portrait=0"
+        src="https://player.vimeo.com/video/1184167811?title=0&byline=0&portrait=0"
         allow="autoplay; fullscreen; picture-in-picture"
         allowfullscreen
         title="Inline Stakeholder Review System Walkthrough"
       ></iframe>
     </div>
 
-    <!-- Before / After -->
-    <span class="lab-s__kicker">the problem</span>
-    <h2 class="lab-s__h">before <em>vs.</em> after</h2>
-    <div class="ba">
-      <div class="ba__col ba__col--before">
-        <div class="ba__label ba__label--before">without this</div>
-        <ul class="ba__list">
-          <li>Email threads with annotated screenshots</li>
-          <li>"Version 3 FINAL comments Emily.pdf"</li>
-          <li>3 rounds of back-and-forth before anything gets resolved</li>
-          <li>Comments buried in email chains nobody can find later</li>
-        </ul>
-      </div>
-      <div class="ba__col ba__col--after">
-        <div class="ba__label ba__label--after">with inline review</div>
-        <ul class="ba__list">
-          <li>Feedback pinned directly to the relevant section</li>
-          <li>Color-coded by reviewer — instantly scannable</li>
-          <li>Resolve tracking with a single click</li>
-          <li>Threaded comments grouped in a slide-out panel</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- How it works -->
-<section class="lab-s lab-s--alt" data-reveal>
-  <div class="lab-s__inner">
-    <span class="lab-s__kicker">the design</span>
-    <h2 class="lab-s__h">four features. <em>one workflow.</em></h2>
+    <h3 class="lab-s__h" style="margin-top:1rem">try it yourself</h3>
     <p class="lab-s__p">
-      Built from scratch with Claude Code. Every feature maps directly to a real friction point in the stakeholder feedback process.
-    </p>
-    <div class="feature-grid">
-      <div class="feature">
-        <div class="feature__num">01</div>
-        <h3 class="feature__h">inline pins</h3>
-        <p class="feature__p">Click anywhere on the page to leave a comment. No screenshots, no email, no "where exactly?" confusion.</p>
-      </div>
-      <div class="feature">
-        <div class="feature__num">02</div>
-        <h3 class="feature__h">color-coded reviewers</h3>
-        <p class="feature__p">Each stakeholder gets a color. Instantly see who said what, without reading every comment.</p>
-      </div>
-      <div class="feature">
-        <div class="feature__num">03</div>
-        <h3 class="feature__h">threaded side panel</h3>
-        <p class="feature__p">All feedback lives in a slide-out panel, grouped by section. Scroll through everything without losing context.</p>
-      </div>
-      <div class="feature">
-        <div class="feature__num">04</div>
-        <h3 class="feature__h">resolve tracking</h3>
-        <p class="feature__p">Mark feedback resolved with a click. Visual confirmation it's been addressed — no follow-up email required.</p>
-      </div>
-    </div>
-
-    <!-- Thesis -->
-    <div class="thesis">
-      <p>
-        stakeholder feedback loops are one of the biggest drags on any learning project.
-        email chains, annotated pdfs, screenshots of screenshots.
-        the real problem isn't that stakeholders give <em>bad feedback</em> — it's that
-        the feedback process creates noise instead of signal.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- Live demo + tools -->
-<section class="lab-s" data-reveal>
-  <div class="lab-s__inner">
-    <span class="lab-s__kicker">try it yourself</span>
-    <h2 class="lab-s__h">the live demo</h2>
-    <p class="lab-s__p">
-      The BrightPath landing page — the actual client page this review system was built into — is live. Click through and leave a pin.
+      The BrightPath landing page — the actual client page this review system was built into — is live.
     </p>
     <a class="lab-cta-link" href="https://emilyblaster.github.io/BrightPath-2026/" target="_blank" rel="noopener">
       <span>open brightpath demo</span>

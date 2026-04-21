@@ -55,7 +55,7 @@
   font-size: clamp(3rem, 6vw, 4.5rem);
   line-height: 1;
   letter-spacing: -0.06em;
-  color: var(--rule);
+  color: rgba(3, 89, 155, 0.18);
   padding-top: 0.1em;
 }
 .glproject__label {
@@ -111,7 +111,7 @@
   font-family: var(--display);
   font-weight: 700;
   font-size: clamp(2rem, 4.5vw, 3.5rem);
-  line-height: 0.95;
+  line-height: 1.1;
   letter-spacing: -0.03em;
   text-transform: lowercase;
   color: var(--paper);
@@ -211,7 +211,7 @@
   font-size: clamp(1.75rem, 3.5vw, 3rem);
   text-transform: lowercase;
   letter-spacing: -0.03em;
-  line-height: 1.05;
+  line-height: 1.1;
   color: var(--paper);
 }
 .glpdf__h em { color: var(--lime); font-style: italic; }
@@ -245,6 +245,14 @@
 }
 .glproject .demolink__preview { height: 220px; }
 
+/* Orphaned last card gets full-width feature treatment */
+.glproject .demolinks > *:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+.glproject .demolinks > *:last-child:nth-child(odd) .demolink__preview {
+  height: 260px;
+}
+
 /* WC images: center crop so circular cover design stays visible */
 .glproject--alt .csgrid__item img {
   aspect-ratio: 16/9;
@@ -256,8 +264,20 @@
 /* Remove dark bg from demo thumbnails */
 .glproject .demolink__preview { background: var(--paper-2); }
 
-/* Spotlight: wider window column, taller iframe */
-.glspotlight__inner { grid-template-columns: 4fr 8fr; min-height: 560px; }
+/* Spotlight: contained within editorial margins, not full-bleed */
+.glspotlight {
+  background: var(--paper-2);
+  padding: clamp(2rem, 4vw, 3.5rem) var(--pad-x);
+  overflow: visible;
+}
+.glspotlight__inner {
+  grid-template-columns: 4fr 8fr;
+  min-height: 560px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--ink);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.10);
+}
 .glspotlight__window { border-left: 1px solid rgba(255,255,255,0.07); }
 .glspotlight__iframe { min-height: 560px; }
 
