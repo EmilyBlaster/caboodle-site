@@ -1,0 +1,46 @@
+# ─── OS + editor noise ─────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+
+# ─── Build output / dependencies (if you ever add a build step) ───
+node_modules/
+dist/
+.cache/
+.parcel-cache/
+.netlify/
+
+# ─── Reference-only folders that should never ship to production ──
+# Pattern catches any future *_Loveable, *_Reference, *_Archive folder
+# so you never have to think about this again.
+*_Loveable/
+*_Reference/
+*_Archive/
+*_archive/
+*_refs/
+
+# ─── Asset backups + intermediate work-in-progress files ──────────
+# We keep originals out of the deploy. Drop them in /caboodle-site-archive/
+# one folder up — already set up and gitignored by being outside the repo.
+*.bak
+*.bak.*
+*.backup.*
+*.original.*
+*.orig.*
+*_draft.*
+*_wip.*
+
+# ─── Big source files we don't want to accidentally commit ────────
+# If you need 3D source models or raw video, keep them in the archive folder.
+*.psd
+*.ai
+*.sketch
+*.fig
+
+# ─── Env + secrets ────────────────────────────────────────────────
+.env
+.env.*
+!.env.example

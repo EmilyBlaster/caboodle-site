@@ -23,6 +23,851 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="../styles.css" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+
+<style>
+/* ==========================================================================
+   Intuit case study — page-specific: signature interactive (career matching)
+   ========================================================================== */
+
+.proto {
+  padding: clamp(3rem, 6vw, 5rem) var(--pad-x);
+  background: var(--paper-2);
+  border-top: 1px solid var(--rule);
+}
+.proto__inner { max-width: var(--maxw); margin: 0 auto; }
+
+.proto__head {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 2.25rem;
+  max-width: 62ch;
+}
+.proto__kicker {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+  width: fit-content;
+}
+.proto__h {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  color: var(--ink);
+}
+.proto__h em { color: var(--blue); }
+.proto__p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 60ch;
+}
+.proto__note {
+  margin-top: 0.5rem;
+  padding: 0.85rem 1.1rem;
+  background: rgba(3, 89, 155, 0.05);
+  border-left: 3px solid var(--blue);
+  border-radius: 2px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.proto__note b { color: var(--blue); font-weight: 600; }
+
+/* Step label (inside the prototype) */
+.proto__step {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 0.8rem;
+  display: block;
+}
+
+/* Role selector */
+.proto__roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2.25rem;
+}
+.proto__role {
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+.proto__role:hover { border-color: var(--blue); }
+.proto__role.is-active {
+  background: var(--blue);
+  color: var(--paper);
+  border-color: var(--blue);
+}
+
+/* Two-column: radar + matches */
+.proto__grid {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 2rem;
+  align-items: start;
+}
+.proto__panel {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 1.75rem;
+}
+
+.proto__radar-wrap { position: relative; }
+.proto__radar { width: 100%; height: auto; max-width: 380px; display: block; margin: 0 auto; }
+.proto__legend {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--ink-2);
+  margin-top: 0.5rem;
+}
+.proto__legend-swatch {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 2px;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+
+/* Match cards */
+.proto__matches { display: flex; flex-direction: column; gap: 0.6rem; }
+.proto__match {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.proto__match:hover { border-color: var(--blue); }
+.proto__match.is-expanded {
+  border-color: var(--blue);
+  background: rgba(3, 89, 155, 0.03);
+}
+.proto__match-pct {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.9rem;
+  color: var(--blue);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.proto__match-role {
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  color: var(--ink);
+  display: block;
+}
+.proto__match-gaps {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--ink-2);
+  margin-top: 0.15rem;
+  display: block;
+}
+.proto__match-chev {
+  width: 14px;
+  height: 14px;
+  color: var(--ink-2);
+  transition: transform 0.2s var(--ease);
+}
+.proto__match.is-expanded .proto__match-chev { transform: rotate(180deg); color: var(--blue); }
+
+.proto__path {
+  grid-column: 1 / -1;
+  display: none;
+  padding-top: 1.1rem;
+  margin-top: 0.6rem;
+  border-top: 1px dashed var(--rule);
+}
+.proto__match.is-expanded .proto__path { display: block; }
+.proto__path-head {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 0.9rem;
+}
+.proto__path-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.6rem;
+}
+.proto__path-card {
+  padding: 0.85rem 0.95rem;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+.proto__path-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: var(--blue);
+  color: var(--paper);
+  border-radius: 50%;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+.proto__path-title {
+  font-family: var(--body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+  display: block;
+}
+.proto__path-status {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--ink-2);
+  margin-top: 0.4rem;
+  display: block;
+}
+.proto__path-empty {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--blue);
+  line-height: 1.5;
+}
+
+/* Nudge system */
+.proto__nudge {
+  margin-top: 3rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--rule);
+}
+.proto__nudge-head {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  max-width: 62ch;
+}
+.proto__nudge-h {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-transform: lowercase;
+  color: var(--ink);
+}
+.proto__nudge-h em { color: var(--magenta); }
+.proto__nudge-p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  max-width: 60ch;
+}
+.proto__tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.proto__tab {
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  border-radius: 99px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.proto__tab:hover { border-color: var(--magenta); }
+.proto__tab.is-active {
+  background: var(--magenta);
+  color: var(--paper);
+  border-color: var(--magenta);
+}
+.proto__tab svg { width: 13px; height: 13px; }
+
+.proto__nudge-panel {
+  background: transparent;
+  display: none;
+  animation: nudgeIn 0.45s var(--ease) both;
+}
+.proto__nudge-panel.is-active { display: block; }
+@keyframes nudgeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typing cursor — appears at end of element while typing */
+.is-typing::after {
+  content: '▍';
+  color: var(--blue);
+  opacity: 0.85;
+  animation: caretBlink 0.85s step-end infinite;
+  margin-left: 0.05em;
+  font-weight: 400;
+  display: inline;
+}
+.nudge-slack .is-typing::after { color: #4a154b; }
+.nudge-cal .is-typing::after { color: var(--magenta); }
+@keyframes caretBlink { 50% { opacity: 0; } }
+
+/* Empty [data-type] slots need height so layout doesn't jump in mid-typing */
+.proto__nudge [data-type]:empty::before { content: '\00a0'; display: inline; opacity: 0; }
+
+/* Stagger-reveal items */
+.to-reveal {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.45s var(--ease), transform 0.45s var(--ease);
+}
+.to-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slack typing indicator (3 bouncing dots bubble) */
+.slack-typing {
+  display: inline-flex;
+  gap: 0.28rem;
+  padding: 0.55rem 0.8rem;
+  background: #f3f3f3;
+  border-radius: 18px;
+  align-items: center;
+  margin: 0.4rem 0;
+  width: fit-content;
+}
+.slack-typing span {
+  width: 0.38rem;
+  height: 0.38rem;
+  background: #8b8b8b;
+  border-radius: 50%;
+  display: inline-block;
+  animation: typingBounce 1.2s var(--ease) infinite;
+}
+.slack-typing span:nth-child(2) { animation-delay: 0.15s; }
+.slack-typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .to-reveal { opacity: 1; transform: none; transition: none; }
+  .is-typing::after { display: none; }
+  .slack-typing { display: none; }
+}
+
+/* ===== Real-interface nudge mocks ===== */
+
+/* Live delivery indicator shown above every mock */
+.nudge-live {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.nudge-live__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--magenta);
+  box-shadow: 0 0 0 0 rgba(236, 0, 140, 0.55);
+  animation: livePulse 1.8s var(--ease) infinite;
+}
+@keyframes livePulse {
+  0% { box-shadow: 0 0 0 0 rgba(236, 0, 140, 0.55); }
+  60%, 100% { box-shadow: 0 0 0 10px rgba(236, 0, 140, 0); }
+}
+
+/* -- Email interface (Gmail-style) -- */
+.nudge-email {
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e5e3de;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  font-family: 'Google Sans', 'DM Sans', system-ui, sans-serif;
+}
+.nudge-email__chrome {
+  padding: 0.6rem 1rem;
+  background: #f6f8fc;
+  border-bottom: 1px solid #e5e3de;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.nudge-email__app {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  color: #5f6368;
+  font-weight: 500;
+}
+.nudge-email__app-logo {
+  width: 18px; height: 18px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.nudge-email__folder {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: #5f6368;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.nudge-email__head {
+  padding: 1rem 1.25rem;
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto;
+  gap: 0.85rem;
+  align-items: center;
+}
+.nudge-email__avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.nudge-email__meta { display: grid; gap: 0.1rem; min-width: 0; }
+.nudge-email__sender { font-weight: 500; font-size: 0.9rem; color: #202124; }
+.nudge-email__addr { font-size: 0.74rem; color: #5f6368; }
+.nudge-email__time { font-size: 0.72rem; color: #5f6368; white-space: nowrap; }
+.nudge-email__subject {
+  padding: 0 1.25rem 0.85rem;
+  font-weight: 400;
+  font-size: 1.15rem;
+  color: #202124;
+  line-height: 1.35;
+}
+.nudge-email__body {
+  padding: 0.5rem 1.25rem 1.25rem;
+  font-size: 0.93rem;
+  line-height: 1.65;
+  color: #3c4043;
+}
+.nudge-email__body p { margin: 0 0 0.9rem; }
+.nudge-email__roles {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+.nudge-email__role {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.65rem 0.95rem;
+  background: #f8fafc;
+  border: 1px solid #eceff3;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  color: #202124;
+}
+.nudge-email__role-pct {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--blue);
+  letter-spacing: -0.02em;
+}
+.nudge-email__role-gap {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: #5f6368;
+}
+.nudge-email__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 1.1rem;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: background 0.2s var(--ease);
+}
+.nudge-email__cta:hover { background: var(--blue-deep); }
+.nudge-email__cta svg { width: 14px; height: 14px; }
+
+/* -- Slack interface -- */
+.nudge-slack {
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e5e3de;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  font-family: 'Slack-Lato', 'DM Sans', system-ui, -apple-system, sans-serif;
+  color: #1d1c1d;
+}
+.nudge-slack__chrome {
+  padding: 0.7rem 1rem;
+  background: #4a154b;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+}
+.nudge-slack__ws {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.nudge-slack__ws-sep { opacity: 0.5; font-weight: 400; }
+.nudge-slack__channel { font-weight: 400; opacity: 0.9; }
+.nudge-slack__presence {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.nudge-slack__presence-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #2bac76;
+}
+.nudge-slack__body {
+  padding: 1rem 1.1rem 0.5rem;
+}
+.nudge-slack__msg {
+  display: grid;
+  grid-template-columns: 2.35rem 1fr;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+}
+.nudge-slack__avatar {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 5px;
+  background: var(--magenta);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.78rem;
+  font-family: var(--display);
+  position: relative;
+}
+.nudge-slack__avatar svg { width: 1.45rem; height: 1.45rem; }
+.nudge-slack__avatar::after {
+  /* online status dot */
+  content: '';
+  position: absolute;
+  right: -2px; bottom: -2px;
+  width: 10px; height: 10px;
+  background: #2bac76;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+.nudge-slack__header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.2rem;
+  flex-wrap: wrap;
+}
+.nudge-slack__name {
+  font-weight: 900;
+  color: #1d1c1d;
+  font-size: 0.94rem;
+  letter-spacing: -0.01em;
+}
+.nudge-slack__bot-tag {
+  background: #e8e8e8;
+  color: #616061;
+  font-size: 0.58rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.nudge-slack__time { font-size: 0.72rem; color: #616061; }
+.nudge-slack__text {
+  font-size: 0.93rem;
+  line-height: 1.5;
+  color: #1d1c1d;
+}
+.nudge-slack__text p { margin: 0 0 0.5rem; }
+.nudge-slack__text a { color: #1264a3; text-decoration: none; }
+.nudge-slack__text a:hover { text-decoration: underline; }
+.nudge-slack__actions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.nudge-slack__btn {
+  background: #fff;
+  border: 1px solid #bbbabb;
+  color: #1d1c1d;
+  padding: 0.4rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.nudge-slack__btn--primary {
+  background: #007a5a;
+  color: #fff;
+  border-color: #007a5a;
+}
+.nudge-slack__reactions {
+  padding: 0.4rem 1.1rem 1rem 4rem;
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+.nudge-slack__reaction {
+  background: #f8f8f8;
+  border: 1px solid #e3e3e3;
+  border-radius: 12px;
+  padding: 0.1rem 0.5rem 0.1rem 0.35rem;
+  font-size: 0.72rem;
+  color: #1264a3;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: default;
+}
+
+/* -- Google Calendar-style 1:1 meeting card -- */
+.nudge-cal {
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e5e3de;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+.nudge-cal__chrome {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid #e5e3de;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+}
+.nudge-cal__chrome-left {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: var(--body);
+  font-size: 0.85rem;
+  color: #3c4043;
+  font-weight: 500;
+}
+.nudge-cal__chrome-pill {
+  background: rgba(3,89,155,0.1);
+  color: var(--blue);
+  padding: 0.22rem 0.55rem;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.nudge-cal__bar {
+  height: 4px;
+  background: var(--blue);
+}
+.nudge-cal__body { padding: 1.25rem 1.35rem; }
+.nudge-cal__title {
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 1.15rem;
+  color: #202124;
+  line-height: 1.3;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+}
+.nudge-cal__when {
+  font-size: 0.82rem;
+  color: #5f6368;
+  margin-bottom: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.nudge-cal__when svg { width: 14px; height: 14px; color: #5f6368; }
+.nudge-cal__attendees {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 1.1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+.nudge-cal__av-stack { display: flex; align-items: center; }
+.nudge-cal__av {
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  border: 2px solid #fff;
+  margin-left: -0.45rem;
+  font-family: var(--display);
+  letter-spacing: -0.02em;
+}
+.nudge-cal__av:first-child { margin-left: 0; }
+.nudge-cal__av--sarah { background: linear-gradient(135deg, var(--magenta), #a00060); }
+.nudge-cal__av--mgr { background: linear-gradient(135deg, var(--blue), var(--blue-deep)); }
+.nudge-cal__av--photo {
+  overflow: hidden;
+  background: #d6d3cc;
+}
+.nudge-cal__av--photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.nudge-cal__attendees-text {
+  font-size: 0.8rem;
+  color: #5f6368;
+  margin-left: 0.5rem;
+}
+.nudge-cal__section-label {
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #5f6368;
+  margin: 0 0 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.nudge-cal__section-label b {
+  color: var(--magenta);
+  font-weight: 700;
+}
+.nudge-cal__agenda {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.1rem;
+  display: grid;
+  gap: 0.45rem;
+}
+.nudge-cal__item {
+  display: grid;
+  grid-template-columns: 1.1rem 1fr;
+  gap: 0.65rem;
+  align-items: start;
+  padding: 0.6rem 0.85rem;
+  background: #f8fafc;
+  border: 1px solid #eceff3;
+  border-radius: 5px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: #202124;
+}
+.nudge-cal__item-check {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 3px;
+  background: var(--lime);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.nudge-cal__item-check svg { width: 10px; height: 10px; stroke-width: 3; }
+.nudge-cal__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1rem;
+  background: #fff;
+  color: var(--blue);
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.83rem;
+  font-weight: 500;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+.nudge-cal__cta:hover { background: var(--blue); color: #fff; }
+.nudge-cal__cta svg { width: 14px; height: 14px; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .proto__grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .proto__match { grid-template-columns: 4rem 1fr auto; }
+  .nudge-email__role { grid-template-columns: 3rem 1fr auto; }
+}
+@media (max-width: 600px) {
+  .proto__panel { padding: 1.25rem; }
+  .proto__match { padding: 0.9rem 1rem; gap: 0.75rem; }
+  .proto__match-pct { font-size: 1.6rem; }
+  .nudge-email__subject { font-size: 1rem; }
+}
+</style>
 </head>
 <body>
 
@@ -167,44 +1012,322 @@
   </article>
 </section>
 
-<!-- Design files: EXO brand system grid -->
-<section class="designfiles" data-log="003 — from the design files">
+<!-- Signature interactive: career matching prototype -->
+<section class="proto" id="proto" data-log="003 — signature interactive · career matching prototype">
+  <div class="proto__inner">
+    <header class="proto__head">
+      <span class="proto__kicker">try the prototype</span>
+      <h2 class="proto__h">
+        a simulated version of the <em>ai matching engine.</em>
+      </h2>
+      <p class="proto__p">
+        Select a role to see how the platform surfaces internal opportunities, identifies skill gaps, and recommends learning paths. Then see how the system nudges action across three channels.
+      </p>
+      <p class="proto__note">
+        <b>Designer's note:</b> demo only. In production, the matching algorithm analyzed employee skills data, role requirements, and career trajectory patterns across the organization.
+      </p>
+    </header>
+
+    <!-- Step 1: role selector -->
+    <span class="proto__step">step 01 · select your current role</span>
+    <div class="proto__roles" role="tablist" aria-label="Current role">
+      <button class="proto__role is-active" data-role="software-engineer" type="button">Software Engineer</button>
+      <button class="proto__role" data-role="marketing-manager" type="button">Marketing Manager</button>
+      <button class="proto__role" data-role="data-analyst" type="button">Data Analyst</button>
+      <button class="proto__role" data-role="product-designer" type="button">Product Designer</button>
+      <button class="proto__role" data-role="finance-specialist" type="button">Finance Specialist</button>
+    </div>
+
+    <!-- Step 2: skills radar + matched opportunities -->
+    <div class="proto__grid">
+      <div class="proto__panel">
+        <span class="proto__step">skills profile</span>
+        <div class="proto__radar-wrap">
+          <svg class="proto__radar" viewBox="-10 0 360 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Skills radar chart">
+            <!-- axis lines + rings -->
+            <g class="proto__radar-axes" stroke="#d6d3cc" stroke-width="1" fill="none" id="radarAxes"></g>
+            <g class="proto__radar-rings" stroke="#d6d3cc" stroke-width="0.5" fill="none" id="radarRings"></g>
+            <!-- target (dashed lime) -->
+            <polygon id="radarTarget" fill="rgba(150, 230, 80, 0.18)" stroke="#96E650" stroke-width="1.5" stroke-dasharray="4,3" />
+            <!-- current (solid blue) -->
+            <polygon id="radarCurrent" fill="rgba(3, 89, 155, 0.22)" stroke="#03599B" stroke-width="1.5" />
+            <!-- axis labels -->
+            <g class="proto__radar-labels" font-family="JetBrains Mono, monospace" font-size="10" fill="#686868" id="radarLabels"></g>
+          </svg>
+          <div class="proto__legend">
+            <span><i class="proto__legend-swatch" style="background: rgba(3, 89, 155, 0.22); border: 1px solid #03599B;"></i>your skills</span>
+            <span><i class="proto__legend-swatch" style="background: rgba(150, 230, 80, 0.18); border: 1px dashed #96E650;"></i>target role</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <span class="proto__step">matched opportunities · click to expand</span>
+        <div class="proto__matches" id="protoMatches"></div>
+      </div>
+    </div>
+
+    <!-- Step 3: nudge system -->
+    <div class="proto__nudge">
+      <header class="proto__nudge-head">
+        <span class="proto__step">step 03 · the nudge system</span>
+        <h3 class="proto__nudge-h">the system doesn't just match. <em>it nudges.</em></h3>
+        <p class="proto__nudge-p">
+          Matching surfaces the opportunity. Behavior change requires a push. Below: how the platform drives action through a multi-channel progression.
+        </p>
+      </header>
+
+      <div class="proto__tabs" role="tablist" aria-label="Nudge channel">
+        <button class="proto__tab is-active" data-nudge="email" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          Email
+        </button>
+        <button class="proto__tab" data-nudge="slack" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg>
+          Slack
+        </button>
+        <button class="proto__tab" data-nudge="manager" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Manager 1:1 Prompt
+        </button>
+      </div>
+
+      <!-- Email (Gmail-style) -->
+      <div class="proto__nudge-panel is-active" data-panel="email">
+        <div class="nudge-live"><span class="nudge-live__dot"></span>delivered · tuesday 8:02 am</div>
+        <div class="nudge-email">
+          <div class="nudge-email__chrome">
+            <span class="nudge-email__app">
+              <span class="nudge-email__app-logo">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#EA4335" d="M4 6v13h3.5V9.5L12 13l4.5-3.5V19H20V6l-8 6z"/><path fill="#FBBC05" d="M20 6h-1.5l-6 4.5V19H20z"/><path fill="#34A853" d="M4 6h1.5l6 4.5V19H4z"/></svg>
+              </span>
+              Gmail · Inbox
+            </span>
+            <span class="nudge-email__folder">primary</span>
+          </div>
+          <div class="nudge-email__head">
+            <span class="nudge-email__avatar">IM</span>
+            <div class="nudge-email__meta">
+              <span class="nudge-email__sender">Internal Mobility</span>
+              <span class="nudge-email__addr">mobility@intuit.com</span>
+            </div>
+            <span class="nudge-email__time">8:02 AM (2 min ago)</span>
+          </div>
+          <div class="nudge-email__subject" data-type>3 internal roles match your current skills profile</div>
+          <div class="nudge-email__body">
+            <p data-type>Hi Sarah,</p>
+            <p data-type>Your skills profile was updated this week. Based on your current strengths, we found 3 internal roles where you're 65 to 88% qualified today.</p>
+            <ul class="nudge-email__roles">
+              <li class="nudge-email__role to-reveal">
+                <span class="nudge-email__role-pct">78%</span>
+                <span>Engineering Manager</span>
+                <span class="nudge-email__role-gap">4 skill gaps</span>
+              </li>
+              <li class="nudge-email__role to-reveal">
+                <span class="nudge-email__role-pct">88%</span>
+                <span>Data Engineer</span>
+                <span class="nudge-email__role-gap">ready today</span>
+              </li>
+              <li class="nudge-email__role to-reveal">
+                <span class="nudge-email__role-pct">65%</span>
+                <span>Technical Product Manager</span>
+                <span class="nudge-email__role-gap">4 skill gaps</span>
+              </li>
+            </ul>
+            <p data-type>One role you're ready for today. Two with a defined learning path. Take a look when you have a minute.</p>
+            <a class="nudge-email__cta to-reveal" href="#proto" onclick="event.preventDefault();">
+              Open your career dashboard
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slack DM -->
+      <div class="proto__nudge-panel" data-panel="slack">
+        <div class="nudge-live"><span class="nudge-live__dot"></span>just now · thursday 2:14 pm</div>
+        <div class="nudge-slack">
+          <div class="nudge-slack__chrome">
+            <span class="nudge-slack__ws">intuit</span>
+            <span class="nudge-slack__ws-sep">/</span>
+            <span class="nudge-slack__channel">Career Bot · direct message</span>
+            <span class="nudge-slack__presence"><span class="nudge-slack__presence-dot"></span>active</span>
+          </div>
+          <div class="nudge-slack__body">
+            <div class="nudge-slack__msg">
+              <span class="nudge-slack__avatar" aria-label="Career Bot">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="12" y1="4" x2="12" y2="7"/>
+                  <circle cx="12" cy="3.2" r="0.8" fill="currentColor" stroke="none"/>
+                  <rect x="5" y="7.5" width="14" height="11" rx="2.5"/>
+                  <circle cx="9" cy="13" r="1.2" fill="currentColor" stroke="none"/>
+                  <circle cx="15" cy="13" r="1.2" fill="currentColor" stroke="none"/>
+                  <path d="M10 16.5h4"/>
+                </svg>
+              </span>
+              <div>
+                <div class="nudge-slack__header">
+                  <span class="nudge-slack__name">Career Bot</span>
+                  <span class="nudge-slack__bot-tag">App</span>
+                  <span class="nudge-slack__time">2:14 PM</span>
+                </div>
+                <div class="nudge-slack__text">
+                  <p data-type>Quick check in, Sarah 👋</p>
+                  <p data-type>You opened the <b>Engineering Manager</b> role 4 days ago and haven't come back. That's the most common drop-off point.</p>
+                  <p data-type>A colleague on the data platform team just finished <a href="#proto" onclick="event.preventDefault();">People Management Foundations</a> in 45 minutes. It's the first module on your path.</p>
+                  <div class="nudge-slack__actions to-reveal">
+                    <button type="button" class="nudge-slack__btn nudge-slack__btn--primary">Start module 1</button>
+                    <button type="button" class="nudge-slack__btn">Remind me later</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="nudge-slack__reactions to-reveal">
+            <span class="nudge-slack__reaction">👀 <span>3</span></span>
+            <span class="nudge-slack__reaction">🎯 <span>1</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manager 1:1 (Google Calendar-style event card) -->
+      <div class="proto__nudge-panel" data-panel="manager">
+        <div class="nudge-live"><span class="nudge-live__dot"></span>added to agenda · 2 days before next 1:1</div>
+        <div class="nudge-cal">
+          <div class="nudge-cal__bar"></div>
+          <div class="nudge-cal__chrome">
+            <span class="nudge-cal__chrome-left">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#5f6368" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              Google Calendar
+            </span>
+            <span class="nudge-cal__chrome-pill">upcoming event</span>
+          </div>
+          <div class="nudge-cal__body">
+            <h4 class="nudge-cal__title">Sarah · Priya · Weekly 1:1</h4>
+            <div class="nudge-cal__when">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              Thursday, Apr 23 · 10:30 – 11:00 AM · every Thursday
+            </div>
+            <div class="nudge-cal__attendees">
+              <div class="nudge-cal__av-stack">
+                <span class="nudge-cal__av nudge-cal__av--photo" title="Sarah Chen">
+                  <img src="https://i.pravatar.cc/200?img=5" alt="Sarah Chen" loading="lazy" />
+                </span>
+                <span class="nudge-cal__av nudge-cal__av--photo" title="Priya Ramanathan">
+                  <img src="https://i.pravatar.cc/200?img=44" alt="Priya Ramanathan" loading="lazy" />
+                </span>
+              </div>
+              <span class="nudge-cal__attendees-text">2 guests · Sarah Chen, Priya Ramanathan</span>
+            </div>
+            <p class="nudge-cal__section-label" data-type><b>·</b> suggested talking point · career development</p>
+            <ul class="nudge-cal__agenda">
+              <li class="nudge-cal__item to-reveal">
+                <span class="nudge-cal__item-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                Sarah has been exploring Engineering Manager roles this quarter.
+              </li>
+              <li class="nudge-cal__item to-reveal">
+                <span class="nudge-cal__item-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                She has completed 2 of 4 recommended learning modules.
+              </li>
+              <li class="nudge-cal__item to-reveal">
+                <span class="nudge-cal__item-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                Discuss: realistic timeline, a stretch assignment, and mentorship.
+              </li>
+            </ul>
+            <a class="nudge-cal__cta to-reveal" href="#proto" onclick="event.preventDefault();">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+              Open Sarah's career profile
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Design files: graphic systems carousel -->
+<section class="designfiles" data-log="004 — from the design files">
   <header class="designfiles__head">
     <span class="designfiles__kicker">from the design files</span>
     <h3 class="designfiles__h">
-      EXO brand system — <em>AI enablement graphics.</em>
+      graphic systems for <em>ai + leadership.</em>
     </h3>
     <p class="designfiles__p">
-      Executive system logos and branded collateral developed for
-      Intuit's internal AI Enablement leadership program.
+      AI enablement graphics for the wider organization, and the EXO leadership identification brand — two visual systems built alongside the mobility platform.
     </p>
   </header>
 
-  <div class="csgrid">
-    <div class="csgrid__item">
-      <img src="../assets/cs/intuit-exo-mug.png" alt="AI Enablement — Top 10 to Try First branded mug" />
-      <p class="csgrid__caption">AI Enablement — Top 10 to Try First</p>
+  <div class="dfcarousel" aria-roledescription="carousel" aria-label="Graphic design gallery">
+    <div class="dfcarousel__viewport">
+      <div class="dfcarousel__track">
+        <div class="dfcarousel__slide dfcarousel__slide--dark"
+             data-label="AI Enablement"
+             data-title="Top 10 to Try First — reference card"
+             data-desc="A pocket-sized reference for the AI tools most likely to change day-to-day work at Intuit.">
+          <span class="dfcarousel__chip">AI Enablement</span>
+          <img src="../assets/cs/intuit-exo-mug.png" alt="AI Enablement — Top 10 to Try First reference card" loading="lazy" />
+        </div>
+        <div class="dfcarousel__slide"
+             data-label="AI Enablement"
+             data-title="Brand gradients — system"
+             data-desc="Gradient system used across AI enablement comms, deck templates, and learning assets.">
+          <span class="dfcarousel__chip">AI Enablement</span>
+          <img src="../assets/cs/intuit-exo-gradients.png" alt="AI Enablement — brand gradients" loading="lazy" />
+        </div>
+        <div class="dfcarousel__slide dfcarousel__slide--dark"
+             data-label="EXO Leadership Brand"
+             data-title="Identity system"
+             data-desc="Full visual identity developed for EXO — Intuit's internal executive identification and leadership program.">
+          <span class="dfcarousel__chip">EXO Leadership</span>
+          <img src="../assets/cs/intuit-exo-brand2.png" alt="EXO Leadership Brand — identity system" loading="lazy" />
+        </div>
+        <div class="dfcarousel__slide dfcarousel__slide--dark"
+             data-label="EXO Leadership Brand"
+             data-title="Logo — dark variant"
+             data-desc="Primary logomark on dark ground. Built to hold at sizes from badge to banner.">
+          <span class="dfcarousel__chip">EXO Leadership</span>
+          <img src="../assets/cs/intuit-exo-logo-dark.png" alt="EXO Leadership Brand — logo dark variant" loading="lazy" />
+        </div>
+        <div class="dfcarousel__slide"
+             data-label="EXO Leadership Brand"
+             data-title="Print materials"
+             data-desc="Print collateral for EXO events and leadership launch moments.">
+          <span class="dfcarousel__chip dfcarousel__chip--light">EXO Leadership</span>
+          <img src="../assets/cs/intuit-exo-print2.png" alt="EXO Leadership Brand — print materials" loading="lazy" />
+        </div>
+        <div class="dfcarousel__slide"
+             data-label="EXO Leadership Brand"
+             data-title="Branded merchandise — water bottle"
+             data-desc="Branded identifier merchandise issued at EXO leadership events.">
+          <span class="dfcarousel__chip dfcarousel__chip--light">EXO Leadership</span>
+          <img src="../assets/cs/intuit-exo-bottle2.png" alt="EXO Leadership Brand — branded water bottle" loading="lazy" />
+        </div>
+        <div class="dfcarousel__slide"
+             data-label="EXO Leadership Brand"
+             data-title="Branded merchandise — Yeti mug"
+             data-desc="Production proof for the EXO Yeti mug run.">
+          <span class="dfcarousel__chip dfcarousel__chip--light">EXO Leadership</span>
+          <img src="../assets/cs/intuit-exo-yeti.png" alt="EXO Leadership Brand — branded Yeti mug" loading="lazy" />
+        </div>
+      </div>
     </div>
-    <div class="csgrid__item">
-      <img src="../assets/cs/intuit-exo-brand2.png" alt="EXO Brand Identity system" />
-      <p class="csgrid__caption">EXO Brand Identity</p>
+
+    <div class="dfcarousel__controls">
+      <div class="dfcarousel__caption" data-df-caption></div>
+      <div class="dfcarousel__nav">
+        <span class="dfcarousel__counter" data-df-counter></span>
+        <div class="dfcarousel__arrows">
+          <button class="dfcarousel__arrow" data-df-prev type="button" aria-label="Previous slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="dfcarousel__arrow" data-df-next type="button" aria-label="Next slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="csgrid__item">
-      <img src="../assets/cs/intuit-exo-logo-dark.png" alt="EXO Logo dark variant" />
-      <p class="csgrid__caption">EXO Logo — Dark Variant</p>
-    </div>
-    <div class="csgrid__item">
-      <img src="../assets/cs/intuit-exo-print2.png" alt="EXO print materials" />
-      <p class="csgrid__caption">Print Materials</p>
-    </div>
-    <div class="csgrid__item">
-      <img src="../assets/cs/intuit-exo-bottle2.png" alt="EXO branded water bottle proof" />
-      <p class="csgrid__caption">Branded Water Bottle Proof</p>
-    </div>
-    <div class="csgrid__item">
-      <img src="../assets/cs/intuit-exo-yeti.png" alt="EXO branded Yeti mug proof" />
-      <p class="csgrid__caption">Branded Yeti Mug Proof</p>
-    </div>
+
+    <div class="dfcarousel__dots" data-df-dots role="tablist" aria-label="Slide navigation"></div>
   </div>
 </section>
 
@@ -341,5 +1464,373 @@
 </footer>
 
 <script src="../script.js" defer></script>
+
+<script>
+/* ==========================================================================
+   Intuit case study — signature interactive: career matching prototype
+   ========================================================================== */
+(function () {
+  const ROLES = {
+    'software-engineer': {
+      label: 'Software Engineer',
+      current: [92, 45, 55, 78, 50],
+      target:  [85, 85, 80, 70, 80],
+      matches: [
+        { role: 'Engineering Manager', pct: 78, gaps: 4, path: ['People Management Foundations', 'Performance Coaching', 'Hiring & Interviewing', 'Strategic Planning'] },
+        { role: 'Data Engineer', pct: 88, gaps: 0, path: [] },
+        { role: 'Technical Product Manager', pct: 65, gaps: 4, path: ['Product Strategy Fundamentals', 'Cross-functional Leadership', 'User Research Methods', 'Roadmap Planning'] }
+      ]
+    },
+    'marketing-manager': {
+      label: 'Marketing Manager',
+      current: [52, 75, 88, 62, 70],
+      target:  [60, 85, 92, 80, 85],
+      matches: [
+        { role: 'Product Marketing Lead', pct: 82, gaps: 2, path: ['Pricing Strategy', 'Competitive Analysis'] },
+        { role: 'Brand Strategy Director', pct: 71, gaps: 3, path: ['Brand Architecture', 'Portfolio Positioning', 'Market Research Methods'] },
+        { role: 'Growth Marketing Manager', pct: 69, gaps: 4, path: ['Experimentation Design', 'SQL for Marketers', 'Attribution Modeling', 'Retention Strategy'] }
+      ]
+    },
+    'data-analyst': {
+      label: 'Data Analyst',
+      current: [80, 40, 60, 95, 55],
+      target:  [85, 75, 80, 92, 80],
+      matches: [
+        { role: 'Senior Data Scientist', pct: 85, gaps: 2, path: ['ML Fundamentals', 'Statistical Modeling'] },
+        { role: 'Analytics Engineer', pct: 79, gaps: 3, path: ['dbt Advanced', 'Data Modeling', 'Airflow Pipelines'] },
+        { role: 'Business Intelligence Lead', pct: 72, gaps: 3, path: ['Stakeholder Management', 'Dashboard Strategy', 'Data Storytelling'] }
+      ]
+    },
+    'product-designer': {
+      label: 'Product Designer',
+      current: [60, 55, 82, 50, 78],
+      target:  [65, 80, 90, 70, 88],
+      matches: [
+        { role: 'Design Lead', pct: 76, gaps: 3, path: ['Design Critique Facilitation', 'Hiring Designers', 'Design Systems at Scale'] },
+        { role: 'UX Researcher', pct: 72, gaps: 3, path: ['Research Ops', 'Quantitative Methods', 'Insight Synthesis'] },
+        { role: 'Product Manager', pct: 64, gaps: 5, path: ['Roadmap Planning', 'Pricing & Packaging', 'Stakeholder Influence', 'Metrics Frameworks', 'Go-to-Market'] }
+      ]
+    },
+    'finance-specialist': {
+      label: 'Finance Specialist',
+      current: [70, 58, 72, 90, 60],
+      target:  [78, 82, 85, 90, 82],
+      matches: [
+        { role: 'FP&A Manager', pct: 83, gaps: 2, path: ['Business Partnering', 'Scenario Modeling'] },
+        { role: 'Strategic Finance Lead', pct: 74, gaps: 3, path: ['Long-range Planning', 'Board Reporting', 'M&A Fundamentals'] },
+        { role: 'Revenue Operations Lead', pct: 68, gaps: 4, path: ['Salesforce Admin', 'Pipeline Analytics', 'Territory Design', 'Quota Modeling'] }
+      ]
+    }
+  };
+
+  const AXES = [
+    { angle: 0,   label: 'Technical',    anchor: 'middle', lx: 170, ly: 15 },
+    { angle: 72,  label: 'Leadership',   anchor: 'start',  lx: 285, ly: 108 },
+    { angle: 144, label: 'Comm',         anchor: 'start',  lx: 250, ly: 265 },
+    { angle: 216, label: 'Data',         anchor: 'end',    lx: 90,  ly: 265 },
+    { angle: 288, label: 'Cross-func',   anchor: 'end',    lx: 55,  ly: 108 }
+  ];
+  const CX = 170, CY = 150, R = 110;
+
+  function polarPoint(valuePct, angleDeg) {
+    const v = valuePct / 100;
+    const rad = angleDeg * Math.PI / 180;
+    const x = CX + v * R * Math.sin(rad);
+    const y = CY - v * R * Math.cos(rad);
+    return [+x.toFixed(2), +y.toFixed(2)];
+  }
+
+  function buildStaticRadar() {
+    const axesEl = document.getElementById('radarAxes');
+    const ringsEl = document.getElementById('radarRings');
+    const labelsEl = document.getElementById('radarLabels');
+    if (!axesEl || !ringsEl || !labelsEl) return;
+
+    // Axes
+    let axesHtml = '';
+    AXES.forEach(a => {
+      const [x, y] = polarPoint(100, a.angle);
+      axesHtml += `<line x1="${CX}" y1="${CY}" x2="${x}" y2="${y}" />`;
+    });
+    axesEl.innerHTML = axesHtml;
+
+    // Concentric rings at 25/50/75/100
+    let ringsHtml = '';
+    [25, 50, 75, 100].forEach(pct => {
+      const pts = AXES.map(a => polarPoint(pct, a.angle).join(',')).join(' ');
+      ringsHtml += `<polygon points="${pts}" />`;
+    });
+    ringsEl.innerHTML = ringsHtml;
+
+    // Labels
+    let labelsHtml = '';
+    AXES.forEach(a => {
+      labelsHtml += `<text x="${a.lx}" y="${a.ly}" text-anchor="${a.anchor}">${a.label}</text>`;
+    });
+    labelsEl.innerHTML = labelsHtml;
+  }
+
+  function renderRadar(roleKey) {
+    const data = ROLES[roleKey];
+    const current = data.current.map((v, i) => polarPoint(v, AXES[i].angle).join(',')).join(' ');
+    const target  = data.target.map((v, i)  => polarPoint(v, AXES[i].angle).join(',')).join(' ');
+    document.getElementById('radarCurrent').setAttribute('points', current);
+    document.getElementById('radarTarget').setAttribute('points', target);
+  }
+
+  function renderMatches(roleKey) {
+    const data = ROLES[roleKey];
+    const container = document.getElementById('protoMatches');
+    if (!container) return;
+
+    container.innerHTML = data.matches.map((m, idx) => {
+      const pathHtml = m.path.length === 0
+        ? `<div class="proto__path"><div class="proto__path-head">you're ready today</div><div class="proto__path-empty">0 skill gaps. Apply directly or schedule a conversation with your manager.</div></div>`
+        : `<div class="proto__path">
+             <div class="proto__path-head">recommended learning path → ${m.role}</div>
+             <div class="proto__path-grid">
+               ${m.path.map((step, i) => `
+                 <div class="proto__path-card">
+                   <span class="proto__path-num">${i + 1}</span>
+                   <span class="proto__path-title">${step}</span>
+                   <span class="proto__path-status">not started</span>
+                 </div>
+               `).join('')}
+             </div>
+           </div>`;
+
+      return `
+        <div class="proto__match${idx === 0 ? ' is-expanded' : ''}" data-match="${idx}">
+          <span class="proto__match-pct">${m.pct}%</span>
+          <div>
+            <span class="proto__match-role">${m.role}</span>
+            <span class="proto__match-gaps">${m.gaps === 0 ? 'no skill gaps' : m.gaps + ' skill gaps to close'}</span>
+          </div>
+          <svg class="proto__match-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          ${pathHtml}
+        </div>
+      `;
+    }).join('');
+
+    // Attach expand handlers
+    container.querySelectorAll('.proto__match').forEach(el => {
+      el.addEventListener('click', () => {
+        el.classList.toggle('is-expanded');
+      });
+    });
+  }
+
+  function selectRole(roleKey) {
+    document.querySelectorAll('.proto__role').forEach(btn => {
+      btn.classList.toggle('is-active', btn.dataset.role === roleKey);
+    });
+    renderRadar(roleKey);
+    renderMatches(roleKey);
+  }
+
+  /* --- Typing / reveal animation engine for nudges --- */
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let animToken = 0;
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+  async function typeHtml(el, baseSpeed = 14, aborted) {
+    if (!el) return;
+    if (!el.dataset.html) el.dataset.html = el.innerHTML;
+    const html = el.dataset.html;
+    if (prefersReduced) { el.innerHTML = html; return; }
+    el.innerHTML = '';
+    el.classList.add('is-typing');
+    let i = 0, buffer = '';
+    while (i < html.length) {
+      if (aborted && aborted()) { el.classList.remove('is-typing'); return; }
+      // Skip past HTML tags in one tick
+      if (html[i] === '<') {
+        const end = html.indexOf('>', i);
+        if (end === -1) break;
+        buffer += html.slice(i, end + 1);
+        i = end + 1;
+        el.innerHTML = buffer;
+        continue;
+      }
+      // Handle HTML entities as single units
+      if (html[i] === '&') {
+        const semi = html.indexOf(';', i);
+        if (semi > -1 && semi - i < 12) {
+          buffer += html.slice(i, semi + 1);
+          i = semi + 1;
+          el.innerHTML = buffer;
+          await sleep(baseSpeed);
+          continue;
+        }
+      }
+      const ch = html[i];
+      buffer += ch;
+      i++;
+      el.innerHTML = buffer;
+      const delay = '.!?'.includes(ch) ? 180
+                  : ch === ',' ? 70
+                  : ch === ' ' ? 18
+                  : baseSpeed + Math.random() * 18;
+      await sleep(delay);
+    }
+    el.classList.remove('is-typing');
+    el.innerHTML = html;
+  }
+
+  function showReveal(el) { el && el.classList.add('is-visible'); }
+
+  async function staggerReveal(els, stagger = 140, aborted) {
+    for (const el of els) {
+      if (aborted && aborted()) return;
+      showReveal(el);
+      await sleep(stagger);
+    }
+  }
+
+  async function slackTypingIndicator(beforeEl, duration) {
+    if (!beforeEl) return;
+    const indicator = document.createElement('div');
+    indicator.className = 'slack-typing';
+    indicator.innerHTML = '<span></span><span></span><span></span>';
+    beforeEl.parentNode.insertBefore(indicator, beforeEl);
+    await sleep(duration);
+    indicator.remove();
+  }
+
+  function resetPanel(panel) {
+    if (!panel) return;
+    panel.querySelectorAll('.slack-typing').forEach(e => e.remove());
+    panel.querySelectorAll('[data-type]').forEach(el => {
+      if (!el.dataset.html) el.dataset.html = el.innerHTML;
+      el.innerHTML = '';
+      el.classList.remove('is-typing');
+    });
+    panel.querySelectorAll('.to-reveal').forEach(el => el.classList.remove('is-visible'));
+  }
+
+  const PANEL_ANIMS = {
+    email: async (panel, aborted) => {
+      const subject = panel.querySelector('.nudge-email__subject');
+      const paras = Array.from(panel.querySelectorAll('.nudge-email__body > p[data-type]'));
+      const roles = panel.querySelectorAll('.nudge-email__role.to-reveal');
+      const cta = panel.querySelector('.nudge-email__cta.to-reveal');
+      await sleep(250);
+      if (aborted()) return;
+      await typeHtml(subject, 14, aborted);
+      await sleep(200);
+      for (let k = 0; k < paras.length; k++) {
+        if (aborted()) return;
+        await typeHtml(paras[k], 14, aborted);
+        if (k === 1) {
+          await staggerReveal(roles, 140, aborted);
+        } else {
+          await sleep(200);
+        }
+      }
+      if (aborted()) return;
+      await sleep(150);
+      showReveal(cta);
+    },
+    slack: async (panel, aborted) => {
+      const paras = Array.from(panel.querySelectorAll('.nudge-slack__text p[data-type]'));
+      const actions = panel.querySelector('.nudge-slack__actions.to-reveal');
+      const reactions = panel.querySelector('.nudge-slack__reactions.to-reveal');
+      for (const p of paras) {
+        if (aborted()) return;
+        await slackTypingIndicator(p, 550);
+        if (aborted()) return;
+        await typeHtml(p, 14, aborted);
+        await sleep(280);
+      }
+      if (aborted()) return;
+      showReveal(actions);
+      await sleep(380);
+      showReveal(reactions);
+    },
+    manager: async (panel, aborted) => {
+      const label = panel.querySelector('.nudge-cal__section-label');
+      const items = panel.querySelectorAll('.nudge-cal__item.to-reveal');
+      const cta = panel.querySelector('.nudge-cal__cta.to-reveal');
+      await sleep(250);
+      if (aborted()) return;
+      await typeHtml(label, 18, aborted);
+      await sleep(180);
+      await staggerReveal(items, 260, aborted);
+      if (aborted()) return;
+      await sleep(150);
+      showReveal(cta);
+    }
+  };
+
+  async function playPanel(key) {
+    const token = ++animToken;
+    const panel = document.querySelector(`.proto__nudge-panel[data-panel="${key}"]`);
+    if (!panel) return;
+    resetPanel(panel);
+    if (prefersReduced) {
+      panel.querySelectorAll('[data-type]').forEach(el => {
+        if (el.dataset.html) el.innerHTML = el.dataset.html;
+      });
+      panel.querySelectorAll('.to-reveal').forEach(showReveal);
+      return;
+    }
+    const fn = PANEL_ANIMS[key];
+    if (!fn) return;
+    await fn(panel, () => token !== animToken);
+  }
+
+  function initNudgeAnimations() {
+    // Clear the initially-active panel immediately so content isn't flashed
+    const active = document.querySelector('.proto__nudge-panel.is-active');
+    if (active) resetPanel(active);
+    const section = document.querySelector('.proto__nudge');
+    if (!section) return;
+    if (!('IntersectionObserver' in window)) {
+      if (active) playPanel(active.dataset.panel);
+      return;
+    }
+    const obs = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          const act = document.querySelector('.proto__nudge-panel.is-active');
+          if (act) playPanel(act.dataset.panel);
+          obs.disconnect();
+        }
+      }
+    }, { threshold: 0.18 });
+    obs.observe(section);
+  }
+
+  function wireNudgeTabs() {
+    const tabs = document.querySelectorAll('.proto__tab');
+    const panels = document.querySelectorAll('.proto__nudge-panel');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const key = tab.dataset.nudge;
+        tabs.forEach(t => t.classList.toggle('is-active', t === tab));
+        panels.forEach(p => p.classList.toggle('is-active', p.dataset.panel === key));
+        playPanel(key);
+      });
+    });
+  }
+
+  function init() {
+    if (!document.getElementById('protoMatches')) return;
+    buildStaticRadar();
+    selectRole('software-engineer');
+    document.querySelectorAll('.proto__role').forEach(btn => {
+      btn.addEventListener('click', () => selectRole(btn.dataset.role));
+    });
+    wireNudgeTabs();
+    initNudgeAnimations();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
 </body>
 </html>

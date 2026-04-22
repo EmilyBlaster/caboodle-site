@@ -1,0 +1,48 @@
+# ============================================================================
+# Netlify _headers file — cache-control for caboodle-site
+#
+# Biggest bandwidth saver on the site. Tells browsers + Netlify's CDN how
+# long they can reuse a file before re-downloading. A visitor who comes
+# back in a week pulls ~0 bytes for most assets instead of ~10 MB.
+#
+# Ordering rule: more specific paths go above less specific ones.
+# ============================================================================
+
+# ─── Immutable assets: fonts, images, videos, 3D ────────────────────────────
+# These files rarely change, and when they do, we can cache-bust by renaming.
+# 1 year + immutable = browser reuses the cached copy with zero revalidation.
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# ─── CSS + JS: long cache, but let the browser revalidate ───────────────────
+# If you edit styles.css or script.js the URL stays the same, so we don't want
+# "immutable." max-age=3600 lets browsers reuse for an hour, then check for
+# updates on next visit. stale-while-revalidate serves the old copy instantly
+# while fetching the new one in the background — snappy and correct.
+
+/styles.css
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/script.js
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+# ─── HTML pages: short cache, always check for updates ──────────────────────
+# You want content changes to go live immediately, so pages revalidate often.
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+# ─── Security headers (applies to everything) ───────────────────────────────
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

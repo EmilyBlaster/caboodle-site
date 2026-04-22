@@ -23,6 +23,890 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="../styles.css" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+
+<style>
+/* ==========================================================================
+   Apple case study — page-specific: signature spotlight (3D fire extinguisher)
+   ========================================================================== */
+.apspotlight {
+  background: var(--paper-2);
+  padding: clamp(2rem, 4vw, 3.5rem) var(--pad-x);
+  overflow: visible;
+  border-top: 1px solid var(--rule);
+}
+.apspotlight__inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 4fr 8fr;
+  min-height: 640px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--ink);
+  box-shadow: 0 2px 24px rgba(0,0,0,0.12);
+}
+.apspotlight__text {
+  padding: clamp(3rem, 6vw, 5rem) clamp(2rem, 4vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.1rem;
+}
+.apspotlight__kicker {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lime);
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(150, 230, 80, 0.35);
+  width: fit-content;
+}
+.apspotlight__h {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  color: var(--paper);
+}
+.apspotlight__h em { color: var(--lime); font-style: italic; }
+.apspotlight__p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(242, 239, 232, 0.68);
+  max-width: 44ch;
+}
+.apspotlight__tips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+.apspotlight__tip {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(242, 239, 232, 0.6);
+  background: rgba(242, 239, 232, 0.06);
+  border: 1px solid rgba(242, 239, 232, 0.12);
+  padding: 0.35rem 0.65rem;
+  border-radius: 99px;
+}
+.apspotlight__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lime);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(150, 230, 80, 0.35);
+  padding-bottom: 0.2em;
+  width: fit-content;
+  margin-top: 0.5rem;
+  transition: border-color 0.2s var(--ease);
+}
+.apspotlight__cta:hover { border-color: var(--lime); }
+.apspotlight__cta svg { width: 12px; height: 12px; }
+.apspotlight__attr {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(242, 239, 232, 0.1);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: rgba(242, 239, 232, 0.45);
+  line-height: 1.5;
+}
+.apspotlight__attr a {
+  color: rgba(242, 239, 232, 0.7);
+  text-decoration: underline;
+  text-decoration-thickness: 0.5px;
+  text-underline-offset: 2px;
+  transition: color 0.2s var(--ease);
+}
+.apspotlight__attr a:hover { color: var(--lime); }
+
+.apspotlight__window {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #eef3f7;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+.apspotlight__iframe {
+  width: 100%;
+  flex: 1;
+  border: none;
+  display: block;
+  min-height: 640px;
+  background: #eef3f7;
+}
+
+@media (max-width: 900px) {
+  .apspotlight__inner { grid-template-columns: 1fr; min-height: 0; }
+  .apspotlight__iframe { min-height: 460px; }
+}
+
+/* ==========================================================================
+   Apple — Multilingual delivery callout ("Scan. Watch. Apply.")
+   ========================================================================== */
+.apmulti {
+  padding: clamp(4rem, 8vw, 6rem) var(--pad-x);
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+}
+.apmulti__inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 3rem;
+  align-items: center;
+}
+.apmulti__orbit {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  max-width: 420px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.apmulti__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px dashed rgba(3, 89, 155, 0.18);
+  pointer-events: none;
+  animation: ringRotate 60s linear infinite;
+}
+.apmulti__ring--inner {
+  inset: 18%;
+  animation-direction: reverse;
+  animation-duration: 45s;
+}
+@keyframes ringRotate {
+  to { transform: rotate(360deg); }
+}
+.apmulti__qr {
+  position: relative;
+  z-index: 2;
+  width: 130px;
+  height: 130px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 24px rgba(3, 89, 155, 0.10);
+}
+.apmulti__qr svg { width: 80%; height: 80%; display: block; color: var(--ink); }
+
+.apmulti__lang {
+  position: absolute;
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 0.82rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 99px;
+  color: var(--paper);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  white-space: nowrap;
+  animation: langFloat 4.5s var(--ease) infinite;
+}
+.apmulti__lang--1 { top: 2%;  left: 50%; transform: translate(-50%, 0);     background: var(--magenta); animation-delay: 0s; }
+.apmulti__lang--2 { top: 50%; right: 1%; transform: translate(0, -50%);     background: var(--blue);    animation-delay: 0.6s; }
+.apmulti__lang--3 { bottom: 2%; left: 50%; transform: translate(-50%, 0);   background: var(--magenta); animation-delay: 1.2s; }
+.apmulti__lang--4 { top: 50%; left: 1%; transform: translate(0, -50%);      background: var(--blue);    animation-delay: 1.8s; }
+.apmulti__lang--5 { top: 20%; right: 20%; background: var(--lime); color: var(--ink); animation-delay: 2.4s; }
+.apmulti__lang--6 { bottom: 20%; right: 20%; background: var(--magenta); animation-delay: 3s; }
+.apmulti__lang--7 { bottom: 20%; left: 20%; background: var(--blue); animation-delay: 3.6s; }
+.apmulti__lang--8 { top: 20%; left: 20%; background: var(--lime); color: var(--ink); animation-delay: 4.2s; }
+@keyframes langFloat {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.15); }
+}
+
+.apmulti__copy { display: grid; gap: 1rem; }
+.apmulti__kicker {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue);
+  padding-top: 0.5rem;
+  border-top: 2px solid var(--blue);
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.apmulti__h {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  color: var(--ink);
+}
+.apmulti__h em { color: var(--magenta); font-style: italic; }
+.apmulti__p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 58ch;
+}
+/* Landscape phone mockup with animation image */
+.apmulti__phone {
+  display: flex;
+  justify-content: center;
+  margin: 1.25rem 0 0.25rem;
+  padding: 0.5rem 0;
+}
+.apmulti__phone-frame {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 19.5 / 9;
+  background: #1a1a1a;
+  border-radius: 22px;
+  padding: 6px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 24px 48px rgba(0, 0, 0, 0.14),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+.apmulti__phone-frame::before {
+  /* Notch on the left (landscape orientation) */
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 60px;
+  background: #1a1a1a;
+  border-radius: 10px;
+  z-index: 2;
+}
+.apmulti__phone-screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(180deg, #f6f3ec 0%, #e5e0d1 100%);
+}
+.apmulti__phone-screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 28%;
+  display: block;
+}
+.apmulti__phone-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.35) 100%);
+  pointer-events: none;
+}
+.apmulti__phone-live {
+  position: absolute;
+  top: 12px;
+  left: 44px;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.55rem;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 99px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 2;
+}
+.apmulti__phone-live::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff3b30;
+  animation: phoneLivePulse 1.6s ease infinite;
+}
+@keyframes phoneLivePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(1.2); }
+}
+.apmulti__phone-info {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  z-index: 2;
+}
+.apmulti__phone-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.32rem 0.7rem;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--paper);
+  border-radius: 99px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  min-width: 7.5rem;
+  justify-content: center;
+  transition: background 0.3s var(--ease);
+}
+.apmulti__phone-lang-text {
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+  transition: opacity 0.18s ease;
+}
+.apmulti__phone-caption {
+  display: block;
+  text-align: center;
+  margin-top: 1rem;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+@media (max-width: 700px) {
+  .apmulti__phone-frame { max-width: 360px; }
+}
+.apmulti__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  list-style: none;
+}
+.apmulti__tags li {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  background: var(--paper-2);
+  padding: 0.4rem 0.75rem;
+  border-radius: 99px;
+  border: 1px solid var(--rule);
+}
+@media (max-width: 900px) {
+  .apmulti__inner { grid-template-columns: 1fr; gap: 2rem; }
+  .apmulti__orbit { max-width: 340px; }
+}
+
+/* ==========================================================================
+   Apple — 4-step walkthrough prototype ("Experience the Approach")
+   ========================================================================== */
+.appwt {
+  padding: clamp(4rem, 8vw, 6rem) var(--pad-x);
+  background: var(--paper-2);
+  border-top: 1px solid var(--rule);
+}
+.appwt__inner { max-width: var(--maxw); margin: 0 auto; }
+
+.appwt__head {
+  max-width: 62ch;
+  margin: 0 0 2rem;
+  display: grid;
+  gap: 0.75rem;
+}
+.appwt__kicker {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+  width: fit-content;
+}
+.appwt__h {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  color: var(--ink);
+}
+.appwt__h em { color: var(--blue); font-style: italic; }
+.appwt__p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 60ch;
+}
+.appwt__note {
+  margin-top: 0.5rem;
+  padding: 0.85rem 1.1rem;
+  background: rgba(3, 89, 155, 0.05);
+  border-left: 3px solid var(--blue);
+  border-radius: 2px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.appwt__note b { color: var(--blue); font-weight: 600; }
+
+.appwt__card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: clamp(2rem, 4vw, 3.5rem);
+  max-width: 880px;
+  margin: 0 auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 10px 40px rgba(0, 0, 0, 0.04);
+}
+
+/* Head bar: segmented progress + step label */
+.appwt__head-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 2.5rem;
+}
+.appwt__progress-bar {
+  display: flex;
+  gap: 3px;
+  flex: 1;
+  max-width: 280px;
+}
+.appwt__progress-seg {
+  flex: 1;
+  height: 2px;
+  background: var(--rule);
+  border-radius: 1px;
+  transition: background 0.4s var(--ease);
+}
+.appwt__progress-seg.is-done { background: rgba(3, 89, 155, 0.35); }
+.appwt__progress-seg.is-active { background: var(--blue); }
+.appwt__step-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+/* Panels */
+.appwt__panel { display: none; animation: appwtFade 0.5s var(--ease) both; }
+.appwt__panel.is-active { display: block; }
+@keyframes appwtFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.appwt__chip {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin: 0 0 1.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--blue);
+}
+
+.appwt__panel-h {
+  margin: 0 0 1.25rem;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  color: var(--ink);
+  max-width: 22ch;
+}
+.appwt__panel-h em { color: var(--magenta); font-style: italic; }
+
+.appwt__panel-lede {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  line-height: 1.4;
+  color: var(--ink);
+  margin: 0 0 1.25rem;
+  max-width: 50ch;
+  letter-spacing: -0.01em;
+}
+
+.appwt__panel-p {
+  margin: 0 0 1.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 60ch;
+}
+
+/* Step 2 — scenarios (typographic, no icon thumbnails) */
+.appwt__scenarios { margin: 0; }
+.appwt__scenario {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 2rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--rule);
+}
+.appwt__scenario:last-of-type { border-bottom: 1px solid var(--rule); }
+.appwt__scenario-num {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+}
+.appwt__scenario-label {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.appwt__scenario-text {
+  font-size: 0.95rem;
+  color: var(--ink-2);
+  line-height: 1.55;
+  margin: 0 0 0.9rem;
+  max-width: 54ch;
+}
+.appwt__reveal {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--blue);
+  text-transform: uppercase;
+  transition: color 0.2s var(--ease);
+}
+.appwt__reveal:hover { color: var(--blue-deep); }
+.appwt__answer {
+  display: none;
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(3, 89, 155, 0.04);
+  border-left: 2px solid var(--blue);
+  font-size: 0.94rem;
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 58ch;
+}
+.appwt__scenario.is-revealed .appwt__answer { display: block; }
+.appwt__scenario.is-revealed .appwt__reveal { color: var(--ink-2); }
+
+.appwt__progress-note {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin: 1.5rem 0 0;
+}
+
+/* Step 3 — decision point (editorial: video + quote) */
+.appwt__video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 0 0 2rem;
+  background: var(--ink);
+}
+.appwt__video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.appwt__video video::cue {
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--paper);
+  font-family: var(--body);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  padding: 0.25rem 0.55rem;
+  border-radius: 3px;
+}
+.appwt__video-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+.appwt__video-ctrls {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  gap: 0.4rem;
+  z-index: 3;
+}
+.appwt__video-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.8rem;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--paper);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 99px;
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.appwt__video-btn:hover {
+  background: rgba(3, 89, 155, 0.85);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.appwt__video-btn svg { width: 12px; height: 12px; }
+.appwt__video-btn.is-hidden { display: none; }
+.appwt__video-play-overlay {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.35);
+  transition: background 0.2s var(--ease);
+}
+.appwt__video-play-overlay.is-shown { display: flex; }
+.appwt__video-play-overlay:hover { background: rgba(0, 0, 0, 0.45); }
+.appwt__video-play-icon {
+  width: 4rem;
+  height: 4rem;
+  background: var(--paper);
+  color: var(--blue);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s var(--ease);
+}
+.appwt__video-play-overlay:hover .appwt__video-play-icon { transform: scale(1.06); }
+.appwt__video-play-icon svg { width: 1.4rem; height: 1.4rem; }
+.appwt__video-caption {
+  position: absolute;
+  bottom: 0.9rem;
+  left: 1rem;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: rgba(0, 0, 0, 0.55);
+  padding: 0.3rem 0.6rem;
+  border-radius: 99px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 3;
+}
+
+.appwt__quote {
+  border-left: 3px solid var(--magenta);
+  padding: 0.25rem 0 0.25rem 1.5rem;
+  margin: 0 0 2rem;
+}
+.appwt__quote small {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  color: var(--ink-2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.appwt__quote small + small { margin-top: 1rem; margin-bottom: 0; }
+.appwt__quote p {
+  font-family: var(--display);
+  font-size: clamp(1.2rem, 1.9vw, 1.5rem);
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+}
+
+.appwt__choices {
+  display: grid;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--rule);
+}
+.appwt__choices li { border-bottom: 1px solid var(--rule); }
+.appwt__choices button {
+  width: 100%;
+  text-align: left;
+  padding: 1.15rem 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--body);
+  font-size: 0.98rem;
+  color: var(--ink);
+  cursor: pointer;
+  transition: color 0.2s var(--ease);
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+.appwt__choices button::before {
+  content: '';
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.appwt__choices button:hover { color: var(--blue); }
+.appwt__choices button:hover::before { border-color: var(--blue); }
+.appwt__choices button.is-wrong { color: var(--magenta); }
+.appwt__choices button.is-wrong::before {
+  background: var(--magenta);
+  border-color: var(--magenta);
+  box-shadow: inset 0 0 0 3px var(--paper);
+}
+.appwt__choices button.is-right { color: var(--blue); font-weight: 600; }
+.appwt__choices button.is-right::before {
+  background: var(--lime);
+  border-color: var(--lime);
+  box-shadow: inset 0 0 0 3px var(--paper);
+}
+
+.appwt__feedback {
+  display: none;
+  padding: 1.25rem 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink);
+  margin-top: 1.75rem;
+  border-left: 3px solid;
+  max-width: 62ch;
+}
+.appwt__feedback.is-shown { display: block; }
+.appwt__feedback--right { border-color: var(--lime); background: rgba(150, 230, 80, 0.14); }
+.appwt__feedback--wrong { border-color: var(--magenta); background: rgba(236, 0, 140, 0.03); }
+
+/* Step 4 — outcome (editorial list) */
+.appwt__outcome-list {
+  display: grid;
+  gap: 0;
+  margin: 2rem 0 0;
+  list-style: none;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+.appwt__outcome-list li {
+  padding: 1.35rem 0;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 2rem;
+  align-items: baseline;
+}
+.appwt__outcome-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+.appwt__outcome-val {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+}
+
+/* Navigation — thin editorial links */
+.appwt__nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2rem;
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--rule);
+  gap: 1rem;
+}
+.appwt__btn {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  transition: color 0.2s var(--ease), opacity 0.2s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.appwt__btn:hover:not(:disabled) { color: var(--blue); }
+.appwt__btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.appwt__btn--prev::before { content: '←'; font-size: 1.1rem; line-height: 1; }
+.appwt__btn--next::after { content: '→'; font-size: 1.1rem; line-height: 1; }
+
+@media (max-width: 700px) {
+  .appwt__card { padding: 1.75rem; }
+  .appwt__scenario { grid-template-columns: 2rem 1fr; gap: 1rem; }
+  .appwt__outcome-list li { grid-template-columns: 1fr; gap: 0.25rem; }
+  .appwt__head-bar { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .appwt__progress-bar { max-width: none; width: 100%; }
+}
+</style>
 </head>
 <body>
 
@@ -160,37 +1044,311 @@
   </article>
 </section>
 
-<!-- Design files: custom media grid -->
-<section class="designfiles" data-log="003 — from the design files">
+<!-- Signature spotlight: 3D fire extinguisher inspection -->
+<section class="apspotlight" data-log="003 — signature spotlight · 3d fire extinguisher inspection">
+  <div class="apspotlight__inner">
+    <div class="apspotlight__text">
+      <span class="apspotlight__kicker">signature spotlight · fire safety</span>
+      <h3 class="apspotlight__h">
+        a fire extinguisher,<br />
+        <em>inspectable in 3D.</em>
+      </h3>
+      <p class="apspotlight__p">
+        Factory floor safety training doesn't happen at a desk. I built a hands-on 3D inspection viewer that mirrors the real pre-use check — five components, five checklists, one model supplier workers can rotate, inspect, and pass or flag without ever opening a manual.
+      </p>
+      <div class="apspotlight__tips">
+        <span class="apspotlight__tip">drag to rotate</span>
+        <span class="apspotlight__tip">click markers to inspect</span>
+      </div>
+      <a class="apspotlight__cta" href="../assets/3d/fire-extinguisher.html" target="_blank" rel="noopener">
+        open full-screen viewer
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+      </a>
+      <p class="apspotlight__attr">
+        3D model: <a href="https://sketchfab.com/3d-models/fire-extinguisher-5676b179b3b744c0aaae53a3dcea2300" target="_blank" rel="noopener">Fire Extinguisher</a> by Loïc · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC-BY-4.0</a>
+      </p>
+    </div>
+    <div class="apspotlight__window">
+      <iframe
+        src="../assets/3d/fire-extinguisher.html?v=4"
+        class="apspotlight__iframe"
+        title="Fire extinguisher 3D inspection viewer — Apple supplier compliance training"
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- Multilingual delivery callout -->
+<section class="apmulti" data-log="004 — multilingual delivery">
+  <div class="apmulti__inner">
+    <div class="apmulti__orbit">
+      <span class="apmulti__ring apmulti__ring--outer" aria-hidden="true"></span>
+      <span class="apmulti__ring apmulti__ring--inner" aria-hidden="true"></span>
+      <div class="apmulti__qr" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR code">
+          <!-- Position detectors -->
+          <path d="M0 0h20v20H0zM4 4v12h12V4zM7 7h6v6H7z"/>
+          <path d="M44 0h20v20H44zM48 4v12h12V4zM51 7h6v6H51z"/>
+          <path d="M0 44h20v20H0zM4 48v12h12V48zM7 51h6v6H7z"/>
+          <!-- Data dots -->
+          <path d="M24 0h4v4h-4zM32 0h4v4h-4zM40 0h2v4h-2z"/>
+          <path d="M24 8h2v4h-2zM30 8h4v4h-4zM38 8h4v4h-4z"/>
+          <path d="M24 14h4v4h-4zM32 14h2v4h-2zM40 14h4v4h-4z"/>
+          <path d="M0 24h4v4H0zM8 24h4v4H8zM16 24h4v4h-4zM24 24h4v4h-4zM32 24h4v4h-4zM40 24h4v4h-4zM48 24h4v4h-4zM56 24h4v4h-4z"/>
+          <path d="M4 30h4v4H4zM12 30h4v4h-4zM20 30h4v4h-4zM28 30h4v4h-4zM36 30h4v4h-4zM44 30h4v4h-4zM52 30h4v4h-4zM60 30h4v4h-4z"/>
+          <path d="M0 38h4v4H0zM8 38h4v4H8zM16 38h4v4h-4zM24 38h4v4h-4zM32 38h4v4h-4zM40 38h4v4h-4zM48 38h4v4h-4zM56 38h4v4h-4z"/>
+          <path d="M24 44h4v4h-4zM32 44h2v4h-2zM44 44h4v4h-4zM52 44h4v4h-4zM60 44h4v4h-4z"/>
+          <path d="M28 50h4v4h-4zM36 50h4v4h-4zM44 50h4v4h-4zM52 50h2v4h-2zM60 50h4v4h-4z"/>
+          <path d="M24 58h4v4h-4zM32 58h4v4h-4zM40 58h2v4h-2zM48 58h4v4h-4zM56 58h4v4h-4z"/>
+        </svg>
+      </div>
+      <span class="apmulti__lang apmulti__lang--1">ภาษาไทย</span>
+      <span class="apmulti__lang apmulti__lang--2">한국어</span>
+      <span class="apmulti__lang apmulti__lang--3">中文</span>
+      <span class="apmulti__lang apmulti__lang--4">Español</span>
+      <span class="apmulti__lang apmulti__lang--5">Tiếng Việt</span>
+      <span class="apmulti__lang apmulti__lang--6">தமிழ்</span>
+      <span class="apmulti__lang apmulti__lang--7">हिन्दी</span>
+      <span class="apmulti__lang apmulti__lang--8">Bahasa</span>
+    </div>
+
+    <div class="apmulti__copy">
+      <span class="apmulti__kicker">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        multilingual delivery
+      </span>
+      <h3 class="apmulti__h">Scan. Watch. <em>Apply.</em></h3>
+      <p class="apmulti__p">
+        Code of Conduct training delivered through QR codes posted directly on factory floors. Suppliers scan with their phones and watch a short, clear animation in their native language. No computer. No login. No literacy barrier.
+      </p>
+      <div class="apmulti__phone" aria-label="Landscape phone mockup — Code of Conduct animation playing on a supplier's device">
+        <div class="apmulti__phone-frame">
+          <div class="apmulti__phone-screen">
+            <img src="../assets/cs/apple-coc-characters.png" alt="Code of Conduct animation — localized character cast" />
+            <div class="apmulti__phone-gradient" aria-hidden="true"></div>
+            <span class="apmulti__phone-live" aria-hidden="true">Now playing</span>
+            <div class="apmulti__phone-info">
+              <span class="apmulti__phone-lang">
+                <span class="apmulti__phone-lang-text" id="apmultiPhoneLang">ภาษาไทย</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="apmulti__phone-caption">Representative module preview · cycling localization</span>
+      <ul class="apmulti__tags">
+        <li>QR code access</li>
+        <li>Animated</li>
+        <li>Localized (8 languages)</li>
+        <li>Mobile-first</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Walkthrough prototype: Experience the Approach -->
+<section class="appwt" data-log="005 — experience the approach · 4-step walkthrough">
+  <div class="appwt__inner">
+    <header class="appwt__head">
+      <span class="appwt__kicker">experience the approach</span>
+      <h3 class="appwt__h">step into a <em>representative module.</em></h3>
+      <p class="appwt__p">
+        A click-through simulation of how Action Mapping transforms compliance content into behavior-focused learning. Four steps, one decision that matters.
+      </p>
+      <p class="appwt__note">
+        <b>Designer's note:</b> demo only — not actual client content. Structure is representative of the modules built for Apple's global supplier network.
+      </p>
+    </header>
+
+    <div class="appwt__card">
+      <div class="appwt__head-bar">
+        <div class="appwt__progress-bar" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1">
+          <span class="appwt__progress-seg is-active" data-step="1"></span>
+          <span class="appwt__progress-seg" data-step="2"></span>
+          <span class="appwt__progress-seg" data-step="3"></span>
+          <span class="appwt__progress-seg" data-step="4"></span>
+        </div>
+        <div class="appwt__step-label" id="appwtStepLabel">Step 1 of 4</div>
+      </div>
+
+      <!-- Panel 1: Welcome -->
+      <div class="appwt__panel is-active" data-panel="1">
+        <span class="appwt__chip">Module 01 · Supplier onboarding</span>
+        <h4 class="appwt__panel-h">welcome to <em>meridian electronics.</em></h4>
+        <p class="appwt__panel-lede">You're a new supplier preparing for your first shipment.</p>
+        <p class="appwt__panel-p">
+          Before any production begins, complete this onboarding module to understand the workplace safety protocols and compliance expectations Apple holds across its entire supplier network.
+        </p>
+      </div>
+
+      <!-- Panel 2: Knowledge Check -->
+      <div class="appwt__panel" data-panel="2">
+        <span class="appwt__chip">Module 02 · Knowledge check</span>
+        <h4 class="appwt__panel-h">knowledge <em>check.</em></h4>
+        <p class="appwt__panel-p">Tap each scenario to reveal the correct response.</p>
+
+        <div class="appwt__scenarios">
+          <div class="appwt__scenario">
+            <span class="appwt__scenario-num">01</span>
+            <div>
+              <span class="appwt__scenario-label">Chemical spill</span>
+              <p class="appwt__scenario-text">A worker on the assembly line reports a chemical spill near the ventilation intake.</p>
+              <button type="button" class="appwt__reveal">Tap to reveal →</button>
+              <div class="appwt__answer">Evacuate the immediate area, activate the emergency ventilation lockout, and notify the on-site EHS officer. Do not attempt to contain the spill without proper PPE and the dedicated spill kit.</div>
+            </div>
+          </div>
+
+          <div class="appwt__scenario">
+            <span class="appwt__scenario-num">02</span>
+            <div>
+              <span class="appwt__scenario-label">Missing certification</span>
+              <p class="appwt__scenario-text">An incoming shipment arrives without the required environmental compliance certification.</p>
+              <button type="button" class="appwt__reveal">Tap to reveal →</button>
+              <div class="appwt__answer">Place the shipment in quarantine hold, document the gap in the receiving log, and escalate to the supplier compliance lead before any material enters the production line.</div>
+            </div>
+          </div>
+
+          <div class="appwt__scenario">
+            <span class="appwt__scenario-num">03</span>
+            <div>
+              <span class="appwt__scenario-label">PPE at the soldering station</span>
+              <p class="appwt__scenario-text">A new employee is unsure which PPE is required for the soldering station.</p>
+              <button type="button" class="appwt__reveal">Tap to reveal →</button>
+              <div class="appwt__answer">Safety glasses with side shields, nitrile gloves rated for flux exposure, and an active fume extraction unit are required before any work begins. Consult the station's PPE card and the line supervisor.</div>
+            </div>
+          </div>
+        </div>
+        <p class="appwt__progress-note" id="appwtKcNote">Reveal all 3 to continue</p>
+      </div>
+
+      <!-- Panel 3: Decision Point -->
+      <div class="appwt__panel" data-panel="3">
+        <span class="appwt__chip">Module 03 · Decision point</span>
+        <h4 class="appwt__panel-h">the supervisor <em>overrides.</em></h4>
+
+        <div class="appwt__video">
+          <video id="appwtVideo" playsinline muted preload="metadata" aria-label="Scene — modern electronics factory floor">
+            <source src="../assets/cs/apple-decision-video.mp4" type="video/mp4" />
+            <track kind="captions" src="../assets/cs/apple-decision-video.vtt" srclang="en" label="English" default />
+          </video>
+          <div class="appwt__video-scrim"></div>
+          <div class="appwt__video-ctrls">
+            <button class="appwt__video-btn" id="appwtVideoSound" type="button" aria-pressed="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>
+              <span>Unmute</span>
+            </button>
+            <button class="appwt__video-btn" id="appwtVideoCC" type="button" aria-pressed="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M7 11a2 2 0 1 0 0 2M15 11a2 2 0 1 0 0 2"/></svg>
+              <span>CC</span>
+            </button>
+          </div>
+          <button class="appwt__video-play-overlay" id="appwtVideoPlay" type="button" aria-label="Play video">
+            <span class="appwt__video-play-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </button>
+          <span class="appwt__video-caption">Scene · Modern electronics facility</span>
+        </div>
+
+        <div class="appwt__quote">
+          <small>the supervisor says</small>
+          <p>Our deadline is looming. Let's skip the production line inspection for now — everything looks fine.</p>
+          <small>what do you do?</small>
+        </div>
+
+        <ul class="appwt__choices">
+          <li><button type="button" data-choice="skip">Skip the inspection to meet the deadline</button></li>
+          <li><button type="button" data-choice="inspect">Complete the full inspection before production resumes</button></li>
+          <li><button type="button" data-choice="escalate">Pause production and escalate the request to EHS</button></li>
+        </ul>
+        <div class="appwt__feedback" data-feedback></div>
+      </div>
+
+      <!-- Panel 4: Outcome -->
+      <div class="appwt__panel" data-panel="4">
+        <span class="appwt__chip">Module complete</span>
+        <h4 class="appwt__panel-h">behavior over <em>checkbox.</em></h4>
+        <p class="appwt__panel-p">
+          This module doesn't test whether you memorized policy. It tests whether you make the right call when the deadline is pressing and the shortcut looks tempting. That's what Action Mapping trains for.
+        </p>
+        <ul class="appwt__outcome-list">
+          <li>
+            <span class="appwt__outcome-label">Module structure</span>
+            <span class="appwt__outcome-val">4 steps · 1 decision that matters</span>
+          </li>
+          <li>
+            <span class="appwt__outcome-label">Scenarios practiced</span>
+            <span class="appwt__outcome-val">3 reveals · 3 on-the-job moments</span>
+          </li>
+          <li>
+            <span class="appwt__outcome-label">Escalation path</span>
+            <span class="appwt__outcome-val">EHS-routed, not supervisor-overridden</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Nav -->
+      <div class="appwt__nav">
+        <button type="button" class="appwt__btn appwt__btn--prev" disabled>Back</button>
+        <button type="button" class="appwt__btn appwt__btn--next">Next</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Design files carousel -->
+<section class="designfiles" data-log="006 — from the design files">
   <header class="designfiles__head">
     <span class="designfiles__kicker">from the design files</span>
     <h3 class="designfiles__h">
       custom media for <em>every context.</em>
     </h3>
     <p class="designfiles__p">
-      Custom iconography, technical diagrams, and localized animation
-      characters — built to work without words.
+      Custom iconography, technical diagrams, and localized animation characters — built to work without words.
     </p>
   </header>
 
-  <div class="csgrid">
-    <div class="csgrid__item">
-      <img src="../assets/cs/apple-iconography.png" alt="Custom iconography for Apple fire and electrical safety standards" />
-      <p class="csgrid__caption">Custom Iconography — Fire &amp; Electrical Safety Standards</p>
+  <div class="dfcarousel" aria-roledescription="carousel" aria-label="Apple design gallery">
+    <div class="dfcarousel__viewport">
+      <div class="dfcarousel__track">
+        <div class="dfcarousel__slide"
+             data-label="Custom iconography"
+             data-title="Fire &amp; Electrical Safety Standards"
+             data-desc="Custom icon set built for Apple supplier safety training — works across literacy levels and language barriers.">
+          <span class="dfcarousel__chip dfcarousel__chip--light">Iconography</span>
+          <img src="../assets/cs/apple-iconography.png" alt="Custom iconography for Apple fire and electrical safety standards" loading="lazy" />
+        </div>
+        <div class="dfcarousel__slide"
+             data-label="Technical diagram"
+             data-title="Facility Hydrant &amp; Sprinkler System"
+             data-desc="Isometric technical diagrams of the fire suppression infrastructure, produced for supplier reference manuals.">
+          <span class="dfcarousel__chip dfcarousel__chip--light">Technical diagram</span>
+          <img src="../assets/cs/apple-hydrant-system.png" alt="Technical diagram of facility hydrant and sprinkler system" loading="lazy" />
+        </div>
+      </div>
     </div>
-    <div class="csgrid__item">
-      <img src="../assets/cs/apple-hydrant-system.png" alt="Technical diagram of facility hydrant and sprinkler system" />
-      <p class="csgrid__caption">Technical Diagram — Facility Hydrant &amp; Sprinkler System</p>
+
+    <div class="dfcarousel__controls">
+      <div class="dfcarousel__caption" data-df-caption></div>
+      <div class="dfcarousel__nav">
+        <span class="dfcarousel__counter" data-df-counter></span>
+        <div class="dfcarousel__arrows">
+          <button class="dfcarousel__arrow" data-df-prev type="button" aria-label="Previous slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="dfcarousel__arrow" data-df-next type="button" aria-label="Next slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="csgrid__item">
-      <img src="../assets/cs/apple-coc-characters.png" alt="Code of Conduct animation characters localized for 8 languages" />
-      <p class="csgrid__caption">Code of Conduct Animation Characters — Localized for 8 Languages</p>
-    </div>
+
+    <div class="dfcarousel__dots" data-df-dots role="tablist" aria-label="Slide navigation"></div>
   </div>
 </section>
 
 <!-- Editorial break: case study document -->
-<section class="csbreak" data-log="003b — case study document">
+<section class="csbreak" data-log="007 — case study document">
   <div class="csbreak__inner">
     <div class="csbreak__caption">
       <span class="csbreak__kicker">the full picture</span>
@@ -206,7 +1364,7 @@
 </section>
 
 <!-- Dark pull-quote -->
-<section class="quote" data-log="004 — pull quote · liz medhi-kashi · apple">
+<section class="quote" data-log="008 — pull quote · liz medhi-kashi · apple">
   <div class="quote__inner">
     <span class="quote__kicker">testimonial · liz medhi-kashi · apple</span>
     <blockquote class="quote__body">
@@ -219,7 +1377,7 @@
 </section>
 
 <!-- Results -->
-<section class="results" data-log="005 — results · behavior change at global scale">
+<section class="results" data-log="009 — results · behavior change at global scale">
   <header class="results__head">
     <span class="results__kicker">the results</span>
     <h2 class="results__h">
@@ -322,5 +1480,195 @@
 </footer>
 
 <script src="../script.js" defer></script>
+
+<script>
+/* ==========================================================================
+   Apple case study — 4-step walkthrough prototype ("Experience the Approach")
+   ========================================================================== */
+(function () {
+  const card = document.querySelector('.appwt__card');
+  if (!card) return;
+
+  const panels   = card.querySelectorAll('.appwt__panel');
+  const segs     = card.querySelectorAll('.appwt__progress-seg');
+  const label    = document.getElementById('appwtStepLabel');
+  const prevBtn  = card.querySelector('.appwt__btn--prev');
+  const nextBtn  = card.querySelector('.appwt__btn--next');
+  const kcNote   = document.getElementById('appwtKcNote');
+  const progress = card.querySelector('.appwt__progress-bar');
+  const total    = panels.length;
+
+  let current = 1;
+
+  function renderStep(n) {
+    current = Math.max(1, Math.min(total, n));
+    panels.forEach(p => p.classList.toggle('is-active', parseInt(p.dataset.panel, 10) === current));
+    segs.forEach((s, i) => {
+      s.classList.toggle('is-active', i + 1 === current);
+      s.classList.toggle('is-done', i + 1 < current);
+    });
+    if (label) label.textContent = `Step ${current} of ${total}`;
+    if (progress) progress.setAttribute('aria-valuenow', current);
+    prevBtn.disabled = current === 1;
+    nextBtn.textContent = current === total ? 'Restart' : 'Next';
+    updateStep2Gate();
+  }
+
+  function updateStep2Gate() {
+    if (current !== 2) return;
+    const revealed = card.querySelectorAll('.appwt__scenario.is-revealed').length;
+    const total2 = card.querySelectorAll('.appwt__panel[data-panel="2"] .appwt__scenario').length;
+    const allRevealed = revealed === total2;
+    if (kcNote) kcNote.textContent = allRevealed
+      ? 'All 3 scenarios revealed — ready to continue.'
+      : `Reveal ${total2 - revealed} more scenario${total2 - revealed === 1 ? '' : 's'} to continue`;
+    nextBtn.disabled = !allRevealed;
+    nextBtn.style.opacity = allRevealed ? '1' : '0.4';
+  }
+
+  prevBtn.addEventListener('click', () => renderStep(current - 1));
+  nextBtn.addEventListener('click', () => {
+    if (nextBtn.disabled) return;
+    if (current === total) {
+      // Restart — reset all state
+      card.querySelectorAll('.appwt__scenario.is-revealed').forEach(s => s.classList.remove('is-revealed'));
+      card.querySelectorAll('.appwt__choices button').forEach(b => b.classList.remove('is-right', 'is-wrong'));
+      const fb = card.querySelector('[data-feedback]');
+      if (fb) { fb.className = 'appwt__feedback'; fb.textContent = ''; }
+      renderStep(1);
+    } else {
+      renderStep(current + 1);
+    }
+  });
+
+  // Step 2 — scenario tap-to-reveal
+  card.querySelectorAll('.appwt__reveal').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const scenario = btn.closest('.appwt__scenario');
+      scenario.classList.toggle('is-revealed');
+      btn.textContent = scenario.classList.contains('is-revealed') ? 'Hide ↑' : 'Tap to reveal →';
+      updateStep2Gate();
+    });
+  });
+
+  // Step 3 — decision point feedback
+  const FEEDBACK = {
+    skip:     { kind: 'wrong', text: 'Incorrect. Deadline pressure is exactly when documented protocols matter most. Skipping inspections is how compliance programs fail their first real test.' },
+    inspect:  { kind: 'wrong', text: 'Partially right — inspecting is correct, but the supervisor\'s request itself is a compliance red flag. You need to escalate before production resumes.' },
+    escalate: { kind: 'right', text: 'Correct. Action Mapping trains for this exact moment — recognize the pressure, route the decision through the documented process, protect the worker and the program.' }
+  };
+
+  card.querySelectorAll('.appwt__choices button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const choice = btn.dataset.choice;
+      const feedback = FEEDBACK[choice];
+      if (!feedback) return;
+      card.querySelectorAll('.appwt__choices button').forEach(b => b.classList.remove('is-right', 'is-wrong'));
+      btn.classList.add(feedback.kind === 'right' ? 'is-right' : 'is-wrong');
+      const fb = card.querySelector('[data-feedback]');
+      fb.className = `appwt__feedback is-shown appwt__feedback--${feedback.kind}`;
+      fb.textContent = feedback.text;
+    });
+  });
+
+  renderStep(1);
+
+  /* ---------- Decision-point video: once-per-session + audio controls ---------- */
+  const video = document.getElementById('appwtVideo');
+  if (video) {
+    const soundBtn = document.getElementById('appwtVideoSound');
+    const ccBtn = document.getElementById('appwtVideoCC');
+    const playOverlay = document.getElementById('appwtVideoPlay');
+    const SESSION_KEY = 'apple_decision_video_played';
+    let hasPlayedThisVisit = false;
+
+    function setSoundLabel(muted) {
+      soundBtn.querySelector('span').textContent = muted ? 'Unmute' : 'Mute';
+      soundBtn.setAttribute('aria-pressed', String(!muted));
+    }
+    function setCaptionsActive(on) {
+      if (!video.textTracks || !video.textTracks[0]) return;
+      video.textTracks[0].mode = on ? 'showing' : 'hidden';
+      ccBtn.setAttribute('aria-pressed', String(on));
+      ccBtn.style.opacity = on ? '1' : '0.55';
+    }
+    // Initial captions state
+    setCaptionsActive(true);
+
+    function playIfFirstVisit() {
+      if (hasPlayedThisVisit) return;
+      hasPlayedThisVisit = true;
+      const alreadyPlayed = sessionStorage.getItem(SESSION_KEY);
+      if (alreadyPlayed) {
+        // Show the play overlay — let user opt in
+        playOverlay.classList.add('is-shown');
+        return;
+      }
+      video.currentTime = 0;
+      video.muted = true;
+      setSoundLabel(true);
+      video.play().catch(() => {
+        // Autoplay blocked — show overlay
+        playOverlay.classList.add('is-shown');
+      });
+    }
+
+    // Trigger play when panel 3 becomes visible
+    const origRenderStep = renderStep;
+    window.__appwtRenderStep = origRenderStep;
+    // Monkey-patch: wrap the renderStep call by observing panel 3 visibility
+    const panel3 = card.querySelector('.appwt__panel[data-panel="3"]');
+    const mo = new MutationObserver(() => {
+      if (panel3.classList.contains('is-active')) {
+        playIfFirstVisit();
+      }
+    });
+    mo.observe(panel3, { attributes: true, attributeFilter: ['class'] });
+    // Check initial state too (in case page loads on step 3)
+    if (panel3.classList.contains('is-active')) playIfFirstVisit();
+
+    soundBtn.addEventListener('click', () => {
+      video.muted = !video.muted;
+      setSoundLabel(video.muted);
+      if (video.paused) video.play().catch(() => {});
+    });
+
+    ccBtn.addEventListener('click', () => {
+      const tt = video.textTracks[0];
+      if (!tt) return;
+      const nowOn = tt.mode !== 'showing';
+      setCaptionsActive(nowOn);
+    });
+
+    playOverlay.addEventListener('click', () => {
+      video.currentTime = 0;
+      playOverlay.classList.remove('is-shown');
+      video.play().catch(() => {});
+    });
+
+    video.addEventListener('ended', () => {
+      sessionStorage.setItem(SESSION_KEY, '1');
+      playOverlay.classList.add('is-shown');
+    });
+  }
+
+  /* ---------- Multilingual callout: cycle phone language chip ---------- */
+  const phoneLangEl = document.getElementById('apmultiPhoneLang');
+  if (phoneLangEl) {
+    const LANGS = ['ภาษาไทย', '한국어', '中文', 'Español', 'Tiếng Việt', 'தமிழ்', 'हिन्दी', 'Bahasa'];
+    let idx = 0;
+    setInterval(() => {
+      idx = (idx + 1) % LANGS.length;
+      phoneLangEl.style.opacity = '0';
+      setTimeout(() => {
+        phoneLangEl.textContent = LANGS[idx];
+        phoneLangEl.style.opacity = '1';
+      }, 180);
+    }, 2400);
+    phoneLangEl.style.transition = 'opacity 0.18s ease';
+  }
+})();
+</script>
 </body>
 </html>

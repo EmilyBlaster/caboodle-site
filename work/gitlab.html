@@ -237,32 +237,20 @@
   padding: 0;
 }
 
-/* 2-column card grid with larger thumbnails */
+/* 2-column card grid */
 .glproject .demolinks {
   grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
   margin: 0 0 2rem;
 }
-.glproject .demolink__preview { height: 220px; }
 
 /* Orphaned last card gets full-width feature treatment */
 .glproject .demolinks > *:last-child:nth-child(odd) {
   grid-column: 1 / -1;
 }
 .glproject .demolinks > *:last-child:nth-child(odd) .demolink__preview {
-  height: 260px;
+  aspect-ratio: 21 / 9;
 }
-
-/* WC images: center crop so circular cover design stays visible */
-.glproject--alt .csgrid__item img {
-  aspect-ratio: 16/9;
-  height: auto;
-  object-fit: cover;
-  object-position: center center;
-}
-
-/* Remove dark bg from demo thumbnails */
-.glproject .demolink__preview { background: var(--paper-2); }
 
 /* Spotlight: contained within editorial margins, not full-bleed */
 .glspotlight {
@@ -485,15 +473,15 @@
   </article>
 </section>
 
-<!-- Design files: header -->
-<section class="designfiles" data-log="003 — from the design files">
+<!-- Interactives intro -->
+<section class="designfiles" data-log="003 — the interactives">
   <header class="designfiles__head">
-    <span class="designfiles__kicker">from the design files</span>
+    <span class="designfiles__kicker">custom-coded interactives</span>
     <h3 class="designfiles__h">
       custom tools for <em>every decision.</em>
     </h3>
     <p class="designfiles__p">
-      Two initiatives, eleven interactives, three countries. Live demos you can try now.
+      Two initiatives, eleven interactives, three countries. Live demos in each project section below.
     </p>
   </header>
 </section>
@@ -509,56 +497,75 @@
       </div>
     </div>
 
-    <div class="csgrid">
-      <figure class="csgrid__item">
-        <img src="../assets/cs/gitlab-ja-why-it-matters.png" alt="Job Architecture — Why It Matters Module" loading="lazy" />
-        <figcaption class="csgrid__caption">why it matters module</figcaption>
-      </figure>
-      <figure class="csgrid__item">
-        <img src="../assets/cs/gitlab-ja-icon.png" alt="Job Architecture — Icon Design System" loading="lazy" />
-        <figcaption class="csgrid__caption">icon design system</figcaption>
-      </figure>
-    </div>
-
     <div class="demolinks">
       <a class="demolink" href="https://emilyblaster.github.io/PorfolioDemos/job-architecture-scrubbed.html" target="_blank" rel="noopener">
-        <div class="demolink__preview"><iframe src="https://emilyblaster.github.io/PorfolioDemos/job-architecture-scrubbed.html" scrolling="no" tabindex="-1" loading="lazy" title="Custom Landing Component"></iframe></div>
+        <div class="demolink__preview">
+          <span class="demolink__chip">Landing component</span>
+          <img src="../assets/demos/job-arch-landing.png" alt="Custom landing component — preview" loading="lazy" />
+        </div>
         <div class="demolink__content">
           <span class="demolink__title">custom landing component</span>
-          <span class="demolink__desc">Glassmorphism hero with staggered card animations</span>
-          <span class="demolink__arrow">try it →</span>
+          <span class="demolink__desc">Glassmorphism hero with staggered card animations.</span>
+          <span class="demolink__cta">
+            try it live
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </span>
         </div>
       </a>
       <a class="demolink" href="https://emilyblaster.github.io/PorfolioDemos/job-architecture-journey.html" target="_blank" rel="noopener">
-        <div class="demolink__preview"><iframe src="https://emilyblaster.github.io/PorfolioDemos/job-architecture-journey.html" scrolling="no" tabindex="-1" loading="lazy" title="Guided Scenario Walkthrough"></iframe></div>
+        <div class="demolink__preview">
+          <span class="demolink__chip">Walkthrough</span>
+          <img src="../assets/demos/job-arch-journey.png" alt="Guided scenario walkthrough — preview" loading="lazy" />
+        </div>
         <div class="demolink__content">
           <span class="demolink__title">guided scenario walkthrough</span>
-          <span class="demolink__desc">Step-by-step role framework explorer with progress tracking</span>
-          <span class="demolink__arrow">try it →</span>
+          <span class="demolink__desc">Step-by-step role framework explorer with progress tracking.</span>
+          <span class="demolink__cta">
+            try it live
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </span>
         </div>
       </a>
       <a class="demolink" href="https://emilyblaster.github.io/PorfolioDemos/conversation-practice-simulator.html" target="_blank" rel="noopener">
-        <div class="demolink__preview"><iframe src="https://emilyblaster.github.io/PorfolioDemos/conversation-practice-simulator.html" scrolling="no" tabindex="-1" loading="lazy" title="Conversation Practice Simulator"></iframe></div>
+        <div class="demolink__preview">
+          <span class="demolink__chip">Simulator</span>
+          <img src="../assets/demos/conversation-practice.png" alt="Conversation practice simulator — preview" loading="lazy" />
+        </div>
         <div class="demolink__content">
           <span class="demolink__title">conversation practice simulator</span>
-          <span class="demolink__desc">Scenario-based manager coaching with scoring</span>
-          <span class="demolink__arrow">try it →</span>
+          <span class="demolink__desc">Scenario-based manager coaching with real-time scoring.</span>
+          <span class="demolink__cta">
+            try it live
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </span>
         </div>
       </a>
       <a class="demolink" href="https://emilyblaster.github.io/PorfolioDemos/compa-ratio-slider.html" target="_blank" rel="noopener">
-        <div class="demolink__preview"><iframe src="https://emilyblaster.github.io/PorfolioDemos/compa-ratio-slider.html" scrolling="no" tabindex="-1" loading="lazy" title="Compa-Ratio Slider"></iframe></div>
+        <div class="demolink__preview">
+          <span class="demolink__chip">Slider tool</span>
+          <img src="../assets/demos/compa-ratio-slider.png" alt="Compa-ratio slider — preview" loading="lazy" />
+        </div>
         <div class="demolink__content">
           <span class="demolink__title">compa-ratio slider</span>
-          <span class="demolink__desc">Drag-to-explore compensation positioning tool</span>
-          <span class="demolink__arrow">try it →</span>
+          <span class="demolink__desc">Drag-to-explore compensation positioning tool.</span>
+          <span class="demolink__cta">
+            try it live
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </span>
         </div>
       </a>
       <a class="demolink" href="https://emilyblaster.github.io/PorfolioDemos/compensation-range-explorer.html" target="_blank" rel="noopener">
-        <div class="demolink__preview"><iframe src="https://emilyblaster.github.io/PorfolioDemos/compensation-range-explorer.html" scrolling="no" tabindex="-1" loading="lazy" title="Compensation Range Explorer"></iframe></div>
+        <div class="demolink__preview">
+          <span class="demolink__chip">Explorer</span>
+          <img src="../assets/demos/compensation-range-explorer.png" alt="Compensation range explorer — preview" loading="lazy" />
+        </div>
         <div class="demolink__content">
           <span class="demolink__title">compensation range explorer</span>
-          <span class="demolink__desc">Click-to-reveal range visualization with modals</span>
-          <span class="demolink__arrow">try it →</span>
+          <span class="demolink__desc">Click-to-reveal range visualization with modal deep-dives.</span>
+          <span class="demolink__cta">
+            try it live
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </span>
         </div>
       </a>
     </div>
@@ -603,64 +610,148 @@
       </div>
     </div>
 
-    <div class="csgrid">
-      <figure class="csgrid__item">
-        <img src="../assets/cs/gitlab-wc-photo.png" alt="Works Council — Custom Rise Divider" loading="lazy" />
-        <figcaption class="csgrid__caption">custom rise divider</figcaption>
-      </figure>
-      <figure class="csgrid__item">
-        <img src="../assets/cs/gitlab-wc-diagram.png" alt="Works Council — Process Diagram" loading="lazy" />
-        <figcaption class="csgrid__caption">process diagram</figcaption>
-      </figure>
-    </div>
-
     <div class="demolinks">
       <a class="demolink" href="https://emilyblaster.github.io/PorfolioDemos/works-council-training-module.html" target="_blank" rel="noopener">
-        <div class="demolink__preview"><iframe src="https://emilyblaster.github.io/PorfolioDemos/works-council-training-module.html" scrolling="no" tabindex="-1" loading="lazy" title="Works Council Training Module"></iframe></div>
+        <div class="demolink__preview">
+          <span class="demolink__chip">Training module</span>
+          <img src="../assets/demos/wc-training-module.png" alt="Works Council training module — preview" loading="lazy" />
+        </div>
         <div class="demolink__content">
           <span class="demolink__title">works council training module</span>
-          <span class="demolink__desc">7-step guided learning with embedded quiz</span>
-          <span class="demolink__arrow">try it →</span>
+          <span class="demolink__desc">7-step guided learning flow with an embedded knowledge check.</span>
+          <span class="demolink__cta">
+            try it live
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </span>
         </div>
       </a>
       <a class="demolink" href="https://emilyblaster.github.io/PorfolioDemos/works-council-comparison-slider.html" target="_blank" rel="noopener">
-        <div class="demolink__preview"><iframe src="https://emilyblaster.github.io/PorfolioDemos/works-council-comparison-slider.html" scrolling="no" tabindex="-1" loading="lazy" title="Drag-to-Compare Explorer"></iframe></div>
+        <div class="demolink__preview">
+          <span class="demolink__chip">Comparison</span>
+          <img src="../assets/demos/wc-comparison-slider.png" alt="Drag-to-compare explorer — preview" loading="lazy" />
+        </div>
         <div class="demolink__content">
           <span class="demolink__title">drag-to-compare explorer</span>
-          <span class="demolink__desc">Split-panel comparison with drag interaction</span>
-          <span class="demolink__arrow">try it →</span>
+          <span class="demolink__desc">Split-panel comparison with drag-based reveal interaction.</span>
+          <span class="demolink__cta">
+            try it live
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </span>
         </div>
       </a>
       <a class="demolink" href="https://emilyblaster.github.io/PorfolioDemos/sort-the-actions-game.html" target="_blank" rel="noopener">
-        <div class="demolink__preview"><iframe src="https://emilyblaster.github.io/PorfolioDemos/sort-the-actions-game.html" scrolling="no" tabindex="-1" loading="lazy" title="Card Sorting Game"></iframe></div>
+        <div class="demolink__preview">
+          <span class="demolink__chip">Game</span>
+          <img src="../assets/demos/sort-actions-game.png" alt="Card sorting game — preview" loading="lazy" />
+        </div>
         <div class="demolink__content">
           <span class="demolink__title">card sorting game</span>
-          <span class="demolink__desc">Drag-and-drop categorization with scoring</span>
-          <span class="demolink__arrow">try it →</span>
+          <span class="demolink__desc">Drag-and-drop categorization challenge with live scoring.</span>
+          <span class="demolink__cta">
+            try it live
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </span>
         </div>
       </a>
       <a class="demolink" href="https://emilyblaster.github.io/PorfolioDemos/works-council-europe-map.html" target="_blank" rel="noopener">
-        <div class="demolink__preview"><iframe src="https://emilyblaster.github.io/PorfolioDemos/works-council-europe-map.html" scrolling="no" tabindex="-1" loading="lazy" title="Interactive Europe Map"></iframe></div>
+        <div class="demolink__preview">
+          <span class="demolink__chip">Interactive map</span>
+          <img src="../assets/demos/wc-europe-map.png" alt="Interactive Europe map — preview" loading="lazy" />
+        </div>
         <div class="demolink__content">
           <span class="demolink__title">interactive europe map</span>
-          <span class="demolink__desc">D3 map with click-to-reveal country panels</span>
-          <span class="demolink__arrow">try it →</span>
+          <span class="demolink__desc">D3 map with click-to-reveal country panels for the Netherlands, Germany, and France.</span>
+          <span class="demolink__cta">
+            try it live
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </span>
         </div>
       </a>
       <a class="demolink" href="https://emilyblaster.github.io/PorfolioDemos/red-flag-spotter.html" target="_blank" rel="noopener">
-        <div class="demolink__preview"><iframe src="https://emilyblaster.github.io/PorfolioDemos/red-flag-spotter.html" scrolling="no" tabindex="-1" loading="lazy" title="Red Flag Spotter"></iframe></div>
+        <div class="demolink__preview">
+          <span class="demolink__chip">Spotter</span>
+          <img src="../assets/demos/red-flag-spotter.png" alt="Red flag spotter — preview" loading="lazy" />
+        </div>
         <div class="demolink__content">
           <span class="demolink__title">red flag spotter</span>
-          <span class="demolink__desc">Identify compliance red flags in workplace scenarios</span>
-          <span class="demolink__arrow">try it →</span>
+          <span class="demolink__desc">Identify compliance red flags hidden inside realistic workplace scenarios.</span>
+          <span class="demolink__cta">
+            try it live
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </span>
         </div>
       </a>
     </div>
   </div>
 </section>
 
+<!-- Design files carousel -->
+<section class="designfiles" data-log="003d — from the design files">
+  <header class="designfiles__head">
+    <span class="designfiles__kicker">from the design files</span>
+    <h3 class="designfiles__h">
+      supporting visuals + <em>diagrams.</em>
+    </h3>
+    <p class="designfiles__p">
+      Graphics and process maps that anchored each initiative — two per project.
+    </p>
+  </header>
+
+  <div class="dfcarousel" aria-roledescription="carousel" aria-label="GitLab design gallery">
+    <div class="dfcarousel__viewport">
+      <div class="dfcarousel__track">
+        <div class="dfcarousel__slide"
+             data-label="Job Architecture"
+             data-title="Why It Matters module"
+             data-desc="Opening module that frames the business case for the Job Architecture rollout.">
+          <span class="dfcarousel__chip">Job Architecture</span>
+          <img src="../assets/cs/gitlab-ja-why-it-matters.png" alt="Job Architecture — Why It Matters module" loading="lazy" />
+        </div>
+        <div class="dfcarousel__slide"
+             data-label="Job Architecture"
+             data-title="Icon design system"
+             data-desc="Custom icon set used across role descriptors, competency frameworks, and leveling visuals.">
+          <span class="dfcarousel__chip">Job Architecture</span>
+          <img src="../assets/cs/gitlab-ja-icon.png" alt="Job Architecture — icon design system" loading="lazy" />
+        </div>
+        <div class="dfcarousel__slide"
+             data-label="Works Council"
+             data-title="Custom Rise divider"
+             data-desc="Hand-built Rise divider component that replaces the default stock graphic with branded, country-specific art.">
+          <span class="dfcarousel__chip">Works Council</span>
+          <img src="../assets/cs/gitlab-wc-photo.png" alt="Works Council — custom Rise divider" loading="lazy" />
+        </div>
+        <div class="dfcarousel__slide"
+             data-label="Works Council"
+             data-title="Process diagram"
+             data-desc="Decision flowchart showing when manager actions trigger Works Council consultation across NL, DE, and FR.">
+          <span class="dfcarousel__chip">Works Council</span>
+          <img src="../assets/cs/gitlab-wc-diagram.png" alt="Works Council — process diagram" loading="lazy" />
+        </div>
+      </div>
+    </div>
+
+    <div class="dfcarousel__controls">
+      <div class="dfcarousel__caption" data-df-caption></div>
+      <div class="dfcarousel__nav">
+        <span class="dfcarousel__counter" data-df-counter></span>
+        <div class="dfcarousel__arrows">
+          <button class="dfcarousel__arrow" data-df-prev type="button" aria-label="Previous slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="dfcarousel__arrow" data-df-next type="button" aria-label="Next slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dfcarousel__dots" data-df-dots role="tablist" aria-label="Slide navigation"></div>
+  </div>
+</section>
+
 <!-- Editorial: case study document -->
-<section class="glpdf" data-log="003d — case study document">
+<section class="glpdf" data-log="003e — case study document">
   <div class="glpdf__inner">
     <div class="glpdf__caption">
       <span class="glpdf__kicker">the full picture</span>

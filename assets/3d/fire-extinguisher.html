@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fire Extinguisher — Inspection Viewer · caboodle design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+:root {
+  --lime: #96E650;
+  --lime-soft: rgba(150, 230, 80, 0.16);
+  --lime-dark: #3f6d1c;
+  --blue: #03599B;
+  --blue-soft: rgba(3, 89, 155, 0.10);
+  --blue-deep: #024378;
+  --magenta: #EC008C;
+  --amber: #d98b00;
+  --amber-soft: rgba(217, 139, 0, 0.14);
+  --ink: #282828;
+  --ink-2: #686868;
+  --rule: #d6d3cc;
+  --paper: #f2efe8;
+  --paper-2: #e8e3d8;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: var(--ink);
+  background: linear-gradient(180deg, #edeae2 0%, #e3dfd4 100%);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+button { font-family: inherit; cursor: pointer; border: 0; background: transparent; }
+
+/* ───── Header ───── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.25rem;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  gap: 1rem;
+  flex-shrink: 0;
+}
+.header__left { display: flex; align-items: center; gap: 0.75rem; }
+.header__icon {
+  width: 2rem;
+  height: 2rem;
+  background: var(--blue);
+  color: var(--paper);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+.header__title {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+.header__sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem;
+  color: var(--ink-2);
+  letter-spacing: 0.06em;
+  margin-top: 0.15rem;
+}
+.header__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  background: var(--lime-soft);
+  border: 1px solid rgba(150, 230, 80, 0.45);
+  border-radius: 99px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lime-dark);
+}
+.header__pill::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lime);
+  animation: pulse 1.8s var(--ease) infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* ───── Stage ───── */
+.stage {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 220px 1fr 320px;
+  min-height: 0;
+  position: relative;
+}
+
+/* ───── Sidebar ───── */
+.sidebar {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  overflow-y: auto;
+  border-right: 1px solid var(--rule);
+  background: var(--paper);
+}
+.component {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: var(--ink);
+  text-align: left;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease);
+  width: 100%;
+}
+.component:hover { border-color: var(--blue); }
+.component.is-active {
+  background: var(--blue-soft);
+  border-color: var(--blue);
+  color: var(--blue);
+  font-weight: 600;
+}
+.component__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: var(--blue);
+  color: var(--paper);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.meta {
+  margin-top: auto;
+  padding: 0.85rem 0.9rem;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--paper);
+  display: grid;
+  gap: 0.4rem;
+}
+.meta__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.64rem;
+}
+.meta__label { color: var(--ink-2); letter-spacing: 0.1em; text-transform: uppercase; }
+.meta__val { color: var(--ink); font-weight: 500; }
+
+/* ───── Viewer ───── */
+.viewer-wrap {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+}
+.viewer-frame {
+  position: relative;
+  height: 100%;
+  max-height: 620px;
+  aspect-ratio: 900 / 1531;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.viewer-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Hotspot markers — absolute positioned on the frame */
+.hotspot {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--blue);
+  border: 2px solid var(--blue);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.hotspot::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--blue);
+  opacity: 0.35;
+  animation: ping 2s var(--ease) infinite;
+}
+@keyframes ping {
+  0% { transform: scale(0.8); opacity: 0.55; }
+  80%, 100% { transform: scale(1.7); opacity: 0; }
+}
+.hotspot:hover {
+  background: var(--blue);
+  color: var(--paper);
+  transform: translate(-50%, -50%) scale(1.08);
+}
+.hotspot.is-active {
+  background: var(--blue);
+  color: var(--paper);
+}
+.hotspot.is-active::before { display: none; }
+
+/* Hints */
+.hints {
+  position: absolute;
+  bottom: 1.1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+  transition: opacity 0.3s var(--ease);
+}
+.hints.is-hidden { opacity: 0; pointer-events: none; }
+.hints span {
+  padding: 0.4rem 0.85rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem;
+  color: var(--ink-2);
+  background: rgba(242, 239, 232, 0.92);
+  border: 1px solid var(--rule);
+  border-radius: 99px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ───── Panel ───── */
+.panel {
+  border-left: 1px solid var(--rule);
+  background: var(--paper);
+  overflow-y: auto;
+  padding: 1.25rem 1.25rem 1.5rem;
+  display: none;
+  animation: slideIn 0.35s var(--ease) both;
+}
+.panel.is-shown { display: block; }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.panel__rule {
+  width: 2.5rem;
+  height: 2px;
+  background: var(--blue);
+  margin-bottom: 1rem;
+}
+.panel__kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 0.35rem;
+}
+.panel__h {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.4rem;
+  line-height: 1.25;
+}
+.panel__row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
+.panel__status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 99px;
+  border: 1px solid;
+}
+.panel__status--pass { background: var(--lime-soft); color: var(--lime-dark); border-color: rgba(150, 230, 80, 0.5); }
+.panel__status--monitor { background: var(--amber-soft); color: var(--amber); border-color: rgba(217, 139, 0, 0.4); }
+.panel__status--fail { background: rgba(236, 0, 140, 0.1); color: var(--magenta); border-color: rgba(236, 0, 140, 0.35); }
+.panel__checked { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--ink-2); }
+.panel__desc { font-size: 0.85rem; line-height: 1.55; color: var(--ink-2); margin-bottom: 1.1rem; }
+.panel__section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin: 1rem 0 0.5rem;
+}
+.panel__checks { display: grid; gap: 0.45rem; list-style: none; padding: 0; margin: 0 0 1rem; }
+.panel__check {
+  display: grid;
+  grid-template-columns: 1.1rem 1fr;
+  gap: 0.6rem;
+  align-items: start;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.panel__check-mark {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+}
+.panel__check-mark--pass { background: var(--lime-soft); color: var(--lime-dark); }
+.panel__check-mark--warn { background: var(--amber-soft); color: var(--amber); }
+.panel__check-mark--fail { background: rgba(236, 0, 140, 0.14); color: var(--magenta); }
+.panel__stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; margin: 0 0 1rem; }
+.panel__stat { background: var(--paper-2); border-radius: 6px; padding: 0.55rem 0.7rem; }
+.panel__stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  display: block;
+  margin-bottom: 0.15rem;
+}
+.panel__stat-val { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; font-weight: 600; color: var(--ink); }
+.panel__stat-val--lime { color: var(--lime-dark); }
+.panel__stat-val--amber { color: var(--amber); }
+.panel__stat-val--magenta { color: var(--magenta); }
+.panel__note {
+  padding: 0.7rem 0.85rem;
+  background: var(--blue-soft);
+  border-left: 2px solid var(--blue);
+  border-radius: 4px;
+  margin: 0 0 1rem;
+}
+.panel__note-label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--blue);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+.panel__note-text { font-size: 0.78rem; line-height: 1.5; color: var(--ink); }
+.panel__close {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+.panel__close:hover { border-color: var(--blue); color: var(--blue); }
+
+/* ───── Responsive ───── */
+@media (max-width: 900px) {
+  .stage { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; }
+  .sidebar {
+    flex-direction: row;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+    padding: 0.75rem;
+  }
+  .component { min-width: 160px; flex-shrink: 0; }
+  .meta { display: none; }
+  .panel { border-left: 0; border-top: 1px solid var(--rule); max-height: 45vh; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header__left">
+    <div class="header__icon">🧯</div>
+    <div>
+      <div class="header__title">Fire Extinguisher — Inspection Viewer</div>
+      <div class="header__sub">Badger Standard · ABC Dry Chemical · Serial #FE-2024-0391</div>
+    </div>
+  </div>
+  <span class="header__pill">Inspection Active</span>
+</div>
+
+<div class="stage">
+  <aside class="sidebar">
+    <button class="component" data-hotspot="1" type="button">
+      <span class="component__num">1</span><span>Pressure Gauge</span>
+    </button>
+    <button class="component" data-hotspot="2" type="button">
+      <span class="component__num">2</span><span>Safety Pin</span>
+    </button>
+    <button class="component" data-hotspot="3" type="button">
+      <span class="component__num">3</span><span>Operating Handle</span>
+    </button>
+    <button class="component" data-hotspot="4" type="button">
+      <span class="component__num">4</span><span>Hose &amp; Nozzle</span>
+    </button>
+    <button class="component" data-hotspot="5" type="button">
+      <span class="component__num">5</span><span>Body &amp; Label</span>
+    </button>
+
+    <div class="meta">
+      <div class="meta__row"><span class="meta__label">Type</span><span class="meta__val">ABC Dry Chem</span></div>
+      <div class="meta__row"><span class="meta__label">Capacity</span><span class="meta__val">5 lbs</span></div>
+      <div class="meta__row"><span class="meta__label">Next Inspect</span><span class="meta__val">May 2025</span></div>
+      <div class="meta__row"><span class="meta__label">Brand</span><span class="meta__val">Badger</span></div>
+    </div>
+  </aside>
+
+  <div class="viewer-wrap">
+    <div class="viewer-frame" id="viewerFrame">
+      <img src="extinguisher-clean.png" alt="Fire extinguisher inspection diagram" />
+      <button class="hotspot" style="left:56%; top:16%;" data-hotspot-id="1" aria-label="Pressure Gauge" type="button">1</button>
+      <button class="hotspot" style="left:48%; top:11%;" data-hotspot-id="2" aria-label="Safety Pin" type="button">2</button>
+      <button class="hotspot" style="left:68%; top:15%;" data-hotspot-id="3" aria-label="Operating Handle" type="button">3</button>
+      <button class="hotspot" style="left:20%; top:44%;" data-hotspot-id="4" aria-label="Hose and Nozzle" type="button">4</button>
+      <button class="hotspot" style="left:44%; top:66%;" data-hotspot-id="5" aria-label="Body and Label" type="button">5</button>
+    </div>
+
+    <div class="hints" id="hints">
+      <span>Click any marker to inspect</span>
+    </div>
+  </div>
+
+  <aside class="panel" id="panel">
+    <div class="panel__rule"></div>
+    <div class="panel__kicker" id="panelKicker"></div>
+    <h3 class="panel__h" id="panelTitle"></h3>
+    <div class="panel__row">
+      <span class="panel__status" id="panelStatus"></span>
+      <span class="panel__checked">Checked: Nov 12, 2024</span>
+    </div>
+    <p class="panel__desc" id="panelDesc"></p>
+
+    <div class="panel__section-label">Inspection points</div>
+    <ul class="panel__checks" id="panelChecks"></ul>
+
+    <div class="panel__section-label">Live readings</div>
+    <div class="panel__stats" id="panelStats"></div>
+
+    <div class="panel__note">
+      <span class="panel__note-label">Inspector's Note</span>
+      <span class="panel__note-text" id="panelNote"></span>
+    </div>
+
+    <button type="button" class="panel__close" id="panelClose">Close panel</button>
+  </aside>
+</div>
+
+<script>
+const HOTSPOTS = {
+  1: {
+    label: 'Pressure Gauge',
+    status: 'PASS',
+    description: 'The pressure gauge shows internal cylinder pressure. The needle must sit in the green zone, confirming the unit is fully charged and ready to deploy.',
+    checks: [
+      ['pass', 'Needle in green zone (100–175 PSI)'],
+      ['pass', 'Gauge face clean, no cracks'],
+      ['pass', 'No corrosion around gauge ring'],
+      ['warn', 'Re-verify after extreme temperature exposure'],
+    ],
+    stats: [
+      ['Current PSI', '148', 'lime'],
+      ['Min PSI', '100'],
+      ['Max PSI', '175'],
+      ['Status', 'Nominal', 'lime'],
+    ],
+    note: "Needle in the red zone means remove from service immediately. Do not attempt to recharge in the field.",
+  },
+  2: {
+    label: 'Safety Pin',
+    status: 'PASS',
+    description: 'The tamper seal and pull pin confirm the unit has never been used or tampered with. Both must be fully intact for the unit to be considered service-ready.',
+    checks: [
+      ['pass', 'Pin fully seated through handle loop'],
+      ['pass', 'Yellow tamper seal unbroken'],
+      ['pass', 'Pull ring not bent or deformed'],
+      ['pass', 'No evidence of prior discharge'],
+    ],
+    stats: [
+      ['Seal Status', 'Intact', 'lime'],
+      ['Pin Type', 'Pull'],
+      ['Last Used', 'Never', 'lime'],
+      ['Status', 'Secured', 'lime'],
+    ],
+    note: "A broken seal doesn't always mean discharge occurred. Confirm with a weight check before removing from service.",
+  },
+  3: {
+    label: 'Operating Handle',
+    status: 'MONITOR',
+    description: 'The squeeze handle initiates discharge. It must operate smoothly with no binding, cracking, or deformation. Structural damage requires immediate replacement.',
+    checks: [
+      ['pass', 'Handle squeezes freely, no binding'],
+      ['pass', 'No cracks or fractures in grip'],
+      ['warn', 'Light surface scuff noted on lever'],
+      ['pass', 'Carry handle secure'],
+    ],
+    stats: [
+      ['Grip', 'Firm'],
+      ['Lever', 'Scuffed', 'amber'],
+      ['Spring', 'OK', 'lime'],
+      ['Status', 'Monitor', 'amber'],
+    ],
+    note: "Monitor the scuff for progression. If the lever surface becomes rough or develops a crack edge, replace the handle assembly.",
+  },
+  4: {
+    label: 'Hose & Nozzle',
+    status: 'PASS',
+    description: 'The discharge hose and nozzle direct the agent at the fire. The hose must be supple and crack-free; the nozzle must be fully clear and unobstructed.',
+    checks: [
+      ['pass', 'Hose flexible, no cracks or brittleness'],
+      ['pass', 'Nozzle opening clear and unobstructed'],
+      ['pass', 'Hose coupler tight, no corrosion'],
+      ['pass', 'No kinks or crush damage along hose'],
+    ],
+    stats: [
+      ['Hose Length', '12"'],
+      ['Nozzle Type', 'Flare'],
+      ['Blockage', 'None', 'lime'],
+      ['Status', 'Clear', 'lime'],
+    ],
+    note: "Inspect the nozzle interior with a flashlight. Even a small obstruction can block full discharge in an emergency.",
+  },
+  5: {
+    label: 'Body & Label',
+    status: 'PASS',
+    description: 'The steel cylinder must be free of dents, corrosion, and damage. The instruction label must stay fully adhered and legible, including all PASS steps.',
+    checks: [
+      ['pass', 'No dents, deep gouges, or weld damage'],
+      ['pass', 'INSTRUCTIONS label fully legible'],
+      ['pass', 'No rust or surface corrosion'],
+      ['pass', 'Inspection tag current and attached'],
+    ],
+    stats: [
+      ['Body', 'Steel'],
+      ['Label', 'Legible', 'lime'],
+      ['Corrosion', 'None', 'lime'],
+      ['Weight', '7.5 lbs'],
+    ],
+    note: "Any dent deeper than 1/4 inch or a visible cylinder crack requires immediate withdrawal from service.",
+  },
+};
+
+const STATUS_CLASS = { PASS: 'pass', MONITOR: 'monitor', FAIL: 'fail' };
+
+(function () {
+  const panel      = document.getElementById('panel');
+  const panelClose = document.getElementById('panelClose');
+  const hints      = document.getElementById('hints');
+  let currentId = null;
+
+  function clearActive() {
+    document.querySelectorAll('.hotspot.is-active').forEach(el => el.classList.remove('is-active'));
+    document.querySelectorAll('.component.is-active').forEach(el => el.classList.remove('is-active'));
+  }
+
+  function openHotspot(id) {
+    const data = HOTSPOTS[id];
+    if (!data) return;
+    currentId = id;
+    clearActive();
+
+    document.querySelectorAll(`.hotspot[data-hotspot-id="${id}"]`).forEach(el => el.classList.add('is-active'));
+    document.querySelectorAll(`.component[data-hotspot="${id}"]`).forEach(el => el.classList.add('is-active'));
+
+    document.getElementById('panelKicker').textContent = `Component ${id}`;
+    document.getElementById('panelTitle').textContent = data.label;
+    const statusEl = document.getElementById('panelStatus');
+    statusEl.textContent = data.status;
+    statusEl.className = 'panel__status panel__status--' + STATUS_CLASS[data.status];
+    document.getElementById('panelDesc').textContent = data.description;
+
+    document.getElementById('panelChecks').innerHTML = data.checks.map(([kind, text]) => {
+      const mark = kind === 'pass' ? '✓' : kind === 'warn' ? '!' : '✕';
+      return `<li class="panel__check"><span class="panel__check-mark panel__check-mark--${kind}">${mark}</span><span>${text}</span></li>`;
+    }).join('');
+
+    document.getElementById('panelStats').innerHTML = data.stats.map(([label, val, color]) => {
+      const colorClass = color ? ` panel__stat-val--${color}` : '';
+      return `<div class="panel__stat"><span class="panel__stat-label">${label}</span><span class="panel__stat-val${colorClass}">${val}</span></div>`;
+    }).join('');
+
+    document.getElementById('panelNote').textContent = data.note;
+    panel.classList.add('is-shown');
+  }
+
+  function closePanel() {
+    panel.classList.remove('is-shown');
+    clearActive();
+    currentId = null;
+  }
+
+  document.querySelectorAll('.hotspot').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = parseInt(el.dataset.hotspotId, 10);
+      hints.classList.add('is-hidden');
+      if (currentId === id) closePanel();
+      else openHotspot(id);
+    });
+  });
+
+  document.querySelectorAll('.component').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = parseInt(el.dataset.hotspot, 10);
+      hints.classList.add('is-hidden');
+      if (currentId === id) closePanel();
+      else openHotspot(id);
+    });
+  });
+
+  panelClose.addEventListener('click', closePanel);
+})();
+</script>
+
+</body>
+</html>

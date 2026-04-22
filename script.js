@@ -240,4 +240,79 @@
       el.style.transitionDelay = '0ms';
     });
   }
+
+  /* ---------- Design files carousel (shared component) ----------------- */
+  document.querySelectorAll('.dfcarousel').forEach((root) => {
+    const track = root.querySelector('.dfcarousel__track');
+    const prev = root.querySelector('[data-df-prev]');
+    const next = root.querySelector('[data-df-next]');
+    const dots = root.querySelector('[data-df-dots]');
+    const counter = root.querySelector('[data-df-counter]');
+    const caption = root.querySelector('[data-df-caption]');
+    if (!track) return;
+
+    const slides = Array.from(track.children);
+    const total = slides.length;
+    if (!total) return;
+
+    let idx = 0;
+
+    slides.forEach((_, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'dfcarousel__dot' + (i === 0 ? ' is-active' : '');
+      btn.setAttribute('aria-label', `Slide ${i + 1} of ${total}`);
+      btn.addEventListener('click', () => go(i));
+      dots && dots.appendChild(btn);
+    });
+
+    function go(n) {
+      idx = (n + total) % total;
+      track.style.transform = `translateX(-${idx * 100}%)`;
+      if (dots) Array.from(dots.children).forEach((d, i) => d.classList.toggle('is-active', i === idx));
+      const s = slides[idx];
+      const pad = String(idx + 1).padStart(2, '0');
+      const tot = String(total).padStart(2, '0');
+      if (counter) counter.innerHTML = `<em>${pad}</em> / ${tot}`;
+      if (caption) caption.innerHTML = `<span>${s.dataset.label || ''}</span><b>${s.dataset.title || ''}</b>${s.dataset.desc ? ' — ' + s.dataset.desc : ''}`;
+    }
+
+    prev && prev.addEventListener('click', () => go(idx - 1));
+    next && next.addEventListener('click', () => go(idx + 1));
+
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(idx - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(idx + 1); }
+    });
+
+    go(0);
+  });
+
+  /* ---------- Hover-prefetch internal links ---------------------------- */
+  /* When the user hovers a same-origin link, warm the browser cache so the
+     next page is already downloaded by the time they click. Pairs with the
+     CSS @view-transition rule for a genuinely seamless feel. */
+  const prefetched = new Set();
+  const prefetch = (href) => {
+    if (!href || prefetched.has(href)) return;
+    try {
+      const url = new URL(href, location.href);
+      if (url.origin !== location.origin) return;
+      if (url.pathname === location.pathname) return;
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = url.href;
+      link.as = 'document';
+      document.head.appendChild(link);
+      prefetched.add(href);
+    } catch { /* ignore malformed hrefs */ }
+  };
+  document.querySelectorAll('a[href]').forEach((a) => {
+    const h = a.getAttribute('href');
+    if (!h || h.startsWith('#') || h.startsWith('mailto:') || h.startsWith('tel:')) return;
+    if (a.target === '_blank') return;
+    const trigger = () => prefetch(h);
+    a.addEventListener('pointerenter', trigger, { once: true, passive: true });
+    a.addEventListener('focus', trigger, { once: true });
+  });
 })();
