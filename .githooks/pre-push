@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+# ============================================================================
+# pre-push hook — Netlify credit brake pedal
+#
+# Runs before every `git push`. When pushing to main, it shows you what's
+# about to deploy and asks "deploy now? (y/n)". Cancels the push if you
+# say anything other than y.
+#
+# Why: pushing to main triggers a Netlify production deploy (~15 credits).
+# Pro plan = 3,000 credits/month. At 60+ deploys/day you blow through a
+# month's allowance in an afternoon. This hook makes every deploy a
+# conscious choice.
+#
+# Tip: to push WITHOUT deploying, include "[skip netlify]" in your commit
+# message. Netlify sees it and skips the build.
+#
+# To bypass this hook once:   git push --no-verify
+# ============================================================================
+
+# Colors (fall back gracefully if terminal doesn't support them)
+if [ -t 1 ]; then
+  BLUE='\033[0;34m'
+  YELLOW='\033[1;33m'
+  GREEN='\033[0;32m'
+  DIM='\033[2m'
+  BOLD='\033[1m'
+  NC='\033[0m'
+else
+  BLUE='' YELLOW='' GREEN='' DIM='' BOLD='' NC=''
+fi
+
+remote="$1"
+url="$2"
+
+# Read each ref being pushed
+while read -r local_ref local_sha remote_ref remote_sha; do
+
+  # Only guard the main branch
+  if [ "$remote_ref" = "refs/heads/main" ]; then
+
+    # How many commits are about to be pushed
+    if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
+      # First push, no remote history — count all commits
+      commit_count=$(git rev-list --count "$local_sha")
+      commits=$(git log --oneline "$local_sha" | head -10)
+    else
+      commit_count=$(git rev-list --count "$remote_sha..$local_sha")
+      commits=$(git log --oneline "$remote_sha..$local_sha" | head -10)
+    fi
+
+    # Short circuit if nothing to push
+    if [ "$commit_count" = "0" ]; then
+      continue
+    fi
+
+    # Check if ANY commit has [skip netlify] or [skip ci] — if ALL do, no deploy happens
+    if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
+      non_skip_count=$(git log "$local_sha" --pretty=%s | grep -vcE '\[skip (netlify|ci)\]' || true)
+    else
+      non_skip_count=$(git log "$remote_sha..$local_sha" --pretty=%s | grep -vcE '\[skip (netlify|ci)\]' || true)
+    fi
+
+    printf "\n"
+    printf "${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
+    printf "${BOLD}${YELLOW}⚠  Netlify deploy check${NC}\n"
+    printf "${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
+    printf "\n"
+    printf "Pushing ${BOLD}%s commit(s)${NC} to ${BOLD}main${NC}\n" "$commit_count"
+    printf "\n"
+    printf "${DIM}%s${NC}\n" "$commits"
+    printf "\n"
+
+    if [ "$non_skip_count" = "0" ]; then
+      printf "${GREEN}✓ All commits have [skip netlify] — no deploy will run.${NC}\n"
+      printf "  Pushing freely, no credits will be used.\n\n"
+      continue
+    fi
+
+    printf "This will trigger a ${BOLD}Netlify production deploy${NC} (~15 credits).\n"
+    printf "${DIM}Pro plan has 3,000 credits/month. Current session budget.${NC}\n"
+    printf "\n"
+    printf "${DIM}Tip: add [skip netlify] to a commit message to push without deploying.${NC}\n"
+    printf "\n"
+    printf "${BOLD}Deploy now?${NC} (y/N) "
+
+    # Read from the terminal (not stdin, which git is using)
+    exec < /dev/tty
+    read -r answer
+    case "$answer" in
+      [yY]|[yY][eE][sS])
+        printf "${GREEN}→ Deploying.${NC}\n\n"
+        ;;
+      *)
+        printf "${YELLOW}→ Push cancelled. No deploy.${NC}\n\n"
+        exit 1
+        ;;
+    esac
+
+  fi
+done
+
+exit 0
