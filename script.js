@@ -6,13 +6,16 @@
    ========================================================================== */
 
 /* ---------- View transition: always start at top ----------------------
-   Cross-document view transitions inherit scroll position from the outgoing
-   page. pagereveal fires after the snapshot is placed — scroll before any
-   paint so there's no visible jump. Falls back to DOMContentLoaded timing. */
+   history.scrollRestoration = 'manual' stops the browser from trying to
+   restore the previous page's scroll position on navigation.
+   pagereveal fires right before the entry animation — scroll to top there.
+   The immediate scrollTo is a belt-and-suspenders fallback for browsers
+   that support view transitions but not pagereveal. */
+history.scrollRestoration = 'manual';
 document.addEventListener('pagereveal', () => {
-  if (!location.hash) window.scrollTo(0, 0);
+  if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 });
-if (!location.hash) window.scrollTo(0, 0);
+if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
 (() => {
   const nav = document.querySelector('.nav');
