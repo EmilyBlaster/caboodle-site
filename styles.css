@@ -1303,6 +1303,30 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   max-width: 22ch;
 }
 
+/* CTA pill — outlined at rest, fills lime on card hover */
+.dossier__cta {
+  grid-column: 1;
+  margin-top: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 1.1rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  border: 1px solid var(--rule);
+  border-radius: 99px;
+  width: fit-content;
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+.dossier:hover .dossier__cta {
+  background: var(--lime);
+  border-color: var(--lime);
+  color: var(--ink);
+}
+
 @media (max-width: 820px) {
   .work__head { grid-template-columns: 1fr; gap: 1.5rem; }
   .work__dek { grid-column: 1; }
@@ -1819,6 +1843,117 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 }
 
 /* ==========================================================================
+   VOICES — consolidated client testimonials grid (about page)
+   Each card holds one client voice. Client name is the only label at top,
+   speaker details are in the cite at bottom. Name appears once per card.
+   ========================================================================== */
+
+.voices {
+  padding: clamp(4rem, 8vw, 7rem) var(--pad-x);
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+.voices__head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem 4rem;
+  align-items: end;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 3rem;
+}
+.voices__kicker {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--magenta);
+}
+.voices__h {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: lowercase;
+  color: var(--ink);
+}
+.voices__h em {
+  font-style: italic;
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.voices__grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+.voices__card {
+  position: relative;
+  padding: 2rem 2rem 1.75rem;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 1.25rem;
+}
+.voices__client {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--blue);
+  font-weight: 700;
+}
+.voices__quote {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+.voices__quote em {
+  color: var(--magenta);
+  font-style: italic;
+  font-weight: 600;
+}
+.voices__cite {
+  display: grid;
+  gap: 0.15rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--rule);
+  font-style: normal;
+}
+.voices__cite b {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  text-transform: lowercase;
+  color: var(--ink);
+}
+.voices__cite span {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+@media (max-width: 820px) {
+  .voices__head { grid-template-columns: 1fr; gap: 1rem; }
+  .voices__grid { grid-template-columns: 1fr; gap: 1rem; }
+  .voices__card { padding: 1.5rem 1.35rem 1.35rem; }
+}
+
+/* ==========================================================================
    FOOTER
    ========================================================================== */
 
@@ -1867,16 +2002,21 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .foot__cols a:hover { color: var(--magenta); }
 
 @media (max-width: 620px) {
-  /* Footer compacts on mobile — two columns, tighter spacing */
+  /* Footer stacks to single column on mobile — full width, breathing room */
   .foot { padding: 1.75rem var(--pad-x) 2rem; }
   .foot__cols {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem 1.25rem;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
     justify-content: start;
+    padding-top: 1.75rem;
   }
-  .foot__cols ul { gap: 0.3rem; }
-  .foot__cols a { font-size: 0.9rem; }
-  .foot__cols h4 { margin-bottom: 0.5rem; font-size: 0.65rem; }
+  .foot__cols > div + div {
+    padding-top: 1.75rem;
+    border-top: 1px dashed var(--rule);
+  }
+  .foot__cols ul { gap: 0.55rem; }
+  .foot__cols a { font-size: 0.95rem; }
+  .foot__cols h4 { margin-bottom: 0.75rem; font-size: 0.65rem; }
   .foot__row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
   .foot__mark { font-size: 1rem; }
   .foot__tag { font-size: 0.85rem; line-height: 1.4; }
@@ -3315,6 +3455,42 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   border: 1px solid var(--ink);
 }
 .phases__figure svg { display: block; width: 100%; height: auto; }
+
+/* Horizontal-scroll wrappers so SVG diagrams stay legible on narrow screens.
+   Usage: wrap each <svg> in <div class="phases__scroll"> (or .ladder__scroll). */
+.phases__scroll,
+.ladder__scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-2) transparent;
+}
+.phases__scroll::-webkit-scrollbar,
+.ladder__scroll::-webkit-scrollbar { height: 6px; }
+.phases__scroll::-webkit-scrollbar-thumb,
+.ladder__scroll::-webkit-scrollbar-thumb { background: var(--ink-2); border-radius: 99px; }
+.phases__scroll svg,
+.ladder__scroll svg { display: block; width: 100%; height: auto; }
+
+/* On mobile: force SVGs wider than viewport so their text stays readable,
+   and show a subtle swipe hint below each figure. */
+@media (max-width: 720px) {
+  .phases__scroll svg { width: 800px; min-width: 800px; }
+  .ladder__scroll svg { width: 760px; min-width: 760px; }
+  .phases__figure::after,
+  .ladder__figure::after {
+    content: "← swipe →";
+    display: block;
+    margin-top: 0.6rem;
+    font-family: var(--mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    text-align: center;
+  }
+}
 .phases__caption,
 .ladder__caption {
   display: block;

@@ -53,8 +53,8 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
 .header__icon {
   width: 2rem;
   height: 2rem;
-  background: var(--blue);
-  color: var(--paper);
+  background: var(--lime);
+  color: var(--ink);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -105,9 +105,15 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
 .stage {
   flex: 1;
   display: grid;
-  grid-template-columns: 220px 1fr 320px;
+  grid-template-columns: 220px 1fr 0px; /* panel column starts collapsed */
   min-height: 0;
   position: relative;
+  overflow: hidden; /* clips the panel when its column is 0px */
+  transition: grid-template-columns 0.44s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* When panel is open, expand the third column */
+.stage.panel-open {
+  grid-template-columns: 220px 1fr 320px;
 }
 
 /* ───── Sidebar ───── */
@@ -174,36 +180,32 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
 .meta__label { color: var(--ink-2); letter-spacing: 0.1em; text-transform: uppercase; }
 .meta__val { color: var(--ink); font-weight: 500; }
 
-/* ───── Viewer ───── */
+/* ───── 3D Viewer ───── */
 .viewer-wrap {
   position: relative;
   min-width: 0;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem 1rem;
-}
-.viewer-frame {
-  position: relative;
-  height: 100%;
-  max-height: 620px;
-  aspect-ratio: 900 / 1531;
-  max-width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.viewer-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  user-select: none;
-  -webkit-user-drag: none;
+  /* canvas fills this container — no padding needed */
 }
 
-/* Hotspot markers — absolute positioned on the frame */
+/* The Three.js canvas — fills the entire viewer area */
+#threeCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none; /* prevents scroll interference on touch */
+}
+
+/* Transparent overlay layer for hotspot buttons */
+.hotspot-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none; /* clicks pass through to canvas unless hitting a button */
+}
+
+/* Hotspot markers — absolutely positioned, centered on their coords */
 .hotspot {
   position: absolute;
   width: 34px;
@@ -216,9 +218,12 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
   font-size: 0.78rem;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  /* translate -50% so the button is centered on the projected point */
   transform: translate(-50%, -50%);
+  transition: transform 0.18s var(--ease), background 0.18s var(--ease),
+              color 0.18s var(--ease), opacity 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  pointer-events: all; /* override .hotspot-layer's none */
   z-index: 2;
 }
 .hotspot::before {
@@ -231,7 +236,7 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
   animation: ping 2s var(--ease) infinite;
 }
 @keyframes ping {
-  0% { transform: scale(0.8); opacity: 0.55; }
+  0%        { transform: scale(0.8); opacity: 0.55; }
   80%, 100% { transform: scale(1.7); opacity: 0; }
 }
 .hotspot:hover {
@@ -245,7 +250,7 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
 }
 .hotspot.is-active::before { display: none; }
 
-/* Hints */
+/* Hints bar at the bottom of the viewer */
 .hints {
   position: absolute;
   bottom: 1.1rem;
@@ -255,6 +260,7 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
   gap: 0.5rem;
   z-index: 10;
   transition: opacity 0.3s var(--ease);
+  white-space: nowrap;
 }
 .hints.is-hidden { opacity: 0; pointer-events: none; }
 .hints span {
@@ -269,19 +275,65 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
   -webkit-backdrop-filter: blur(8px);
 }
 
+/* Loading overlay — fades out after GLB is ready */
+.loader-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  background: linear-gradient(180deg, #edeae2 0%, #e3dfd4 100%);
+  transition: opacity 0.5s var(--ease);
+  z-index: 20;
+}
+.loader-overlay.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.loader-icon {
+  font-size: 2rem;
+  opacity: 0.5;
+}
+.loader-bar {
+  width: 160px;
+  height: 3px;
+  background: var(--rule);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.loader-fill {
+  height: 100%;
+  background: var(--lime);
+  width: 0%;
+  transition: width 0.25s ease;
+  border-radius: 99px;
+}
+.loader-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--ink-2);
+  letter-spacing: 0.1em;
+}
+
 /* ───── Panel ───── */
 .panel {
   border-left: 1px solid var(--rule);
   background: var(--paper);
   overflow-y: auto;
+  overflow-x: hidden; /* content clips when column is 0px wide */
   padding: 1.25rem 1.25rem 1.5rem;
-  display: none;
-  animation: slideIn 0.35s var(--ease) both;
+  min-width: 0; /* respect grid column width — prevents blowout */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
 }
-.panel.is-shown { display: block; }
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(12px); }
-  to { opacity: 1; transform: translateX(0); }
+/* Fade in after column has started expanding (slight delay) */
+.panel.is-shown {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.22s ease 0.22s;
 }
 .panel__rule {
   width: 2.5rem;
@@ -314,9 +366,9 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
   border-radius: 99px;
   border: 1px solid;
 }
-.panel__status--pass { background: var(--lime-soft); color: var(--lime-dark); border-color: rgba(150, 230, 80, 0.5); }
-.panel__status--monitor { background: var(--amber-soft); color: var(--amber); border-color: rgba(217, 139, 0, 0.4); }
-.panel__status--fail { background: rgba(236, 0, 140, 0.1); color: var(--magenta); border-color: rgba(236, 0, 140, 0.35); }
+.panel__status--pass    { background: var(--lime-soft);               color: var(--lime-dark); border-color: rgba(150, 230, 80, 0.5); }
+.panel__status--monitor { background: var(--amber-soft);              color: var(--amber);     border-color: rgba(217, 139, 0, 0.4); }
+.panel__status--fail    { background: rgba(236, 0, 140, 0.1);         color: var(--magenta);   border-color: rgba(236, 0, 140, 0.35); }
 .panel__checked { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--ink-2); }
 .panel__desc { font-size: 0.85rem; line-height: 1.55; color: var(--ink-2); margin-bottom: 1.1rem; }
 .panel__section-label {
@@ -350,8 +402,8 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
   margin-top: 0.15rem;
   flex-shrink: 0;
 }
-.panel__check-mark--pass { background: var(--lime-soft); color: var(--lime-dark); }
-.panel__check-mark--warn { background: var(--amber-soft); color: var(--amber); }
+.panel__check-mark--pass { background: var(--lime-soft);         color: var(--lime-dark); }
+.panel__check-mark--warn { background: var(--amber-soft);        color: var(--amber); }
 .panel__check-mark--fail { background: rgba(236, 0, 140, 0.14); color: var(--magenta); }
 .panel__stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; margin: 0 0 1rem; }
 .panel__stat { background: var(--paper-2); border-radius: 6px; padding: 0.55rem 0.7rem; }
@@ -364,10 +416,10 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
   display: block;
   margin-bottom: 0.15rem;
 }
-.panel__stat-val { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; font-weight: 600; color: var(--ink); }
-.panel__stat-val--lime { color: var(--lime-dark); }
-.panel__stat-val--amber { color: var(--amber); }
-.panel__stat-val--magenta { color: var(--magenta); }
+.panel__stat-val           { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; font-weight: 600; color: var(--ink); }
+.panel__stat-val--lime     { color: var(--lime-dark); }
+.panel__stat-val--amber    { color: var(--amber); }
+.panel__stat-val--magenta  { color: var(--magenta); }
 .panel__note {
   padding: 0.7rem 0.85rem;
   background: var(--blue-soft);
@@ -403,7 +455,10 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
 
 /* ───── Responsive ───── */
 @media (max-width: 900px) {
-  .stage { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; }
+  .stage {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
   .sidebar {
     flex-direction: row;
     overflow-x: auto;
@@ -413,6 +468,7 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
   }
   .component { min-width: 160px; flex-shrink: 0; }
   .meta { display: none; }
+  .viewer-wrap { min-height: 280px; }
   .panel { border-left: 0; border-top: 1px solid var(--rule); max-height: 45vh; }
 }
 </style>
@@ -421,7 +477,23 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
 
 <div class="header">
   <div class="header__left">
-    <div class="header__icon">🧯</div>
+    <div class="header__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <!-- Carry handle -->
+        <line x1="9.5" y1="3" x2="14.5" y2="3"/>
+        <!-- Valve stem -->
+        <line x1="12" y1="3" x2="12" y2="5.5"/>
+        <!-- Squeeze lever -->
+        <path d="M9 5.5h6v2.5H9z"/>
+        <!-- Cylinder body -->
+        <rect x="7.5" y="8" width="9" height="12.5" rx="3.5"/>
+        <!-- Pressure gauge -->
+        <circle cx="12" cy="15" r="1.5"/>
+        <!-- Hose -->
+        <path d="M7.5 11.5C5 11.5 4 13 4 15"/>
+        <line x1="4" y1="15" x2="2.5" y2="16.5"/>
+      </svg>
+    </div>
     <div>
       <div class="header__title">Fire Extinguisher — Inspection Viewer</div>
       <div class="header__sub">Badger Standard · ABC Dry Chemical · Serial #FE-2024-0391</div>
@@ -431,6 +503,8 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
 </div>
 
 <div class="stage">
+
+  <!-- ── Sidebar: component list ── -->
   <aside class="sidebar">
     <button class="component" data-hotspot="1" type="button">
       <span class="component__num">1</span><span>Pressure Gauge</span>
@@ -456,21 +530,31 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
     </div>
   </aside>
 
-  <div class="viewer-wrap">
-    <div class="viewer-frame" id="viewerFrame">
-      <img src="extinguisher-clean.png" alt="Fire extinguisher inspection diagram" />
-      <button class="hotspot" style="left:56%; top:16%;" data-hotspot-id="1" aria-label="Pressure Gauge" type="button">1</button>
-      <button class="hotspot" style="left:48%; top:11%;" data-hotspot-id="2" aria-label="Safety Pin" type="button">2</button>
-      <button class="hotspot" style="left:68%; top:15%;" data-hotspot-id="3" aria-label="Operating Handle" type="button">3</button>
-      <button class="hotspot" style="left:20%; top:44%;" data-hotspot-id="4" aria-label="Hose and Nozzle" type="button">4</button>
-      <button class="hotspot" style="left:44%; top:66%;" data-hotspot-id="5" aria-label="Body and Label" type="button">5</button>
+  <!-- ── 3D Viewer ── -->
+  <div class="viewer-wrap" id="viewerWrap">
+
+    <!-- Three.js renders here -->
+    <canvas id="threeCanvas"></canvas>
+
+    <!-- Hotspot buttons are injected here by JS after the model loads -->
+    <div class="hotspot-layer" id="hotspotLayer"></div>
+
+    <!-- Interaction hints — hidden after first use -->
+    <div class="hints" id="hints">
+      <span>Drag to rotate</span>
+      <span>Click a marker to inspect</span>
     </div>
 
-    <div class="hints" id="hints">
-      <span>Click any marker to inspect</span>
+    <!-- Loading progress overlay -->
+    <div class="loader-overlay" id="loaderOverlay">
+      <div class="loader-icon">🧯</div>
+      <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+      <div class="loader-text" id="loaderText">Loading model…</div>
     </div>
+
   </div>
 
+  <!-- ── Inspection Panel ── -->
   <aside class="panel" id="panel">
     <div class="panel__rule"></div>
     <div class="panel__kicker" id="panelKicker"></div>
@@ -494,9 +578,30 @@ button { font-family: inherit; cursor: pointer; border: 0; background: transpare
 
     <button type="button" class="panel__close" id="panelClose">Close panel</button>
   </aside>
-</div>
 
-<script>
+</div><!-- .stage -->
+
+<!-- ─────────────────────────────────────────────
+     Three.js via ES module importmap (no bundler needed)
+     CDN: three@0.167.0
+────────────────────────────────────────────── -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.167.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+/* ══════════════════════════════════════════════════════
+   HOTSPOT INSPECTION DATA
+   ══════════════════════════════════════════════════════ */
 const HOTSPOTS = {
   1: {
     label: 'Pressure Gauge',
@@ -510,9 +615,9 @@ const HOTSPOTS = {
     ],
     stats: [
       ['Current PSI', '148', 'lime'],
-      ['Min PSI', '100'],
-      ['Max PSI', '175'],
-      ['Status', 'Nominal', 'lime'],
+      ['Min PSI',     '100'],
+      ['Max PSI',     '175'],
+      ['Status',      'Nominal', 'lime'],
     ],
     note: "Needle in the red zone means remove from service immediately. Do not attempt to recharge in the field.",
   },
@@ -527,10 +632,10 @@ const HOTSPOTS = {
       ['pass', 'No evidence of prior discharge'],
     ],
     stats: [
-      ['Seal Status', 'Intact', 'lime'],
-      ['Pin Type', 'Pull'],
-      ['Last Used', 'Never', 'lime'],
-      ['Status', 'Secured', 'lime'],
+      ['Seal Status', 'Intact',   'lime'],
+      ['Pin Type',    'Pull'],
+      ['Last Used',   'Never',    'lime'],
+      ['Status',      'Secured',  'lime'],
     ],
     note: "A broken seal doesn't always mean discharge occurred. Confirm with a weight check before removing from service.",
   },
@@ -545,9 +650,9 @@ const HOTSPOTS = {
       ['pass', 'Carry handle secure'],
     ],
     stats: [
-      ['Grip', 'Firm'],
-      ['Lever', 'Scuffed', 'amber'],
-      ['Spring', 'OK', 'lime'],
+      ['Grip',   'Firm'],
+      ['Lever',  'Scuffed', 'amber'],
+      ['Spring', 'OK',      'lime'],
       ['Status', 'Monitor', 'amber'],
     ],
     note: "Monitor the scuff for progression. If the lever surface becomes rough or develops a crack edge, replace the handle assembly.",
@@ -565,8 +670,8 @@ const HOTSPOTS = {
     stats: [
       ['Hose Length', '12"'],
       ['Nozzle Type', 'Flare'],
-      ['Blockage', 'None', 'lime'],
-      ['Status', 'Clear', 'lime'],
+      ['Blockage',    'None',  'lime'],
+      ['Status',      'Clear', 'lime'],
     ],
     note: "Inspect the nozzle interior with a flashlight. Even a small obstruction can block full discharge in an emergency.",
   },
@@ -581,84 +686,347 @@ const HOTSPOTS = {
       ['pass', 'Inspection tag current and attached'],
     ],
     stats: [
-      ['Body', 'Steel'],
-      ['Label', 'Legible', 'lime'],
-      ['Corrosion', 'None', 'lime'],
-      ['Weight', '7.5 lbs'],
+      ['Body',      'Steel'],
+      ['Label',     'Legible', 'lime'],
+      ['Corrosion', 'None',    'lime'],
+      ['Weight',    '7.5 lbs'],
     ],
     note: "Any dent deeper than 1/4 inch or a visible cylinder crack requires immediate withdrawal from service.",
   },
 };
 
+/* ═══════════════════════════════════════════════════════
+   HOTSPOT WORLD-SPACE FRACTIONS
+   These are fractions of the bounding box half-extents,
+   relative to the model's bounding box center.
+   Tune these values if hotspots land in the wrong place
+   once the model loads — they correspond to:
+     x: left(-1) to right(+1)
+     y: bottom(-1) to top(+1)
+     z: back(-1) to front(+1)
+   ═══════════════════════════════════════════════════════ */
+const HOTSPOT_FRACS = {
+  1: { x:  0.15, y:  0.62, z:  0.60 },  // Pressure Gauge  — upper body, front face
+  2: { x: -0.05, y:  0.92, z:  0.30 },  // Safety Pin      — near the top handle
+  3: { x:  0.55, y:  0.88, z:  0.05 },  // Operating Handle — right side, top
+  4: { x: -0.75, y:  0.25, z:  0.40 },  // Hose & Nozzle   — left side, mid
+  5: { x:  0.00, y: -0.08, z:  0.60 },  // Body & Label    — lower front face
+};
+
 const STATUS_CLASS = { PASS: 'pass', MONITOR: 'monitor', FAIL: 'fail' };
 
-(function () {
-  const panel      = document.getElementById('panel');
-  const panelClose = document.getElementById('panelClose');
-  const hints      = document.getElementById('hints');
-  let currentId = null;
 
-  function clearActive() {
-    document.querySelectorAll('.hotspot.is-active').forEach(el => el.classList.remove('is-active'));
-    document.querySelectorAll('.component.is-active').forEach(el => el.classList.remove('is-active'));
+/* ══════════════════════════════════════════════════════
+   THREE.JS SCENE SETUP
+   ══════════════════════════════════════════════════════ */
+const viewerWrap = document.getElementById('viewerWrap');
+const canvas     = document.getElementById('threeCanvas');
+
+// Renderer — alpha:true so the CSS background gradient shows through
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = false;
+
+const scene  = new THREE.Scene();
+// No scene.background — transparent canvas over CSS gradient
+
+const camera = new THREE.PerspectiveCamera(42, 1, 0.01, 100);
+camera.position.set(0, 0, 5);
+
+// OrbitControls — drag to rotate, scroll to zoom, smooth damping
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping  = true;
+controls.dampingFactor  = 0.06;
+controls.autoRotate     = true;    // slow auto-spin until user touches
+controls.autoRotateSpeed = 1.4;
+controls.minDistance    = 0.6;
+controls.maxDistance    = 10;
+controls.enablePan      = false;   // keep it clean for a product viewer
+
+// Stop auto-rotate the moment the user drags
+canvas.addEventListener('pointerdown', () => { controls.autoRotate = false; }, { once: true });
+
+
+/* ── Lighting ── */
+
+// Soft ambient fill so no part goes totally black
+const ambient = new THREE.AmbientLight(0xffffff, 0.65);
+scene.add(ambient);
+
+// Main key light (upper-right front)
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.6);
+keyLight.position.set(2, 4, 3);
+scene.add(keyLight);
+
+// Secondary fill (opposite side, cool blue tint from brand palette)
+const fillLight = new THREE.DirectionalLight(0xd9e6f0, 0.55);
+fillLight.position.set(-3, 1, -2);
+scene.add(fillLight);
+
+// Lime-tinted rim from below-back (brand color moment)
+const rimLight = new THREE.DirectionalLight(0x96e650, 0.30);
+rimLight.position.set(0, -2, -3);
+scene.add(rimLight);
+
+
+/* ── Resize handler ── */
+function onResize() {
+  const w = viewerWrap.clientWidth;
+  const h = viewerWrap.clientHeight;
+  if (w === 0 || h === 0) return;
+  renderer.setSize(w, h, false); // false = don't touch canvas style attrs
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(onResize).observe(viewerWrap);
+onResize();
+
+
+/* ══════════════════════════════════════════════════════
+   MODEL LOADING
+   ══════════════════════════════════════════════════════ */
+const loaderFill    = document.getElementById('loaderFill');
+const loaderText    = document.getElementById('loaderText');
+const loaderOverlay = document.getElementById('loaderOverlay');
+
+const loadingManager = new THREE.LoadingManager(
+  // onLoad
+  () => {
+    loaderFill.style.width = '100%';
+    setTimeout(() => loaderOverlay.classList.add('is-hidden'), 450);
+  },
+  // onProgress
+  (url, loaded, total) => {
+    const pct = Math.round((loaded / total) * 100);
+    loaderFill.style.width = pct + '%';
+    loaderText.textContent = `Loading… ${pct}%`;
+  },
+  // onError
+  (url) => {
+    loaderText.textContent = 'Model failed to load';
+    console.error('GLTFLoader error:', url);
   }
+);
 
-  function openHotspot(id) {
-    const data = HOTSPOTS[id];
-    if (!data) return;
-    currentId = id;
-    clearActive();
+// World-space positions for each hotspot (populated after GLB loads)
+const hotspotWorldPositions = {};
 
-    document.querySelectorAll(`.hotspot[data-hotspot-id="${id}"]`).forEach(el => el.classList.add('is-active'));
-    document.querySelectorAll(`.component[data-hotspot="${id}"]`).forEach(el => el.classList.add('is-active'));
+const gltfLoader = new GLTFLoader(loadingManager);
 
-    document.getElementById('panelKicker').textContent = `Component ${id}`;
-    document.getElementById('panelTitle').textContent = data.label;
-    const statusEl = document.getElementById('panelStatus');
-    statusEl.textContent = data.status;
-    statusEl.className = 'panel__status panel__status--' + STATUS_CLASS[data.status];
-    document.getElementById('panelDesc').textContent = data.description;
+gltfLoader.load(
+  'fire_extinguisher.glb',
 
-    document.getElementById('panelChecks').innerHTML = data.checks.map(([kind, text]) => {
-      const mark = kind === 'pass' ? '✓' : kind === 'warn' ? '!' : '✕';
-      return `<li class="panel__check"><span class="panel__check-mark panel__check-mark--${kind}">${mark}</span><span>${text}</span></li>`;
-    }).join('');
+  // onLoad
+  (gltf) => {
+    const model = gltf.scene;
 
-    document.getElementById('panelStats').innerHTML = data.stats.map(([label, val, color]) => {
-      const colorClass = color ? ` panel__stat-val--${color}` : '';
-      return `<div class="panel__stat"><span class="panel__stat-label">${label}</span><span class="panel__stat-val${colorClass}">${val}</span></div>`;
-    }).join('');
+    // ── 1. Measure raw bounding box ──
+    const rawBox    = new THREE.Box3().setFromObject(model);
+    const rawCenter = rawBox.getCenter(new THREE.Vector3());
+    const rawSize   = rawBox.getSize(new THREE.Vector3());
 
-    document.getElementById('panelNote').textContent = data.note;
-    panel.classList.add('is-shown');
+    // ── 2. Scale so the tallest dimension is ~2.2 world-units ──
+    const TARGET_HEIGHT = 2.2;
+    const scaleFactor   = TARGET_HEIGHT / Math.max(rawSize.y, 0.001);
+    model.scale.setScalar(scaleFactor);
+
+    // ── 3. Center the scaled model at world origin ──
+    //    (position must also account for scale applied to center offset)
+    model.position.set(
+      -rawCenter.x * scaleFactor,
+      -rawCenter.y * scaleFactor,
+      -rawCenter.z * scaleFactor
+    );
+
+    scene.add(model);
+
+    // ── 4. Recompute bounding box after transforms ──
+    const box    = new THREE.Box3().setFromObject(model);
+    const center = box.getCenter(new THREE.Vector3());
+    const size   = box.getSize(new THREE.Vector3());
+    const half   = size.clone().multiplyScalar(0.5);
+
+    // ── 5. Position camera to frame the model nicely ──
+    const maxDim  = Math.max(size.x, size.y, size.z);
+    const fovRad  = camera.fov * (Math.PI / 180);
+    const camDist = (maxDim * 0.5 / Math.tan(fovRad * 0.5)) * 1.75;
+    camera.position.set(0, center.y, camDist);
+    controls.target.copy(center);
+    controls.update();
+
+    // ── 6. Compute hotspot world positions from fractional coords ──
+    for (const [id, frac] of Object.entries(HOTSPOT_FRACS)) {
+      hotspotWorldPositions[id] = new THREE.Vector3(
+        center.x + frac.x * half.x,
+        center.y + frac.y * half.y,
+        center.z + frac.z * half.z
+      );
+    }
+
+    // ── 7. Soft contact shadow — radial gradient oval below the model ──
+    const shadowCanvas = document.createElement('canvas');
+    shadowCanvas.width = 128; shadowCanvas.height = 64;
+    const sCtx = shadowCanvas.getContext('2d');
+    const sGrad = sCtx.createRadialGradient(64, 32, 3, 64, 32, 58);
+    sGrad.addColorStop(0,    'rgba(0,0,0,0.52)');
+    sGrad.addColorStop(0.45, 'rgba(0,0,0,0.22)');
+    sGrad.addColorStop(1,    'rgba(0,0,0,0)');
+    sCtx.fillStyle = sGrad;
+    sCtx.beginPath();
+    sCtx.ellipse(64, 32, 62, 30, 0, 0, Math.PI * 2);
+    sCtx.fill();
+    const shadowTex  = new THREE.CanvasTexture(shadowCanvas);
+    const shadowMesh = new THREE.Mesh(
+      new THREE.PlaneGeometry(Math.max(size.x, 0.5) * 2.0, Math.max(size.z, 0.5) * 2.0),
+      new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false })
+    );
+    shadowMesh.rotation.x = -Math.PI / 2;
+    shadowMesh.position.set(center.x, box.min.y - 0.008, center.z);
+    scene.add(shadowMesh);
+
+    // ── 8. Inject hotspot DOM buttons ──
+    createHotspotButtons();
   }
+);
 
-  function closePanel() {
-    panel.classList.remove('is-shown');
-    clearActive();
-    currentId = null;
-  }
 
-  document.querySelectorAll('.hotspot').forEach(el => {
-    el.addEventListener('click', () => {
-      const id = parseInt(el.dataset.hotspotId, 10);
-      hints.classList.add('is-hidden');
+/* ══════════════════════════════════════════════════════
+   HOTSPOT DOM BUTTONS
+   Created after the model loads so we have world positions
+   ══════════════════════════════════════════════════════ */
+function createHotspotButtons() {
+  const layer = document.getElementById('hotspotLayer');
+  layer.innerHTML = '';
+
+  for (let id = 1; id <= 5; id++) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'hotspot';
+    btn.dataset.hotspotId = id;
+    btn.textContent = id;
+    btn.setAttribute('aria-label', HOTSPOTS[id].label);
+    btn.addEventListener('click', () => {
+      document.getElementById('hints').classList.add('is-hidden');
+      controls.autoRotate = false; // also stop rotation on hotspot click
       if (currentId === id) closePanel();
       else openHotspot(id);
     });
-  });
+    layer.appendChild(btn);
+  }
+}
 
-  document.querySelectorAll('.component').forEach(el => {
-    el.addEventListener('click', () => {
-      const id = parseInt(el.dataset.hotspot, 10);
-      hints.classList.add('is-hidden');
-      if (currentId === id) closePanel();
-      else openHotspot(id);
-    });
-  });
 
-  panelClose.addEventListener('click', closePanel);
-})();
+/* ══════════════════════════════════════════════════════
+   RENDER LOOP
+   ══════════════════════════════════════════════════════ */
+const _projVec = new THREE.Vector3(); // reused to avoid GC pressure
+
+function updateHotspotPositions() {
+  const w = viewerWrap.clientWidth;
+  const h = viewerWrap.clientHeight;
+
+  for (const [id, worldPos] of Object.entries(hotspotWorldPositions)) {
+    const btn = document.querySelector(`.hotspot[data-hotspot-id="${id}"]`);
+    if (!btn) continue;
+
+    _projVec.copy(worldPos).project(camera);
+
+    // If z > 1 the point is behind the camera — hide the button
+    if (_projVec.z > 1) {
+      btn.style.opacity        = '0';
+      btn.style.pointerEvents  = 'none';
+    } else {
+      const x = (_projVec.x *  0.5 + 0.5) * w;
+      const y = (_projVec.y * -0.5 + 0.5) * h;
+      btn.style.left          = `${x}px`;
+      btn.style.top           = `${y}px`;
+      btn.style.opacity       = '1';
+      btn.style.pointerEvents = 'all';
+    }
+  }
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();          // needed for damping + auto-rotate
+  renderer.render(scene, camera);
+  updateHotspotPositions();
+}
+animate();
+
+
+/* ══════════════════════════════════════════════════════
+   PANEL INTERACTION
+   ══════════════════════════════════════════════════════ */
+let currentId = null;
+
+function clearActive() {
+  document.querySelectorAll('.hotspot.is-active').forEach(el => el.classList.remove('is-active'));
+  document.querySelectorAll('.component.is-active').forEach(el => el.classList.remove('is-active'));
+}
+
+function openHotspot(id) {
+  const data = HOTSPOTS[id];
+  if (!data) return;
+  currentId = id;
+  clearActive();
+
+  // Highlight matching markers
+  document.querySelectorAll(`.hotspot[data-hotspot-id="${id}"]`).forEach(el => el.classList.add('is-active'));
+  document.querySelectorAll(`.component[data-hotspot="${id}"]`).forEach(el => el.classList.add('is-active'));
+
+  // Populate panel
+  document.getElementById('panelKicker').textContent = `Component ${id}`;
+  document.getElementById('panelTitle').textContent  = data.label;
+
+  const statusEl = document.getElementById('panelStatus');
+  statusEl.textContent = data.status;
+  statusEl.className   = 'panel__status panel__status--' + STATUS_CLASS[data.status];
+
+  document.getElementById('panelDesc').textContent = data.description;
+
+  document.getElementById('panelChecks').innerHTML = data.checks.map(([kind, text]) => {
+    const mark = kind === 'pass' ? '✓' : kind === 'warn' ? '!' : '✕';
+    return `<li class="panel__check">
+      <span class="panel__check-mark panel__check-mark--${kind}">${mark}</span>
+      <span>${text}</span>
+    </li>`;
+  }).join('');
+
+  document.getElementById('panelStats').innerHTML = data.stats.map(([label, val, color]) => {
+    const cls = color ? ` panel__stat-val--${color}` : '';
+    return `<div class="panel__stat">
+      <span class="panel__stat-label">${label}</span>
+      <span class="panel__stat-val${cls}">${val}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('panelNote').textContent = data.note;
+  document.querySelector('.stage').classList.add('panel-open');
+  document.getElementById('panel').classList.add('is-shown');
+}
+
+function closePanel() {
+  document.querySelector('.stage').classList.remove('panel-open');
+  document.getElementById('panel').classList.remove('is-shown');
+  clearActive();
+  currentId = null;
+}
+
+// Sidebar component buttons
+document.querySelectorAll('.component').forEach(el => {
+  el.addEventListener('click', () => {
+    const id = parseInt(el.dataset.hotspot, 10);
+    document.getElementById('hints').classList.add('is-hidden');
+    controls.autoRotate = false;
+    if (currentId === id) closePanel();
+    else openHotspot(id);
+  });
+});
+
+document.getElementById('panelClose').addEventListener('click', closePanel);
+
 </script>
 
 </body>

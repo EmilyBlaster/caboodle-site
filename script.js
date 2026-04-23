@@ -5,6 +5,15 @@
    - reveal-on-scroll typography
    ========================================================================== */
 
+/* ---------- View transition: always start at top ----------------------
+   Cross-document view transitions inherit scroll position from the outgoing
+   page. pagereveal fires after the snapshot is placed — scroll before any
+   paint so there's no visible jump. Falls back to DOMContentLoaded timing. */
+document.addEventListener('pagereveal', () => {
+  if (!location.hash) window.scrollTo(0, 0);
+});
+if (!location.hash) window.scrollTo(0, 0);
+
 (() => {
   const nav = document.querySelector('.nav');
   const fieldlog = document.querySelector('.fieldlog');
