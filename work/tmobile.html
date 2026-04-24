@@ -35,6 +35,7 @@
   </div>
   <ul class="fieldlog__entries" id="logEntries">
     <li class="fieldlog__entry is-active"><span>001</span> dossier opened · t-mobile</li>
+    <li class="fieldlog__entry"><span>002</span> prototype · 2 sims loaded</li>
   </ul>
 </aside>
 
@@ -163,7 +164,292 @@
   </article>
 </section>
 
-<!-- Design files strip: image grid -->
+<!-- Try the prototype -->
+<section class="prototype" data-log="004c — prototype · privacy scenario loaded" id="prototype">
+  <header class="prototype__head">
+    <span class="prototype__kicker">try the prototype</span>
+    <h3 class="prototype__h">
+      Experience the approach. <em>Make the call.</em>
+    </h3>
+    <p class="prototype__p">
+      A representative example of the training — fictional scenarios that
+      demonstrate how the program built real decision-making capability.
+    </p>
+  </header>
+
+  <div class="proto" data-proto>
+    <!-- Tabs -->
+    <div class="proto__tabs" role="tablist" aria-label="Prototype modes">
+      <button class="proto__tab is-active" type="button" role="tab" aria-selected="true" data-proto-tab="scenario" id="proto-tab-scenario" aria-controls="proto-panel-scenario">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 4v4M12 16v4M4 12h4M16 12h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span>Privacy Scenario</span>
+      </button>
+      <button class="proto__tab" type="button" role="tab" aria-selected="false" data-proto-tab="triage" id="proto-tab-triage" aria-controls="proto-panel-triage">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 3v18M5 8h14M7 8l-2 5a3 3 0 006 0l-2-5M17 8l-2 5a3 3 0 006 0l-2-5" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Triage Tool</span>
+      </button>
+    </div>
+
+    <!-- Scenario panel -->
+    <div class="proto__panel is-active" role="tabpanel" id="proto-panel-scenario" aria-labelledby="proto-tab-scenario" data-proto-panel="scenario">
+      <!-- Progress dots -->
+      <div class="proto__dots" data-scen-dots aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="proto__bar"><div class="proto__bar-fill" data-scen-bar></div></div>
+
+      <!-- Step: intro 1 -->
+      <div class="proto__step is-active" data-scen-step="intro1">
+        <div class="proto__meta">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>
+          <span>scenario 1 of 2</span>
+        </div>
+        <article class="protocard protocard--incoming">
+          <header class="protocard__head">
+            <svg class="protocard__icon protocard__icon--phone" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M15 3h6v6M21 3l-7.5 7.5M10 5h-3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>incoming customer call</span>
+            <button class="protocard__skip" type="button" data-scen-skip>skip →</button>
+          </header>
+          <div class="protocard__body">
+            <div class="protocard__avatar">
+              <img src="../assets/cs/call-center-rep.png" alt="Customer from Colorado" loading="lazy" />
+            </div>
+            <p class="protocard__speaker">Customer (Colorado)</p>
+            <p class="protocard__dialogue" data-scen-type="s1">&ldquo;<span data-scen-typetext></span><span class="protocard__caret" data-scen-caret></span>&rdquo;</p>
+            <button class="protocard__cta is-hidden" type="button" data-scen-next="decision1">
+              respond to this
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </article>
+      </div>
+
+      <!-- Step: decision 1 -->
+      <div class="proto__step" data-scen-step="decision1">
+        <article class="protocard">
+          <div class="protocard__body">
+            <h4 class="protocard__q">What's your next step?</h4>
+            <div class="protochoice" data-scen-choices="s1">
+              <label class="protochoice__opt">
+                <input type="radio" name="scen1" value="a" />
+                <span class="protochoice__mark" aria-hidden="true"></span>
+                <span class="protochoice__text">Delete the data immediately to satisfy the customer and avoid a complaint.</span>
+              </label>
+              <label class="protochoice__opt">
+                <input type="radio" name="scen1" value="b" />
+                <span class="protochoice__mark" aria-hidden="true"></span>
+                <span class="protochoice__text">Verify the request meets Colorado Privacy Act requirements before proceeding.</span>
+              </label>
+              <label class="protochoice__opt">
+                <input type="radio" name="scen1" value="c" />
+                <span class="protochoice__mark" aria-hidden="true"></span>
+                <span class="protochoice__text">Forward the request directly to Legal Affairs for handling.</span>
+              </label>
+            </div>
+            <button class="protocard__cta" type="button" data-scen-submit="s1" disabled>
+              submit answer
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </article>
+      </div>
+
+      <!-- Step: feedback 1 -->
+      <div class="proto__step" data-scen-step="feedback1">
+        <article class="protocard">
+          <div class="protocard__body">
+            <div class="protofb" data-scen-fb="s1">
+              <div class="protofb__head">
+                <svg class="protofb__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" data-scen-fb-icon><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span data-scen-fb-label>Correct!</span>
+              </div>
+              <p data-scen-fb-text></p>
+            </div>
+            <button class="protocard__cta" type="button" data-scen-next="intro2">
+              next scenario
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </article>
+      </div>
+
+      <!-- Step: intro 2 -->
+      <div class="proto__step" data-scen-step="intro2">
+        <div class="proto__meta">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3l10 18H2L12 3z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/><path d="M12 10v4M12 17v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>scenario 2 of 2 — harder</span>
+        </div>
+        <article class="protocard protocard--incoming">
+          <header class="protocard__head">
+            <svg class="protocard__icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 20c.8-3.5 3.8-6 7-6s6.2 2.5 7 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+            <span>message from your manager</span>
+            <button class="protocard__skip" type="button" data-scen-skip>skip →</button>
+          </header>
+          <div class="protocard__body">
+            <div class="protocard__avatar">
+              <img src="../assets/cs/manager-avatar.png" alt="Manager, Regional Ops" loading="lazy" />
+            </div>
+            <p class="protocard__speaker">Manager — Regional Ops</p>
+            <p class="protocard__dialogue" data-scen-type="s2">&ldquo;<span data-scen-typetext></span><span class="protocard__caret" data-scen-caret></span>&rdquo;</p>
+            <button class="protocard__cta is-hidden" type="button" data-scen-next="decision2">
+              respond to this
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </article>
+      </div>
+
+      <!-- Step: decision 2 -->
+      <div class="proto__step" data-scen-step="decision2">
+        <article class="protocard">
+          <div class="protocard__body">
+            <h4 class="protocard__q">What's your next step?</h4>
+            <div class="protochoice" data-scen-choices="s2">
+              <label class="protochoice__opt">
+                <input type="radio" name="scen2" value="a" />
+                <span class="protochoice__mark" aria-hidden="true"></span>
+                <span class="protochoice__text">Share the data — the manager approved it and the vendor is a known partner.</span>
+              </label>
+              <label class="protochoice__opt">
+                <input type="radio" name="scen2" value="b" />
+                <span class="protochoice__mark" aria-hidden="true"></span>
+                <span class="protochoice__text">Decline and escalate to Legal Affairs — this requires a DPA review.</span>
+              </label>
+            </div>
+            <button class="protocard__cta" type="button" data-scen-submit="s2" disabled>
+              submit answer
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </article>
+      </div>
+
+      <!-- Step: feedback 2 -->
+      <div class="proto__step" data-scen-step="feedback2">
+        <article class="protocard">
+          <div class="protocard__body">
+            <div class="protofb" data-scen-fb="s2">
+              <div class="protofb__head">
+                <svg class="protofb__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" data-scen-fb-icon><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span data-scen-fb-label>Correct!</span>
+              </div>
+              <p data-scen-fb-text></p>
+            </div>
+            <button class="protocard__cta" type="button" data-scen-next="summary">
+              see results
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </article>
+      </div>
+
+      <!-- Step: summary -->
+      <div class="proto__step" data-scen-step="summary">
+        <article class="protocard">
+          <div class="protocard__body">
+            <h4 class="protocard__h">Your Results</h4>
+            <div class="protosum">
+              <div class="protosum__score" data-scen-score>0/2</div>
+              <p class="protosum__text" data-scen-summary></p>
+            </div>
+            <div class="protocallout">
+              <p class="protocallout__lbl">
+                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>
+                Behavioral takeaway
+              </p>
+              <p>You can resolve most privacy questions independently using the decision framework. Escalate when agreements are missing or sensitive data categories are involved.</p>
+            </div>
+            <button class="protocard__cta protocard__cta--ghost" type="button" data-scen-reset>
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M3 12a9 9 0 1015-6.7L21 8M21 3v5h-5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              try again
+            </button>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- Triage panel -->
+    <div class="proto__panel" role="tabpanel" id="proto-panel-triage" aria-labelledby="proto-tab-triage" data-proto-panel="triage" hidden>
+      <div class="proto__bar"><div class="proto__bar-fill" data-tri-bar></div></div>
+
+      <!-- Question 1 -->
+      <div class="proto__step is-active" data-tri-step="0">
+        <article class="protocard">
+          <div class="protocard__body">
+            <div class="proto__meta">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3v18M5 8h14M7 8l-2 5a3 3 0 006 0l-2-5M17 8l-2 5a3 3 0 006 0l-2-5" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>question 1 of 3</span>
+            </div>
+            <h4 class="protocard__q">What type of inquiry is this?</h4>
+            <div class="protochoice protochoice--stack" data-tri-choices="0">
+              <button type="button" class="protochoice__btn" data-tri-opt="0">Data deletion request</button>
+              <button type="button" class="protochoice__btn" data-tri-opt="1">Data access request</button>
+              <button type="button" class="protochoice__btn" data-tri-opt="2">Vendor data sharing</button>
+              <button type="button" class="protochoice__btn" data-tri-opt="3">Breach notification</button>
+            </div>
+            <button class="protocard__cta" type="button" data-tri-next="0" disabled>
+              next
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </article>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="proto__step" data-tri-step="1">
+        <article class="protocard">
+          <div class="protocard__body">
+            <div class="proto__meta">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3v18M5 8h14M7 8l-2 5a3 3 0 006 0l-2-5M17 8l-2 5a3 3 0 006 0l-2-5" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>question 2 of 3</span>
+            </div>
+            <h4 class="protocard__q">Is there an existing SOP for this situation?</h4>
+            <div class="protochoice protochoice--stack" data-tri-choices="1">
+              <button type="button" class="protochoice__btn" data-tri-opt="0">Yes, I can find it</button>
+              <button type="button" class="protochoice__btn" data-tri-opt="1">I'm not sure</button>
+              <button type="button" class="protochoice__btn" data-tri-opt="2">No, this seems new</button>
+            </div>
+            <button class="protocard__cta" type="button" data-tri-next="1" disabled>
+              next
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </article>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="proto__step" data-tri-step="2">
+        <article class="protocard">
+          <div class="protocard__body">
+            <div class="proto__meta">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3v18M5 8h14M7 8l-2 5a3 3 0 006 0l-2-5M17 8l-2 5a3 3 0 006 0l-2-5" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>question 3 of 3</span>
+            </div>
+            <h4 class="protocard__q">Does this involve sensitive data categories (health, financial, children)?</h4>
+            <div class="protochoice protochoice--stack" data-tri-choices="2">
+              <button type="button" class="protochoice__btn" data-tri-opt="0">Yes</button>
+              <button type="button" class="protochoice__btn" data-tri-opt="1">No</button>
+              <button type="button" class="protochoice__btn" data-tri-opt="2">Not sure</button>
+            </div>
+            <button class="protocard__cta" type="button" data-tri-next="2" disabled>
+              get recommendation
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </article>
+      </div>
+
+      <!-- Result -->
+      <div class="proto__step" data-tri-step="3">
+        <article class="protocard">
+          <div class="protocard__body" data-tri-result></div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Design files strip: carousel -->
 <section class="designfiles" data-log="004 — from the design files">
   <header class="designfiles__head">
     <span class="designfiles__kicker">from the design files</span>
@@ -177,35 +463,40 @@
     </p>
   </header>
 
-  <div class="csgrid">
-    <div class="csgrid__item">
-      <img src="../assets/cs/tmobile-design-jorge.png" alt="Course Guide Video" loading="lazy" />
-      <p class="csgrid__caption">Course Guide Video</p>
+  <div class="carousel" data-carousel tabindex="0" aria-roledescription="carousel" aria-label="Design files">
+    <div class="carousel__frame">
+      <div class="carousel__track" data-carousel-track>
+        <figure class="carousel__slide" data-caption="Course Guide Video">
+          <img src="../assets/cs/tmobile-design-jorge.png" alt="Course Guide Video" loading="lazy" />
+        </figure>
+        <figure class="carousel__slide" data-caption="Scenario Videos Created with AI Generation">
+          <img src="../assets/cs/tmobile-design-chris.png" alt="Scenario Videos Created with AI Generation" loading="lazy" />
+        </figure>
+        <figure class="carousel__slide" data-caption="Data Classification — Interactive Activity">
+          <img src="../assets/cs/tmobile-design-data-classification.png" alt="Data Classification — Interactive Activity" loading="lazy" />
+        </figure>
+        <figure class="carousel__slide" data-caption="Recall Quiz — Test and Learn">
+          <img src="../assets/cs/tmobile-design-recall-quiz.png" alt="Recall Quiz — Test and Learn" loading="lazy" />
+        </figure>
+        <figure class="carousel__slide" data-caption="In-Store Scenario">
+          <img src="../assets/cs/tmobile-design-video-gallery.png" alt="In-Store Scenario" loading="lazy" />
+        </figure>
+        <figure class="carousel__slide" data-caption="Customer Support Manager Scenario">
+          <img src="../assets/cs/tmobile-design-privacy-vignette.png" alt="Customer Support Manager Scenario" loading="lazy" />
+        </figure>
+      </div>
+
+      <button class="carousel__nav carousel__nav--prev" type="button" data-carousel-prev aria-label="Previous slide">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="carousel__nav carousel__nav--next" type="button" data-carousel-next aria-label="Next slide">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
-    <div class="csgrid__item">
-      <img src="../assets/cs/tmobile-design-frontline.png" alt="Differentiated Instruction — Frontline Group" loading="lazy" />
-      <p class="csgrid__caption">Differentiated Instruction — Frontline Group</p>
-    </div>
-    <div class="csgrid__item">
-      <img src="../assets/cs/tmobile-design-chris.png" alt="AI-Generated Scenario Videos" loading="lazy" />
-      <p class="csgrid__caption">AI-Generated Scenario Videos</p>
-    </div>
-    <div class="csgrid__item">
-      <img src="../assets/cs/tmobile-design-data-classification.png" alt="Data Classification — Interactive Activity" loading="lazy" />
-      <p class="csgrid__caption">Data Classification — Interactive Activity</p>
-    </div>
-    <div class="csgrid__item">
-      <img src="../assets/cs/tmobile-design-recall-quiz.png" alt="Recall Quiz — Test and Learn" loading="lazy" />
-      <p class="csgrid__caption">Recall Quiz — Test and Learn</p>
-    </div>
-    <div class="csgrid__item">
-      <img src="../assets/cs/tmobile-design-video-gallery.png" alt="In-Store Scenario" loading="lazy" />
-      <p class="csgrid__caption">In-Store Scenario</p>
-    </div>
-    <div class="csgrid__item">
-      <img src="../assets/cs/tmobile-design-privacy-vignette.png" alt="Customer Support Manager Scenario" loading="lazy" />
-      <p class="csgrid__caption">Customer Support Manager Scenario</p>
-    </div>
+
+    <p class="carousel__caption" data-carousel-caption>Course Guide Video</p>
+
+    <div class="carousel__dots" data-carousel-dots role="tablist" aria-label="Slide selector"></div>
   </div>
 </section>
 
@@ -250,7 +541,7 @@
 
   <dl class="results__grid">
     <div>
-      <dt>reduction in Legal Affairs inquiries</dt>
+      <dt>reduction in legal inquiries</dt>
       <dd>40<span>%</span></dd>
     </div>
     <div>
@@ -261,9 +552,9 @@
       <dt>learner satisfaction</dt>
       <dd>95<span>%</span></dd>
     </div>
-    <div>
-      <dt>products shipped in 5 months</dt>
-      <dd>5<span>/</span></dd>
+    <div class="results__grid-word">
+      <dt>beyond checkbox compliance</dt>
+      <dd>behavior-<br/>focused</dd>
     </div>
   </dl>
 
@@ -341,5 +632,320 @@
 </footer>
 
 <script src="../script.js" defer></script>
+
+<script>
+/* ==========================================================================
+   T-Mobile page behaviors — carousel + prototype state machines
+   ========================================================================== */
+(() => {
+  /* ---------- Design-files carousel -------------------------------------- */
+  const carousel = document.querySelector('[data-carousel]');
+  if (carousel) {
+    const slides = Array.from(carousel.querySelectorAll('[data-carousel-track] .carousel__slide'));
+    const caption = carousel.querySelector('[data-carousel-caption]');
+    const dotsWrap = carousel.querySelector('[data-carousel-dots]');
+    const prevBtn = carousel.querySelector('[data-carousel-prev]');
+    const nextBtn = carousel.querySelector('[data-carousel-next]');
+    let idx = 0;
+
+    // Build dots
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'carousel__dot' + (i === 0 ? ' is-active' : '');
+      dot.setAttribute('role', 'tab');
+      dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      dot.addEventListener('click', () => show(i));
+      dotsWrap.appendChild(dot);
+    });
+
+    const show = (n) => {
+      idx = (n + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+      dotsWrap.querySelectorAll('.carousel__dot').forEach((d, i) => {
+        d.classList.toggle('is-active', i === idx);
+      });
+      caption.textContent = slides[idx].dataset.caption || '';
+    };
+
+    // Initialize
+    slides[0].classList.add('is-active');
+
+    prevBtn.addEventListener('click', () => show(idx - 1));
+    nextBtn.addEventListener('click', () => show(idx + 1));
+    carousel.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); show(idx - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); show(idx + 1); }
+    });
+  }
+
+  /* ---------- Prototype: tabs -------------------------------------------- */
+  const proto = document.querySelector('[data-proto]');
+  if (!proto) return;
+
+  const tabBtns = proto.querySelectorAll('[data-proto-tab]');
+  const panels = proto.querySelectorAll('[data-proto-panel]');
+  tabBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.protoTab;
+      tabBtns.forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      panels.forEach((p) => {
+        const active = p.dataset.protoPanel === target;
+        p.classList.toggle('is-active', active);
+        if (active) p.removeAttribute('hidden');
+        else p.setAttribute('hidden', '');
+      });
+    });
+  });
+
+  /* ---------- Privacy Scenario state machine ----------------------------- */
+  const scenarioPanel = proto.querySelector('[data-proto-panel="scenario"]');
+  const scenSteps = ['intro1', 'decision1', 'feedback1', 'intro2', 'decision2', 'feedback2', 'summary'];
+  let scenIdx = 0;
+  const selected = { s1: null, s2: null };
+
+  const scenDialogues = {
+    s1: "Hi, I live in Colorado and I recently learned about the new privacy law. I want all of my personal data deleted — account history, call records, everything. I don't want T-Mobile holding any of it. Can you take care of that right now?",
+    s2: "Hey, I need you to send the customer usage data for Q3 over to our marketing vendor — they need it for the campaign launch next week. They're a known partner so it should be fine. The vendor is MarketEdge Analytics, but I don't think we have a Data Processing Agreement on file yet. Can you just go ahead and share it?",
+  };
+
+  const scenChoices = {
+    s1: {
+      a: { correct: false, feedback: "Not quite. Deleting without verification could violate internal data-retention policies and expose T-Mobile to liability. The CPA requires you to verify the requestor's identity and confirm the request falls within scope before acting." },
+      b: { correct: true, feedback: "Correct. The CPA requires identity verification and scope confirmation before processing a deletion request. You have the training and the checklist to handle this independently — no need to escalate." },
+      c: { correct: false, feedback: "This was the old pattern. While Legal can handle it, this is exactly the type of routine inquiry the training prepared you to resolve independently. The decision framework gives you the tools to verify and process standard requests." },
+    },
+    s2: {
+      a: { correct: false, feedback: "Manager approval alone isn't sufficient. Without a Data Processing Agreement, sharing customer data with a third-party vendor violates privacy regulations regardless of the existing business relationship." },
+      b: { correct: true, feedback: "Correct. This situation involves a third-party vendor without a DPA in place — that's a clear escalation trigger. You correctly identified that this goes beyond routine handling and needs Legal review." },
+    },
+  };
+
+  const scenStepEls = scenarioPanel.querySelectorAll('[data-scen-step]');
+  const scenDots = scenarioPanel.querySelectorAll('[data-scen-dots] span');
+  const scenBar = scenarioPanel.querySelector('[data-scen-bar]');
+
+  const renderScenStep = (name) => {
+    scenIdx = scenSteps.indexOf(name);
+    scenStepEls.forEach((el) => {
+      el.classList.toggle('is-active', el.dataset.scenStep === name);
+    });
+    scenDots.forEach((d, i) => {
+      d.classList.toggle('is-active', i === scenIdx);
+      d.classList.toggle('is-past', i < scenIdx);
+    });
+    scenBar.style.width = `${(scenIdx / (scenSteps.length - 1)) * 100}%`;
+
+    // Trigger type animation on intro steps
+    if (name === 'intro1') runTypeAnim('s1');
+    if (name === 'intro2') runTypeAnim('s2');
+  };
+
+  // Typing animation
+  const typeTimers = {};
+  const runTypeAnim = (key) => {
+    const stepName = key === 's1' ? 'intro1' : 'intro2';
+    const step = scenarioPanel.querySelector(`[data-scen-step="${stepName}"]`);
+    const textEl = step.querySelector('[data-scen-typetext]');
+    const caret = step.querySelector('[data-scen-caret]');
+    const cta = step.querySelector('[data-scen-next]');
+    const skip = step.querySelector('[data-scen-skip]');
+    const full = scenDialogues[key];
+    let i = 0;
+    textEl.textContent = '';
+    caret.classList.remove('is-hidden');
+    cta.classList.add('is-hidden');
+    if (typeTimers[key]) clearInterval(typeTimers[key]);
+
+    const finish = () => {
+      textEl.textContent = full;
+      caret.classList.add('is-hidden');
+      cta.classList.remove('is-hidden');
+      clearInterval(typeTimers[key]);
+    };
+
+    typeTimers[key] = setInterval(() => {
+      i++;
+      textEl.textContent = full.slice(0, i);
+      if (i >= full.length) finish();
+    }, 26);
+
+    skip.onclick = finish;
+  };
+
+  // Choice wiring (radio)
+  ['s1', 's2'].forEach((key) => {
+    const choices = scenarioPanel.querySelector(`[data-scen-choices="${key}"]`);
+    const submit = scenarioPanel.querySelector(`[data-scen-submit="${key}"]`);
+    choices.querySelectorAll('input[type="radio"]').forEach((input) => {
+      input.addEventListener('change', () => {
+        selected[key] = input.value;
+        submit.disabled = false;
+      });
+    });
+    submit.addEventListener('click', () => {
+      const val = selected[key];
+      const info = scenChoices[key][val];
+      const fbStep = key === 's1' ? 'feedback1' : 'feedback2';
+      const fbEl = scenarioPanel.querySelector(`[data-scen-fb="${key}"]`);
+      const fbLabel = fbEl.querySelector('[data-scen-fb-label]');
+      const fbText = fbEl.querySelector('[data-scen-fb-text]');
+      const fbIcon = fbEl.querySelector('[data-scen-fb-icon]');
+      fbEl.classList.toggle('is-wrong', !info.correct);
+      fbLabel.textContent = info.correct ? 'Correct!' : 'Not quite.';
+      fbText.textContent = info.feedback;
+      fbIcon.innerHTML = info.correct
+        ? '<path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+        : '<path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>';
+      renderScenStep(fbStep);
+    });
+  });
+
+  // Summary logic
+  const renderSummary = () => {
+    const scoreEl = scenarioPanel.querySelector('[data-scen-score]');
+    const sumText = scenarioPanel.querySelector('[data-scen-summary]');
+    const s1Right = selected.s1 && scenChoices.s1[selected.s1].correct ? 1 : 0;
+    const s2Right = selected.s2 && scenChoices.s2[selected.s2].correct ? 1 : 0;
+    const score = s1Right + s2Right;
+    scoreEl.textContent = `${score}/2`;
+    sumText.textContent = score === 2
+      ? "You nailed both scenarios. You know when to handle independently and when to escalate — exactly what the training was designed to build."
+      : score === 1
+      ? "You got one right. The key insight: routine privacy requests can be handled independently using the decision framework, but situations without proper agreements need Legal review."
+      : "The training framework helps you distinguish between routine requests you can handle and situations that need escalation. Review the decision checklist and try again.";
+  };
+
+  // Next/skip buttons — advance step, render summary when landing on summary
+  scenarioPanel.querySelectorAll('[data-scen-next]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const next = btn.dataset.scenNext;
+      renderScenStep(next);
+      if (next === 'summary') renderSummary();
+    });
+  });
+
+  // Reset
+  const resetBtn = scenarioPanel.querySelector('[data-scen-reset]');
+  resetBtn.addEventListener('click', () => {
+    selected.s1 = null;
+    selected.s2 = null;
+    scenarioPanel.querySelectorAll('input[type="radio"]').forEach((r) => { r.checked = false; });
+    scenarioPanel.querySelectorAll('[data-scen-submit]').forEach((b) => { b.disabled = true; });
+    renderScenStep('intro1');
+  });
+
+  // Start
+  renderScenStep('intro1');
+
+  /* ---------- Triage Tool state machine ---------------------------------- */
+  const triPanel = proto.querySelector('[data-proto-panel="triage"]');
+  const triSteps = triPanel.querySelectorAll('[data-tri-step]');
+  const triBar = triPanel.querySelector('[data-tri-bar]');
+  const triAnswers = [null, null, null];
+
+  const renderTri = (n) => {
+    triSteps.forEach((s) => s.classList.toggle('is-active', Number(s.dataset.triStep) === n));
+    triBar.style.width = `${(n / 3) * 100}%`;
+    if (n === 3) renderTriResult();
+  };
+
+  // Wire option buttons
+  triPanel.querySelectorAll('[data-tri-choices]').forEach((group) => {
+    const qIdx = Number(group.dataset.triChoices);
+    const nextBtn = triPanel.querySelector(`[data-tri-next="${qIdx}"]`);
+    group.querySelectorAll('[data-tri-opt]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        group.querySelectorAll('[data-tri-opt]').forEach((b) => b.classList.remove('is-selected'));
+        btn.classList.add('is-selected');
+        triAnswers[qIdx] = Number(btn.dataset.triOpt);
+        nextBtn.disabled = false;
+      });
+    });
+    nextBtn.addEventListener('click', () => renderTri(qIdx + 1));
+  });
+
+  const renderTriResult = () => {
+    const [a0, a1, a2] = triAnswers;
+    const escalate =
+      a0 === 3 || // breach
+      a1 === 2 || // no SOP
+      a2 === 0 || // sensitive data
+      (a1 === 1 && a2 === 2); // unsure both
+
+    const resultEl = triPanel.querySelector('[data-tri-result]');
+    const reasons = [];
+    if (a0 === 3) reasons.push('Breach notifications require immediate Legal involvement');
+    if (a1 === 2) reasons.push('No existing SOP — Legal needs to establish the process');
+    if (a2 === 0) reasons.push('Sensitive data categories require extra safeguards');
+    if (a1 === 1 && a2 === 2) reasons.push('Uncertainty about both procedures and data sensitivity — better to escalate');
+
+    resultEl.innerHTML = `
+      <div class="protoresult__head">
+        ${escalate
+          ? '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style="color:#d97706;"><path d="M12 3l10 18H2L12 3z" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/><path d="M12 10v4M12 17v.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'
+          : '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style="color:#22a861;"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M8 12.5l2.5 2.5 5.5-5.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'}
+        <h4 class="protoresult__h">${escalate ? 'Escalate to Legal Affairs' : 'Handle Independently'}</h4>
+      </div>
+      <p class="protoresult__lede">${escalate
+        ? 'This situation involves factors that require Legal review — such as a potential breach, sensitive data categories, or a situation without established procedures.'
+        : "This is a routine inquiry you're equipped to handle. Follow the standard operating procedure and use your privacy decision checklist."}</p>
+      ${escalate
+        ? `<div class="protocallout protocallout--warn">
+             <p class="protocallout__lbl">Why escalate?</p>
+             <ul>${reasons.map((r) => `<li>${r}</li>`).join('')}</ul>
+           </div>`
+        : `<div class="protocallout protocallout--ok">
+             <p class="protocallout__lbl">Your checklist:</p>
+             <ul>
+               <li><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Verify requestor identity</li>
+               <li><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Confirm request scope under applicable state law</li>
+               <li><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Process using the standard SOP</li>
+               <li><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Document the action in the compliance log</li>
+             </ul>
+           </div>`}
+      <div class="protoimpact">
+        <p class="protoimpact__lbl">
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+          Training impact: inquiry escalation rate
+        </p>
+        <div class="protoimpact__row">
+          <div class="protoimpact__meta"><span>Before training</span><span>80%</span></div>
+          <div class="protoimpact__bar"><div class="protoimpact__fill" style="width:80%;"></div></div>
+        </div>
+        <div class="protoimpact__row">
+          <div class="protoimpact__meta protoimpact__meta--after"><span>After training</span><span>40%</span></div>
+          <div class="protoimpact__bar"><div class="protoimpact__fill protoimpact__fill--after" style="width:0%;"></div></div>
+        </div>
+        <p class="protoimpact__note">Employees gained confidence to resolve routine inquiries independently.</p>
+      </div>
+      <button class="protocard__cta protocard__cta--ghost" type="button" data-tri-reset>
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M3 12a9 9 0 1015-6.7L21 8M21 3v5h-5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        start over
+      </button>
+    `;
+
+    // Animate "after" bar
+    requestAnimationFrame(() => {
+      const afterFill = resultEl.querySelector('.protoimpact__fill--after');
+      if (afterFill) setTimeout(() => { afterFill.style.width = '40%'; }, 120);
+    });
+
+    // Wire reset
+    resultEl.querySelector('[data-tri-reset]').addEventListener('click', () => {
+      triAnswers[0] = triAnswers[1] = triAnswers[2] = null;
+      triPanel.querySelectorAll('[data-tri-opt]').forEach((b) => b.classList.remove('is-selected'));
+      triPanel.querySelectorAll('[data-tri-next]').forEach((b) => { b.disabled = true; });
+      renderTri(0);
+    });
+  };
+
+  renderTri(0);
+})();
+</script>
 </body>
 </html>
