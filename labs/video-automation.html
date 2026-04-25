@@ -36,6 +36,11 @@
 
 .lab-video { border-radius: 4px; overflow: hidden; aspect-ratio: 16/9; margin-bottom: 3rem; border: 1px solid var(--rule); }
 .lab-video iframe { width: 100%; height: 100%; display: block; border: 0; }
+/* Source video is portrait (9:16) — at mobile, switch the container to
+   match so the video fills the viewport instead of letterboxing. */
+@media (max-width: 720px) {
+  .lab-video { aspect-ratio: 9/16; max-width: 320px; margin-left: auto; margin-right: auto; }
+}
 
 /* Two-workflow callout */
 .workflows { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; border: 1px solid var(--rule); background: var(--rule); margin-bottom: 3rem; }
@@ -94,6 +99,21 @@
   z-index: 20 !important;
 }
 .fan-slide img { width: 100%; display: block; }
+/* On mobile, the desktop fan spread (±200px) overflows. Tighten to ±90px
+   so the full 7-card fan stays inside the viewport with shallower rotation. */
+@media (max-width: 600px) {
+  .fan-wrap { height: 240px; max-width: 340px; }
+  .fan-slide { width: 95px; }
+  /* !important is required — the desktop --tx values are set inline on each
+     element, which would otherwise win specificity against this media rule. */
+  .fan-slide:nth-child(1) { --tx: -90px !important; --r: -16deg !important; }
+  .fan-slide:nth-child(2) { --tx: -60px !important; --r: -10deg !important; }
+  .fan-slide:nth-child(3) { --tx: -30px !important; --r: -5deg !important; }
+  .fan-slide:nth-child(4) { --tx: 0px   !important; --r: 0deg   !important; }
+  .fan-slide:nth-child(5) { --tx: 30px  !important; --r: 5deg   !important; }
+  .fan-slide:nth-child(6) { --tx: 60px  !important; --r: 10deg  !important; }
+  .fan-slide:nth-child(7) { --tx: 90px  !important; --r: 16deg  !important; }
+}
 </style>
 </head>
 <body>
@@ -290,8 +310,8 @@
       <ul>
         <li><a href="../approach.html">approach</a></li>
         <li><a href="../work.html">work</a></li>
-        <li><a href="../about.html">about emily</a></li>
         <li><a href="../labs.html">labs</a></li>
+        <li><a href="../about.html">about emily</a></li>
         <li><a href="../field-notes.html">field notes</a></li>
         <li><a href="../resources.html">free resources</a></li>
       </ul>

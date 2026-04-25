@@ -149,10 +149,79 @@
   min-height: 640px;
   background: #eef3f7;
 }
+.apspotlight__mobilecard { display: none; }
 
 @media (max-width: 900px) {
   .apspotlight__inner { grid-template-columns: 1fr; min-height: 0; }
   .apspotlight__iframe { min-height: 460px; }
+}
+/* On phones, swap the 3D iframe for a tappable preview card. */
+@media (max-width: 720px) {
+  .apspotlight__iframe { display: none; }
+  .apspotlight__mobilecard {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    background: #eef3f7;
+  }
+  .apspotlight__mobilecard-img {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: #1a1d29;
+  }
+  .apspotlight__mobilecard-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .apspotlight__mobilecard-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.75rem 1.5rem;
+    background: #1a1d29;
+    color: var(--paper);
+  }
+  .apspotlight__chip {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--lime);
+    align-self: flex-start;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid rgba(200, 255, 53, 0.4);
+    border-radius: 999px;
+  }
+  .apspotlight__mobilecard-h {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--paper);
+  }
+  .apspotlight__mobilecard-p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgba(242, 239, 232, 0.7);
+  }
+  .apspotlight__mobilecard-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: 0.25rem;
+  }
+  .apspotlight__mobilecard-cta svg { width: 14px; height: 14px; }
 }
 
 /* ==========================================================================
@@ -1059,6 +1128,22 @@
         class="apspotlight__iframe"
         title="Fire extinguisher 3D inspection viewer — Apple supplier compliance training"
       ></iframe>
+      <!-- Mobile-only fallback: 3D drag/pinch is awkward in a tiny embedded
+           iframe, so swap for a preview card that opens full-screen. -->
+      <a class="apspotlight__mobilecard" href="../assets/3d/fire-extinguisher.html" target="_blank" rel="noopener" aria-label="Open the 3D fire extinguisher viewer full-screen">
+        <span class="apspotlight__mobilecard-img">
+          <img src="../assets/3d/extinguisher-clean.png" alt="" loading="lazy" />
+        </span>
+        <span class="apspotlight__mobilecard-body">
+          <span class="apspotlight__chip">3d viewer</span>
+          <span class="apspotlight__mobilecard-h">inspect in 3D, full-screen.</span>
+          <span class="apspotlight__mobilecard-p">Drag-to-rotate works best on a larger screen. Tap to open the inspection viewer in a new tab.</span>
+          <span class="apspotlight__mobilecard-cta">
+            launch 3d viewer
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </span>
+        </span>
+      </a>
     </div>
   </div>
 </section>
@@ -1443,8 +1528,8 @@
       <ul>
         <li><a href="../approach.html">approach</a></li>
         <li><a href="../work.html">work</a></li>
-        <li><a href="../about.html">about emily</a></li>
         <li><a href="../labs.html">labs</a></li>
+        <li><a href="../about.html">about emily</a></li>
         <li><a href="../field-notes.html">field notes</a></li>
         <li><a href="../resources.html">free resources</a></li>
       </ul>

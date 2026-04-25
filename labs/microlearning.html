@@ -42,9 +42,15 @@
   align-items: start;
   max-width: 900px;
 }
-@media (max-width: 780px) {
+@media (max-width: 900px) {
   .ml-layout { grid-template-columns: 1fr; }
-  .ml-phone { order: -1; max-width: 280px; }
+  .ml-phone {
+    order: -1;
+    max-width: 280px;
+    margin: 0 auto 2rem;
+    position: static;          /* kill the desktop sticky that makes it float */
+    top: auto;
+  }
 }
 
 /* Scenario picker */
@@ -93,14 +99,18 @@
 .ml-comp-row--new .ml-comp-label { color: #4a9c20; }
 .ml-comp-text { font-size: 0.825rem; line-height: 1.5; color: var(--ink-2); }
 
-/* Phone mockup */
-.ml-phone { position: sticky; top: 6rem; }
+/* Phone mockup — sticks beside the panel on wide screens; the media query
+   above flips it to static + centered when the layout collapses to one column. */
+@media (min-width: 901px) {
+  .ml-phone { position: sticky; top: 6rem; }
+}
 .phone-shell {
   background: var(--dark);
   border-radius: 28px;
   padding: 12px;
   box-shadow: 0 16px 48px rgba(0,0,0,0.25);
-  max-width: 260px;
+  width: 260px;
+  max-width: 100%;
   margin: 0 auto;
 }
 .phone-screen {
@@ -413,8 +423,8 @@
       <ul>
         <li><a href="../approach.html">approach</a></li>
         <li><a href="../work.html">work</a></li>
-        <li><a href="../about.html">about emily</a></li>
         <li><a href="../labs.html">labs</a></li>
+        <li><a href="../about.html">about emily</a></li>
         <li><a href="../field-notes.html">field notes</a></li>
         <li><a href="../resources.html">free resources</a></li>
       </ul>

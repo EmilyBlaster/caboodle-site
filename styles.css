@@ -293,6 +293,8 @@ em { font-style: italic; color: var(--blue); }
   font-family: var(--display);
   font-weight: 700;
   letter-spacing: -0.01em;
+  position: relative;
+  z-index: 2;             /* sit above the mobile nav panel when it slides down */
 }
 
 /* Brand logo — shared SVG component, recolorable via CSS variables.
@@ -360,9 +362,83 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 /* underline animation on nav links must not target the CTA */
 .nav__links .nav__cta::after { display: none !important; }
 
+/* Hamburger toggle — injected via JS, hidden on desktop */
+.nav__toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;             /* sit above the mobile nav panel */
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav__toggle span,
+.nav__toggle span::before,
+.nav__toggle span::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 22px;
+  height: 2px;
+  background: var(--ink);
+  border-radius: 2px;
+  transform: translate(-50%, 0);
+  transition: transform 0.35s var(--ease), top 0.25s var(--ease), opacity 0.2s var(--ease);
+}
+.nav__toggle span { top: 50%; transform: translate(-50%, -50%); }
+.nav__toggle span::before { top: -7px; }
+.nav__toggle span::after { top: 7px; }
+.nav.is-open .nav__toggle span { background: transparent; }
+.nav.is-open .nav__toggle span::before { top: 0; transform: translate(-50%, 0) rotate(45deg); }
+.nav.is-open .nav__toggle span::after  { top: 0; transform: translate(-50%, 0) rotate(-45deg); }
+
 @media (max-width: 760px) {
   .nav__word { display: none; }
-  .nav__links { gap: 1rem; font-size: 0.8rem; }
+  .nav__toggle { display: inline-flex; align-items: center; justify-content: center; }
+
+  /* Mobile slide-down panel */
+  .nav__links {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 5.25rem 1.5rem 2rem;
+    background: var(--paper, #f2efe8);
+    border-bottom: 1px solid var(--rule);
+    box-shadow: 0 18px 40px -28px rgba(0,0,0,0.25);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.4s var(--ease), opacity 0.3s var(--ease), visibility 0s linear 0.4s;
+    font-size: 1.05rem;
+    font-weight: 500;
+    z-index: 1;           /* logo + toggle (z-index: 2) sit above the panel */
+  }
+  .nav.is-open .nav__links {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    transition: transform 0.4s var(--ease), opacity 0.3s var(--ease), visibility 0s linear 0s;
+  }
+  .nav__links a {
+    padding: 0.95rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav__links a:not(.nav__cta)::after { display: none; }
+  .nav__links .nav__cta {
+    margin-top: 1.25rem;
+    padding: 0.85rem 1.5rem;
+    justify-content: center;
+    border-bottom: 0;
+  }
+
+  /* Lock background scroll while panel is open */
+  body.nav-lock { overflow: hidden; }
 }
 
 /* ==========================================================================
@@ -2130,12 +2206,14 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   padding-top: 0.1em;
   font-family: var(--display);
   font-weight: 800;
-  font-size: clamp(3.25rem, 10vw, 8rem);
+  font-size: clamp(2.4rem, 11vw, 8rem);
   line-height: 1.15;
   letter-spacing: -0.04em;
   color: var(--ink);
   text-transform: lowercase;
   max-width: 14ch;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 .casehero__h em { font-style: italic; color: var(--magenta); }
 
@@ -3476,22 +3554,84 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .phases__scroll svg,
 .ladder__scroll svg { display: block; width: 100%; height: auto; }
 
-/* On mobile: force SVGs wider than viewport so their text stays readable,
-   and show a subtle swipe hint below each figure. */
+/* Mobile-only stacked AM ↔ KP ladder; hidden at desktop widths */
+.ladder__list { display: none; }
+
+/* On mobile: ditch the horizontal-scroll SVG diagrams entirely. The
+   .phases__list below the phases SVG already covers the same content
+   as a readable vertical text version. The .ladder__list below the
+   ladder SVG is purpose-built to stack the AM ↔ KP pairing. */
 @media (max-width: 720px) {
-  .phases__scroll svg { width: 800px; min-width: 800px; }
-  .ladder__scroll svg { width: 760px; min-width: 760px; }
-  .phases__figure::after,
-  .ladder__figure::after {
-    content: "← swipe →";
-    display: block;
-    margin-top: 0.6rem;
+  .phases__figure,
+  .ladder__figure { display: none; }
+
+  .ladder__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+  }
+  .ladder__rung {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+  .ladder__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1rem 1.1rem;
+    background: var(--paper);
+    border: 2px solid var(--blue);
+  }
+  .ladder__card--kp { border-color: var(--magenta); }
+  .ladder__card .ladder__lvl {
     font-family: var(--mono);
-    font-size: 0.64rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blue);
+  }
+  .ladder__card--kp .ladder__lvl { color: var(--magenta); }
+  .ladder__card strong {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-transform: lowercase;
+  }
+  .ladder__card .ladder__q {
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: var(--ink-2);
+  }
+  .ladder__verb {
+    align-self: center;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    padding: 0.35rem 0.85rem;
+    border: 1px dashed var(--rule);
+    border-radius: 999px;
+    background: var(--paper);
+  }
+  .ladder__axis {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px dashed var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--ink-2);
-    text-align: center;
   }
 }
 .phases__caption,
@@ -4355,11 +4495,13 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   padding-top: 0.1em;
   font-family: var(--display);
   font-weight: 800;
-  font-size: clamp(3rem, 9vw, 8rem);
+  font-size: clamp(2.4rem, 11vw, 8rem);
   line-height: 1.1;
   letter-spacing: -0.04em;
   color: var(--ink);
   text-transform: lowercase;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 .labshero__h em { font-style: italic; color: var(--magenta); }
 .labshero__lede {

@@ -29,6 +29,53 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   };
   setNavState();
 
+  /* ---------- Mobile nav toggle ----------------------------------------
+     Inject a hamburger button so the existing HTML doesn't have to change.
+     The button toggles `is-open` on the nav, which CSS uses to slide the
+     links panel into view. Closes on link click, Escape, or resize past
+     the mobile breakpoint. */
+  if (nav && !nav.querySelector('.nav__toggle')) {
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'nav__toggle';
+    toggle.setAttribute('aria-label', 'Open menu');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.innerHTML = '<span></span>';
+    nav.appendChild(toggle);
+
+    const linksPanel = nav.querySelector('.nav__links');
+    if (linksPanel && !linksPanel.id) linksPanel.id = 'nav-links';
+    if (linksPanel) toggle.setAttribute('aria-controls', linksPanel.id);
+
+    const closeNav = () => {
+      nav.classList.remove('is-open');
+      document.body.classList.remove('nav-lock');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open menu');
+    };
+    const openNav = () => {
+      nav.classList.add('is-open');
+      document.body.classList.add('nav-lock');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Close menu');
+    };
+
+    toggle.addEventListener('click', () => {
+      nav.classList.contains('is-open') ? closeNav() : openNav();
+    });
+    if (linksPanel) {
+      linksPanel.addEventListener('click', (e) => {
+        if (e.target.closest('a')) closeNav();
+      });
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nav.classList.contains('is-open')) closeNav();
+    });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 760 && nav.classList.contains('is-open')) closeNav();
+    }, { passive: true });
+  }
+
   /* ---------- Field log: time ticker ----------------------------------- */
   const updateTime = () => {
     if (!logTime) return;
