@@ -1,0 +1,263 @@
+/* ==========================================================================
+   caboodle design — colors, type, motion tokens
+   Source of truth. Import this first.
+   ========================================================================== */
+
+/* ---------- Fonts ---------------------------------------------------------- */
+
+@font-face {
+  font-family: 'Bauhaus Bool';
+  src: url('fonts/BauhausBoolDisplay-Thin.woff') format('woff');
+  font-weight: 100; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Bauhaus Bool';
+  src: url('fonts/BauhausBoolDisplay-ExtraLight.woff') format('woff');
+  font-weight: 200; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Bauhaus Bool';
+  src: url('fonts/BauhausBoolDisplay-Light.woff') format('woff');
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Bauhaus Bool';
+  src: url('fonts/BauhausBoolDisplay-Regular.woff') format('woff');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Bauhaus Bool';
+  src: url('fonts/BauhausBoolDisplay-Medium.woff') format('woff');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Bauhaus Bool';
+  src: url('fonts/BauhausBoolDisplay-SemiBold.woff') format('woff');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Bauhaus Bool';
+  src: url('fonts/BauhausBoolDisplay-Bold.woff') format('woff');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Bauhaus Bool';
+  src: url('fonts/BauhausBoolDisplay-ExtraBold.woff') format('woff');
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Bauhaus Bool';
+  src: url('fonts/BauhausBoolDisplay-Black.woff') format('woff');
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+
+/* Body + mono are loaded from Google Fonts in HTML:
+   DM Sans 400/500/600/700, JetBrains Mono 400/500 */
+
+:root {
+  /* ====== BRAND COLOR — CORE ====== */
+  --lime:     #96E650;  /* primary */
+  --blue:     #03599B;  /* secondary */
+  --magenta:  #EC008C;  /* tertiary */
+
+  /* ====== BRAND COLOR — TINTS (from brand specs PDF) ====== */
+  --lime-tint-1:    #B6EE85;
+  --lime-tint-2:    #D5F5B9;
+  --lime-tint-3:    #EFFBE5;
+  --blue-tint-1:    #4F8BB9;
+  --blue-tint-2:    #9ABDD7;
+  --blue-tint-3:    #D9E6F0;
+  --magenta-tint-1: #F24DAF;
+  --magenta-tint-2: #F799D1;
+  --magenta-tint-3: #FCD9EE;
+
+  /* Extended (site usage) */
+  --blue-deep: #024378;
+
+  /* ====== GRAY PALETTE (from brand specs PDF) ====== */
+  --gray-1:   #282828;  /* ink */
+  --gray-2:   #686868;  /* ink-2 / secondary text */
+  --gray-3:   #E7E7E7;  /* hairlines / dividers */
+  --gray-4:   #FFFFFF;
+
+  /* ====== SURFACE / PAPER (editorial warm-white) ====== */
+  --paper:    #F2EFE8;  /* warm editorial paper — default body bg */
+  --paper-2:  #E8E3D8;  /* secondary paper */
+  --white:    #FFFFFF;
+  --dark:     #141414;  /* near-black for dark panels */
+  --dark-2:   #1E1E1E;
+  --rule:     #D6D3CC;  /* warm hairline on paper */
+
+  /* ====== SEMANTIC: TEXT ====== */
+  --fg-1:     var(--gray-1);  /* primary text */
+  --fg-2:     var(--gray-2);  /* secondary text */
+  --fg-inv:   var(--paper);   /* text on dark */
+  --fg-accent-blue:    var(--blue);
+  --fg-accent-magenta: var(--magenta);
+  --fg-accent-lime:    var(--lime);
+
+  /* ====== SEMANTIC: BACKGROUND ====== */
+  --bg:         var(--paper);
+  --bg-alt:     var(--paper-2);
+  --bg-card:    var(--white);
+  --bg-dark:    var(--dark);
+  --bg-brand:   var(--lime);
+
+  /* ====== SEMANTIC: BORDERS ====== */
+  --border:       var(--rule);
+  --border-strong:var(--gray-1);
+
+  /* ====== TYPE ====== */
+  --display: 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif;
+  --body:    'DM Sans', system-ui, sans-serif;
+  --mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  /* Type scale — display (Bauhaus Bool, lowercase, -letter-spacing) */
+  --display-xxl: clamp(3.75rem, 14vw, 12rem);   /* hero */
+  --display-xl:  clamp(2.5rem, 6vw, 5.5rem);    /* section h1 */
+  --display-lg:  clamp(2rem, 4.5vw, 4rem);      /* h2 */
+  --display-md:  clamp(1.5rem, 2.8vw, 2.35rem); /* h3 */
+  --display-sm:  clamp(1.2rem, 2vw, 1.55rem);   /* h4 */
+
+  /* Type scale — body (DM Sans) */
+  --text-lg:  1.1rem;
+  --text-md:  1.02rem;
+  --text-sm:  0.92rem;
+  --text-xs:  0.82rem;
+
+  /* Type scale — mono kicker (JetBrains Mono, UPPERCASE, tracked) */
+  --mono-lg:  0.78rem;
+  --mono-md:  0.72rem;
+  --mono-sm:  0.68rem;
+
+  /* Letter-spacing */
+  --track-display: -0.03em; /* tight lockup */
+  --track-body:     0em;
+  --track-mono:     0.14em; /* wide-tracked uppercase */
+  --track-mono-wide:0.18em;
+
+  /* Line-height */
+  --lh-display: 0.95;
+  --lh-body:    1.55;
+
+  /* ====== SPACING (rhythm) ====== */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 9rem;
+
+  --pad-x: clamp(1.25rem, 5vw, 5rem);
+  --maxw:  1440px;
+
+  /* ====== BORDERS / RADII ====== */
+  --radius-0: 0;        /* default — editorial is SQUARE */
+  --radius-1: 4px;      /* rare, only small utility */
+  --radius-pill: 999px; /* CTAs, link pills */
+
+  --border-1: 1px;
+  --border-2: 2px;
+
+  /* ====== SHADOWS ====== */
+  /* Lift — used on hover for cards */
+  --shadow-lift: 0 30px 50px -30px rgba(40, 40, 40, 0.20);
+  /* Stamp / nav drop */
+  --shadow-stamp: 0 18px 40px -20px rgba(0, 0, 0, 0.40);
+  /* Disc glow around portrait */
+  --shadow-disc: 0 40px 60px -30px rgba(3, 89, 155, 0.45);
+
+  /* ====== MOTION (Apple easing) ====== */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-1: 0.25s;
+  --dur-2: 0.4s;
+  --dur-3: 0.6s;
+  --dur-4: 1s;
+}
+
+/* ==========================================================================
+   SEMANTIC ELEMENTS — drop on any page
+   ========================================================================== */
+
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--body);
+  font-weight: 400;
+  color: var(--fg-1);
+  background: var(--bg);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+p, li, dd, blockquote { text-wrap: pretty; }
+h1, h2, h3, h4 { text-wrap: balance; }
+::selection { background: var(--lime); color: var(--fg-1); }
+
+h1, .h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--display-xl);
+  line-height: var(--lh-display);
+  letter-spacing: var(--track-display);
+  text-transform: lowercase;
+  margin: 0;
+}
+h2, .h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--display-lg);
+  line-height: var(--lh-display);
+  letter-spacing: var(--track-display);
+  text-transform: lowercase;
+  margin: 0;
+}
+h3, .h3 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--display-md);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: lowercase;
+  margin: 0;
+}
+h4, .h4 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--display-sm);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-transform: lowercase;
+  margin: 0;
+}
+
+em { font-style: italic; color: var(--blue); }
+
+.kicker,
+.mono-kicker {
+  font-family: var(--mono);
+  font-size: var(--mono-md);
+  letter-spacing: var(--track-mono-wide);
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+
+.lede {
+  font-family: var(--body);
+  font-size: var(--text-lg);
+  line-height: 1.5;
+  color: var(--fg-1);
+}
+
+.body   { font-family: var(--body); font-size: var(--text-md); line-height: var(--lh-body); color: var(--fg-1); }
+.body-2 { font-family: var(--body); font-size: var(--text-sm); line-height: 1.45;           color: var(--fg-2); }
+.mono   { font-family: var(--mono); font-size: var(--mono-md); letter-spacing: var(--track-mono); text-transform: uppercase; }
+
+code, pre, .code {
+  font-family: var(--mono);
+  font-size: var(--text-sm);
+}
