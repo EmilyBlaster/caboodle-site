@@ -1,0 +1,86 @@
+[
+  {
+    "id": "7629484140756274463",
+    "cat": "ai tools",
+    "date": "apr 16",
+    "title": "A Claude Code skill that turns any codebase into a course.",
+    "body": "Build first, understand later. Tested the <em>codebase-to-course</em> skill by Zara Zhang. As a learning designer, this one got me."
+  },
+  {
+    "id": "7629062936681549087",
+    "cat": "career",
+    "date": "apr 15",
+    "title": "Learning starts with copying someone else's process.",
+    "body": "That's not theft. That's how every skill you've ever built began. Stop gatekeeping titles. Stop gatekeeping knowledge."
+  },
+  {
+    "id": "7629024011594304799",
+    "cat": "systems",
+    "date": "apr 15",
+    "title": "Five fixes. Not about prompting better. About building a system.",
+    "body": "Which one are you starting with? Systems thinking, applied to the AI workflow problem most teams keep trying to patch."
+  },
+  {
+    "id": "7628277966241271070",
+    "cat": "ai workflow",
+    "date": "apr 13",
+    "title": "Most teams added AI on top of the old workflow. Nothing actually got removed.",
+    "body": "That's why the productivity boost didn't materialize. The legacy steps are still there, and you layered a new one on top."
+  },
+  {
+    "id": "7626893184295079198",
+    "cat": "strategy",
+    "date": "apr 9",
+    "title": "Preparation isn't the opposite of innovation.",
+    "body": "It's what makes innovation stick. Companies arrive with energy and good intentions, but no plan, no stakeholder alignment, no constraints."
+  },
+  {
+    "id": "7626540450278559006",
+    "cat": "research",
+    "date": "apr 8",
+    "title": "Anthropic proved AI has functional emotions. What that means for feedback.",
+    "body": "Same scenario. Same learner response. Three completely different coaching outputs depending on emotional state."
+  },
+  {
+    "id": "7626047911301811487",
+    "cat": "measurement",
+    "date": "apr 7",
+    "title": "The metrics that actually tell you behavior changed.",
+    "body": "Completion rate is not on this list. That's the point. Which one does your team actually use?"
+  },
+  {
+    "id": "7625718051110997278",
+    "cat": "ai workflow",
+    "date": "apr 6",
+    "title": "The AI verification burden is real.",
+    "body": "You saved time writing. Now you're spending it reviewing. The bottleneck just changed locations."
+  },
+  {
+    "id": "7625692969055571231",
+    "cat": "strategy",
+    "date": "apr 6",
+    "title": "Five moves for your next stakeholder conversation.",
+    "body": "Save this for the next time you're walking into a meeting where no one's aligned. Which one does your team skip most?"
+  },
+  {
+    "id": "7621699168360287518",
+    "cat": "ai fluency",
+    "date": "mar 26",
+    "title": "MD files, skills, agents. AI through an L&D lens.",
+    "body": "Once it clicks through an L&amp;D lens it makes total sense. Sharing everything as I figure it out."
+  },
+  {
+    "id": "7619733083608173855",
+    "cat": "learning",
+    "date": "mar 21",
+    "title": "What L&D is actually talking about this week.",
+    "body": "AI hype fatigue, fake content, a role identity crisis, and the most human skill in our field that nobody is talking about."
+  },
+  {
+    "id": "7619485338641239327",
+    "cat": "behavior",
+    "date": "mar 20",
+    "title": "Most corporate training doesn't change behavior. It just gets completed.",
+    "body": "There's a difference, and it matters. My name is Emily Green, founder of Caboodle Design."
+  }
+]
