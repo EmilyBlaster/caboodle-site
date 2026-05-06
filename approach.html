@@ -205,116 +205,63 @@
     </p>
   </header>
 
-  <figure class="ladder__figure" aria-labelledby="ladderCaption">
-    <div class="ladder__scroll">
-    <svg viewBox="0 0 1000 560" role="img" aria-labelledby="ladderTitle" xmlns="http://www.w3.org/2000/svg">
-      <title id="ladderTitle">Action Mapping mapped against Kirkpatrick's four levels, with a client proof on each rung.</title>
-
-      <!-- Column labels -->
-      <g font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="2" fill="#686868">
-        <text x="100" y="30">ACTION MAPPING</text>
-        <text x="500" y="30" text-anchor="middle">CROSSES INTO</text>
-        <text x="900" y="30" text-anchor="end">KIRKPATRICK</text>
-      </g>
-
-      <!-- Left column (Action Mapping) -->
-      <g transform="translate(40,60)">
-        <!-- Row 1 -->
-        <g transform="translate(0,0)">
-          <rect x="0" y="0" width="340" height="100" fill="#f2efe8" stroke="#03599B" stroke-width="2"/>
-          <text x="20" y="32" font-family="JetBrains Mono, monospace" font-size="12" fill="#03599B" letter-spacing="2">01</text>
-          <text x="20" y="62" font-family="Bauhaus Bool, Futura, sans-serif" font-size="22" font-weight="800" fill="#282828">business goal</text>
-          <text x="20" y="84" font-family="DM Sans, sans-serif" font-size="13" fill="#686868">what outcome must change?</text>
-        </g>
-        <!-- Row 2 -->
-        <g transform="translate(0,115)">
-          <rect x="0" y="0" width="340" height="100" fill="#f2efe8" stroke="#03599B" stroke-width="2"/>
-          <text x="20" y="32" font-family="JetBrains Mono, monospace" font-size="12" fill="#03599B" letter-spacing="2">02</text>
-          <text x="20" y="62" font-family="Bauhaus Bool, Futura, sans-serif" font-size="22" font-weight="800" fill="#282828">critical actions</text>
-          <text x="20" y="84" font-family="DM Sans, sans-serif" font-size="13" fill="#686868">what must people do differently?</text>
-        </g>
-        <!-- Row 3 -->
-        <g transform="translate(0,230)">
-          <rect x="0" y="0" width="340" height="100" fill="#f2efe8" stroke="#03599B" stroke-width="2"/>
-          <text x="20" y="32" font-family="JetBrains Mono, monospace" font-size="12" fill="#03599B" letter-spacing="2">03</text>
-          <text x="20" y="62" font-family="Bauhaus Bool, Futura, sans-serif" font-size="22" font-weight="800" fill="#282828">practice activities</text>
-          <text x="20" y="84" font-family="DM Sans, sans-serif" font-size="13" fill="#686868">how do they rehearse it?</text>
-        </g>
-        <!-- Row 4 -->
-        <g transform="translate(0,345)">
-          <rect x="0" y="0" width="340" height="100" fill="#f2efe8" stroke="#03599B" stroke-width="2"/>
-          <text x="20" y="32" font-family="JetBrains Mono, monospace" font-size="12" fill="#03599B" letter-spacing="2">04</text>
-          <text x="20" y="62" font-family="Bauhaus Bool, Futura, sans-serif" font-size="22" font-weight="800" fill="#282828">essential info</text>
-          <text x="20" y="84" font-family="DM Sans, sans-serif" font-size="13" fill="#686868">what's the minimum to act?</text>
-        </g>
-      </g>
-
-      <!-- Connecting verbs -->
-      <g font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="2" fill="#686868">
-        <text x="500" y="115" text-anchor="middle">PROVES</text>
-        <text x="500" y="230" text-anchor="middle">TRACKS</text>
-        <text x="500" y="345" text-anchor="middle">REVEALS</text>
-        <text x="500" y="460" text-anchor="middle">DRIVES</text>
-      </g>
-      <!-- dashed horizontal connectors -->
-      <g stroke="#686868" stroke-width="1" stroke-dasharray="2 4">
-        <line x1="385" y1="110" x2="475" y2="110"/>
-        <line x1="525" y1="110" x2="615" y2="110"/>
-        <line x1="385" y1="225" x2="475" y2="225"/>
-        <line x1="525" y1="225" x2="615" y2="225"/>
-        <line x1="385" y1="340" x2="475" y2="340"/>
-        <line x1="525" y1="340" x2="615" y2="340"/>
-        <line x1="385" y1="455" x2="475" y2="455"/>
-        <line x1="525" y1="455" x2="615" y2="455"/>
-      </g>
-
-      <!-- Right column (Kirkpatrick) -->
-      <g transform="translate(620,60)">
-        <g transform="translate(0,0)">
-          <rect x="0" y="0" width="340" height="100" fill="#f2efe8" stroke="#EC008C" stroke-width="2"/>
-          <text x="20" y="32" font-family="JetBrains Mono, monospace" font-size="12" fill="#EC008C" letter-spacing="2">L4</text>
-          <text x="20" y="62" font-family="Bauhaus Bool, Futura, sans-serif" font-size="22" font-weight="800" fill="#282828">results</text>
-          <text x="20" y="84" font-family="DM Sans, sans-serif" font-size="13" font-style="italic" fill="#686868">did it matter?</text>
-        </g>
-        <g transform="translate(0,115)">
-          <rect x="0" y="0" width="340" height="100" fill="#f2efe8" stroke="#EC008C" stroke-width="2"/>
-          <text x="20" y="32" font-family="JetBrains Mono, monospace" font-size="12" fill="#EC008C" letter-spacing="2">L3</text>
-          <text x="20" y="62" font-family="Bauhaus Bool, Futura, sans-serif" font-size="22" font-weight="800" fill="#282828">behavior</text>
-          <text x="20" y="84" font-family="DM Sans, sans-serif" font-size="13" font-style="italic" fill="#686868">are they doing it?</text>
-        </g>
-        <g transform="translate(0,230)">
-          <rect x="0" y="0" width="340" height="100" fill="#f2efe8" stroke="#EC008C" stroke-width="2"/>
-          <text x="20" y="32" font-family="JetBrains Mono, monospace" font-size="12" fill="#EC008C" letter-spacing="2">L2</text>
-          <text x="20" y="62" font-family="Bauhaus Bool, Futura, sans-serif" font-size="22" font-weight="800" fill="#282828">learning</text>
-          <text x="20" y="84" font-family="DM Sans, sans-serif" font-size="13" font-style="italic" fill="#686868">did they learn it?</text>
-        </g>
-        <g transform="translate(0,345)">
-          <rect x="0" y="0" width="340" height="100" fill="#f2efe8" stroke="#EC008C" stroke-width="2"/>
-          <text x="20" y="32" font-family="JetBrains Mono, monospace" font-size="12" fill="#EC008C" letter-spacing="2">L1</text>
-          <text x="20" y="62" font-family="Bauhaus Bool, Futura, sans-serif" font-size="22" font-weight="800" fill="#282828">reaction</text>
-          <text x="20" y="84" font-family="DM Sans, sans-serif" font-size="13" font-style="italic" fill="#686868">did they like it?</text>
-        </g>
-      </g>
-
-      <!-- Direction of rigor arrow down left edge -->
-      <g transform="translate(12,70)">
-        <line x1="0" y1="0" x2="0" y2="390" stroke="#282828" stroke-width="1"/>
-        <path d="M0,0 l-4,8 m4,-8 l4,8" stroke="#282828" stroke-width="1" fill="none"/>
-        <path d="M0,390 l-4,-8 m4,8 l4,-8" stroke="#282828" stroke-width="1" fill="none"/>
-        <text transform="translate(-4,210) rotate(-90)" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="2" fill="#686868">MORE RIGOR · LESS FLUFF</text>
-      </g>
-
-      <!-- Footer caption on the figure -->
-      <text x="40" y="540" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="1.5" fill="#686868">AM · Cathy Moore</text>
-      <text x="960" y="540" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="1.5" fill="#686868">KP · Donald Kirkpatrick</text>
-    </svg>
-    </div>
-    <figcaption id="ladderCaption" class="ladder__caption">
+  <!-- fig-02-ladder.html: animated 1920×1080 canvas, plays on scroll-into-view.
+       background:#e8e3d8 on the iframe matches the animation's own bg so the
+       warm paper colour shows consistently during load and throughout playback. -->
+  <figure class="ladder__figure" aria-labelledby="ladderCaption" style="padding:0; border:none; background:transparent;">
+    <iframe id="ladderFrame" src="/fig-02-ladder.html"
+            loading="lazy"
+            scrolling="no"
+            title="Action Mapping × Kirkpatrick — the ladder"
+            style="width:100%; aspect-ratio: 1920/1080; border:0; display:block; overflow:hidden; background:#e8e3d8;"></iframe>
+    <figcaption id="ladderCaption" class="ladder__caption" style="padding: 0.75rem 0 0;">
       Fig. 02 · Every row of Action Mapping has a direct Kirkpatrick
       partner. The business goal proves results. Essential info just
       drives reaction.
     </figcaption>
   </figure>
+
+  <script>
+  /* ── Ladder iframe: strip inner body padding so animation fills full width ── */
+  (function () {
+    var iframe = document.getElementById('ladderFrame');
+    if (!iframe) return;
+
+    var CSS = [
+      /* Remove body whitespace */
+      'html, body { padding: 0 !important; margin: 0 !important; overflow: hidden !important; }',
+      'body { align-items: stretch !important; justify-content: flex-start !important; }',
+      /* Embed shell: full width */
+      '.embed-shell { max-width: 100% !important; }',
+      /* Remove height cap */
+      '.arc-embed { max-height: none !important; }',
+    ].join('\n');
+
+    function inject(doc) {
+      if (!doc || !doc.body) return false;
+      if (!doc.querySelector('.embed-shell')) return false; /* bundle not rendered yet */
+      if (doc.getElementById('cd-ladder-inject')) return true; /* already done */
+      var s = doc.createElement('style');
+      s.id = 'cd-ladder-inject';
+      s.textContent = CSS;
+      (doc.head || doc.documentElement).appendChild(s);
+      return true;
+    }
+
+    function poll() {
+      var attempts = 0;
+      var timer = setInterval(function () {
+        try {
+          if (inject(iframe.contentDocument)) { clearInterval(timer); return; }
+        } catch (e) {}
+        if (++attempts > 60) clearInterval(timer); /* give up after ~6s */
+      }, 100);
+    }
+
+    iframe.addEventListener('load', poll);
+    try { if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') poll(); } catch (e) {}
+  })();
+  </script>
 
   <!-- Mobile-only: stacked card pairs so the AM ↔ KP relationship is
        readable without sideways scrolling. Hidden at desktop widths. -->
