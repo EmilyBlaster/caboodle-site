@@ -103,11 +103,10 @@
 
   <!-- Editorial SVG diagram -->
   <figure class="phases__figure" aria-labelledby="phasesCaption" style="padding:0; border:none; background:transparent;">
-    <iframe id="arcFrame" src="/engagement-arc.html"
-            loading="lazy"
+    <iframe id="arcFrame" data-src="/engagement-arc.html"
             scrolling="no"
             title="The engagement arc — Caboodle methodology"
-            style="width:100%; aspect-ratio: 1920/1080; border:0; display:block; overflow:hidden;"></iframe>
+            style="width:100%; aspect-ratio: 1920/1080; border:0; display:block; overflow:hidden; background:#f2efe8;"></iframe>
     <img class="fig__static"
          src="/assets/arc-static.jpg"
          alt="The engagement arc: five phases — discover, analyze, design, build, measure — each laddering to the next."
@@ -215,8 +214,7 @@
   <!-- Restore the figure's original CSS framing (padding + border + paper bg)
        so the animation sits in the same lighter box as the old static SVG. -->
   <figure class="ladder__figure" aria-label="Action Mapping × Kirkpatrick ladder">
-    <iframe id="ladderFrame" src="/fig-02-ladder.html"
-            loading="lazy"
+    <iframe id="ladderFrame" data-src="/fig-02-ladder.html"
             scrolling="no"
             aria-hidden="true"
             style="width:100%; aspect-ratio: 1920/1080; border:0; display:block; background:#f2efe8;"></iframe>
@@ -463,5 +461,30 @@
 </footer>
 
 <script src="script.js" defer></script>
+
+<script>
+/* ── Scroll-triggered iframe loading ────────────────────────────────────────
+   The animated figures (arc + ladder) are 1920×1080 React bundles that start
+   playing the moment they mount. To keep the animation in sync with the
+   viewer, we don't set src until the iframe is about to enter the viewport.
+   rootMargin '200px' gives ~200px of pre-load runway so the bundle is ready
+   by the time the user actually sees it.
+────────────────────────────────────────────────────────────────────────── */
+(function () {
+  var iframes = document.querySelectorAll('iframe[data-src]');
+  if (!iframes.length) return;
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      var el = entry.target;
+      el.src = el.dataset.src;
+      io.unobserve(el);
+    });
+  }, { rootMargin: '0px 0px 200px 0px', threshold: 0 });
+
+  iframes.forEach(function (el) { io.observe(el); });
+})();
+</script>
 </body>
 </html>
