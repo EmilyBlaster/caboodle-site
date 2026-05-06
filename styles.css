@@ -3557,6 +3557,22 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 /* Mobile-only stacked AM ↔ KP ladder; hidden at desktop widths */
 .ladder__list { display: none; }
 
+/* Static image fallbacks for the animated iframes.
+   Hidden by default (desktop shows the live iframe).
+   Shown at tablet widths where the 1920×1080 animation is too small to read.
+   At mobile widths the whole figure is hidden and the text list takes over. */
+.fig__static {
+  display: none;
+  width: 100%;
+  height: auto;
+  background: #f2efe8;
+}
+@media (max-width: 820px) and (min-width: 721px) {
+  .phases__figure iframe,
+  .ladder__figure iframe { display: none; }
+  .fig__static { display: block; }
+}
+
 /* On mobile: ditch the horizontal-scroll SVG diagrams entirely. The
    .phases__list below the phases SVG already covers the same content
    as a readable vertical text version. The .ladder__list below the
