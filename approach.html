@@ -103,7 +103,7 @@
 
   <!-- Editorial SVG diagram -->
   <figure class="phases__figure" aria-labelledby="phasesCaption" style="padding:0; border:none; background:transparent;">
-    <iframe src="/engagement-arc.html"
+    <iframe id="arcFrame" src="/engagement-arc.html"
             loading="lazy"
             scrolling="no"
             title="The engagement arc — Caboodle methodology"
@@ -113,6 +113,57 @@
       No phase can be skipped without cost.
     </figcaption>
   </figure>
+
+  <script>
+  /* ── Engagement arc iframe: strip inner padding, overlay replay button ── */
+  (function () {
+    var iframe = document.getElementById('arcFrame');
+    if (!iframe) return;
+
+    var CSS = [
+      /* Remove body whitespace so arc fills the full iframe width */
+      'html, body { padding: 0 !important; margin: 0 !important; overflow: hidden !important; }',
+      'body { align-items: stretch !important; justify-content: flex-start !important; }',
+      /* Embed shell: full width, position:relative so controls can overlay */
+      '.embed-shell { position: relative !important; max-width: 100% !important; gap: 0 !important; }',
+      /* Remove height cap so arc scales naturally */
+      '.arc-embed { max-height: none !important; }',
+      /* Hide the note text — approach.html has its own caption */
+      '.note { display: none !important; }',
+      /* Overlay the controls in the bottom-right corner */
+      '.controls { position: absolute !important; bottom: 16px !important; right: 20px !important;',
+      '  z-index: 10 !important; justify-content: flex-end !important; }',
+      /* Hide fig/time meta, keep only the replay button */
+      '.controls .meta { display: none !important; }',
+    ].join('\n');
+
+    function inject(doc) {
+      if (!doc || !doc.body) return false;
+      if (!doc.querySelector('.embed-shell')) return false; /* bundle not rendered yet */
+      if (doc.getElementById('cd-arc-inject')) return true; /* already injected */
+      var s = doc.createElement('style');
+      s.id = 'cd-arc-inject';
+      s.textContent = CSS;
+      (doc.head || doc.documentElement).appendChild(s);
+      return true;
+    }
+
+    function poll() {
+      var attempts = 0;
+      var timer = setInterval(function () {
+        try {
+          if (inject(iframe.contentDocument)) { clearInterval(timer); return; }
+        } catch (e) {}
+        if (++attempts > 60) clearInterval(timer); /* give up after ~6s */
+      }, 100);
+    }
+
+    /* Start polling after the iframe's initial load fires */
+    iframe.addEventListener('load', poll);
+    /* Also try immediately in case it's already loaded (e.g. back/forward cache) */
+    try { if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') poll(); } catch (e) {}
+  })();
+  </script>
 
   <!-- Plain-text version for depth -->
   <dl class="phases__list">
