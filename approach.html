@@ -208,17 +208,14 @@
   <!-- fig-02-ladder.html: animated 1920×1080 canvas, plays on scroll-into-view.
        background:#e8e3d8 on the iframe matches the animation's own bg so the
        warm paper colour shows consistently during load and throughout playback. -->
-  <figure class="ladder__figure" aria-labelledby="ladderCaption" style="padding:0; border:none; background:transparent;">
+  <!-- Restore the figure's original CSS framing (padding + border + paper bg)
+       so the animation sits in the same lighter box as the old static SVG. -->
+  <figure class="ladder__figure" aria-label="Action Mapping × Kirkpatrick ladder">
     <iframe id="ladderFrame" src="/fig-02-ladder.html"
             loading="lazy"
             scrolling="no"
-            title="Action Mapping × Kirkpatrick — the ladder"
-            style="width:100%; aspect-ratio: 1920/1080; border:0; display:block; overflow:hidden; background:#e8e3d8;"></iframe>
-    <figcaption id="ladderCaption" class="ladder__caption" style="padding: 0.75rem 0 0;">
-      Fig. 02 · Every row of Action Mapping has a direct Kirkpatrick
-      partner. The business goal proves results. Essential info just
-      drives reaction.
-    </figcaption>
+            aria-hidden="true"
+            style="width:100%; aspect-ratio: 1920/1080; border:0; display:block; background:#f2efe8;"></iframe>
   </figure>
 
   <script>
@@ -228,19 +225,19 @@
     if (!iframe) return;
 
     var CSS = [
-      /* Remove body whitespace */
+      /* Remove body whitespace so animation fills the figure box */
       'html, body { padding: 0 !important; margin: 0 !important; overflow: hidden !important; }',
       'body { align-items: stretch !important; justify-content: flex-start !important; }',
-      /* Embed shell: full width */
       '.embed-shell { max-width: 100% !important; }',
-      /* Remove height cap */
       '.arc-embed { max-height: none !important; }',
+      /* Hide the note text */
+      '.note { display: none !important; }',
     ].join('\n');
 
     function inject(doc) {
       if (!doc || !doc.body) return false;
-      if (!doc.querySelector('.embed-shell')) return false; /* bundle not rendered yet */
-      if (doc.getElementById('cd-ladder-inject')) return true; /* already done */
+      if (!doc.querySelector('.embed-shell')) return false;
+      if (doc.getElementById('cd-ladder-inject')) return true;
       var s = doc.createElement('style');
       s.id = 'cd-ladder-inject';
       s.textContent = CSS;
