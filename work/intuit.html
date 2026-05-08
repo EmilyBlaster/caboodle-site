@@ -38,11 +38,18 @@
    ========================================================================== */
 
 .proto {
-  padding: clamp(3rem, 6vw, 5rem) var(--pad-x);
-  background: var(--paper-2);
+  /* Override global 820px cap — this section should bleed full-width */
+  max-width: none;
+  margin: 0;
+  padding: clamp(3rem, 6vw, 5rem) 0;
+  background: var(--paper);
   border-top: 1px solid var(--rule);
 }
-.proto__inner { max-width: var(--maxw); margin: 0 auto; }
+.proto__inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+}
 
 .proto__head {
   display: grid;
@@ -235,7 +242,7 @@
 }
 .proto__path-card {
   padding: 0.85rem 0.95rem;
-  background: var(--paper-2);
+  background: var(--paper);
   border: 1px solid var(--rule);
   border-radius: 6px;
 }
