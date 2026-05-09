@@ -1355,6 +1355,80 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .dossier--accent-blue::after    { background: var(--blue); }
 .dossier--accent-magenta::after { background: var(--magenta); }
 
+/* ——— Panel modifier · colored stat block ———————————————————————————
+   Stat column is absolutely positioned against the card so it always
+   fills the full card height regardless of content length.
+   Apply .dossier--panel alongside any .dossier--accent-* class.
+   ——————————————————————————————————————————————————————————————————— */
+.dossier--panel {
+  padding-right: 0;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+.dossier--panel::after { display: none; } /* panel IS the color */
+
+/* Text column: single-column, reserves right space for the panel */
+.dossier--panel .dossier__main {
+  display: block;
+  padding-right: 250px; /* panel width (230px) + 20px gap */
+  padding-bottom: 3rem;
+}
+
+/* Stat panel: absolute, always full card height, flush right */
+.dossier--panel .dossier__stat {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 230px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  text-align: left;
+  border-top: none;
+  padding: 2.5rem 1.75rem 2.5rem 1.5rem;
+}
+.dossier--panel .dossier__statnum {
+  font-size: clamp(4rem, 6.5vw, 6.5rem);
+}
+.dossier--panel .dossier__statlabel {
+  max-width: 16ch;
+}
+
+/* Lime panel: dark text on lime */
+.dossier--panel.dossier--accent-lime .dossier__stat {
+  background: var(--lime);
+}
+.dossier--panel.dossier--accent-lime .dossier__statnum {
+  color: var(--ink);
+  -webkit-text-stroke: 0;
+}
+.dossier--panel.dossier--accent-lime .dossier__statnum i { color: var(--ink); }
+.dossier--panel.dossier--accent-lime .dossier__statlabel { color: rgba(40,40,40,0.6); }
+
+/* Blue panel: white text on blue */
+.dossier--panel.dossier--accent-blue .dossier__stat {
+  background: var(--blue);
+}
+.dossier--panel.dossier--accent-blue .dossier__statnum {
+  color: #fff;
+  -webkit-text-stroke: 0;
+}
+.dossier--panel.dossier--accent-blue .dossier__statnum i { color: rgba(255,255,255,0.7); }
+.dossier--panel.dossier--accent-blue .dossier__statlabel { color: rgba(255,255,255,0.65); }
+
+/* Magenta panel: white text on magenta */
+.dossier--panel.dossier--accent-magenta .dossier__stat {
+  background: var(--magenta);
+}
+.dossier--panel.dossier--accent-magenta .dossier__statnum {
+  color: #fff;
+  -webkit-text-stroke: 0;
+}
+.dossier--panel.dossier--accent-magenta .dossier__statnum i { color: rgba(255,255,255,0.7); }
+.dossier--panel.dossier--accent-magenta .dossier__statlabel { color: rgba(255,255,255,0.65); }
+
 /* ——— Featured modifier · People's Professors ———————————————————————— */
 
 .dossier--featured {
