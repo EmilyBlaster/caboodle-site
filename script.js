@@ -401,12 +401,13 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   ];
 
   /* Tuning knobs */
-  const SCROLL_SPEED    = 0.55;  /* px per animation frame   */
-  const PAUSE_ON_LOAD   = 2000;  /* ms to show top of page   */
-  const PAUSE_AT_BOTTOM = 2200;  /* ms to show bottom        */
-  const FADE_DURATION   = 380;   /* ms for opacity crossfade */
-  const VISIBLE_H       = 480;   /* px of iframe shown       */
-  const IFRAME_W        = 1440;  /* design width to scale from */
+  const SCROLL_SPEED    = 0.55;  /* px per animation frame                     */
+  const SCROLL_START    = 950;   /* px — skip hero/intro, land at interactives  */
+  const PAUSE_ON_LOAD   = 1600;  /* ms to show top of landing zone              */
+  const PAUSE_AT_BOTTOM = 2200;  /* ms to show bottom before cycling            */
+  const FADE_DURATION   = 380;   /* ms for opacity crossfade                    */
+  const VISIBLE_H       = 480;   /* px of iframe shown                          */
+  const IFRAME_W        = 1440;  /* design width to scale from                  */
 
   let current   = 0;
   let scrollY   = 0;
@@ -500,17 +501,19 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       urlLabel.textContent = PAGES[current].url;
       setActiveDot(current);
 
+      scrollY = SCROLL_START;
       frame.src = PAGES[current].src;
-      /* load event handles fade-in and scroll start */
+      /* load event handles the jump + fade-in + scroll start */
     }, FADE_DURATION);
   }
 
-  /* ── iframe load: reset scroll, fade in, then start scrolling ─────────── */
+  /* ── iframe load: jump to interactives zone, fade in, then start scrolling */
   frame.addEventListener('load', () => {
     scaleFrame();
 
-    try { frame.contentWindow.scrollTo(0, 0); } catch { /* */ }
-    scrollY = 0;
+    /* Skip the hero/intro and land at the artifacts section */
+    scrollY = SCROLL_START;
+    try { frame.contentWindow.scrollTo(0, SCROLL_START); } catch { /* */ }
 
     /* Small rAF delay to let the browser paint the new page */
     requestAnimationFrame(() => {
