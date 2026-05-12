@@ -375,3 +375,186 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     a.addEventListener('focus', trigger, { once: true });
   });
 })();
+
+/* ==========================================================================
+   WORK PEEK — live-scrolling case study preview
+   Loads each case study page in an iframe and slowly scrolls it, giving
+   visitors a genuine look inside the case files from the homepage.
+   Same-origin pages, so JS can control contentWindow.scrollTo().
+   ========================================================================== */
+(function () {
+  const frame    = document.getElementById('peekFrame');
+  const urlLabel = document.getElementById('peekUrl');
+  const navEl    = document.getElementById('peekNav');
+  const viewport = document.querySelector('.peek__viewport');
+  const wrapper  = document.getElementById('workPeek');
+
+  if (!frame || !viewport || !wrapper) return;
+
+  /* Case studies to cycle through */
+  const PAGES = [
+    { src: 'work/gitlab.html',  url: 'caboodledesign.info/work/gitlab.html'  },
+    { src: 'work/apple.html',   url: 'caboodledesign.info/work/apple.html'   },
+    { src: 'work/intuit.html',  url: 'caboodledesign.info/work/intuit.html'  },
+    { src: 'work/tmobile.html', url: 'caboodledesign.info/work/tmobile.html' },
+    { src: 'work/trust20.html', url: 'caboodledesign.info/work/trust20.html' },
+  ];
+
+  /* Tuning knobs */
+  const SCROLL_SPEED    = 0.55;  /* px per animation frame   */
+  const PAUSE_ON_LOAD   = 2000;  /* ms to show top of page   */
+  const PAUSE_AT_BOTTOM = 2200;  /* ms to show bottom        */
+  const FADE_DURATION   = 380;   /* ms for opacity crossfade */
+  const VISIBLE_H       = 480;   /* px of iframe shown       */
+  const IFRAME_W        = 1440;  /* design width to scale from */
+
+  let current   = 0;
+  let scrollY   = 0;
+  let raf       = null;
+  let isSwitching  = false;
+  let isHovered    = false;
+  let isOnScreen   = false;
+
+  /* ── Build nav dots ───────────────────────────────────────────────────── */
+  PAGES.forEach((_, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'peek__dot' + (i === 0 ? ' is-active' : '');
+    btn.setAttribute('aria-label', `Preview case study ${i + 1} of ${PAGES.length}`);
+    btn.addEventListener('click', () => { if (i !== current) switchTo(i); });
+    navEl.appendChild(btn);
+  });
+
+  function setActiveDot (n) {
+    navEl.querySelectorAll('.peek__dot').forEach((d, i) =>
+      d.classList.toggle('is-active', i === n));
+  }
+
+  /* ── Scale the iframe to fill the viewport width exactly ─────────────── */
+  /* The pages are 1440px wide. We scale down to fit the container,
+     then set the iframe height so its post-scale height matches VISIBLE_H. */
+  function scaleFrame () {
+    const containerW = viewport.offsetWidth;
+    const scale      = containerW / IFRAME_W;
+    const iframeH    = Math.ceil(VISIBLE_H / scale);
+
+    frame.style.width     = IFRAME_W + 'px';
+    frame.style.height    = iframeH + 'px';
+    frame.style.transform = `scale(${scale})`;
+  }
+
+  scaleFrame();
+  window.addEventListener('resize', scaleFrame, { passive: true });
+
+  /* ── rAF scroll tick ──────────────────────────────────────────────────── */
+  function tick () {
+    raf = null;
+    if (isSwitching || isHovered || !isOnScreen) return;
+
+    scrollY += SCROLL_SPEED;
+
+    /* Calculate how far we can scroll before the page ends */
+    let maxScroll = 4000; /* safe fallback */
+    try {
+      const doc = frame.contentDocument;
+      if (doc && doc.documentElement) {
+        const iframeH = parseFloat(frame.style.height) || (VISIBLE_H / (viewport.offsetWidth / IFRAME_W));
+        maxScroll = doc.documentElement.scrollHeight - iframeH;
+      }
+    } catch { /* cross-origin guard — shouldn't fire on same domain */ }
+
+    if (scrollY >= Math.max(maxScroll, 200)) {
+      /* Hit the bottom — pause, then cycle to next page */
+      isSwitching = true;
+      setTimeout(() => switchTo((current + 1) % PAGES.length), PAUSE_AT_BOTTOM);
+      return;
+    }
+
+    try {
+      frame.contentWindow.scrollTo(0, scrollY);
+    } catch { /* safety */ }
+
+    raf = requestAnimationFrame(tick);
+  }
+
+  function startScroll () {
+    if (!isSwitching && !isHovered && isOnScreen && !raf) {
+      raf = requestAnimationFrame(tick);
+    }
+  }
+
+  /* ── Page switching ───────────────────────────────────────────────────── */
+  function switchTo (index) {
+    cancelAnimationFrame(raf);
+    raf         = null;
+    isSwitching = true;
+
+    /* Fade out */
+    frame.classList.remove('is-visible');
+
+    setTimeout(() => {
+      current = index;
+      scrollY = 0;
+
+      /* Update URL bar and dots before src swap */
+      urlLabel.textContent = PAGES[current].url;
+      setActiveDot(current);
+
+      frame.src = PAGES[current].src;
+      /* load event handles fade-in and scroll start */
+    }, FADE_DURATION);
+  }
+
+  /* ── iframe load: reset scroll, fade in, then start scrolling ─────────── */
+  frame.addEventListener('load', () => {
+    scaleFrame();
+
+    try { frame.contentWindow.scrollTo(0, 0); } catch { /* */ }
+    scrollY = 0;
+
+    /* Small rAF delay to let the browser paint the new page */
+    requestAnimationFrame(() => {
+      frame.classList.add('is-visible');
+    });
+
+    /* Pause at top, then unlock and begin scrolling */
+    isSwitching = true;
+    setTimeout(() => {
+      isSwitching = false;
+      startScroll();
+    }, PAUSE_ON_LOAD);
+  });
+
+  /* ── Hover: freeze while the user is looking ──────────────────────────── */
+  wrapper.addEventListener('mouseenter', () => {
+    isHovered = true;
+    cancelAnimationFrame(raf);
+    raf = null;
+  });
+  wrapper.addEventListener('mouseleave', () => {
+    isHovered = false;
+    startScroll();
+  });
+
+  /* ── IntersectionObserver: only animate while visible on screen ────────── */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      isOnScreen = e.isIntersecting;
+      if (isOnScreen) {
+        startScroll();
+      } else {
+        cancelAnimationFrame(raf);
+        raf = null;
+      }
+    });
+  }, { threshold: 0.1 });
+  io.observe(wrapper);
+
+  /* ── Reduced motion: show first page statically, no scroll ───────────── */
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    frame.addEventListener('load', () => {
+      frame.classList.add('is-visible');
+    }, { once: true });
+    return; /* skip all scroll logic */
+  }
+})();

@@ -369,6 +369,38 @@
     </a>
   </article>
 
+  <!-- Case study live peek — auto-scrolling browser window preview -->
+  <div class="peek" id="workPeek">
+    <p class="peek__label">inside the case files</p>
+    <div class="peek__window">
+      <div class="peek__chrome">
+        <div class="peek__dots" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="peek__urlbar">
+          <span class="peek__url" id="peekUrl">caboodledesign.info/work/gitlab.html</span>
+        </div>
+      </div>
+      <div class="peek__viewport">
+        <iframe
+          id="peekFrame"
+          src="work/gitlab.html"
+          tabindex="-1"
+          aria-hidden="true"
+          title="Case study preview"
+          class="peek__iframe"
+        ></iframe>
+      </div>
+    </div>
+    <div class="peek__foot">
+      <div class="peek__nav" id="peekNav" aria-hidden="true"></div>
+      <a class="peek__cta" href="work.html">
+        open all case files
+        <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+    </div>
+  </div>
+
   <div class="dossiers">
     <a class="dossier dossier--link dossier--accent-lime" href="work/gitlab.html" data-log="009 — dossier · gitlab">
       <div class="dossier__tab">

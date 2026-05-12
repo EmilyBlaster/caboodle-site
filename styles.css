@@ -1169,6 +1169,187 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 }
 
 /* ==========================================================================
+   05a — WORK PEEK · live-scrolling browser window preview
+   An iframe of the actual case study pages, slowly auto-scrolling.
+   Sits between the featured article and the dossier cards.
+   ========================================================================== */
+
+.peek {
+  margin: 5rem 0 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* "inside the case files" label */
+.peek__label {
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+}
+.peek__label::before,
+.peek__label::after {
+  content: '';
+  display: block;
+  width: 2.5rem;
+  height: 1px;
+  background: var(--rule);
+}
+
+/* Browser window shell */
+.peek__window {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  /* layered shadow for depth */
+  box-shadow:
+    0 1px 3px rgba(0,0,0,0.06),
+    0 8px 24px rgba(0,0,0,0.10),
+    0 32px 64px rgba(0,0,0,0.07);
+  /* subtle perspective tilt — feels like it's floating toward you */
+  transform: perspective(1200px) rotateX(1.5deg);
+  transform-origin: center bottom;
+  will-change: transform;
+}
+
+/* macOS-style dark chrome bar */
+.peek__chrome {
+  background: #232325;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.peek__dots {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.peek__dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: block;
+}
+.peek__dots span:nth-child(1) { background: var(--magenta); }
+.peek__dots span:nth-child(2) { background: var(--lime); }
+.peek__dots span:nth-child(3) { background: rgba(255,255,255,0.12); }
+
+.peek__urlbar {
+  flex: 1;
+  background: rgba(255,255,255,0.07);
+  border-radius: 5px;
+  padding: 4px 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.64rem;
+  color: rgba(255,255,255,0.38);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.4s ease;
+}
+
+/* Viewport — clips the scaled iframe to the visible window height */
+.peek__viewport {
+  height: 480px;
+  overflow: hidden;
+  position: relative;
+  background: var(--paper);
+}
+
+/* Gradient fade: transparent → paper color at the bottom.
+   Using the literal paper hex to avoid the grey-tinge transparent artifact. */
+.peek__viewport::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 110px;
+  background: linear-gradient(to bottom, rgba(242,239,232,0), var(--paper));
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* The iframe — width + height + scale all set dynamically by JS */
+.peek__iframe {
+  display: block;
+  border: none;
+  pointer-events: none;
+  transform-origin: top left;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.peek__iframe.is-visible {
+  opacity: 1;
+}
+
+/* Footer row: page dots + CTA link */
+.peek__foot {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.peek__nav {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.peek__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--ink);
+  opacity: 0.15;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: width 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+}
+.peek__dot:hover { opacity: 0.35; }
+.peek__dot.is-active {
+  width: 22px;
+  opacity: 1;
+  background: var(--blue);
+}
+
+.peek__cta {
+  font-family: var(--body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.2s;
+}
+.peek__cta:hover { color: var(--blue); }
+.peek__cta svg { transition: transform 0.2s ease; }
+.peek__cta:hover svg { transform: translateX(3px); }
+
+/* Hide on small screens — iframes at mobile scale aren't useful */
+@media (max-width: 640px) {
+  .peek { display: none; }
+}
+
+/* Reduced motion — flatten the perspective tilt, no transitions */
+@media (prefers-reduced-motion: reduce) {
+  .peek__window { transform: none; }
+  .peek__iframe { transition: none; }
+  .peek__dot { transition: none; }
+}
+
+/* ==========================================================================
    05a — DOSSIERS · editorial full-width entries
    Rule-and-whitespace structure. No card boxes. Newspaper scale stats.
    ========================================================================== */
