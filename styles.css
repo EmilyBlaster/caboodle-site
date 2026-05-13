@@ -1982,6 +1982,23 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .lab__cta--wip { color: var(--ink-2); }
 .lab:hover .lab__cta--wip { letter-spacing: 0.1em; }
 
+/* Instruction strip — sits between the header and the labs stage */
+.labs__guide {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 1.75rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1;
+}
+.labs__guide svg { color: var(--magenta); flex-shrink: 0; }
+.labs__guide-sep { color: var(--rule); }
+
 /* -----------------------------------------------------------------------
    Labs Stage: single shared live-preview window above the grid
    Hover a lab card below → the stage switches to that experiment
@@ -2072,20 +2089,27 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   z-index: 2;
 }
 
-/* Hint text: disappears after first hover */
+/* Hint pill: centered at the bottom, fades after first hover */
 .labs-stage__hint {
   position: absolute;
   bottom: 1.75rem;
-  right: 1.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
   font-family: var(--mono);
   font-size: 0.68rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--magenta);
-  opacity: 0.55;
+  background: rgba(242, 239, 232, 0.88);
+  border: 1px solid rgba(236, 0, 140, 0.25);
+  border-radius: 100px;
+  padding: 0.35rem 0.9rem;
+  opacity: 1;
   z-index: 3;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.5s ease;
   pointer-events: none;
+  backdrop-filter: blur(4px);
 }
 /* Fade hint once any lab is hovered (class set by JS) */
 .labs-stage.has-hovered .labs-stage__hint { opacity: 0; }

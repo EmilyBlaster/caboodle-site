@@ -707,7 +707,8 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
    LABS STAGE — hover-to-switch live preview
    One shared large preview window above the labs grid.
    Hover any .lab[data-lab-src] card → stage crossfades to that experiment.
-   Auto-scrolls slowly while visible; pauses on prefers-reduced-motion.
+   Scroll starts at the .lab-s section (the experiment content) on every page,
+   not the top. Loops back to that offset instead of page-top.
    ========================================================================== */
 (function labsStage() {
   'use strict';
@@ -722,15 +723,26 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   const labs      = Array.from(document.querySelectorAll('.lab[data-lab-src]'));
   if (!labs.length) return;
 
-  const SCROLL_SPEED  = 0.35;   // px per rAF tick (~21px/s at 60fps)
-  const PAUSE_INIT    = 1400;   // ms before first auto-scroll begins
-  const SWITCH_PAUSE  = 900;    // ms pause after switching before scroll resumes
+  const SCROLL_SPEED  = 0.35;  // px per rAF tick
+  const PAUSE_INIT    = 1400;  // ms before first scroll
+  const SWITCH_PAUSE  = 900;   // ms pause after switching
 
   let raf         = null;
   let scrollY     = 0;
+  let scrollStart = 0;   // offset of .lab-s section — looping resets here
   let isPaused    = false;
   let onScreen    = false;
   let currentSrc  = '';
+  let nextPause   = PAUSE_INIT; // PAUSE_INIT on first load, SWITCH_PAUSE after
+
+  /* Find where the experiment section begins in the lab page (.lab-s) */
+  function findLabsOffset(iframeDoc) {
+    const target = iframeDoc.querySelector('.lab-s');
+    if (!target) return Math.floor(iframeDoc.documentElement.scrollHeight * 0.25);
+    let top = 0, el = target;
+    while (el) { top += el.offsetTop; el = el.offsetParent; }
+    return Math.max(top - 80, 0);
+  }
 
   /* Scale iframe to fill container width at 1440px design width */
   function scaleFrame() {
@@ -748,9 +760,9 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
         try {
           const doc = iframe.contentDocument;
           const max = doc.documentElement.scrollHeight - doc.documentElement.clientHeight;
-          if (scrollY >= max - 20) { scrollY = 0; }
+          if (scrollY >= max - 20) { scrollY = scrollStart; } /* loop to experiment, not page top */
           iframe.contentWindow.scrollTo(0, scrollY);
-        } catch (_) { /* cross-origin or unloaded — silent */ }
+        } catch (_) {}
       }
       raf = requestAnimationFrame(tick);
     })();
@@ -761,75 +773,72 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     raf = null;
   }
 
+  /* Shared onload handler — runs after every iframe src change */
+  function onLoaded() {
+    scaleFrame();
+    try {
+      scrollStart = findLabsOffset(iframe.contentDocument);
+    } catch (_) {
+      scrollStart = 400;
+    }
+    scrollY = scrollStart;
+    try { iframe.contentWindow.scrollTo(0, scrollStart); } catch (_) {}
+    iframe.classList.remove('is-switching');
+    viewport.classList.add('is-loaded');
+    isPaused = true;
+    const delay = nextPause;
+    nextPause = SWITCH_PAUSE; /* subsequent loads use shorter pause */
+    setTimeout(function () {
+      isPaused = false;
+      if (onScreen) startScroll();
+    }, delay);
+  }
+
   function switchTo(src, name) {
     if (src === currentSrc) return;
     currentSrc = src;
-    scrollY    = 0;
 
-    /* Update chrome text immediately */
     labelEl.textContent = name;
     urlEl.textContent   = src;
 
-    /* Crossfade: fade iframe out, swap src, fade back in on load */
     stopScroll();
     iframe.classList.add('is-switching');
 
     setTimeout(function () {
+      iframe.onload = onLoaded;
       iframe.src = src;
-    }, 320); /* wait for opacity transition to complete */
-
-    iframe.onload = function () {
-      scaleFrame();
-      iframe.classList.remove('is-switching');
-      viewport.classList.add('is-loaded');
-      isPaused = true;
-      setTimeout(function () {
-        isPaused = false;
-        if (onScreen) startScroll();
-      }, SWITCH_PAUSE);
-    };
+    }, 320); /* wait for fade-out transition */
   }
 
-  /* ── Reduced-motion: load static, no scrolling ── */
+  /* ── Reduced-motion: static switch only ── */
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    iframe.onload = function () { scaleFrame(); viewport.classList.add('is-loaded'); };
     iframe.src = labs[0].dataset.labSrc;
-    iframe.onload = function () {
-      scaleFrame();
-      viewport.classList.add('is-loaded');
-    };
+    currentSrc = labs[0].dataset.labSrc;
     labs.forEach(function (lab) {
       lab.addEventListener('mouseenter', function () {
         stage.classList.add('has-hovered');
         if (lab.dataset.labSrc !== currentSrc) {
-          currentSrc = lab.dataset.labSrc;
+          currentSrc          = lab.dataset.labSrc;
           labelEl.textContent = lab.dataset.labName;
           urlEl.textContent   = lab.dataset.labSrc;
-          iframe.src = lab.dataset.labSrc;
           iframe.onload = function () { scaleFrame(); };
+          iframe.src = lab.dataset.labSrc;
         }
       });
     });
     return;
   }
 
-  /* ── Init: load first lab ── */
+  /* ── Init ── */
   scaleFrame();
   window.addEventListener('resize', scaleFrame);
 
   currentSrc          = labs[0].dataset.labSrc;
   labelEl.textContent = labs[0].dataset.labName;
   urlEl.textContent   = labs[0].dataset.labSrc;
+  iframe.onload       = onLoaded;
   iframe.src          = currentSrc;
-
-  iframe.onload = function () {
-    scaleFrame();
-    viewport.classList.add('is-loaded');
-    isPaused = true;
-    setTimeout(function () {
-      isPaused = false;
-      if (onScreen) startScroll();
-    }, PAUSE_INIT);
-  };
 
   /* ── Hover: switch lab ── */
   labs.forEach(function (lab) {

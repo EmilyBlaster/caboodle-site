@@ -584,6 +584,15 @@
     </p>
   </header>
 
+  <!-- Instruction strip: tells visitors how to use this section -->
+  <p class="labs__guide">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 15l-2 5L9 9l11 6-5 2zm0 0l5 5"/></svg>
+    hover any experiment to load a live preview
+    <span class="labs__guide-sep" aria-hidden="true">·</span>
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    click any card to open the full prototype
+  </p>
+
   <!-- Labs Stage: shared live preview, switches on card hover -->
   <div class="labs-stage">
     <div class="labs-stage__chrome">
@@ -596,7 +605,7 @@
     <div class="labs-stage__viewport">
       <iframe class="labs-stage__iframe" tabindex="-1" aria-hidden="true" title="Lab experiment preview"></iframe>
       <div class="labs-stage__fade" aria-hidden="true"></div>
-      <span class="labs-stage__hint">hover any experiment below to preview</span>
+      <span class="labs-stage__hint" aria-hidden="true">hover a card below to switch</span>
     </div>
   </div>
 
