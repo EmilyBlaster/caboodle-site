@@ -480,7 +480,11 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       } catch { scrollStart = FALLBACK_START; }
       scrollY = scrollStart;
       try { frame.contentWindow.scrollTo(0, scrollStart); } catch {}
-      requestAnimationFrame(() => frame.classList.add('is-visible'));
+      /* Double rAF: let the browser paint the scroll position BEFORE the
+         iframe becomes visible — prevents the visible jump to middle */
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        frame.classList.add('is-visible');
+      }));
       isPaused = true;
       setTimeout(() => {
         isPaused = false;
@@ -784,15 +788,21 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     }
     scrollY = scrollStart;
     try { iframe.contentWindow.scrollTo(0, scrollStart); } catch (_) {}
-    iframe.classList.remove('is-switching');
-    viewport.classList.add('is-loaded');
     isPaused = true;
     const delay = nextPause;
     nextPause = SWITCH_PAUSE; /* subsequent loads use shorter pause */
-    setTimeout(function () {
-      isPaused = false;
-      if (onScreen) startScroll();
-    }, delay);
+    /* Double rAF: let the browser paint the scroll position BEFORE the
+       iframe fades back in — prevents the visible jump-to-top on load */
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        iframe.classList.remove('is-switching');
+        viewport.classList.add('is-loaded');
+        setTimeout(function () {
+          isPaused = false;
+          if (onScreen) startScroll();
+        }, delay);
+      });
+    });
   }
 
   function switchTo(src, name) {
@@ -801,6 +811,11 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
     labelEl.textContent = name;
     urlEl.textContent   = src;
+
+    /* Highlight the active card — gives real-time feedback that hover = preview */
+    labs.forEach(function (l) { l.classList.remove('is-active'); });
+    var activeLab = labs.find(function (l) { return l.dataset.labSrc === src; });
+    if (activeLab) activeLab.classList.add('is-active');
 
     stopScroll();
     iframe.classList.add('is-switching');
@@ -819,6 +834,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     iframe.onload = function () { scaleFrame(); viewport.classList.add('is-loaded'); };
     iframe.src = labs[0].dataset.labSrc;
     currentSrc = labs[0].dataset.labSrc;
+    labs[0].classList.add('is-active');
     labs.forEach(function (lab) {
       lab.addEventListener('mouseenter', function () {
         stage.classList.add('has-hovered');
@@ -826,6 +842,8 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
           currentSrc          = lab.dataset.labSrc;
           labelEl.textContent = lab.dataset.labName;
           urlEl.textContent   = lab.dataset.labSrc;
+          labs.forEach(function (l) { l.classList.remove('is-active'); });
+          lab.classList.add('is-active');
           iframe.onload = function () { scaleFrame(); };
           iframe.src = lab.dataset.labSrc;
         }
@@ -841,6 +859,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   currentSrc          = labs[0].dataset.labSrc;
   labelEl.textContent = labs[0].dataset.labName;
   urlEl.textContent   = labs[0].dataset.labSrc;
+  labs[0].classList.add('is-active'); /* first card is active on init */
   iframe.onload       = onLoaded;
   iframe.src          = currentSrc;
 
