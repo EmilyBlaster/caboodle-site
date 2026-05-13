@@ -881,3 +881,273 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   }, { threshold: 0.1 });
   io.observe(stage);
 })();
+
+/* ==========================================================================
+   FIELD GUIDE BOT
+   Rule-based chip-navigation widget. No backend — all responses live here.
+   Visitors click quick-reply chips to browse, or type to trigger keyword
+   matching. Matches the field log aesthetic: mono, lime, dark chrome.
+   ========================================================================== */
+(function fieldGuide() {
+  'use strict';
+
+  const trigger  = document.getElementById('guideTrigger');
+  const panel    = document.getElementById('guidePanel');
+  const msgList  = document.getElementById('guideMessages');
+  const chipZone = document.getElementById('guideChips');
+  const inputEl  = document.getElementById('guideInput');
+  const sendBtn  = document.getElementById('guideSend');
+  const closeBtn = document.getElementById('guideClose');
+
+  if (!trigger || !panel) return;
+
+  let isOpen  = false;
+  let greeted = false;
+
+  /* ── Response graph ──────────────────────────────────────────────────────
+     Each node has: msg (HTML string), chips (array of { label, next }).
+     'next' is another key in NODES. '← back' chips loop back up the tree.
+     ─────────────────────────────────────────────────────────────────────── */
+  const NODES = {
+
+    start: {
+      msg: 'field guide online — ask me anything about emily or caboodle design.',
+      chips: [
+        { label: 'emily\'s background', next: 'background' },
+        { label: 'clients + work',      next: 'clients'    },
+        { label: 'methodology',         next: 'method'     },
+        { label: 'services',            next: 'services'   },
+        { label: 'contact + hire',      next: 'contact'    },
+      ]
+    },
+
+    /* ── Background branch ── */
+    background: {
+      msg: 'emily green is the founder of caboodle design — a learning design consultancy for fortune 500 companies. she works where instructional design, behavioral science, media production, and UX intersect. ai is a field tool for that work, not a shortcut. <a class="guide-link" href="about.html">read more →</a>',
+      chips: [
+        { label: 'her approach',   next: 'approach'   },
+        { label: 'where based?',   next: 'location'   },
+        { label: 'tools + stack',  next: 'tools'      },
+        { label: '← main menu',   next: 'start'      },
+      ]
+    },
+
+    approach: {
+      msg: 'emily approaches learning design anthropologically — studying how humans actually change, not how training assumes they should. her POV: behavior change over checkbox training. the thinking is the job.',
+      chips: [
+        { label: 'action mapping',    next: 'actionmap'    },
+        { label: 'kirkpatrick model', next: 'kirkpatrick'  },
+        { label: '← back',           next: 'background'   },
+      ]
+    },
+
+    actionmap: {
+      msg: 'action mapping starts with measurable business goals, identifies the behaviors that drive those goals, then designs practice before content. developed by cathy moore — emily applies it as a core diagnostic: if a behavior gap isn\'t causing the problem, training isn\'t the answer.',
+      chips: [
+        { label: 'kirkpatrick model', next: 'kirkpatrick'  },
+        { label: 'see the work',      next: 'clients'      },
+        { label: '← back',           next: 'method'       },
+      ]
+    },
+
+    kirkpatrick: {
+      msg: 'the kirkpatrick model evaluates training at four levels: reaction, learning, behavior, results. most L&D stops at 1 and 2. emily designs to levels 3 and 4 — actual on-the-job behavior change and documented business outcomes.',
+      chips: [
+        { label: 'action mapping',  next: 'actionmap' },
+        { label: '← back',         next: 'method'    },
+      ]
+    },
+
+    location: {
+      msg: 'grand rapids, michigan — but emily works with clients globally. apple, airbnb, gitlab, and others are all remote engagements.',
+      chips: [
+        { label: '← back', next: 'background' }
+      ]
+    },
+
+    tools: {
+      msg: 'articulate rise + storyline for e-learning, figma for UX and design, adobe creative suite, three.js for 3D interactive training, remotion for branded video components, and claude code for AI-assisted prototyping. vibe coding is a legitimate field tool.',
+      chips: [
+        { label: '← back', next: 'background' }
+      ]
+    },
+
+    /* ── Methodology branch ── */
+    method: {
+      msg: 'emily\'s core frameworks are action mapping and the kirkpatrick model. applied anthropologically: she studies what\'s actually causing the behavior gap before designing anything.',
+      chips: [
+        { label: 'action mapping',    next: 'actionmap'    },
+        { label: 'kirkpatrick model', next: 'kirkpatrick'  },
+        { label: '← main menu',      next: 'start'        },
+      ]
+    },
+
+    /* ── Clients branch ── */
+    clients: {
+      msg: 'emily\'s clients include apple, airbnb, gitlab, johnson & johnson, t-mobile, and intuit. each engagement is scoped to measurable behavior change, not checkbox completion. <a class="guide-link" href="work.html">see the case files →</a>',
+      chips: [
+        { label: 'kind of work', next: 'worktype'  },
+        { label: 'results',      next: 'results'   },
+        { label: '← main menu', next: 'start'     },
+      ]
+    },
+
+    worktype: {
+      msg: 'learning programs, scenario-based courses, interactive simulations, AI-powered training tools, curriculum frameworks, microlearning systems, manager development programs, and instructional media production.',
+      chips: [
+        { label: 'results',   next: 'results'  },
+        { label: '← back',   next: 'clients'  },
+      ]
+    },
+
+    results: {
+      msg: 'emily designs for measurable outcomes: reduced onboarding time, improved manager conversation quality, faster skill transfer, documented behavior change. case studies show specifics where clients permit. <a class="guide-link" href="work.html">read case files →</a>',
+      chips: [
+        { label: '← back', next: 'clients' }
+      ]
+    },
+
+    /* ── Services branch ── */
+    services: {
+      msg: 'caboodle design offers: learning strategy and curriculum architecture, behavioral science-informed program design, media production (video, 3D, interactive), UX and graphic design for L&D, AI-assisted content tools and systems.',
+      chips: [
+        { label: 'workshops?',    next: 'workshops' },
+        { label: 'the process',   next: 'process'   },
+        { label: 'contact emily', next: 'contact'   },
+        { label: '← main menu',  next: 'start'     },
+      ]
+    },
+
+    workshops: {
+      msg: 'yes — emily facilitates learning strategy workshops, action mapping diagnostic sessions, and curriculum design sprints. typically half-day to two-day engagements with L&D or HR leadership teams.',
+      chips: [
+        { label: 'the process',   next: 'process'  },
+        { label: 'contact emily', next: 'contact'  },
+        { label: '← back',       next: 'services' },
+      ]
+    },
+
+    process: {
+      msg: 'typically: a discovery conversation scoped to your outcomes → a proposal → design and build. emily works as an embedded partner, not an order-taker. the diagnosis is part of the deliverable.',
+      chips: [
+        { label: 'contact emily', next: 'contact'  },
+        { label: '← back',       next: 'services' },
+      ]
+    },
+
+    /* ── Contact branch ── */
+    contact: {
+      msg: 'emily is open to new projects. reach her at <a class="guide-link" href="mailto:egreen@emilygreendesign.com">egreen@emilygreendesign.com</a> or visit the about page for more context on her background and approach. <a class="guide-link" href="about.html">about emily →</a>',
+      chips: [
+        { label: '← main menu', next: 'start' }
+      ]
+    },
+  };
+
+  /* ── Keyword fallback: map typed terms to nodes ──────────────────────────
+     Checked in order — first match wins.
+     ─────────────────────────────────────────────────────────────────────── */
+  const KEYWORDS = [
+    { terms: ['action map', 'cathy moore'],                                        node: 'actionmap'    },
+    { terms: ['kirkpatrick', 'level 3', 'level 4', 'evaluation'],                  node: 'kirkpatrick'  },
+    { terms: ['workshop', 'sprint', 'facilit'],                                    node: 'workshops'    },
+    { terms: ['process', 'how work', 'engagement', 'scope', 'proposal'],           node: 'process'      },
+    { terms: ['result', 'outcome', 'measur', 'roi', 'impact', 'data'],             node: 'results'      },
+    { terms: ['tool', 'stack', 'software', 'articulate', 'figma', 'remotion'],     node: 'tools'        },
+    { terms: ['location', 'based', 'where', 'grand rapids', 'michigan', 'remote'], node: 'location'     },
+    { terms: ['apple', 'airbnb', 'gitlab', 'intuit', 't-mobile', 'johnson'],       node: 'clients'      },
+    { terms: ['client', 'fortune', 'portfolio', 'case', 'work'],                   node: 'clients'      },
+    { terms: ['approach', 'philosophy', 'method', 'framework', 'behavior'],        node: 'method'       },
+    { terms: ['service', 'offer', 'deliverable', 'what do'],                       node: 'services'     },
+    { terms: ['contact', 'hire', 'email', 'reach', 'available', 'project'],        node: 'contact'      },
+    { terms: ['who', 'emily', 'founder', 'background', 'about'],                   node: 'background'   },
+  ];
+
+  /* ── Helpers ─────────────────────────────────────────────────────────────── */
+  function addMsg(html, role) {
+    const div = document.createElement('div');
+    div.className = 'guide-msg guide-msg--' + role;
+    div.innerHTML = html;
+    msgList.appendChild(div);
+    msgList.scrollTop = msgList.scrollHeight;
+  }
+
+  function renderChips(chipList) {
+    chipZone.innerHTML = '';
+    (chipList || []).forEach(function (chip) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'guide-chip';
+      btn.textContent = chip.label;
+      btn.addEventListener('click', function () { goTo(chip.next); });
+      chipZone.appendChild(btn);
+    });
+  }
+
+  function goTo(nodeId) {
+    const node = NODES[nodeId] || NODES.start;
+    addMsg(node.msg, 'bot');
+    renderChips(node.chips);
+  }
+
+  function handleInput() {
+    const raw = inputEl.value.trim();
+    if (!raw) return;
+    addMsg(raw, 'user');
+    inputEl.value = '';
+    const lower = raw.toLowerCase();
+
+    /* Scan keyword map — first match wins */
+    let matched = null;
+    for (let i = 0; i < KEYWORDS.length; i++) {
+      const kw = KEYWORDS[i];
+      for (let j = 0; j < kw.terms.length; j++) {
+        if (lower.includes(kw.terms[j])) { matched = kw.node; break; }
+      }
+      if (matched) break;
+    }
+
+    setTimeout(function () {
+      if (matched) {
+        goTo(matched);
+      } else {
+        addMsg('i don\'t have a specific answer for that — here\'s what i know best:', 'bot');
+        renderChips(NODES.start.chips);
+      }
+    }, 280);
+  }
+
+  /* ── Open / close ────────────────────────────────────────────────────────── */
+  function openGuide() {
+    isOpen = true;
+    panel.classList.add('is-open');
+    panel.setAttribute('aria-hidden', 'false');
+    trigger.setAttribute('aria-expanded', 'true');
+    trigger.classList.add('is-open');
+    if (!greeted) {
+      greeted = true;
+      /* Slight delay so panel animation finishes before first message pops in */
+      setTimeout(function () { goTo('start'); }, 180);
+    }
+    inputEl.focus();
+  }
+
+  function closeGuide() {
+    isOpen = false;
+    panel.classList.remove('is-open');
+    panel.setAttribute('aria-hidden', 'true');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.classList.remove('is-open');
+  }
+
+  /* ── Wire up events ──────────────────────────────────────────────────────── */
+  trigger.addEventListener('click', function () { isOpen ? closeGuide() : openGuide(); });
+  closeBtn.addEventListener('click', closeGuide);
+  sendBtn.addEventListener('click', handleInput);
+  inputEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') handleInput();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && isOpen) closeGuide();
+  });
+})();
