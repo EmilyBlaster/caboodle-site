@@ -1520,6 +1520,110 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   max-width: 20ch;
 }
 
+/* ——— Per-card preview: two-column body layout ——————————————————————
+   .dossier--withpreview splits the card into a text column (left) and a
+   live-scrolling mini browser window (right). Hides below 960px.
+   ——————————————————————————————————————————————————————————————————— */
+
+.dossier--withpreview .dossier__body {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 2.5rem 3rem;
+  align-items: start;
+}
+
+/* Mini browser window shell */
+.dossier__preview {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow:
+    0 1px 3px rgba(0,0,0,0.05),
+    0 6px 20px rgba(0,0,0,0.08),
+    0 20px 40px rgba(0,0,0,0.05);
+  /* Prevent the preview from triggering card link — handled by
+     pointer-events:none on the iframe itself */
+}
+
+/* Dark macOS-style chrome bar */
+.dossier__preview-chrome {
+  background: #232325;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dossier__preview-dots {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+}
+.dossier__preview-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: block;
+}
+.dossier__preview-dots span:nth-child(1) { background: var(--magenta); }
+.dossier__preview-dots span:nth-child(2) { background: var(--lime); }
+.dossier__preview-dots span:nth-child(3) { background: rgba(255,255,255,0.12); }
+
+.dossier__preview-url {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.32);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Viewport: clips the scaled iframe */
+.dossier__preview-viewport {
+  height: 300px;
+  overflow: hidden;
+  position: relative;
+  background: var(--paper);
+}
+
+/* Gradient fade at bottom so content fades out rather than hard-clips */
+.dossier__preview-viewport::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, rgba(242,239,232,0), var(--paper));
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* The iframe — all geometry set dynamically by JS */
+.dossier__preview-iframe {
+  display: block;
+  border: none;
+  pointer-events: none; /* clicks pass through to the parent <a> */
+  transform-origin: top left;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.dossier__preview-iframe.is-visible {
+  opacity: 1;
+}
+
+/* Stack on medium screens, hide preview on small */
+@media (max-width: 1100px) {
+  .dossier--withpreview .dossier__body {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+@media (max-width: 800px) {
+  .dossier--withpreview .dossier__body { grid-template-columns: 1fr; }
+  .dossier__preview { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dossier__preview-iframe { transition: none; }
+}
+
 /* ——— Accent bar · color identity per card ————————————————————————— */
 
 .dossier--accent-lime::after,

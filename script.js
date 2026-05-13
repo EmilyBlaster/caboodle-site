@@ -377,6 +377,127 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 })();
 
 /* ==========================================================================
+   PER-CARD CASE STUDY PREVIEWS
+   Each dossier card has its own mini browser window showing that specific
+   case study page auto-scrolling. Iframes are lazy-loaded via
+   IntersectionObserver — only fetched when the card enters the viewport.
+   ========================================================================== */
+(function () {
+  const SCROLL_START = 950;  /* px — skip hero/intro, land at interactives */
+  const SCROLL_SPEED = 0.4;  /* px per animation frame (gentle)            */
+  const IFRAME_W     = 1440; /* design width to scale from                 */
+  const VISIBLE_H    = 300;  /* visible viewport height in px              */
+  const PAUSE_START  = 1400; /* ms — show landing zone before scrolling    */
+  const FADE_MS      = 380;  /* ms — loop crossfade                        */
+
+  /* Skip entirely on screens where preview is hidden anyway */
+  if (window.matchMedia('(max-width: 800px)').matches) return;
+
+  document.querySelectorAll('.dossier--withpreview').forEach((card) => {
+    const vp    = card.querySelector('.dossier__preview-viewport');
+    const frame = card.querySelector('.dossier__preview-iframe');
+    if (!frame || !vp) return;
+
+    let scrollY  = SCROLL_START;
+    let raf      = null;
+    let srcSet   = false;
+    let isPaused = true;
+    let onScreen = false;
+
+    /* ── Scale iframe to fill the preview column ────────────────────── */
+    function scaleFrame () {
+      const w     = vp.offsetWidth;
+      const scale = w / IFRAME_W;
+      const h     = Math.ceil(VISIBLE_H / scale);
+      frame.style.width     = IFRAME_W + 'px';
+      frame.style.height    = h + 'px';
+      frame.style.transform = `scale(${scale})`;
+    }
+    scaleFrame();
+    window.addEventListener('resize', scaleFrame, { passive: true });
+
+    /* ── Scroll tick ─────────────────────────────────────────────────── */
+    function tick () {
+      raf = null;
+      if (isPaused || !onScreen) return;
+
+      scrollY += SCROLL_SPEED;
+
+      let maxScroll = 4500;
+      try {
+        const doc = frame.contentDocument;
+        if (doc && doc.documentElement) {
+          maxScroll = doc.documentElement.scrollHeight - parseFloat(frame.style.height);
+        }
+      } catch { /* cross-origin guard */ }
+
+      if (scrollY >= Math.max(maxScroll, 400)) {
+        /* Bottom reached — fade out, reset to start, fade in, repeat */
+        isPaused = true;
+        frame.classList.remove('is-visible');
+        setTimeout(() => {
+          scrollY = SCROLL_START;
+          try { frame.contentWindow.scrollTo(0, SCROLL_START); } catch {}
+          requestAnimationFrame(() => frame.classList.add('is-visible'));
+          setTimeout(() => {
+            isPaused = false;
+            if (onScreen) startScroll();
+          }, PAUSE_START);
+        }, FADE_MS);
+        return;
+      }
+
+      try { frame.contentWindow.scrollTo(0, scrollY); } catch {}
+      raf = requestAnimationFrame(tick);
+    }
+
+    function startScroll () {
+      if (!isPaused && onScreen && !raf) raf = requestAnimationFrame(tick);
+    }
+
+    /* ── Load: jump to artifacts zone, fade in, begin scroll ────────── */
+    frame.addEventListener('load', () => {
+      scaleFrame();
+      scrollY = SCROLL_START;
+      try { frame.contentWindow.scrollTo(0, SCROLL_START); } catch {}
+      requestAnimationFrame(() => frame.classList.add('is-visible'));
+      isPaused = true;
+      setTimeout(() => {
+        isPaused = false;
+        if (onScreen) startScroll();
+      }, PAUSE_START);
+    });
+
+    /* ── IntersectionObserver: lazy-load src + pause when off-screen ── */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        onScreen = e.isIntersecting;
+        if (onScreen) {
+          /* Set src the first time the card comes into view */
+          if (!srcSet) {
+            srcSet = true;
+            frame.src = frame.dataset.src;
+          }
+          if (!isPaused) startScroll();
+        } else {
+          cancelAnimationFrame(raf);
+          raf = null;
+        }
+      });
+    }, { threshold: 0.1 });
+
+    io.observe(card);
+
+    /* ── Reduced motion: show page statically, no scrolling ─────────── */
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      frame.addEventListener('load', () => {
+        frame.classList.add('is-visible');
+      }, { once: true });
+    }
+  });
+})();
+
+/* ==========================================================================
    WORK PEEK — live-scrolling case study preview
    Loads each case study page in an iframe and slowly scrolls it, giving
    visitors a genuine look inside the case files from the homepage.
