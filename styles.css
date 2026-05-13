@@ -2767,6 +2767,19 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .foot__credit { text-align: center; }
 .foot__location { text-align: right; }
 
+@media (max-width: 620px) {
+  /* Base grid rule above overrides the earlier mobile fix due to cascade order.
+     Repeating the override here ensures it wins. */
+  .foot__row--small {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+  .foot__credit,
+  .foot__location { text-align: left; }
+}
+
 @media (max-width: 680px) {
   .foot__tag { text-align: left; }
 }
