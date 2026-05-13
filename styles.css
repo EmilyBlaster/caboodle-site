@@ -1609,6 +1609,33 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   opacity: 1;
 }
 
+/* Compact stat in withpreview context — preview is the visual proof,
+   stat becomes a small inline credential rather than headline-scale */
+.dossier--withpreview .dossier__stat {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--rule);
+  border-top-width: 1px;
+  text-align: left;
+}
+.dossier--withpreview .dossier__statnum {
+  font-size: clamp(1.4rem, 2vw, 1.75rem);
+  line-height: 1;
+  -webkit-text-stroke: 0;
+  color: var(--lime);
+}
+.dossier--withpreview .dossier__statnum i {
+  font-size: 0.7em;
+  color: var(--ink);
+}
+.dossier--withpreview .dossier__statlabel {
+  margin-top: 0;
+  max-width: none;
+  font-size: 0.65rem;
+}
+
 /* Stack on medium screens, hide preview on small */
 @media (max-width: 1100px) {
   .dossier--withpreview .dossier__body {
@@ -1619,6 +1646,18 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 @media (max-width: 800px) {
   .dossier--withpreview .dossier__body { grid-template-columns: 1fr; }
   .dossier__preview { display: none; }
+  /* Restore full stat on mobile since preview is gone */
+  .dossier--withpreview .dossier__stat {
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+  }
+  .dossier--withpreview .dossier__statnum {
+    font-size: clamp(4rem, 7vw, 6rem);
+    -webkit-text-stroke: 1px var(--ink);
+    color: var(--lime);
+  }
+  .dossier--withpreview .dossier__statlabel { margin-top: 0.85rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .dossier__preview-iframe { transition: none; }

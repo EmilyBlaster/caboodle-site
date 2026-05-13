@@ -383,12 +383,27 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
    IntersectionObserver — only fetched when the card enters the viewport.
    ========================================================================== */
 (function () {
-  const SCROLL_START = 950;  /* px — skip hero/intro, land at interactives */
-  const SCROLL_SPEED = 0.4;  /* px per animation frame (gentle)            */
-  const IFRAME_W     = 1440; /* design width to scale from                 */
-  const VISIBLE_H    = 300;  /* visible viewport height in px              */
-  const PAUSE_START  = 1400; /* ms — show landing zone before scrolling    */
-  const FADE_MS      = 380;  /* ms — loop crossfade                        */
+  const SCROLL_SPEED  = 0.4;  /* px per animation frame (gentle)            */
+  const IFRAME_W      = 1440; /* design width to scale from                 */
+  const VISIBLE_H     = 300;  /* visible viewport height in px              */
+  const PAUSE_START   = 1400; /* ms — show landing zone before scrolling    */
+  const FADE_MS       = 380;  /* ms — loop crossfade                        */
+  const FALLBACK_START = 2000; /* px fallback if no artifact section found  */
+
+  /* Query the iframe DOM to find where the actual artifact demos start.
+     Checks several selectors used across different case study pages. */
+  function findArtifactOffset (iframeDoc) {
+    const target = iframeDoc.querySelector(
+      '.demolinks, .designfiles, .glproject, .caseshowcase, [data-log*="interactive"]'
+    );
+    if (!target) return FALLBACK_START;
+    /* Walk offsetParent chain to get absolute Y from top of document */
+    let top = 0;
+    let el  = target;
+    while (el) { top += el.offsetTop; el = el.offsetParent; }
+    /* Land 80px above the section so the heading is visible in context */
+    return Math.max(top - 80, 0);
+  }
 
   /* Skip entirely on screens where preview is hidden anyway */
   if (window.matchMedia('(max-width: 800px)').matches) return;
@@ -398,11 +413,12 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     const frame = card.querySelector('.dossier__preview-iframe');
     if (!frame || !vp) return;
 
-    let scrollY  = SCROLL_START;
-    let raf      = null;
-    let srcSet   = false;
-    let isPaused = true;
-    let onScreen = false;
+    let scrollStart = FALLBACK_START; /* refined on load via DOM query */
+    let scrollY     = FALLBACK_START;
+    let raf         = null;
+    let srcSet      = false;
+    let isPaused    = true;
+    let onScreen    = false;
 
     /* ── Scale iframe to fill the preview column ────────────────────── */
     function scaleFrame () {
@@ -436,8 +452,8 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
         isPaused = true;
         frame.classList.remove('is-visible');
         setTimeout(() => {
-          scrollY = SCROLL_START;
-          try { frame.contentWindow.scrollTo(0, SCROLL_START); } catch {}
+          scrollY = scrollStart;
+          try { frame.contentWindow.scrollTo(0, scrollStart); } catch {}
           requestAnimationFrame(() => frame.classList.add('is-visible'));
           setTimeout(() => {
             isPaused = false;
@@ -455,11 +471,15 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       if (!isPaused && onScreen && !raf) raf = requestAnimationFrame(tick);
     }
 
-    /* ── Load: jump to artifacts zone, fade in, begin scroll ────────── */
+    /* ── Load: find artifacts in DOM, jump there, fade in, begin scroll  */
     frame.addEventListener('load', () => {
       scaleFrame();
-      scrollY = SCROLL_START;
-      try { frame.contentWindow.scrollTo(0, SCROLL_START); } catch {}
+      /* Query the iframe's own DOM to find where the demos actually start */
+      try {
+        scrollStart = findArtifactOffset(frame.contentDocument);
+      } catch { scrollStart = FALLBACK_START; }
+      scrollY = scrollStart;
+      try { frame.contentWindow.scrollTo(0, scrollStart); } catch {}
       requestAnimationFrame(() => frame.classList.add('is-visible'));
       isPaused = true;
       setTimeout(() => {
