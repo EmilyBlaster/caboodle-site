@@ -7016,13 +7016,13 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.6rem 1rem 0.6rem 0.8rem;
+  padding: 0.65rem 1.1rem 0.65rem 0.9rem;
   background: var(--lime);
   color: var(--ink);
   border: none;
   border-radius: 100px;
   font-family: var(--mono);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
@@ -7044,7 +7044,7 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 
 /* ── Chat panel ──────────────────────────────────────────────────────────── */
 .guide-panel {
-  width: 340px;
+  width: 380px;
   border-radius: 12px;
   overflow: hidden;
   box-shadow:
@@ -7081,7 +7081,7 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   align-items: center;
   gap: 0.5rem;
   font-family: var(--mono);
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #c8ff35;
@@ -7117,17 +7117,17 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   padding: 1rem 1rem 0.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.65rem;
   background: var(--paper);
   min-height: 120px;
-  max-height: 240px;
+  max-height: 280px;
   scroll-behavior: smooth;
 }
 .guide-msg {
   max-width: 90%;
-  padding: 0.6rem 0.85rem;
+  padding: 0.7rem 1rem;
   border-radius: 10px;
-  font-size: 0.875rem;
+  font-size: 0.95rem;
   line-height: 1.55;
   animation: guide-pop 0.2s ease;
 }
@@ -7167,13 +7167,13 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .guide-chip {
   display: inline-flex;
   align-items: center;
-  padding: 0.28rem 0.7rem;
+  padding: 0.32rem 0.8rem;
   border-radius: 100px;
   border: 1px solid rgba(150, 230, 80, 0.4);
   background: transparent;
   color: var(--ink);
   font-family: var(--mono);
-  font-size: 0.63rem;
+  font-size: 0.7rem;
   letter-spacing: 0.07em;
   text-transform: lowercase;
   cursor: pointer;
@@ -7197,9 +7197,9 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   flex: 1;
   border: none;
   outline: none;
-  padding: 0.72rem 0.9rem;
+  padding: 0.78rem 1rem;
   font-family: var(--sans);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--ink);
   background: transparent;
 }
