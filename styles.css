@@ -1999,10 +1999,11 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .labs__guide svg { color: var(--magenta); flex-shrink: 0; }
 .labs__guide-sep { color: var(--rule); }
 
-/* Side-by-side layout: cards left, sticky preview right */
+/* Side-by-side layout: cards left, sticky preview right.
+   Preview is the wider column — the work is the point, the list is nav. */
 .labs__layout {
   display: grid;
-  grid-template-columns: 5fr 4fr;
+  grid-template-columns: 4fr 5fr;
   gap: 2.5rem;
   align-items: start;
 }
@@ -2081,7 +2082,7 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 
 .labs-stage__viewport {
   position: relative;
-  height: 460px;
+  height: clamp(400px, 65vh, 560px);
   overflow: hidden;
   background: var(--paper);
   opacity: 0;
