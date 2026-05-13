@@ -83,12 +83,15 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     printf "\n"
     printf "${BOLD}Deploy now?${NC} (y/N) "
 
-    # Read from the terminal (not stdin, which git is using)
-    exec < /dev/tty
-    read -r answer
+    # Read from the terminal (not stdin, which git is using).
+    # Note: scope the redirect to the read alone — using `exec < /dev/tty`
+    # globally re-points the while-loop's read to the terminal too, which
+    # causes the loop to hang waiting for more input after the answer.
+    read -r answer < /dev/tty
     case "$answer" in
       [yY]|[yY][eE][sS])
         printf "${GREEN}→ Deploying.${NC}\n\n"
+        exit 0
         ;;
       *)
         printf "${YELLOW}→ Push cancelled. No deploy.${NC}\n\n"
