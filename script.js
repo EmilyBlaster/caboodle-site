@@ -911,62 +911,63 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   const NODES = {
 
     start: {
-      msg: 'field guide online — ask me anything about emily or caboodle design.',
+      msg: 'field guide online. ask me anything — work stuff, methodology, or the important things like her coffee order.',
       chips: [
         { label: 'emily\'s background', next: 'background' },
         { label: 'clients + work',      next: 'clients'    },
         { label: 'methodology',         next: 'method'     },
         { label: 'services',            next: 'services'   },
         { label: 'contact + hire',      next: 'contact'    },
+        { label: 'fun stuff',           next: 'fun'        },
       ]
     },
 
     /* ── Background branch ── */
     background: {
-      msg: 'emily green is the founder of caboodle design — a learning design consultancy for fortune 500 companies. she works where instructional design, behavioral science, media production, and UX intersect. ai is a field tool for that work, not a shortcut. <a class="guide-link" href="about.html">read more →</a>',
+      msg: 'emily green is the founder of caboodle design. she designs learning that actually changes what people do — for apple, airbnb, gitlab, intuit, t-mobile, and j&j. behavioral science, instructional design, media production, and UX all in one place. ai is a field tool here, not a shortcut. <a class="guide-link" href="about.html">more about emily →</a>',
       chips: [
-        { label: 'her approach',   next: 'approach'   },
-        { label: 'where based?',   next: 'location'   },
-        { label: 'tools + stack',  next: 'tools'      },
-        { label: '← main menu',   next: 'start'      },
+        { label: 'her approach',  next: 'approach'  },
+        { label: 'where based?',  next: 'location'  },
+        { label: 'tools + stack', next: 'tools'     },
+        { label: '← main menu',  next: 'start'     },
       ]
     },
 
     approach: {
-      msg: 'emily approaches learning design anthropologically — studying how humans actually change, not how training assumes they should. her POV: behavior change over checkbox training. the thinking is the job.',
+      msg: 'she treats learning design like anthropology — show up, study how things actually work, then design for how people actually change. not how training assumes they should. she\'s pretty allergic to training that exists just to say training happened.',
       chips: [
-        { label: 'action mapping',    next: 'actionmap'    },
-        { label: 'kirkpatrick model', next: 'kirkpatrick'  },
-        { label: '← back',           next: 'background'   },
+        { label: 'action mapping',    next: 'actionmap'   },
+        { label: 'kirkpatrick model', next: 'kirkpatrick' },
+        { label: '← back',           next: 'background'  },
       ]
     },
 
     actionmap: {
-      msg: 'action mapping starts with measurable business goals, identifies the behaviors that drive those goals, then designs practice before content. developed by cathy moore — emily applies it as a core diagnostic: if a behavior gap isn\'t causing the problem, training isn\'t the answer.',
+      msg: 'action mapping starts with the business goal, works backward to the behaviors driving it, then designs practice opportunities before content. cathy moore\'s framework. emily\'s version: if a knowledge gap isn\'t causing the problem, training isn\'t the answer. she\'ll say this in the first conversation.',
       chips: [
-        { label: 'kirkpatrick model', next: 'kirkpatrick'  },
-        { label: 'see the work',      next: 'clients'      },
-        { label: '← back',           next: 'method'       },
+        { label: 'kirkpatrick model', next: 'kirkpatrick' },
+        { label: 'see the work',      next: 'clients'     },
+        { label: '← back',           next: 'method'      },
       ]
     },
 
     kirkpatrick: {
-      msg: 'the kirkpatrick model evaluates training at four levels: reaction, learning, behavior, results. most L&D stops at 1 and 2. emily designs to levels 3 and 4 — actual on-the-job behavior change and documented business outcomes.',
+      msg: 'four levels: reaction, learning, behavior, results. most L&D stops at 1 and 2 — did people like it, did they pass the quiz. emily designs to 3 and 4 — did behavior actually change on the job? can you measure it? that\'s the real bar.',
       chips: [
-        { label: 'action mapping',  next: 'actionmap' },
-        { label: '← back',         next: 'method'    },
+        { label: 'action mapping', next: 'actionmap' },
+        { label: '← back',        next: 'method'    },
       ]
     },
 
     location: {
-      msg: 'grand rapids, michigan — but emily works with clients globally. apple, airbnb, gitlab, and others are all remote engagements.',
+      msg: 'grand rapids, michigan. but she works remotely with clients everywhere — apple, airbnb, gitlab are all remote engagements. the zip code doesn\'t limit the work.',
       chips: [
         { label: '← back', next: 'background' }
       ]
     },
 
     tools: {
-      msg: 'articulate rise + storyline for e-learning, figma for UX and design, adobe creative suite, three.js for 3D interactive training, remotion for branded video components, and claude code for AI-assisted prototyping. vibe coding is a legitimate field tool.',
+      msg: 'articulate rise + storyline for e-learning, figma for design, adobe creative suite, three.js for 3D interactive training, remotion for branded video, claude code for AI prototyping. this site was built with claude code. she calls vibe coding a legitimate field tool and means it.',
       chips: [
         { label: '← back', next: 'background' }
       ]
@@ -974,34 +975,34 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
     /* ── Methodology branch ── */
     method: {
-      msg: 'emily\'s core frameworks are action mapping and the kirkpatrick model. applied anthropologically: she studies what\'s actually causing the behavior gap before designing anything.',
+      msg: 'action mapping and kirkpatrick — applied anthropologically. she studies what\'s actually causing the behavior gap before designing anything. spoiler: it\'s usually not a content problem.',
       chips: [
-        { label: 'action mapping',    next: 'actionmap'    },
-        { label: 'kirkpatrick model', next: 'kirkpatrick'  },
-        { label: '← main menu',      next: 'start'        },
+        { label: 'action mapping',    next: 'actionmap'   },
+        { label: 'kirkpatrick model', next: 'kirkpatrick' },
+        { label: '← main menu',      next: 'start'       },
       ]
     },
 
     /* ── Clients branch ── */
     clients: {
-      msg: 'emily\'s clients include apple, airbnb, gitlab, johnson & johnson, t-mobile, and intuit. each engagement is scoped to measurable behavior change, not checkbox completion. <a class="guide-link" href="work.html">see the case files →</a>',
+      msg: 'apple, airbnb, gitlab, johnson & johnson, t-mobile, intuit. each engagement is scoped to actual behavior change — not "we need a course." she\'ll push back if the problem doesn\'t call for training. <a class="guide-link" href="work.html">see the case files →</a>',
       chips: [
-        { label: 'kind of work', next: 'worktype'  },
-        { label: 'results',      next: 'results'   },
-        { label: '← main menu', next: 'start'     },
+        { label: 'kind of work', next: 'worktype' },
+        { label: 'results',      next: 'results'  },
+        { label: '← main menu', next: 'start'    },
       ]
     },
 
     worktype: {
-      msg: 'learning programs, scenario-based courses, interactive simulations, AI-powered training tools, curriculum frameworks, microlearning systems, manager development programs, and instructional media production.',
+      msg: 'learning programs, scenario-based courses, interactive simulations, AI-powered training tools, curriculum frameworks, microlearning systems, manager development programs, instructional media production. depends on what\'s actually causing the problem.',
       chips: [
-        { label: 'results',   next: 'results'  },
-        { label: '← back',   next: 'clients'  },
+        { label: 'results',  next: 'results' },
+        { label: '← back',  next: 'clients' },
       ]
     },
 
     results: {
-      msg: 'emily designs for measurable outcomes: reduced onboarding time, improved manager conversation quality, faster skill transfer, documented behavior change. case studies show specifics where clients permit. <a class="guide-link" href="work.html">read case files →</a>',
+      msg: 'reduced onboarding time, better manager conversation quality, faster skill transfer, documented behavior change. she designs to kirkpatrick 3 and 4, so results you can actually point to. <a class="guide-link" href="work.html">read the case files →</a>',
       chips: [
         { label: '← back', next: 'clients' }
       ]
@@ -1009,7 +1010,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
     /* ── Services branch ── */
     services: {
-      msg: 'caboodle design offers: learning strategy and curriculum architecture, behavioral science-informed program design, media production (video, 3D, interactive), UX and graphic design for L&D, AI-assisted content tools and systems.',
+      msg: 'learning strategy + curriculum architecture, behavioral science-informed program design, media production (video, 3D, interactive), UX and graphic design for L&D, AI-assisted content tools. she works as an embedded partner, not an order-taker.',
       chips: [
         { label: 'workshops?',    next: 'workshops' },
         { label: 'the process',   next: 'process'   },
@@ -1019,7 +1020,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     },
 
     workshops: {
-      msg: 'yes — emily facilitates learning strategy workshops, action mapping diagnostic sessions, and curriculum design sprints. typically half-day to two-day engagements with L&D or HR leadership teams.',
+      msg: 'yes. learning strategy workshops, action mapping diagnostic sessions, curriculum design sprints. usually half-day to two-day with L&D or HR leadership. she\'s good in a room.',
       chips: [
         { label: 'the process',   next: 'process'  },
         { label: 'contact emily', next: 'contact'  },
@@ -1028,7 +1029,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     },
 
     process: {
-      msg: 'typically: a discovery conversation scoped to your outcomes → a proposal → design and build. emily works as an embedded partner, not an order-taker. the diagnosis is part of the deliverable.',
+      msg: 'discovery conversation → proposal scoped to your actual outcomes → design and build. she\'s not going to quote you a course before she understands the problem. the diagnosis is part of the deliverable.',
       chips: [
         { label: 'contact emily', next: 'contact'  },
         { label: '← back',       next: 'services' },
@@ -1037,9 +1038,71 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
     /* ── Contact branch ── */
     contact: {
-      msg: 'emily is open to new projects. reach her at <a class="guide-link" href="mailto:egreen@emilygreendesign.com">egreen@emilygreendesign.com</a> or visit the about page for more context on her background and approach. <a class="guide-link" href="about.html">about emily →</a>',
+      msg: 'open to new projects. best way in: <a class="guide-link" href="mailto:egreen@emilygreendesign.com">egreen@emilygreendesign.com</a>. grand rapids-based, works globally. <a class="guide-link" href="about.html">about emily →</a>',
       chips: [
         { label: '← main menu', next: 'start' }
+      ]
+    },
+
+    /* ── Fun stuff branch ── */
+    fun: {
+      msg: 'okay. the important stuff.',
+      chips: [
+        { label: 'favorite food?',       next: 'food'     },
+        { label: 'coffee order?',        next: 'coffee'   },
+        { label: 'if not L&D?',          next: 'alter'    },
+        { label: 'industry hot take?',   next: 'hottake'  },
+        { label: 'what to watch?',       next: 'watch'    },
+        { label: 'best part of the job', next: 'loves'    },
+        { label: '← main menu',         next: 'start'    },
+      ]
+    },
+
+    food: {
+      msg: 'nachos. no notes.',
+      chips: [
+        { label: 'coffee order?', next: 'coffee' },
+        { label: '← fun stuff',  next: 'fun'    },
+      ]
+    },
+
+    coffee: {
+      msg: 'venti decaf cold brew, soy milk, 2 pumps sugar-free caramel. yes, the whole order. she will not apologize.',
+      chips: [
+        { label: 'favorite food?', next: 'food' },
+        { label: '← fun stuff',   next: 'fun'  },
+      ]
+    },
+
+    alter: {
+      msg: 'reporter. she\'s basically doing that anyway — shows up, studies how things actually work, then translates it for the people who need to act on it. the job descriptions aren\'t that different.',
+      chips: [
+        { label: 'industry hot take?', next: 'hottake' },
+        { label: '← fun stuff',       next: 'fun'     },
+      ]
+    },
+
+    hottake: {
+      msg: 'there aren\'t enough opportunities to learn by doing in corporate america. we keep building content when we should be building practice. the industry knows this. we still ship slide decks.',
+      chips: [
+        { label: 'what to watch?', next: 'watch' },
+        { label: '← fun stuff',   next: 'fun'   },
+      ]
+    },
+
+    watch: {
+      msg: 'veep. completely unrelated to work. just go watch it.',
+      chips: [
+        { label: 'best part of the job', next: 'loves' },
+        { label: '← fun stuff',         next: 'fun'   },
+      ]
+    },
+
+    loves: {
+      msg: 'empowering people. when the right training actually changes what someone can do — when a manager has a conversation they couldn\'t have before, or a new hire gets up to speed in half the time — that\'s the whole point.',
+      chips: [
+        { label: 'contact emily', next: 'contact' },
+        { label: '← fun stuff',  next: 'fun'     },
       ]
     },
   };
@@ -1048,6 +1111,15 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
      Checked in order — first match wins.
      ─────────────────────────────────────────────────────────────────────── */
   const KEYWORDS = [
+    /* Fun stuff — check first so "food" doesn't match "methodology" etc. */
+    { terms: ['nacho', 'food', 'eat', 'favorite food', 'hungry'],                  node: 'food'         },
+    { terms: ['coffee', 'drink', 'cold brew', 'caramel', 'starbucks', 'order'],    node: 'coffee'       },
+    { terms: ['reporter', 'journalist', 'other career', 'if not', 'alternate'],    node: 'alter'        },
+    { terms: ['hot take', 'opinion', 'controversial', 'unpopular'],                node: 'hottake'      },
+    { terms: ['veep', 'watch', 'show', 'netflix', 'recommend', 'tv', 'binge'],     node: 'watch'        },
+    { terms: ['love', 'favorite part', 'best part', 'empower', 'joy'],             node: 'loves'        },
+    { terms: ['fun', 'personal', 'outside work', 'hobby', 'personality'],          node: 'fun'          },
+    /* Work stuff */
     { terms: ['action map', 'cathy moore'],                                        node: 'actionmap'    },
     { terms: ['kirkpatrick', 'level 3', 'level 4', 'evaluation'],                  node: 'kirkpatrick'  },
     { terms: ['workshop', 'sprint', 'facilit'],                                    node: 'workshops'    },
