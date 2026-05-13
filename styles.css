@@ -1525,11 +1525,20 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
    live-scrolling mini browser window (right). Hides below 960px.
    ——————————————————————————————————————————————————————————————————— */
 
+/* Default: text left (2fr), preview right (3fr) */
 .dossier--withpreview .dossier__body {
   display: grid;
   grid-template-columns: 2fr 3fr;
   gap: 2.5rem 3rem;
   align-items: start;
+}
+
+/* Even cards: flip — preview left (3fr), text right (2fr) */
+.dossier--withpreview:nth-child(even) .dossier__body {
+  grid-template-columns: 3fr 2fr;
+}
+.dossier--withpreview:nth-child(even) .dossier__preview {
+  order: -1;
 }
 
 /* Mini browser window shell */
