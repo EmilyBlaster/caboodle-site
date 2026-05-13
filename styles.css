@@ -1659,12 +1659,15 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   .dossier--withpreview:nth-child(even) .dossier__body {
     grid-template-columns: 1fr;
   }
-  /* Reset even-card preview order so nothing leaves a ghost column */
+  /* Reset even-card preview order — stacked layout, order doesn't matter */
   .dossier--withpreview:nth-child(even) .dossier__preview {
     order: 0;
   }
-  .dossier__preview { display: none; }
-  /* Restore full-scale stat — preview is gone, stat is the visual anchor */
+  /* Shorter viewport on tablet — content scales to ~50% so still readable */
+  .dossier__preview-viewport {
+    height: 200px;
+  }
+  /* Restore full-scale stat */
   .dossier--withpreview .dossier__stat {
     flex-direction: column;
     align-items: flex-start;
@@ -1676,6 +1679,10 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
     color: var(--lime);
   }
   .dossier--withpreview .dossier__statlabel { margin-top: 0.85rem; }
+}
+@media (max-width: 600px) {
+  /* Phone: scale drops to ~27% — preview is a postage stamp, not worth the space */
+  .dossier__preview { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .dossier__preview-iframe { transition: none; }
