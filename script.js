@@ -702,3 +702,150 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     return; /* skip all scroll logic */
   }
 })();
+
+/* ==========================================================================
+   LABS STAGE — hover-to-switch live preview
+   One shared large preview window above the labs grid.
+   Hover any .lab[data-lab-src] card → stage crossfades to that experiment.
+   Auto-scrolls slowly while visible; pauses on prefers-reduced-motion.
+   ========================================================================== */
+(function labsStage() {
+  'use strict';
+
+  const stage    = document.querySelector('.labs-stage');
+  if (!stage) return;
+
+  const viewport  = stage.querySelector('.labs-stage__viewport');
+  const iframe    = stage.querySelector('.labs-stage__iframe');
+  const labelEl   = stage.querySelector('.labs-stage__label');
+  const urlEl     = stage.querySelector('.labs-stage__url');
+  const labs      = Array.from(document.querySelectorAll('.lab[data-lab-src]'));
+  if (!labs.length) return;
+
+  const SCROLL_SPEED  = 0.35;   // px per rAF tick (~21px/s at 60fps)
+  const PAUSE_INIT    = 1400;   // ms before first auto-scroll begins
+  const SWITCH_PAUSE  = 900;    // ms pause after switching before scroll resumes
+
+  let raf         = null;
+  let scrollY     = 0;
+  let isPaused    = false;
+  let onScreen    = false;
+  let currentSrc  = '';
+
+  /* Scale iframe to fill container width at 1440px design width */
+  function scaleFrame() {
+    const scale = viewport.offsetWidth / 1440;
+    iframe.style.transform = `scale(${scale})`;
+    iframe.style.width     = '1440px';
+    iframe.style.height    = Math.ceil(viewport.offsetHeight / scale) + 'px';
+  }
+
+  function startScroll() {
+    if (raf) return;
+    (function tick() {
+      if (!isPaused) {
+        scrollY += SCROLL_SPEED;
+        try {
+          const doc = iframe.contentDocument;
+          const max = doc.documentElement.scrollHeight - doc.documentElement.clientHeight;
+          if (scrollY >= max - 20) { scrollY = 0; }
+          iframe.contentWindow.scrollTo(0, scrollY);
+        } catch (_) { /* cross-origin or unloaded — silent */ }
+      }
+      raf = requestAnimationFrame(tick);
+    })();
+  }
+
+  function stopScroll() {
+    cancelAnimationFrame(raf);
+    raf = null;
+  }
+
+  function switchTo(src, name) {
+    if (src === currentSrc) return;
+    currentSrc = src;
+    scrollY    = 0;
+
+    /* Update chrome text immediately */
+    labelEl.textContent = name;
+    urlEl.textContent   = src;
+
+    /* Crossfade: fade iframe out, swap src, fade back in on load */
+    stopScroll();
+    iframe.classList.add('is-switching');
+
+    setTimeout(function () {
+      iframe.src = src;
+    }, 320); /* wait for opacity transition to complete */
+
+    iframe.onload = function () {
+      scaleFrame();
+      iframe.classList.remove('is-switching');
+      viewport.classList.add('is-loaded');
+      isPaused = true;
+      setTimeout(function () {
+        isPaused = false;
+        if (onScreen) startScroll();
+      }, SWITCH_PAUSE);
+    };
+  }
+
+  /* ── Reduced-motion: load static, no scrolling ── */
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    iframe.src = labs[0].dataset.labSrc;
+    iframe.onload = function () {
+      scaleFrame();
+      viewport.classList.add('is-loaded');
+    };
+    labs.forEach(function (lab) {
+      lab.addEventListener('mouseenter', function () {
+        stage.classList.add('has-hovered');
+        if (lab.dataset.labSrc !== currentSrc) {
+          currentSrc = lab.dataset.labSrc;
+          labelEl.textContent = lab.dataset.labName;
+          urlEl.textContent   = lab.dataset.labSrc;
+          iframe.src = lab.dataset.labSrc;
+          iframe.onload = function () { scaleFrame(); };
+        }
+      });
+    });
+    return;
+  }
+
+  /* ── Init: load first lab ── */
+  scaleFrame();
+  window.addEventListener('resize', scaleFrame);
+
+  currentSrc          = labs[0].dataset.labSrc;
+  labelEl.textContent = labs[0].dataset.labName;
+  urlEl.textContent   = labs[0].dataset.labSrc;
+  iframe.src          = currentSrc;
+
+  iframe.onload = function () {
+    scaleFrame();
+    viewport.classList.add('is-loaded');
+    isPaused = true;
+    setTimeout(function () {
+      isPaused = false;
+      if (onScreen) startScroll();
+    }, PAUSE_INIT);
+  };
+
+  /* ── Hover: switch lab ── */
+  labs.forEach(function (lab) {
+    lab.addEventListener('mouseenter', function () {
+      stage.classList.add('has-hovered');
+      switchTo(lab.dataset.labSrc, lab.dataset.labName);
+    });
+  });
+
+  /* ── IntersectionObserver: pause when off-screen ── */
+  const io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      onScreen = e.isIntersecting;
+      if (onScreen && !isPaused) startScroll();
+      else if (!onScreen) stopScroll();
+    });
+  }, { threshold: 0.1 });
+  io.observe(stage);
+})();
