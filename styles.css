@@ -1982,7 +1982,7 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .lab__cta--wip { color: var(--ink-2); }
 .lab:hover .lab__cta--wip { letter-spacing: 0.1em; }
 
-/* Instruction strip — sits between the header and the labs stage */
+/* Instruction strip — sits between the header and the layout */
 .labs__guide {
   display: flex;
   flex-wrap: wrap;
@@ -1999,18 +1999,38 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .labs__guide svg { color: var(--magenta); flex-shrink: 0; }
 .labs__guide-sep { color: var(--rule); }
 
+/* Side-by-side layout: cards left, sticky preview right */
+.labs__layout {
+  display: grid;
+  grid-template-columns: 5fr 4fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* Single-column card stack in the left rail */
+.labs__layout .labs__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.labs__layout .lab,
+.labs__layout .lab:nth-child(n) {
+  grid-column: unset;
+}
+
 /* -----------------------------------------------------------------------
-   Labs Stage: single shared live-preview window above the grid
-   Hover a lab card below → the stage switches to that experiment
+   Labs Stage: live-preview panel, pinned to the right column
    ----------------------------------------------------------------------- */
 .labs-stage {
-  margin-bottom: 2.5rem;
   border-radius: 10px;
   overflow: hidden;
   box-shadow:
     0 1px 3px rgba(0,0,0,.04),
     0 8px 28px rgba(0,0,0,.10),
     0 32px 64px rgba(0,0,0,.07);
+  /* Sticky: stays level with whichever card is being hovered */
+  position: sticky;
+  top: 5rem; /* clears the fixed nav (~72px) with a little breathing room */
 }
 
 .labs-stage__chrome {
@@ -2114,12 +2134,25 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 /* Fade hint once any lab is hovered (class set by JS) */
 .labs-stage.has-hovered .labs-stage__hint { opacity: 0; }
 
-@media (max-width: 920px) {
+@media (max-width: 960px) {
   .labs__head { grid-template-columns: 1fr; }
   .labs__dek { grid-column: 1; }
-  .labs__grid { grid-template-columns: 1fr; }
-  .lab, .lab:nth-child(n) { grid-column: 1 !important; }
-  .labs-stage { display: none; } /* too small to be useful on mobile */
+  /* Stack layout: preview above, cards below */
+  .labs__layout {
+    grid-template-columns: 1fr;
+  }
+  /* Restore original grid for single-column stack */
+  .labs__layout .labs__grid {
+    flex-direction: column;
+  }
+  /* Stage goes full-width, loses sticky (no need — it's above cards now) */
+  .labs-stage {
+    position: static;
+    order: -1; /* render above cards in the stacked layout */
+  }
+}
+@media (max-width: 680px) {
+  .labs-stage { display: none; } /* viewport too narrow for a useful preview */
 }
 
 /* ==========================================================================

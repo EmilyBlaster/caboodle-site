@@ -593,96 +593,102 @@
     click any card to open the full prototype
   </p>
 
-  <!-- Labs Stage: shared live preview, switches on card hover -->
-  <div class="labs-stage">
-    <div class="labs-stage__chrome">
-      <div class="labs-stage__dots" aria-hidden="true">
-        <span></span><span></span><span></span>
+  <!-- Side-by-side layout: cards left, live preview pinned right -->
+  <div class="labs__layout">
+
+    <!-- Left: scrollable card list -->
+    <div class="labs__grid">
+      <a class="lab" href="labs/stakeholder-review.html"
+         data-lab-src="labs/stakeholder-review.html"
+         data-lab-name="stakeholder review system">
+        <span class="lab__tag">ai prototype · workflow</span>
+        <h3>inline stakeholder review system</h3>
+        <p>
+          A feedback workspace built directly into a client landing
+          page. Pins, color-coded reviewers, a slide-out panel grouping
+          comments by section with resolve tracking. No email threads.
+          No annotated screenshots.
+        </p>
+        <span class="lab__tools">claude code · vibe coding</span>
+        <span class="lab__cta">view experiment →</span>
+      </a>
+
+      <a class="lab" href="labs/emotion-feedback.html"
+         data-lab-src="labs/emotion-feedback.html"
+         data-lab-name="emotion-aware feedback system">
+        <span class="lab__tag">ai prototype · feedback design</span>
+        <h3>emotion-aware feedback system</h3>
+        <p>
+          Exploring how learner emotional state can inform the type,
+          tone, and timing of feedback. Self-reported check-ins plus
+          adaptive response patterns, so feedback lands, not just lands
+          accurately.
+        </p>
+        <span class="lab__tools">adaptive ux · emotion detection</span>
+        <span class="lab__cta">view experiment →</span>
+      </a>
+
+      <a class="lab" href="labs/content-ops-dashboard.html"
+         data-lab-src="labs/content-ops-dashboard.html"
+         data-lab-name="content ops dashboard">
+        <span class="lab__tag">ai prototype · systems thinking</span>
+        <h3>content ops dashboard</h3>
+        <p>
+          An entire content operations stack automated with Claude Code.
+          Daily briefs, Canva carousel generation, research pipelines,
+          analytics reports. Every piece maps to a problem learning
+          designers face daily.
+        </p>
+        <span class="lab__tools">claude code · mcp · canva</span>
+        <span class="lab__cta">view experiment →</span>
+      </a>
+
+      <a class="lab" href="labs/video-automation.html"
+         data-lab-src="labs/video-automation.html"
+         data-lab-name="programmatic video automation">
+        <span class="lab__tag">ai prototype · programmatic media</span>
+        <h3>programmatic video &amp; content automation</h3>
+        <p>
+          Remotion templates plus MCP-driven Canva generation. Template
+          to published content with no manual design work. Testing
+          whether programmatic media can replace one-off production for
+          L&amp;D teams.
+        </p>
+        <span class="lab__tools">remotion · mcp · canva</span>
+        <span class="lab__cta">view experiment →</span>
+      </a>
+
+      <a class="lab" href="labs/microlearning.html"
+         data-lab-src="labs/microlearning.html"
+         data-lab-name="context-aware microlearning">
+        <span class="lab__tag">ai prototype · microlearning</span>
+        <h3>context-aware microlearning</h3>
+        <p>
+          Pick a work scenario, receive a contextually relevant
+          micro-intervention. The right nudge at the right moment, not
+          just shorter content. The 2026 evolution of microlearning.
+        </p>
+        <span class="lab__tools">moment-of-need · behavioral nudges</span>
+        <span class="lab__cta">view experiment →</span>
+      </a>
+    </div>
+
+    <!-- Right: live preview, sticky so it stays level with any hovered card -->
+    <div class="labs-stage">
+      <div class="labs-stage__chrome">
+        <div class="labs-stage__dots" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <span class="labs-stage__label">stakeholder review system</span>
+        <span class="labs-stage__url">labs/stakeholder-review.html</span>
       </div>
-      <span class="labs-stage__label">stakeholder review system</span>
-      <span class="labs-stage__url">labs/stakeholder-review.html</span>
+      <div class="labs-stage__viewport">
+        <iframe class="labs-stage__iframe" tabindex="-1" aria-hidden="true" title="Lab experiment preview"></iframe>
+        <div class="labs-stage__fade" aria-hidden="true"></div>
+        <span class="labs-stage__hint" aria-hidden="true">hover a card to switch</span>
+      </div>
     </div>
-    <div class="labs-stage__viewport">
-      <iframe class="labs-stage__iframe" tabindex="-1" aria-hidden="true" title="Lab experiment preview"></iframe>
-      <div class="labs-stage__fade" aria-hidden="true"></div>
-      <span class="labs-stage__hint" aria-hidden="true">hover a card below to switch</span>
-    </div>
-  </div>
 
-  <div class="labs__grid">
-    <a class="lab" href="labs/stakeholder-review.html"
-       data-lab-src="labs/stakeholder-review.html"
-       data-lab-name="stakeholder review system">
-      <span class="lab__tag">ai prototype · workflow</span>
-      <h3>inline stakeholder review system</h3>
-      <p>
-        A feedback workspace built directly into a client landing
-        page. Pins, color-coded reviewers, a slide-out panel grouping
-        comments by section with resolve tracking. No email threads.
-        No annotated screenshots.
-      </p>
-      <span class="lab__tools">claude code · vibe coding</span>
-      <span class="lab__cta">view experiment →</span>
-    </a>
-
-    <a class="lab" href="labs/emotion-feedback.html"
-       data-lab-src="labs/emotion-feedback.html"
-       data-lab-name="emotion-aware feedback system">
-      <span class="lab__tag">ai prototype · feedback design</span>
-      <h3>emotion-aware feedback system</h3>
-      <p>
-        Exploring how learner emotional state can inform the type,
-        tone, and timing of feedback. Self-reported check-ins plus
-        adaptive response patterns, so feedback lands, not just lands
-        accurately.
-      </p>
-      <span class="lab__tools">adaptive ux · emotion detection</span>
-      <span class="lab__cta">view experiment →</span>
-    </a>
-
-    <a class="lab" href="labs/content-ops-dashboard.html"
-       data-lab-src="labs/content-ops-dashboard.html"
-       data-lab-name="content ops dashboard">
-      <span class="lab__tag">ai prototype · systems thinking</span>
-      <h3>content ops dashboard</h3>
-      <p>
-        An entire content operations stack automated with Claude Code.
-        Daily briefs, Canva carousel generation, research pipelines,
-        analytics reports. Every piece maps to a problem learning
-        designers face daily.
-      </p>
-      <span class="lab__tools">claude code · mcp · canva</span>
-      <span class="lab__cta">view experiment →</span>
-    </a>
-
-    <a class="lab" href="labs/video-automation.html"
-       data-lab-src="labs/video-automation.html"
-       data-lab-name="programmatic video automation">
-      <span class="lab__tag">ai prototype · programmatic media</span>
-      <h3>programmatic video &amp; content automation</h3>
-      <p>
-        Remotion templates plus MCP-driven Canva generation. Template
-        to published content with no manual design work. Testing
-        whether programmatic media can replace one-off production for
-        L&amp;D teams.
-      </p>
-      <span class="lab__tools">remotion · mcp · canva</span>
-      <span class="lab__cta">view experiment →</span>
-    </a>
-
-    <a class="lab" href="labs/microlearning.html"
-       data-lab-src="labs/microlearning.html"
-       data-lab-name="context-aware microlearning">
-      <span class="lab__tag">ai prototype · microlearning</span>
-      <h3>context-aware microlearning</h3>
-      <p>
-        Pick a work scenario, receive a contextually relevant
-        micro-intervention. The right nudge at the right moment, not
-        just shorter content. The 2026 evolution of microlearning.
-      </p>
-      <span class="lab__tools">moment-of-need · behavioral nudges</span>
-      <span class="lab__cta">view experiment →</span>
-    </a>
   </div>
 </section>
 

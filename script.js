@@ -734,6 +734,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   let onScreen    = false;
   let currentSrc  = '';
   let nextPause   = PAUSE_INIT; // PAUSE_INIT on first load, SWITCH_PAUSE after
+  let switchTimer = null;       // debounce rapid hover events
 
   /* Find where the experiment section begins in the lab page (.lab-s) */
   function findLabsOffset(iframeDoc) {
@@ -804,7 +805,10 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     stopScroll();
     iframe.classList.add('is-switching');
 
-    setTimeout(function () {
+    /* Cancel any previously queued switch before queuing a new one.
+       Without this, rapid hover events stack timeouts and race each other. */
+    clearTimeout(switchTimer);
+    switchTimer = setTimeout(function () {
       iframe.onload = onLoaded;
       iframe.src = src;
     }, 320); /* wait for fade-out transition */
