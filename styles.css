@@ -1653,13 +1653,22 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   }
 }
 @media (max-width: 800px) {
-  .dossier--withpreview .dossier__body { grid-template-columns: 1fr; }
+  /* Both selectors needed — :nth-child(even) has higher specificity and
+     beats the base rule without this explicit override */
+  .dossier--withpreview .dossier__body,
+  .dossier--withpreview:nth-child(even) .dossier__body {
+    grid-template-columns: 1fr;
+  }
+  /* Reset even-card preview order so nothing leaves a ghost column */
+  .dossier--withpreview:nth-child(even) .dossier__preview {
+    order: 0;
+  }
   .dossier__preview { display: none; }
-  /* Restore full stat on mobile since preview is gone */
+  /* Restore full-scale stat — preview is gone, stat is the visual anchor */
   .dossier--withpreview .dossier__stat {
     flex-direction: column;
-    align-items: flex-end;
-    text-align: right;
+    align-items: flex-start;
+    text-align: left;
   }
   .dossier--withpreview .dossier__statnum {
     font-size: clamp(4rem, 7vw, 6rem);
@@ -2142,18 +2151,24 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   .labs__layout {
     grid-template-columns: 1fr;
   }
-  /* Restore original grid for single-column stack */
   .labs__layout .labs__grid {
     flex-direction: column;
   }
-  /* Stage goes full-width, loses sticky (no need — it's above cards now) */
+  /* Stage goes full-width above the cards, loses sticky */
   .labs-stage {
     position: static;
-    order: -1; /* render above cards in the stacked layout */
+    order: -1;
+  }
+  /* Cap height on tablet so it doesn't eat the whole screen */
+  .labs-stage__viewport {
+    height: clamp(300px, 45vh, 400px);
   }
 }
 @media (max-width: 680px) {
-  .labs-stage { display: none; } /* viewport too narrow for a useful preview */
+  /* Too narrow for a useful preview — cards carry the section alone */
+  .labs-stage { display: none; }
+  /* Guide strip wraps to two lines cleanly */
+  .labs__guide { gap: 0.4rem; font-size: 0.65rem; }
 }
 
 /* ==========================================================================
@@ -2708,7 +2723,15 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   .foot__row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
   .foot__mark { font-size: 1rem; }
   .foot__tag { font-size: 0.85rem; line-height: 1.4; }
-  .foot__row--small { gap: 0.25rem; }
+  /* Override the 3-column grid — stack the three items vertically instead */
+  .foot__row--small {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+  .foot__credit,
+  .foot__location { text-align: left; }
 }
 .foot__mark {
   font-family: var(--display);
