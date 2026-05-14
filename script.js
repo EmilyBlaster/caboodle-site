@@ -891,6 +891,36 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 (function fieldGuide() {
   'use strict';
 
+  /* Self-inject markup on any page that doesn't already have it.
+     index.html has it hardcoded; every other page gets it from here. */
+  if (!document.getElementById('guideTrigger')) {
+    const wrap = document.createElement('div');
+    wrap.className = 'guide-wrap';
+    wrap.innerHTML =
+      '<button class="guide-btn" id="guideTrigger" aria-label="Open field guide" aria-expanded="false" aria-controls="guidePanel">' +
+        '<svg class="guide-btn__mark" width="22" height="15" viewBox="0 0 90 60" fill="currentColor" aria-hidden="true">' +
+          '<path fill-rule="evenodd" d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>' +
+        '</svg>' +
+        '<span>field guide</span>' +
+      '</button>' +
+      '<div class="guide-panel" id="guidePanel" aria-hidden="true" role="dialog" aria-label="Field guide — ask about emily green and caboodle design">' +
+        '<div class="guide-panel__chrome">' +
+          '<div class="guide-panel__status">' +
+            '<span class="guide-panel__dot" aria-hidden="true"></span>' +
+            'field guide · online' +
+          '</div>' +
+          '<button class="guide-panel__close" id="guideClose" aria-label="Close field guide">×</button>' +
+        '</div>' +
+        '<div class="guide-panel__msgs" id="guideMessages"></div>' +
+        '<div class="guide-panel__chips" id="guideChips"></div>' +
+        '<div class="guide-panel__input-row">' +
+          '<input class="guide-panel__input" id="guideInput" type="text" placeholder="or type a question..." autocomplete="off" spellcheck="false"/>' +
+          '<button class="guide-panel__send" id="guideSend" aria-label="Send">→</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(wrap);
+  }
+
   const trigger  = document.getElementById('guideTrigger');
   const panel    = document.getElementById('guidePanel');
   const msgList  = document.getElementById('guideMessages');
