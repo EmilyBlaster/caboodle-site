@@ -1038,7 +1038,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
     /* ── Contact branch ── */
     contact: {
-      msg: 'open to new projects. best way in: <a class="guide-link" href="mailto:egreen@emilygreendesign.com">egreen@emilygreendesign.com</a>. grand rapids-based, works globally. <a class="guide-link" href="about.html">about emily →</a>',
+      msg: 'open to new projects. best way in: <a class="guide-link" href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a>. grand rapids-based, works globally. <a class="guide-link" href="about.html">about emily →</a>',
       chips: [
         { label: '← main menu', next: 'start' }
       ]
