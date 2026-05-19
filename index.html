@@ -32,22 +32,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="styles.css?v=20260516" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 </head>
 <body>
 
 <!-- Scroll-driven research-log sidebar — the "one weird move" -->
-<aside class="fieldlog" aria-hidden="true">
-  <div class="fieldlog__head">
-    <span class="fieldlog__dot"></span>
-    <span class="fieldlog__label">field log</span>
-    <span class="fieldlog__time" id="logTime">--:--</span>
-  </div>
-  <ul class="fieldlog__entries" id="logEntries">
-    <li class="fieldlog__entry is-active"><span>001</span> visitor enters field</li>
-  </ul>
-</aside>
 
 <!-- Nav — matches live site structure -->
 <header class="nav">
@@ -73,7 +63,6 @@
   <div class="hero__frame">
     <div class="hero__stamp">
       <span>field note</span>
-      <b>001</b>
       <span>grand rapids, mi · 2026</span>
     </div>
 
@@ -122,10 +111,10 @@
 
 <section class="work" id="work">
   <header class="work__head">
-    <span class="work__kicker">chapter i · selected work</span>
+    <span class="work__kicker">selected work</span>
     <h2 class="work__title">
       engagements.<br />
-      <em>filed and catalogued.</em>
+      filed and catalogued.
     </h2>
     <p class="work__dek">
       Learning experiences that drive measurable behavioral change,
@@ -348,18 +337,27 @@
 
   </div>
 
-  <a class="work__more" href="#">
-    <span>more on the way · view full resume</span>
-    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-  </a>
+  <div class="workclose">
+    <p class="workclose__line">See a problem here that looks like yours? Let's talk.</p>
+    <div class="workclose__actions">
+      <a class="workclose__cta" href="contact.html">
+        <span>start a conversation</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+      <a class="workclose__resume" href="about.html#resume">
+        <span>see the full work history</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+    </div>
+  </div>
 </section>
 
 <!-- 03 — Approach: three pillars -->
 <section class="approach" id="approach">
   <header class="approach__head">
-    <span class="approach__kicker">chapter ii · approach</span>
+    <span class="approach__kicker">approach</span>
     <h2 class="approach__title">
-      the whole <em>caboodle.</em>
+      the whole caboodle.
     </h2>
     <p class="approach__dek">
       Where strategy, media, and behavioral science converge. Three
@@ -432,48 +430,13 @@
   </article>
 </section>
 
-<!-- 04 — Process strip: 5-phase engagement arc -->
-<section class="process" data-log="006 — engagement arc">
-  <header class="process__head">
-    <span class="process__kicker">how every engagement unfolds</span>
-    <h2 class="process__title">five phases. <em>one outcome.</em></h2>
-  </header>
-  <ol class="process__list">
-    <li>
-      <span class="process__num">01</span>
-      <h3>discover</h3>
-      <p>Uncover the real business problem and audience needs.</p>
-    </li>
-    <li>
-      <span class="process__num">02</span>
-      <h3>analyze</h3>
-      <p>Map critical actions to measurable outcomes.</p>
-    </li>
-    <li>
-      <span class="process__num">03</span>
-      <h3>design</h3>
-      <p>Craft practice-first experiences, not slide decks.</p>
-    </li>
-    <li>
-      <span class="process__num">04</span>
-      <h3>build</h3>
-      <p>Develop and iterate with rapid prototyping.</p>
-    </li>
-    <li>
-      <span class="process__num">05</span>
-      <h3>measure</h3>
-      <p>Prove behavior change, not just completion.</p>
-    </li>
-  </ol>
-</section>
-
-<!-- 05 — Action Mapping × Kirkpatrick editorial table -->
+<!-- Action Mapping × Kirkpatrick editorial table -->
 <section class="matrix" data-log="007 — action mapping crossed with kirkpatrick">
   <header class="matrix__head">
     <span class="matrix__kicker">design meets measurement</span>
     <h2 class="matrix__title">
-      design with <em>action mapping.</em><br />
-      measure with <em>kirkpatrick.</em>
+      design with action mapping.<br />
+      measure with kirkpatrick.
     </h2>
     <p class="matrix__dek">
       Every engagement ladders up through the same four rungs. The
@@ -567,15 +530,15 @@
     </article>
   </div>
 
-  <p class="matrix__kicker matrix__closing">most training measures completion. I measure change.</p>
+  <p class="matrix__kicker matrix__closing">completion is the metric everyone reports; behavior is the one that matters.</p>
 </section>
 
 <!-- 08 — Labs preview -->
 <section class="labs" id="labs">
   <header class="labs__head">
-    <span class="labs__kicker">chapter iii · caboodle labs</span>
+    <span class="labs__kicker">caboodle labs</span>
     <h2 class="labs__title">
-      where behavior design meets <em>ai experimentation.</em>
+      where behavior design meets ai experimentation.
     </h2>
     <p class="labs__dek">
       Personal projects, prototypes, and proofs-of-concept. Each one
@@ -705,24 +668,11 @@
       <span class="about__portraitcap">subject · emily green · founder</span>
     </div>
     <div class="about__body">
-      <span class="about__kicker">chapter iv · about emily</span>
+      <span class="about__kicker">about emily</span>
       <h2 class="about__h">
         14+ years in learning design.<br />
-        one stubborn conviction: <em>training is the last resort, not the first.</em>
+        one stubborn conviction: training is the last resort.
       </h2>
-      <p class="about__p">
-        I'm Emily Green. A certified Google UX professional and
-        learning experience designer with over a decade of experience
-        in graphic, instructional, and visual design leadership. I
-        create visually engaging and interactive learning experiences
-        for public and private organizations.
-      </p>
-      <p class="about__p">
-        Before I design anything, I study how people actually behave
-        at work. I watch. I listen. I ask the uncomfortable questions.
-        Because the gap between what we trained them to do and what
-        they actually do is where the real design challenge lives.
-      </p>
       <p class="about__p">
         I started caboodle design because I was tired of seeing
         organizations pour resources into training that checked a box
@@ -750,68 +700,10 @@
         </div>
       </dl>
 
-      <dl class="about__facts">
-        <div>
-          <dt>based</dt>
-          <dd>grand rapids, michigan</dd>
-        </div>
-        <div>
-          <dt>education</dt>
-          <dd>m.s. instructional design &amp; technology, full sail · salutatorian, 2026</dd>
-        </div>
-        <div>
-          <dt>premier clients</dt>
-          <dd>apple · airbnb · gitlab · johnson &amp; johnson · t-mobile · intuit</dd>
-        </div>
-        <div>
-          <dt>methods</dt>
-          <dd>action mapping · kirkpatrick · ethnography · behavioral design</dd>
-        </div>
-      </dl>
-
-      <!-- Speaking subsection -->
-      <div class="about__speaking">
-        <span class="about__subkicker">speaking · 2026</span>
-        <ul>
-          <li>
-            <b>teacher's toolbox</b>
-            <div class="about__speaking__right">
-              <span>full sail university · with dr. colleen cleveland</span>
-              <a class="about__speaking__watch" href="https://www.youtube.com/watch?v=44iFHmeQ10o" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4z" fill="currentColor" stroke="none"/></svg>
-                watch
-              </a>
-            </div>
-          </li>
-          <li>
-            <b>mighty meetup</b>
-            <div class="about__speaking__right">
-              <span>maestro · the people's professors</span>
-              <a class="about__speaking__watch" href="work/peoples-professors.html#keynote">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4z" fill="currentColor" stroke="none"/></svg>
-                watch
-              </a>
-            </div>
-          </li>
-          <li>
-            <b>human by design</b>
-            <div class="about__speaking__right">
-              <span>tcc 2026 worldwide online conference · april 2026</span>
-              <a class="about__speaking__watch" href="work/peoples-professors.html#keynote">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4z" fill="currentColor" stroke="none"/></svg>
-                watch
-              </a>
-            </div>
-          </li>
-          <li>
-            <b>building bridges</b>
-            <div class="about__speaking__right">
-              <span>aect international convention · november 2026</span>
-              <span class="about__speaking__upcoming">upcoming</span>
-            </div>
-          </li>
-        </ul>
-      </div>
+      <a class="workclose__resume about__more" href="about.html">
+        <span>more about emily · speaking, full bio, capabilities</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
     </div>
   </div>
 </section>
@@ -843,7 +735,7 @@
         <span>start a conversation</span>
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
       </a>
-      <span class="closing__email">hello@caboodledesign.info</span>
+      <a class="closing__email" href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a>
     </div>
   </div>
 </section>
@@ -868,7 +760,7 @@
     <div>
       <h4>get in touch</h4>
       <ul>
-        <li><a href="mailto:hello@caboodledesign.info">let's talk</a></li>
+        <li><a href="contact.html">let's talk</a></li>
         <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
         <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
       </ul>
@@ -910,6 +802,6 @@
   </div>
 </div>
 
-<script src="script.js" defer></script>
+<script src="script.js?v=20260516" defer></script>
 </body>
 </html>

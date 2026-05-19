@@ -19,9 +19,6 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
 (() => {
   const nav = document.querySelector('.nav');
-  const fieldlog = document.querySelector('.fieldlog');
-  const logEntries = document.getElementById('logEntries');
-  const logTime = document.getElementById('logTime');
 
   /* ---------- Nav scroll state ----------------------------------------- */
   const setNavState = () => {
@@ -76,108 +73,16 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     }, { passive: true });
   }
 
-  /* ---------- Field log: time ticker ----------------------------------- */
-  const updateTime = () => {
-    if (!logTime) return;
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2, '0');
-    const mm = String(now.getMinutes()).padStart(2, '0');
-    const ss = String(now.getSeconds()).padStart(2, '0');
-    logTime.textContent = `${hh}:${mm}:${ss}`;
-  };
-  updateTime();
-  setInterval(updateTime, 1000);
-
-  /* The field log stays hidden until the user has scrolled past the hero —
-     keeps the landing view clean and makes the log feel "contextual" (it
-     shows up once you're inside the page, like a researcher starting to
-     take notes). */
-  const hero = document.querySelector('.hero, .casehero, .apphero, .aboutpage, .labshero, .notehero, .reshero');
-
-  /* Cache the hero bottom position relative to the document so scroll
-     handler never triggers a layout read (getBoundingClientRect forces reflow). */
-  let heroBottom = 500;
-  const measureHero = () => {
-    heroBottom = hero ? hero.offsetTop + hero.offsetHeight : 500;
-  };
-  measureHero();
-  window.addEventListener('resize', measureHero, { passive: true });
-
-  const showAfterScroll = () => {
-    if (fieldlog) fieldlog.classList.toggle('is-live', window.scrollY > heroBottom - 80);
-  };
-  showAfterScroll();
-
-  /* Throttle both scroll handlers through a single rAF gate so they never
-     run more than once per frame, eliminating scroll jank. */
+  /* ---------- Nav scroll state, throttled through a single rAF gate ----- */
   let rafPending = false;
   window.addEventListener('scroll', () => {
     if (rafPending) return;
     rafPending = true;
     requestAnimationFrame(() => {
       setNavState();
-      showAfterScroll();
       rafPending = false;
     });
   }, { passive: true });
-
-  /* Dock (hide) the field log when the footer enters the viewport so it
-     doesn't cover the footer nav. */
-  const footer = document.querySelector('.foot');
-  if (footer) {
-    const footerObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (fieldlog) fieldlog.classList.toggle('is-docked', entry.isIntersecting);
-      });
-    }, { rootMargin: '0px 0px -5% 0px', threshold: 0 });
-    footerObserver.observe(footer);
-  }
-
-  /* ---------- Scroll-driven field log entries --------------------------
-     Each section with data-log gets registered as an observation point.
-     As it enters the viewport center, we log it and mark it active.
-     Keeps the last 4 entries visible so it feels like a running journal. */
-
-  const logSources = document.querySelectorAll('[data-log]');
-  const MAX_LOG = 4;
-  const logHistory = [
-    { id: '000', text: 'visitor enters field' }
-  ];
-
-  const renderLog = () => {
-    if (!logEntries) return;
-    logEntries.innerHTML = logHistory
-      .slice(-MAX_LOG)
-      .map((entry, i, arr) => {
-        const active = i === arr.length - 1 ? ' is-active' : '';
-        return `<li class="fieldlog__entry${active}"><span>${entry.id}</span> ${entry.text}</li>`;
-      })
-      .join('');
-  };
-  renderLog();
-
-  const seenLogs = new Set();
-  const logObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      const raw = entry.target.getAttribute('data-log');
-      if (!raw || seenLogs.has(raw)) return;
-      seenLogs.add(raw);
-
-      /* "003 — subject reads pillar 01" → { id: '003', text: 'subject reads pillar 01' } */
-      const [id, ...rest] = raw.split('—');
-      logHistory.push({
-        id: (id || '').trim().padStart(3, '0'),
-        text: rest.join('—').trim() || raw.trim()
-      });
-      renderLog();
-    });
-  }, {
-    rootMargin: '-35% 0px -45% 0px',  /* fire when section nears viewport center */
-    threshold: 0
-  });
-
-  logSources.forEach((el) => logObserver.observe(el));
 
   /* ---------- Reveal-on-scroll for key typographic elements ------------
      Add data-reveal to any element we want to fade-rise. */
@@ -209,7 +114,8 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     '.work__dek',
     '.featured',
     '.dossier',
-    '.work__more',
+    '.workclose__line',
+    '.workclose__actions',
     '.labs__kicker',
     '.labs__title',
     '.labs__dek',
@@ -383,12 +289,12 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
    IntersectionObserver — only fetched when the card enters the viewport.
    ========================================================================== */
 (function () {
-  const SCROLL_SPEED  = 0.4;  /* px per animation frame (gentle)            */
-  const IFRAME_W      = 1440; /* design width to scale from                 */
-  const VISIBLE_H     = 300;  /* visible viewport height in px              */
-  const PAUSE_START   = 1400; /* ms — show landing zone before scrolling    */
-  const FADE_MS       = 380;  /* ms — loop crossfade                        */
-  const FALLBACK_START = 2000; /* px fallback if no artifact section found  */
+  const SCROLL_SPEED   = 0.4;   /* px per animation frame (gentle)           */
+  const IFRAME_W       = 1440;  /* design width to scale from                */
+  const VISIBLE_H      = 300;   /* visible viewport height in px             */
+  const PAUSE_START    = 1400;  /* ms — show landing zone before scrolling   */
+  const FADE_MS        = 380;   /* ms — loop crossfade                       */
+  const FALLBACK_START = 2000;  /* px fallback if no artifact section found  */
 
   /* Query the iframe DOM to find where the actual artifact demos start.
      Checks several selectors used across different case study pages. */
@@ -413,47 +319,45 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     const frame = card.querySelector('.dossier__preview-iframe');
     if (!frame || !vp) return;
 
-    let scrollStart = FALLBACK_START; /* refined on load via DOM query */
+    let scrollStart = FALLBACK_START; /* refined on load via DOM query        */
     let scrollY     = FALLBACK_START;
+    let pageH       = 6000;           /* updated on load to actual page height */
     let raf         = null;
     let srcSet      = false;
     let isPaused    = true;
     let onScreen    = false;
 
-    /* ── Scale iframe to fill the preview column ────────────────────── */
+    /* ── Scale iframe and position via transform (no scrollTo) ──────────── */
+    /* We control the visible position with translateY instead of scrollTo,
+       avoiding scroll-behavior:smooth interference from the iframe's own CSS. */
     function scaleFrame () {
-      const w     = vp.offsetWidth;
-      const scale = w / IFRAME_W;
-      const h     = Math.ceil(VISIBLE_H / scale);
-      frame.style.width     = IFRAME_W + 'px';
-      frame.style.height    = h + 'px';
-      frame.style.transform = `scale(${scale})`;
+      const scale = vp.offsetWidth / IFRAME_W;
+      frame.style.width           = IFRAME_W + 'px';
+      frame.style.height          = pageH + 'px';
+      frame.style.transformOrigin = '0 0';
+      frame.style.transform       = `scale(${scale}) translateY(${-scrollY}px)`;
     }
     scaleFrame();
     window.addEventListener('resize', scaleFrame, { passive: true });
 
-    /* ── Scroll tick ─────────────────────────────────────────────────── */
+    /* ── Scroll tick ─────────────────────────────────────────────────────── */
     function tick () {
       raf = null;
       if (isPaused || !onScreen) return;
 
       scrollY += SCROLL_SPEED;
 
-      let maxScroll = 4500;
-      try {
-        const doc = frame.contentDocument;
-        if (doc && doc.documentElement) {
-          maxScroll = doc.documentElement.scrollHeight - parseFloat(frame.style.height);
-        }
-      } catch { /* cross-origin guard */ }
+      /* Stop when the bottom of the visible window reaches the page bottom */
+      const scale     = vp.offsetWidth / IFRAME_W;
+      const maxScroll = Math.max(pageH - VISIBLE_H / scale, 400);
 
-      if (scrollY >= Math.max(maxScroll, 400)) {
+      if (scrollY >= maxScroll) {
         /* Bottom reached — fade out, reset to start, fade in, repeat */
         isPaused = true;
         frame.classList.remove('is-visible');
         setTimeout(() => {
           scrollY = scrollStart;
-          try { frame.contentWindow.scrollTo(0, scrollStart); } catch {}
+          scaleFrame();  /* reposition instantly via transform */
           requestAnimationFrame(() => frame.classList.add('is-visible'));
           setTimeout(() => {
             isPaused = false;
@@ -463,7 +367,8 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
         return;
       }
 
-      try { frame.contentWindow.scrollTo(0, scrollY); } catch {}
+      /* Move via transform — no scrollTo, no scroll-behavior interference */
+      frame.style.transform = `scale(${scale}) translateY(${-scrollY}px)`;
       raf = requestAnimationFrame(tick);
     }
 
@@ -471,20 +376,23 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       if (!isPaused && onScreen && !raf) raf = requestAnimationFrame(tick);
     }
 
-    /* ── Load: find artifacts in DOM, jump there, fade in, begin scroll  */
+    /* ── Load: find artifacts in DOM, position via transform, fade in ──── */
     frame.addEventListener('load', () => {
-      scaleFrame();
-      /* Query the iframe's own DOM to find where the demos actually start */
+      /* Measure full page height. Shrink the iframe first so its own height
+         doesn't inflate the page's reported scrollHeight. */
       try {
+        frame.style.height = '100px';
+        pageH       = frame.contentDocument.documentElement.scrollHeight || 6000;
         scrollStart = findArtifactOffset(frame.contentDocument);
-      } catch { scrollStart = FALLBACK_START; }
+      } catch {
+        pageH       = 6000;
+        scrollStart = FALLBACK_START;
+      }
+      /* Set position instantly via CSS transform — no scrollTo needed */
       scrollY = scrollStart;
-      try { frame.contentWindow.scrollTo(0, scrollStart); } catch {}
-      /* Double rAF: let the browser paint the scroll position BEFORE the
-         iframe becomes visible — prevents the visible jump to middle */
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        frame.classList.add('is-visible');
-      }));
+      scaleFrame();
+      /* Single rAF is enough — transform applies synchronously */
+      requestAnimationFrame(() => frame.classList.add('is-visible'));
       isPaused = true;
       setTimeout(() => {
         isPaused = false;
@@ -492,7 +400,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       }, PAUSE_START);
     });
 
-    /* ── IntersectionObserver: lazy-load src + pause when off-screen ── */
+    /* ── IntersectionObserver: lazy-load src + pause when off-screen ──── */
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         onScreen = e.isIntersecting;
@@ -522,192 +430,6 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 })();
 
 /* ==========================================================================
-   WORK PEEK — live-scrolling case study preview
-   Loads each case study page in an iframe and slowly scrolls it, giving
-   visitors a genuine look inside the case files from the homepage.
-   Same-origin pages, so JS can control contentWindow.scrollTo().
-   ========================================================================== */
-(function () {
-  const frame    = document.getElementById('peekFrame');
-  const urlLabel = document.getElementById('peekUrl');
-  const navEl    = document.getElementById('peekNav');
-  const viewport = document.querySelector('.peek__viewport');
-  const wrapper  = document.getElementById('workPeek');
-
-  if (!frame || !viewport || !wrapper) return;
-
-  /* Case studies to cycle through */
-  const PAGES = [
-    { src: 'work/gitlab.html',  url: 'caboodledesign.info/work/gitlab.html'  },
-    { src: 'work/apple.html',   url: 'caboodledesign.info/work/apple.html'   },
-    { src: 'work/intuit.html',  url: 'caboodledesign.info/work/intuit.html'  },
-    { src: 'work/tmobile.html', url: 'caboodledesign.info/work/tmobile.html' },
-    { src: 'work/trust20.html', url: 'caboodledesign.info/work/trust20.html' },
-  ];
-
-  /* Tuning knobs */
-  const SCROLL_SPEED    = 0.55;  /* px per animation frame                     */
-  const SCROLL_START    = 950;   /* px — skip hero/intro, land at interactives  */
-  const PAUSE_ON_LOAD   = 1600;  /* ms to show top of landing zone              */
-  const PAUSE_AT_BOTTOM = 2200;  /* ms to show bottom before cycling            */
-  const FADE_DURATION   = 380;   /* ms for opacity crossfade                    */
-  const VISIBLE_H       = 480;   /* px of iframe shown                          */
-  const IFRAME_W        = 1440;  /* design width to scale from                  */
-
-  let current   = 0;
-  let scrollY   = 0;
-  let raf       = null;
-  let isSwitching  = false;
-  let isHovered    = false;
-  let isOnScreen   = false;
-
-  /* ── Build nav dots ───────────────────────────────────────────────────── */
-  PAGES.forEach((_, i) => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'peek__dot' + (i === 0 ? ' is-active' : '');
-    btn.setAttribute('aria-label', `Preview case study ${i + 1} of ${PAGES.length}`);
-    btn.addEventListener('click', () => { if (i !== current) switchTo(i); });
-    navEl.appendChild(btn);
-  });
-
-  function setActiveDot (n) {
-    navEl.querySelectorAll('.peek__dot').forEach((d, i) =>
-      d.classList.toggle('is-active', i === n));
-  }
-
-  /* ── Scale the iframe to fill the viewport width exactly ─────────────── */
-  /* The pages are 1440px wide. We scale down to fit the container,
-     then set the iframe height so its post-scale height matches VISIBLE_H. */
-  function scaleFrame () {
-    const containerW = viewport.offsetWidth;
-    const scale      = containerW / IFRAME_W;
-    const iframeH    = Math.ceil(VISIBLE_H / scale);
-
-    frame.style.width     = IFRAME_W + 'px';
-    frame.style.height    = iframeH + 'px';
-    frame.style.transform = `scale(${scale})`;
-  }
-
-  scaleFrame();
-  window.addEventListener('resize', scaleFrame, { passive: true });
-
-  /* ── rAF scroll tick ──────────────────────────────────────────────────── */
-  function tick () {
-    raf = null;
-    if (isSwitching || isHovered || !isOnScreen) return;
-
-    scrollY += SCROLL_SPEED;
-
-    /* Calculate how far we can scroll before the page ends */
-    let maxScroll = 4000; /* safe fallback */
-    try {
-      const doc = frame.contentDocument;
-      if (doc && doc.documentElement) {
-        const iframeH = parseFloat(frame.style.height) || (VISIBLE_H / (viewport.offsetWidth / IFRAME_W));
-        maxScroll = doc.documentElement.scrollHeight - iframeH;
-      }
-    } catch { /* cross-origin guard — shouldn't fire on same domain */ }
-
-    if (scrollY >= Math.max(maxScroll, 200)) {
-      /* Hit the bottom — pause, then cycle to next page */
-      isSwitching = true;
-      setTimeout(() => switchTo((current + 1) % PAGES.length), PAUSE_AT_BOTTOM);
-      return;
-    }
-
-    try {
-      frame.contentWindow.scrollTo(0, scrollY);
-    } catch { /* safety */ }
-
-    raf = requestAnimationFrame(tick);
-  }
-
-  function startScroll () {
-    if (!isSwitching && !isHovered && isOnScreen && !raf) {
-      raf = requestAnimationFrame(tick);
-    }
-  }
-
-  /* ── Page switching ───────────────────────────────────────────────────── */
-  function switchTo (index) {
-    cancelAnimationFrame(raf);
-    raf         = null;
-    isSwitching = true;
-
-    /* Fade out */
-    frame.classList.remove('is-visible');
-
-    setTimeout(() => {
-      current = index;
-      scrollY = 0;
-
-      /* Update URL bar and dots before src swap */
-      urlLabel.textContent = PAGES[current].url;
-      setActiveDot(current);
-
-      scrollY = SCROLL_START;
-      frame.src = PAGES[current].src;
-      /* load event handles the jump + fade-in + scroll start */
-    }, FADE_DURATION);
-  }
-
-  /* ── iframe load: jump to interactives zone, fade in, then start scrolling */
-  frame.addEventListener('load', () => {
-    scaleFrame();
-
-    /* Skip the hero/intro and land at the artifacts section */
-    scrollY = SCROLL_START;
-    try { frame.contentWindow.scrollTo(0, SCROLL_START); } catch { /* */ }
-
-    /* Small rAF delay to let the browser paint the new page */
-    requestAnimationFrame(() => {
-      frame.classList.add('is-visible');
-    });
-
-    /* Pause at top, then unlock and begin scrolling */
-    isSwitching = true;
-    setTimeout(() => {
-      isSwitching = false;
-      startScroll();
-    }, PAUSE_ON_LOAD);
-  });
-
-  /* ── Hover: freeze while the user is looking ──────────────────────────── */
-  wrapper.addEventListener('mouseenter', () => {
-    isHovered = true;
-    cancelAnimationFrame(raf);
-    raf = null;
-  });
-  wrapper.addEventListener('mouseleave', () => {
-    isHovered = false;
-    startScroll();
-  });
-
-  /* ── IntersectionObserver: only animate while visible on screen ────────── */
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      isOnScreen = e.isIntersecting;
-      if (isOnScreen) {
-        startScroll();
-      } else {
-        cancelAnimationFrame(raf);
-        raf = null;
-      }
-    });
-  }, { threshold: 0.1 });
-  io.observe(wrapper);
-
-  /* ── Reduced motion: show first page statically, no scroll ───────────── */
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    frame.addEventListener('load', () => {
-      frame.classList.add('is-visible');
-    }, { once: true });
-    return; /* skip all scroll logic */
-  }
-})();
-
-/* ==========================================================================
    LABS STAGE — hover-to-switch live preview
    One shared large preview window above the labs grid.
    Hover any .lab[data-lab-src] card → stage crossfades to that experiment.
@@ -734,6 +456,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   let raf         = null;
   let scrollY     = 0;
   let scrollStart = 0;   // offset of .lab-s section — looping resets here
+  let pageH       = 6000; // updated on load to actual lab-page height
   let isPaused    = false;
   let onScreen    = false;
   let currentSrc  = '';
@@ -749,12 +472,16 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     return Math.max(top - 80, 0);
   }
 
-  /* Scale iframe to fill container width at 1440px design width */
+  /* Scale the iframe and set its scroll position via transform (no scrollTo).
+     translateY controls the visible position — this avoids scroll-behavior:
+     smooth interference from the lab pages' own CSS, which would otherwise
+     animate a visible fast-scroll on every load. */
   function scaleFrame() {
     const scale = viewport.offsetWidth / 1440;
-    iframe.style.transform = `scale(${scale})`;
-    iframe.style.width     = '1440px';
-    iframe.style.height    = Math.ceil(viewport.offsetHeight / scale) + 'px';
+    iframe.style.width           = '1440px';
+    iframe.style.height          = pageH + 'px';
+    iframe.style.transformOrigin = '0 0';
+    iframe.style.transform       = `scale(${scale}) translateY(${-scrollY}px)`;
   }
 
   function startScroll() {
@@ -762,12 +489,11 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     (function tick() {
       if (!isPaused) {
         scrollY += SCROLL_SPEED;
-        try {
-          const doc = iframe.contentDocument;
-          const max = doc.documentElement.scrollHeight - doc.documentElement.clientHeight;
-          if (scrollY >= max - 20) { scrollY = scrollStart; } /* loop to experiment, not page top */
-          iframe.contentWindow.scrollTo(0, scrollY);
-        } catch (_) {}
+        const scale     = viewport.offsetWidth / 1440;
+        const maxScroll = Math.max(pageH - viewport.offsetHeight / scale, 200);
+        if (scrollY >= maxScroll) { scrollY = scrollStart; } /* loop to experiment, not page top */
+        /* Move via transform — no scrollTo, no scroll-behavior interference */
+        iframe.style.transform = `scale(${scale}) translateY(${-scrollY}px)`;
       }
       raf = requestAnimationFrame(tick);
     })();
@@ -780,28 +506,31 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
   /* Shared onload handler — runs after every iframe src change */
   function onLoaded() {
-    scaleFrame();
+    /* Measure the full page height. Shrink the iframe first so its own
+       height doesn't inflate the page's reported scrollHeight. */
     try {
+      iframe.style.height = '100px';
+      pageH       = iframe.contentDocument.documentElement.scrollHeight || 6000;
       scrollStart = findLabsOffset(iframe.contentDocument);
     } catch (_) {
+      pageH       = 6000;
       scrollStart = 400;
     }
+    /* Set position instantly via CSS transform — no scrollTo needed */
     scrollY = scrollStart;
-    try { iframe.contentWindow.scrollTo(0, scrollStart); } catch (_) {}
+    scaleFrame();
     isPaused = true;
     const delay = nextPause;
     nextPause = SWITCH_PAUSE; /* subsequent loads use shorter pause */
-    /* Double rAF: let the browser paint the scroll position BEFORE the
-       iframe fades back in — prevents the visible jump-to-top on load */
+    /* Single rAF — the transform applies synchronously, so the iframe is
+       already at the experiment section before it fades back in. */
     requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        iframe.classList.remove('is-switching');
-        viewport.classList.add('is-loaded');
-        setTimeout(function () {
-          isPaused = false;
-          if (onScreen) startScroll();
-        }, delay);
-      });
+      iframe.classList.remove('is-switching');
+      viewport.classList.add('is-loaded');
+      setTimeout(function () {
+        isPaused = false;
+        if (onScreen) startScroll();
+      }, delay);
     });
   }
 
@@ -831,7 +560,20 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
   /* ── Reduced-motion: static switch only ── */
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    iframe.onload = function () { scaleFrame(); viewport.classList.add('is-loaded'); };
+    /* Place the iframe at the experiment section via transform — static,
+       no scroll animation, but still landing on the meat of the page. */
+    const staticPlace = function () {
+      try {
+        iframe.style.height = '100px'; /* shrink so it doesn't inflate the reading */
+        pageH   = iframe.contentDocument.documentElement.scrollHeight || 6000;
+        scrollY = findLabsOffset(iframe.contentDocument);
+      } catch (_) {
+        pageH   = 6000;
+        scrollY = 400;
+      }
+      scaleFrame();
+    };
+    iframe.onload = function () { staticPlace(); viewport.classList.add('is-loaded'); };
     iframe.src = labs[0].dataset.labSrc;
     currentSrc = labs[0].dataset.labSrc;
     labs[0].classList.add('is-active');
@@ -844,7 +586,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
           urlEl.textContent   = lab.dataset.labSrc;
           labs.forEach(function (l) { l.classList.remove('is-active'); });
           lab.classList.add('is-active');
-          iframe.onload = function () { scaleFrame(); };
+          iframe.onload = function () { staticPlace(); };
           iframe.src = lab.dataset.labSrc;
         }
       });
@@ -1252,4 +994,152 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && isOpen) closeGuide();
   });
+})();
+
+/* ============================================================
+   COMET CURSOR — bold leading dot + long lime→magenta trail
+   No ring. Everything is a dot. The colour progression across
+   16 uniform-sized dots is the whole effect.
+   ============================================================ */
+(function cometCursor() {
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  /* Respect reduced-motion: skip the comet entirely so the native cursor
+     shows. The trail is continuous full-screen motion — exactly what users
+     with vestibular sensitivity opt out of. Matches the rest of the site. */
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (document.getElementById('cursorDot')) return;
+
+  var TRAIL      = 16;   /* length of the comet tail */
+  var DOT_LERP   = 0.30; /* leading dot lag — slight but responsive */
+  var TRAIL_LERP = 0.22; /* trail spread — lower = more dramatic sweep */
+  var MIN_DIST   = 10;   /* min px between dot centres — prevents blobbing */
+
+  /* ── DOM ───────────────────────────────────────────────────── */
+  var dot = document.createElement('div');
+  dot.id = 'cursorDot';
+  document.body.appendChild(dot);
+
+  var trails = [];
+  for (var i = 0; i < TRAIL; i++) {
+    var td = document.createElement('div');
+    td.className = 'cursor-trail';
+    document.body.appendChild(td);
+    trails.push(td);
+  }
+
+  /* ── Position chain ────────────────────────────────────────── */
+  /* pos[0] = raw mouse; pos[1] = leading dot; pos[2..] = trail */
+  var pos = [];
+  for (var j = 0; j <= TRAIL + 1; j++) { pos.push({ x: -400, y: -400 }); }
+
+  var mouseX = -400, mouseY = -400;
+  var rafRunning = false, lastMove = 0;
+  var trailVel = 0; /* smoothed cursor speed — drives trail fade at rest */
+
+  /* ── Colour: lime (#96E650) → magenta (#EC008C) ────────────── */
+  function cometColor(t) {
+    var r = Math.round(150 + 86  * t);
+    var g = Math.round(230 - 230 * t);
+    var b = Math.round(80  + 60  * t);
+    return 'rgb(' + r + ',' + g + ',' + b + ')';
+  }
+
+  /* ── Tick ──────────────────────────────────────────────────── */
+  function tick() {
+    /* pos[0] is the raw mouse anchor */
+    pos[0].x = mouseX;
+    pos[0].y = mouseY;
+
+    /* pos[1] = leading dot — lerps toward mouse */
+    var prevX = pos[1].x, prevY = pos[1].y;
+    pos[1].x += (pos[0].x - pos[1].x) * DOT_LERP;
+    pos[1].y += (pos[0].y - pos[1].y) * DOT_LERP;
+    dot.style.left = pos[1].x.toFixed(1) + 'px';
+    dot.style.top  = pos[1].y.toFixed(1) + 'px';
+
+    /* Smoothed cursor speed. The trail is a motion effect — when the
+       cursor is at rest the trail fades out so the comet collapses to
+       just the dot, instead of freezing as a static chain of circles. */
+    var mvX   = pos[1].x - prevX, mvY = pos[1].y - prevY;
+    var speed = Math.sqrt(mvX * mvX + mvY * mvY);
+    trailVel += (speed - trailVel) * 0.15;
+    var visMul = Math.min(trailVel / 3.5, 1); /* 0 at rest → 1 when moving */
+
+    /* pos[2..] = each trail dot chasing the one ahead */
+    for (var k = 2; k <= TRAIL + 1; k++) {
+      pos[k].x += (pos[k - 1].x - pos[k].x) * TRAIL_LERP;
+      pos[k].y += (pos[k - 1].y - pos[k].y) * TRAIL_LERP;
+
+      /* Minimum spacing prevents dots blobbing — but only while moving.
+         At rest, skipping it lets every dot lerp all the way onto the
+         leading dot and stack, so the comet collapses to a single point
+         instead of freezing as a spread-out chain of circles. */
+      if (trailVel > 1) {
+        var dx   = pos[k].x - pos[k - 1].x;
+        var dy   = pos[k].y - pos[k - 1].y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 0 && dist < MIN_DIST) {
+          var r    = MIN_DIST / dist;
+          pos[k].x = pos[k - 1].x + dx * r;
+          pos[k].y = pos[k - 1].y + dy * r;
+        }
+      }
+
+      var td       = trails[k - 2];
+      var progress = (k - 1) / TRAIL;               /* 0 = closest, 1 = tail */
+      var opacity  = (1 - progress) * 0.88 * visMul;
+
+      td.style.left       = pos[k].x.toFixed(1) + 'px';
+      td.style.top        = pos[k].y.toFixed(1) + 'px';
+      td.style.opacity    = opacity.toFixed(3);
+      td.style.background = cometColor(progress);
+    }
+
+    /* Keep ticking while there's recent movement OR the trail is still
+       fading out. Once both settle, hard-clear the trail and stop. */
+    if (Date.now() - lastMove < 1000 || trailVel > 0.1) {
+      requestAnimationFrame(tick);
+    } else {
+      for (var t = 0; t < trails.length; t++) { trails[t].style.opacity = '0'; }
+      rafRunning = false;
+    }
+  }
+
+  /* ── Events ────────────────────────────────────────────────── */
+  document.addEventListener('mousemove', function (e) {
+    mouseX   = e.clientX;
+    mouseY   = e.clientY;
+    lastMove = Date.now();
+    if (!rafRunning) { rafRunning = true; requestAnimationFrame(tick); }
+  });
+
+  document.addEventListener('mouseleave', function () {
+    dot.style.opacity = '0';
+    trails.forEach(function (t) { t.style.opacity = '0'; });
+  });
+  document.addEventListener('mouseenter', function () {
+    dot.style.opacity = '1';
+  });
+})();
+
+/* ============================================================
+   MOBILE TAP RIPPLE — lime circle that expands + fades on touch
+   Only runs on touch devices (desktop has the comet cursor).
+   ============================================================ */
+(function touchRipple() {
+  /* Skip on mouse/trackpad devices — they get the comet */
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  document.addEventListener('touchstart', function (e) {
+    var touch  = e.touches[0];
+    var ripple = document.createElement('div');
+    ripple.className  = 'touch-ripple';
+    ripple.style.left = touch.clientX + 'px';
+    ripple.style.top  = touch.clientY + 'px';
+    document.body.appendChild(ripple);
+    /* Clean up after the animation finishes */
+    setTimeout(function () {
+      if (ripple.parentNode) ripple.parentNode.removeChild(ripple);
+    }, 560);
+  }, { passive: true });
 })();

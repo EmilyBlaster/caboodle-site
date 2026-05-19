@@ -18,17 +18,18 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-# ─── CSS + JS: long cache, but let the browser revalidate ───────────────────
-# If you edit styles.css or script.js the URL stays the same, so we don't want
-# "immutable." max-age=3600 lets browsers reuse for an hour, then check for
-# updates on next visit. stale-while-revalidate serves the old copy instantly
-# while fetching the new one in the background — snappy and correct.
+# ─── CSS + JS: always revalidate so edits go live immediately ───────────────
+# These files change often during active development and their URLs stay the
+# same. max-age=0 + must-revalidate makes the browser check for a new version
+# on every load. Netlify answers with a tiny 304 (Not Modified) when nothing
+# changed, so the bandwidth cost is negligible — but a real edit reaches every
+# visitor on their next reload instead of being stuck behind an hour-long cache.
 
 /styles.css
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: public, max-age=0, must-revalidate
 
 /script.js
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: public, max-age=0, must-revalidate
 
 # ─── HTML pages: short cache, always check for updates ──────────────────────
 # You want content changes to go live immediately, so pages revalidate often.
