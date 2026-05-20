@@ -378,6 +378,10 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
     /* ── Load: find artifacts in DOM, position via transform, fade in ──── */
     frame.addEventListener('load', () => {
+      /* Skip load events from `about:blank` (fired when we unload the
+         iframe below). Without this guard the empty document would trigger
+         a useless layout pass + start the scroll loop on a blank frame. */
+      if (!srcSet) return;
       /* Measure full page height. Shrink the iframe first so its own height
          doesn't inflate the page's reported scrollHeight. */
       try {
@@ -400,12 +404,15 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       }, PAUSE_START);
     });
 
-    /* ── IntersectionObserver: lazy-load src + pause when off-screen ──── */
+    /* ── IntersectionObserver: lazy-load src + unload off-screen ──────────
+       rootMargin gives a hysteresis zone — load when the card is within
+       ~one screen of the viewport, only unload when it's that far past.
+       Without unloading, six full case-study pages stay alive in memory
+       and Chrome crashes the tab (renderer OOM, error code 5). */
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         onScreen = e.isIntersecting;
         if (onScreen) {
-          /* Set src the first time the card comes into view */
           if (!srcSet) {
             srcSet = true;
             frame.src = frame.dataset.src;
@@ -414,9 +421,17 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
         } else {
           cancelAnimationFrame(raf);
           raf = null;
+          /* Off-screen: unload the iframe to free memory. It will reload
+             from dataset.src when the card re-enters the load zone. */
+          if (srcSet) {
+            srcSet = false;
+            isPaused = true;
+            frame.classList.remove('is-visible');
+            frame.src = 'about:blank';
+          }
         }
       });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.01, rootMargin: '600px 0px 600px 0px' });
 
     io.observe(card);
 
