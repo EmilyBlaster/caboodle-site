@@ -521,6 +521,9 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
   /* Shared onload handler — runs after every iframe src change */
   function onLoaded() {
+    /* Skip about:blank reloads triggered by the unload-on-off-screen path
+       below — the empty doc has no content to measure or position. */
+    if (!iframe.src || iframe.src === 'about:blank' || iframe.src.endsWith('/about:blank')) return;
     /* Measure the full page height. Shrink the iframe first so its own
        height doesn't inflate the page's reported scrollHeight. */
     try {
@@ -628,14 +631,30 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     });
   });
 
-  /* ── IntersectionObserver: pause when off-screen ── */
+  /* ── IntersectionObserver: pause + unload when off-screen ──────────────
+     Lab pages are heavy (full HTML + their own script.js running inside).
+     When the user scrolls past the labs section we drop the iframe to free
+     memory, then restore it on the way back. rootMargin gives a hysteresis
+     zone so it doesn't flicker on small scroll moves. */
   const io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       onScreen = e.isIntersecting;
-      if (onScreen && !isPaused) startScroll();
-      else if (!onScreen) stopScroll();
+      if (onScreen) {
+        if (!iframe.src || iframe.src === 'about:blank' || iframe.src.endsWith('/about:blank')) {
+          iframe.onload = onLoaded;
+          nextPause    = PAUSE_INIT;
+          iframe.src   = currentSrc;
+        }
+        if (!isPaused) startScroll();
+      } else {
+        stopScroll();
+        if (iframe.src && iframe.src !== 'about:blank' && !iframe.src.endsWith('/about:blank')) {
+          viewport.classList.remove('is-loaded');
+          iframe.src = 'about:blank';
+        }
+      }
     });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.01, rootMargin: '600px 0px 600px 0px' });
   io.observe(stage);
 })();
 
@@ -647,6 +666,11 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
    ========================================================================== */
 (function fieldGuide() {
   'use strict';
+
+  /* Skip inside preview iframes — the bot's chat panel is heavy DOM
+     (380px wide, full styling, message rendering) and has no purpose
+     inside a scaled-down non-interactive preview. */
+  if (window.self !== window.top) return;
 
   /* Self-inject markup on any page that doesn't already have it.
      index.html has it hardcoded; every other page gets it from here. */
@@ -1017,6 +1041,9 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
    16 uniform-sized dots is the whole effect.
    ============================================================ */
 (function cometCursor() {
+  /* Skip inside preview iframes — saves 17 DOM nodes + mousemove listeners
+     per embedded page (iframe's pointer-events:none means it never fires). */
+  if (window.self !== window.top) return;
   if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   /* Respect reduced-motion: skip the comet entirely so the native cursor
      shows. The trail is continuous full-screen motion — exactly what users
@@ -1142,6 +1169,9 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
    Only runs on touch devices (desktop has the comet cursor).
    ============================================================ */
 (function touchRipple() {
+  /* Skip inside preview iframes — pointer-events:none on the iframe means
+     touchstart never fires anyway; no point attaching the listener. */
+  if (window.self !== window.top) return;
   /* Skip on mouse/trackpad devices — they get the comet */
   if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
