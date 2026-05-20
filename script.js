@@ -487,16 +487,26 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     return Math.max(top - 80, 0);
   }
 
-  /* Scale the iframe and set its scroll position via transform (no scrollTo).
-     translateY controls the visible position — this avoids scroll-behavior:
-     smooth interference from the lab pages' own CSS, which would otherwise
-     animate a visible fast-scroll on every load. */
+  /* Scale the iframe small + position via the iframe's own scrollTo.
+     The transform-translateY approach we used before required iframe height
+     to be the FULL lab-page height (5–8k px), which had the browser hold
+     the entire page in memory and crash Chrome on hover-switches. Here the
+     iframe is just large enough to show the viewport; the iframe's
+     internal scroll positions which slice of the page is visible.
+     We defeat scroll-behavior:smooth (which would animate a visible
+     fast-scroll on first load) by setting inline scrollBehavior:auto on
+     the iframe's <html> before each scrollTo, and using behavior:'instant'
+     on the call itself. Inline style + explicit instant = no animation. */
   function scaleFrame() {
     const scale = viewport.offsetWidth / 1440;
     iframe.style.width           = '1440px';
-    iframe.style.height          = pageH + 'px';
+    iframe.style.height          = Math.ceil(viewport.offsetHeight / scale) + 'px';
     iframe.style.transformOrigin = '0 0';
-    iframe.style.transform       = `scale(${scale}) translateY(${-scrollY}px)`;
+    iframe.style.transform       = `scale(${scale})`;
+    try {
+      iframe.contentDocument.documentElement.style.scrollBehavior = 'auto';
+      iframe.contentWindow.scrollTo({ top: scrollY, behavior: 'instant' });
+    } catch (_) { /* cross-origin or pre-load — safe to ignore */ }
   }
 
   function startScroll() {
@@ -507,8 +517,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
         const scale     = viewport.offsetWidth / 1440;
         const maxScroll = Math.max(pageH - viewport.offsetHeight / scale, 200);
         if (scrollY >= maxScroll) { scrollY = scrollStart; } /* loop to experiment, not page top */
-        /* Move via transform — no scrollTo, no scroll-behavior interference */
-        iframe.style.transform = `scale(${scale}) translateY(${-scrollY}px)`;
+        try { iframe.contentWindow.scrollTo(0, scrollY); } catch (_) {}
       }
       raf = requestAnimationFrame(tick);
     })();
@@ -524,17 +533,18 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     /* Skip about:blank reloads triggered by the unload-on-off-screen path
        below — the empty doc has no content to measure or position. */
     if (!iframe.src || iframe.src === 'about:blank' || iframe.src.endsWith('/about:blank')) return;
-    /* Measure the full page height. Shrink the iframe first so its own
-       height doesn't inflate the page's reported scrollHeight. */
     try {
-      iframe.style.height = '100px';
+      /* Defeat scroll-behavior:smooth in the lab page's own CSS so every
+         scrollTo below jumps instantly. Inline style beats external CSS. */
+      iframe.contentDocument.documentElement.style.scrollBehavior = 'auto';
+      iframe.style.height = '100px'; /* shrink for accurate scrollHeight read */
       pageH       = iframe.contentDocument.documentElement.scrollHeight || 6000;
       scrollStart = findLabsOffset(iframe.contentDocument);
     } catch (_) {
       pageH       = 6000;
       scrollStart = 400;
     }
-    /* Set position instantly via CSS transform — no scrollTo needed */
+    /* scaleFrame restores iframe to a small height and scrolls instantly */
     scrollY = scrollStart;
     scaleFrame();
     isPaused = true;
