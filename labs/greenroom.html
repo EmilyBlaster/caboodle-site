@@ -357,21 +357,13 @@
    is itself inside the homepage labs preview, so that frame is never blank. */
 .demo-frame__placeholder {
   position: absolute; inset: 0;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 0.55rem;
   background: var(--paper);
-  text-align: center;
-  padding: 1rem;
 }
-.demo-frame__placeholder-mark {
-  font-family: var(--display); font-weight: 800;
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-  letter-spacing: -0.03em; text-transform: lowercase; color: var(--ink);
-}
-.demo-frame__placeholder-mark em { color: var(--lime); font-style: normal; }
-.demo-frame__placeholder-note {
-  font-family: var(--mono); font-size: 0.62rem;
-  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2);
+.demo-frame__placeholder img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
 }
 .demo-frame__open {
   position: absolute; inset: 0;
@@ -469,8 +461,7 @@
       </div>
       <div class="demo-frame__viewport">
         <div class="demo-frame__placeholder" aria-hidden="true">
-          <span class="demo-frame__placeholder-mark">greenroom<em>.</em></span>
-          <span class="demo-frame__placeholder-note">live prototype · open full screen</span>
+          <img src="../assets/greenroom-poster.png" alt="" />
         </div>
         <iframe data-src="https://greenroom-strand.netlify.app" title="Greenroom live prototype" tabindex="-1" aria-hidden="true"></iframe>
         <a class="demo-frame__open" href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener" aria-label="Open the live Greenroom demo in a new tab">
