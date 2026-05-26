@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-404B8P6ZLK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-404B8P6ZLK');
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>greenroom · self-directed prototype · caboodle design</title>
+<meta name="description" content="Greenroom: a self-directed AI prototype. A development copilot built around behavior change, with real RAG and citations, an agentic routing loop, and a 22-case evaluation harness. Scoped, built, and evaluated solo." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css?v=20260516" />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+
+<style>
+/* ==========================================================================
+   Lab pages — shared base styles
+   ========================================================================== */
+
+.labero {
+  background: var(--ink);
+  color: var(--white);
+  padding: clamp(6rem, 12vw, 9rem) var(--pad-x) clamp(4rem, 8vw, 6rem);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--dark-2);
+}
+.labero__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lime);
+  text-decoration: none;
+  margin-bottom: 2.5rem;
+  transition: gap 0.3s var(--ease), opacity 0.3s var(--ease);
+  opacity: 0.85;
+}
+.labero__back:hover { gap: 0.8rem; opacity: 1; }
+.labero__stamp {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 2rem;
+}
+.labero__stamp b { color: var(--lime); font-weight: 500; }
+.labero__watermark {
+  font-family: var(--display);
+  font-size: clamp(8rem, 20vw, 16rem);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  color: rgba(255,255,255,0.04);
+  position: absolute;
+  right: var(--pad-x);
+  bottom: -0.1em;
+  pointer-events: none;
+  user-select: none;
+}
+.labero__inner { max-width: var(--maxw); margin: 0 auto; position: relative; }
+.labero__h {
+  font-family: var(--display);
+  font-size: clamp(2.75rem, 6vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--white);
+  text-transform: lowercase;
+  max-width: 18ch;
+  margin: 0 0 1.25rem;
+}
+.labero__h em { color: var(--lime); font-style: normal; }
+.labero__lede {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.6;
+  color: rgba(255,255,255,0.6);
+  max-width: 52ch;
+  margin-bottom: 2rem;
+}
+.labero__lede--lead {
+  color: rgba(255,255,255,0.92);
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: lowercase;
+  font-size: clamp(1.15rem, 2vw, 1.6rem);
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin-bottom: 1.25rem;
+}
+.labero__tags {
+  list-style: none;
+  padding: 0; margin: 2rem 0 0;
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+}
+.labero__tags li {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3em 0.65em;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.4);
+}
+
+/* Hero CTA row — primary lime demo button + mono code link, on the dark hero */
+.labero__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.85rem 1.5rem; }
+.labero__demo {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.85rem 1.4rem;
+  background: var(--lime);
+  color: var(--ink);
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: var(--r-pill);
+  text-decoration: none;
+  transition: transform 0.4s var(--ease), background 0.4s var(--ease);
+}
+.labero__demo:hover { background: var(--white); }
+.labero__demo svg { transition: transform 0.4s var(--ease); }
+.labero__demo:hover svg { transform: translate(2px, -2px); }
+.labero__code {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lime);
+  text-decoration: none;
+  transition: gap 0.3s var(--ease);
+}
+.labero__code:hover { gap: 0.85rem; }
+
+/* Section base */
+.lab-s {
+  padding: clamp(3.5rem, 7vw, 5.5rem) var(--pad-x);
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+}
+.lab-s--alt { background: var(--paper-2); }
+.lab-s__inner { max-width: var(--maxw); margin: 0 auto; }
+.lab-s__kicker {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--magenta);
+  display: block;
+  margin-bottom: 0.75rem;
+}
+.lab-s__h {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  line-height: 1.05;
+  margin: 0 0 0.75rem;
+}
+.lab-s__h em { font-style: italic; }
+.lab-s__p {
+  max-width: 62ch;
+  line-height: 1.65;
+  color: var(--ink-2);
+  margin: 0 0 2.5rem;
+}
+
+/* Feature grid */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1px;
+  border: 1px solid var(--rule);
+  margin-bottom: 3rem;
+  background: var(--rule);
+}
+.feature {
+  padding: 1.75rem;
+  background: var(--paper);
+  position: relative;
+  transition: background 0.3s var(--ease);
+}
+.feature:hover { background: var(--white); }
+.feature__num {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 3rem;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  color: rgba(150, 230, 80, 0.18);
+  margin-bottom: 0.75rem;
+}
+.feature__h {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-transform: lowercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+}
+.feature__p {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+/* Eval-metric stat row */
+.lab-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1px;
+  border: 1px solid var(--rule);
+  background: var(--rule);
+  margin-bottom: 2.5rem;
+}
+.lab-stat { background: var(--paper); padding: 1.75rem; }
+.lab-stat__num {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+.lab-stat__num i { font-style: normal; font-size: 0.55em; color: var(--magenta); }
+.lab-stat__label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-top: 0.65rem;
+  display: block;
+  line-height: 1.45;
+}
+
+/* Lime-dot point list */
+.lab-points { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: 0.8rem; max-width: 62ch; }
+.lab-points li { position: relative; padding-left: 1.5rem; line-height: 1.55; color: var(--ink-2); }
+.lab-points li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0.55em;
+  width: 7px; height: 7px;
+  background: var(--lime);
+  border-radius: 50%;
+}
+.lab-points li b { color: var(--ink); font-weight: 600; }
+
+/* Thesis callout */
+.thesis {
+  border-left: 3px solid var(--magenta);
+  padding: 1.5rem 2rem;
+  background: var(--paper-2);
+  margin-bottom: 3rem;
+}
+.thesis p {
+  font-family: var(--display);
+  font-size: clamp(1rem, 1.8vw, 1.35rem);
+  font-weight: 700;
+  text-transform: lowercase;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  color: var(--ink);
+  margin: 0;
+}
+.thesis p em { font-style: italic; color: var(--magenta); }
+
+/* Tools */
+.tool-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+.tool-pill {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3em 0.65em;
+  border: 1px solid var(--rule);
+  color: var(--ink-2);
+  background: var(--paper);
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="nav__mark" href="../index.html">
+    <svg class="cd-logo" viewBox="0 0 260 56" xmlns="http://www.w3.org/2000/svg" aria-label="caboodle design" role="img">
+      <path class="cd-logo__mark" fill-rule="evenodd"
+        d="M 5 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0 M 33 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0"/>
+      <text class="cd-logo__word" x="95" y="26" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">caboodle</text>
+      <text class="cd-logo__word" x="95" y="50" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">design</text>
+    </svg>
+  </a>
+  <nav class="nav__links">
+    <a href="../approach.html">approach</a>
+    <a href="../work.html">work</a>
+    <a href="../labs.html">labs</a>
+    <a href="../about.html">about emily</a>
+    <a href="../contact.html" class="nav__cta">let's talk</a>
+  </nav>
+</header>
+
+<!-- 1 — Hook -->
+<section class="labero">
+  <div class="labero__inner">
+    <a class="labero__back" href="../labs.html">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      <span>back to labs</span>
+    </a>
+    <div class="labero__stamp">
+      <span>lab</span>
+      <b>self-directed prototype</b>
+      <span>applied llm · rag</span>
+      <span>2026</span>
+    </div>
+    <h1 class="labero__h">greenroom<em>.</em></h1>
+    <p class="labero__lede labero__lede--lead">
+      A development copilot built to change behavior, not just deliver content.
+    </p>
+    <p class="labero__lede">
+      I saw where talent development stalls, then built and evaluated a working fix, solo. Live prototype below.
+    </p>
+    <div class="labero__cta">
+      <a class="labero__demo" href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener">
+        <span>open the live demo</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+      <a class="labero__code" href="https://github.com/EmilyBlaster/greenroom" target="_blank" rel="noopener">
+        <span>view the code</span>
+        <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+    </div>
+    <ul class="labero__tags">
+      <li>applied llm</li>
+      <li>rag</li>
+      <li>behavior change</li>
+      <li>claude code</li>
+      <li>solo build</li>
+    </ul>
+  </div>
+  <span class="labero__watermark" aria-hidden="true">GR</span>
+</section>
+
+<!-- 2 — The opportunity I saw -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">the opportunity i saw</span>
+    <h2 class="lab-s__h">development stalls in a catalog <em>nobody opens.</em></h2>
+    <p class="lab-s__p">
+      Teams have good content and no signal that it changed anything. The opening: an assistant that meets people at the moment of need, and closes the loop on whether the advice actually landed.
+    </p>
+    <div class="thesis">
+      <p>most ai tools stop at delivering content. greenroom is built around the part they skip: <em>behavior change.</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 — What I built -->
+<section class="lab-s lab-s--alt">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">what i built</span>
+    <h2 class="lab-s__h">a copilot that <em>closes the loop.</em></h2>
+    <p class="lab-s__p">
+      An employee asks a real question in plain words. Greenroom answers from a curated people development library using real retrieval (RAG) with citations, or an honest "not covered". It proposes a verb-first next step, then follows up with a "did it land?" check that records the behavior, not just the click. Built solo with Claude Code across six surfaces.
+    </p>
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="feature__num">01</div>
+        <h3 class="feature__h">ask in plain words</h3>
+        <p class="feature__p">A real question at the moment of need. No course catalog to dig through, no keyword guessing.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">02</div>
+        <h3 class="feature__h">grounded answer or honest refusal</h3>
+        <p class="feature__p">Answers come from the curated library with citations. Outside it, the answer is "not covered", not a guess.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">03</div>
+        <h3 class="feature__h">a verb-first next step</h3>
+        <p class="feature__p">Every response ends in one concrete action the person can actually do, not a reading list.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">04</div>
+        <h3 class="feature__h">a "did it land?" follow-up</h3>
+        <p class="feature__p">It checks back and records the behavior, not just the click. Kirkpatrick Level 3, built into the flow.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 — How it works -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">how it works</span>
+    <h2 class="lab-s__h">real rag, <em>with its wiring on display.</em></h2>
+    <p class="lab-s__p">
+      Hosted Voyage embeddings over a governed library, similarity retrieval with a refusal threshold. An agentic loop runs underneath: a cheaper model triages and routes each question, answer, clarify, or refuse, before a stronger model writes the grounded response. Every answer exposes its own wiring on a run sheet.
+    </p>
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="feature__num">01</div>
+        <h3 class="feature__h">real retrieval</h3>
+        <p class="feature__p">Hosted Voyage embeddings over a governed library. Similarity retrieval with a refusal threshold, so weak matches get declined instead of faked.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">02</div>
+        <h3 class="feature__h">an agentic loop</h3>
+        <p class="feature__p">A cheaper model triages and routes each question before a stronger model writes the answer. Right-sized compute per step.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">03</div>
+        <h3 class="feature__h">a run sheet</h3>
+        <p class="feature__p">Every answer shows how it was produced: what was retrieved, how it routed, what it grounded against. Nothing hidden.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 — How I proved it works -->
+<section class="lab-s lab-s--alt">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">how i proved it works</span>
+    <h2 class="lab-s__h">a real eval harness. <em>22 of 22 pass.</em></h2>
+    <p class="lab-s__p">
+      A labeled evaluation suite runs all 22 cases through the real pipeline: 14 in-scope, 4 out-of-scope, 4 adversarial and prompt-injection. Not vibes, a harness.
+    </p>
+    <div class="lab-stats">
+      <div class="lab-stat">
+        <span class="lab-stat__num">22<i>/22</i></span>
+        <span class="lab-stat__label">cases pass, full pipeline</span>
+      </div>
+      <div class="lab-stat">
+        <span class="lab-stat__num">100<i>%</i></span>
+        <span class="lab-stat__label">retrieval hit-rate</span>
+      </div>
+      <div class="lab-stat">
+        <span class="lab-stat__num">100<i>%</i></span>
+        <span class="lab-stat__label">refusal accuracy · 4/4 red-team declined</span>
+      </div>
+      <div class="lab-stat">
+        <span class="lab-stat__num">92<i>/100</i></span>
+        <span class="lab-stat__label">judge score · mean, range 88 to 97</span>
+      </div>
+    </div>
+    <p class="lab-s__p" style="margin-bottom:0">
+      Two grounding checks on purpose: 100% deterministic citation integrity in code, plus an independent judge model that scores how well each answer traces to its sources, a mean of 92/100. So the system never grades its own work.
+    </p>
+  </div>
+</section>
+
+<!-- 6 — Responsible by design -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">responsible by design</span>
+    <h2 class="lab-s__h">guardrails from <em>the first commit.</em></h2>
+    <ul class="lab-points">
+      <li><b>Stays in scope.</b> Answers come only from inside the governed library. No freelancing.</li>
+      <li><b>No judgments about people.</b> It never rates or decides about a real person.</li>
+      <li><b>Injection-resistant.</b> It ignores instructions hidden in documents or in the question itself.</li>
+      <li><b>A documented review path.</b> A clear route to legal and infosec privacy and fairness review before any real launch.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 7 — From prototype to production -->
+<section class="lab-s lab-s--alt">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">from prototype to production</span>
+    <h2 class="lab-s__h">a documented <em>handoff.</em></h2>
+    <p class="lab-s__p">
+      A prototype that knows what production would take.
+    </p>
+    <ul class="lab-points">
+      <li><b>Latency and cost</b> measured per answer.</li>
+      <li><b>The eval suite as a CI release gate,</b> so quality is checked on every change.</li>
+      <li><b>Monitoring</b> on groundedness and refusals once it is live.</li>
+      <li><b>A single-team rollout</b> before anything wider.</li>
+      <li><b>A clear buy-vs-build line</b> for what to keep and what to replace.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 8 — What it demonstrates -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">what it demonstrates</span>
+    <h2 class="lab-s__h">the whole loop, <em>solo.</em></h2>
+    <p class="lab-s__p">
+      Spotting a development opportunity, scoping it, building the prototype, validating it with a real eval harness, and defining the production handoff, with privacy and fairness from the start. Real applied LLM and RAG, end to end.
+    </p>
+    <div class="tool-list">
+      <span class="tool-pill">claude code</span>
+      <span class="tool-pill">rag</span>
+      <span class="tool-pill">voyage embeddings</span>
+      <span class="tool-pill">agentic routing</span>
+      <span class="tool-pill">eval harness</span>
+      <span class="tool-pill">netlify</span>
+    </div>
+  </div>
+</section>
+
+<!-- Closing — live demo + repo -->
+<section class="closing" id="next">
+  <div class="closing__card">
+    <div class="closing__stamp" aria-hidden="true">
+      <svg class="cd-stamp-mark" viewBox="0 0 90 60" aria-hidden="true">
+        <path class="cd-stamp-mark__fill" fill-rule="evenodd"
+          d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>
+      </svg>
+      <small>self-directed</small>
+      <small>prototype</small>
+    </div>
+    <div class="closing__body">
+      <span class="closing__kicker">see it run</span>
+      <h2 class="closing__h">
+        try <em>greenroom.</em>
+      </h2>
+      <p class="closing__p">
+        A working prototype. Ask it a real question, watch it retrieve, refuse the out-of-scope ones, and follow up on whether the advice landed.
+      </p>
+      <a class="closing__cta" href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener">
+        <span>open the live demo</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+      <a class="closing__email" href="https://github.com/EmilyBlaster/greenroom" target="_blank" rel="noopener">view the code on github →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot__row">
+    <span class="foot__mark">caboodle design</span>
+    <span class="foot__tag">strategy, media, and behavioral science — it's the whole caboodle</span>
+  </div>
+  <div class="foot__cols">
+    <div>
+      <h4>navigation</h4>
+      <ul>
+        <li><a href="../approach.html">approach</a></li>
+        <li><a href="../work.html">work</a></li>
+        <li><a href="../labs.html">labs</a></li>
+        <li><a href="../about.html">about emily</a></li>
+        <li><a href="../field-notes.html">field notes</a></li>
+        <li><a href="../resources.html">free resources</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>get in touch</h4>
+      <ul>
+        <li><a href="../contact.html">let's talk</a></li>
+        <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
+        <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot__row foot__row--small">
+    <span>&copy; 2026 caboodle design</span>
+    <span class="foot__credit">built by emily green in claude code</span>
+    <span class="foot__location">grand rapids, mi</span>
+  </div>
+</footer>
+
+<script src="../script.js?v=20260516" defer></script>
+</body>
+</html>
