@@ -294,6 +294,79 @@
   color: var(--ink-2);
   background: var(--paper);
 }
+
+/* Live demo embed — framed like a browser window, matching the case-study
+   previews. The iframe is a visual (pointer-events off); the overlay link
+   opens the full interactive demo. Loaded lazily, and only when this page
+   is top-level (the inline script guards against nested-iframe memory load
+   when greenroom is itself shown inside the homepage labs preview). */
+.demo-frame {
+  border: 1px solid var(--rule);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: var(--white);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  margin-bottom: 1rem;
+}
+.demo-frame__chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem;
+  background: var(--ink);
+}
+.demo-frame__dots { display: flex; gap: 0.4rem; flex-shrink: 0; }
+.demo-frame__dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.18); }
+.demo-frame__dots span:nth-child(1) { background: var(--magenta); }
+.demo-frame__dots span:nth-child(2) { background: var(--lime); }
+.demo-frame__url {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.demo-frame__expand {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lime);
+  text-decoration: none;
+  transition: opacity 0.3s var(--ease);
+}
+.demo-frame__expand:hover { opacity: 0.7; }
+.demo-frame__viewport {
+  position: relative;
+  height: 620px;
+  background: var(--paper);
+}
+@media (max-width: 640px) { .demo-frame__viewport { height: 460px; } }
+.demo-frame__viewport iframe {
+  width: 100%; height: 100%;
+  border: 0; display: block;
+  pointer-events: none;
+}
+.demo-frame__open {
+  position: absolute; inset: 0;
+  display: flex; align-items: flex-end; justify-content: center;
+  padding-bottom: 1.5rem;
+  text-decoration: none;
+  background: linear-gradient(to bottom, rgba(20,20,20,0) 65%, rgba(20,20,20,0.5));
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+.demo-frame__open:hover, .demo-frame__open:focus-visible { opacity: 1; }
+.demo-frame__open span {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--lime); color: var(--ink);
+  font-family: var(--body); font-weight: 600; font-size: 0.9rem;
+  padding: 0.7rem 1.3rem; border-radius: var(--r-pill);
+}
 </style>
 </head>
 <body>
@@ -355,6 +428,30 @@
     </ul>
   </div>
   <span class="labero__watermark" aria-hidden="true">GR</span>
+</section>
+
+<!-- Live demo embed -->
+<section class="lab-s lab-s--alt">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">the live prototype</span>
+    <h2 class="lab-s__h">see it run.</h2>
+    <p class="lab-s__p">
+      The actual working app, embedded live. Open it full screen to ask a real question and watch it retrieve, cite, refuse the out-of-scope ones, and follow up.
+    </p>
+    <div class="demo-frame">
+      <div class="demo-frame__chrome">
+        <div class="demo-frame__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+        <span class="demo-frame__url">greenroom-strand.netlify.app</span>
+        <a class="demo-frame__expand" href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener">open full screen ↗</a>
+      </div>
+      <div class="demo-frame__viewport">
+        <iframe data-src="https://greenroom-strand.netlify.app" title="Greenroom live prototype" tabindex="-1" aria-hidden="true"></iframe>
+        <a class="demo-frame__open" href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener" aria-label="Open the live Greenroom demo in a new tab">
+          <span>open the live demo ↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- 2 — The opportunity I saw -->
@@ -575,6 +672,23 @@
     <span class="foot__location">grand rapids, mi</span>
   </div>
 </footer>
+
+<!-- Lazy-load the live demo iframe, and only when this page is top-level.
+     Skipping it inside an iframe avoids a heavy nested-iframe load when
+     greenroom is shown in the homepage labs preview. -->
+<script>
+(function () {
+  if (window.self !== window.top) return;
+  var f = document.querySelector('.demo-frame__viewport iframe');
+  if (!f || !f.dataset.src) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { f.src = f.dataset.src; io.disconnect(); }
+    });
+  }, { rootMargin: '300px 0px' });
+  io.observe(f);
+})();
+</script>
 
 <script src="../script.js?v=20260516" defer></script>
 </body>
