@@ -7084,3 +7084,91 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   100% { transform: translate(-50%, -50%) scale(3.5); opacity: 0;   }
 }
 
+/* Availability — dual-audience surface (about page) */
+.availability {
+  padding: clamp(3rem, 5vw, 4rem) var(--pad-x);
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+.availability__head {
+  margin-bottom: 2rem;
+}
+.availability__kicker {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding-top: 0.6rem;
+  border-top: 2px solid var(--ink);
+  margin-bottom: 1rem;
+}
+.availability__title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(1.75rem, 3vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: lowercase;
+  margin: 0;
+}
+.availability__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.availability__mode {
+  padding: 1.75rem;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+}
+.availability__num {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 0.5rem;
+}
+.availability__mode--fractional .availability__num { color: var(--magenta); }
+.availability__mode--fulltime   .availability__num { color: var(--blue);    }
+.availability__h {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+  margin: 0 0 0.6rem;
+  text-transform: lowercase;
+  line-height: 1.1;
+}
+.availability__p {
+  font-size: 0.95rem;
+  color: var(--ink-2);
+  margin: 0 0 1.25rem;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+.availability__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+.availability__cta {
+  display: inline-block;
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  transition: opacity 0.3s var(--ease);
+}
+.availability__cta:hover { opacity: 0.65; }
+
+@media (max-width: 720px) {
+  .availability__grid { grid-template-columns: 1fr; }
+}
+
