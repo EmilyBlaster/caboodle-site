@@ -1,0 +1,14 @@
+{
+  "name": "caboodle-site",
+  "version": "1.0.0",
+  "description": "caboodle design portfolio site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:og": "node scripts/generate-og.mjs"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "playwright": "^1.47.0"
+  }
+}

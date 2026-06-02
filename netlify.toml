@@ -3,9 +3,19 @@
 # ============================================================================
 
 [build]
-  # No build step — this is static HTML/CSS/JS.
-  # Netlify deploys the repo root as-is.
-  publish = "."
+  # Build step is one job: regenerate the OG preview images by
+  # screenshotting the live hero of each page. Without this, the
+  # social previews on LinkedIn, Slack, iMessage etc. would slowly
+  # drift out of sync with whatever the homepage actually says.
+  # The script runs in seconds and the output PNGs go to assets/og/.
+  command  = "npm install --no-audit --no-fund && npx playwright install chromium && npm run build:og"
+  publish  = "."
+
+[build.environment]
+  # Skip Playwright's heavy chromium re-download if Netlify's cache
+  # already has it from a previous build.
+  PLAYWRIGHT_BROWSERS_PATH = "/opt/buildhome/.cache/ms-playwright"
+  NODE_VERSION             = "20"
 
 # ─── Files to exclude from deploy ───────────────────────────────────────────
 # Belt-and-suspenders alongside .gitignore. If a reference folder ever sneaks
