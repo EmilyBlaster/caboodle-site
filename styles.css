@@ -453,9 +453,18 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .hero__scroll:hover { background: var(--ink); color: var(--lime); }
 .hero__scroll:hover svg { transform: translateY(3px); }
 
-@media (max-width: 680px) {
+/* Eyebrow + stamp collision: the AI Program Lead eyebrow runs longer
+   than the old "a learning design consultancy" line and collides with
+   the top-right field note stamp at any viewport under ~1024px.
+   Move the stamp above the eyebrow earlier so the eyebrow gets its
+   own row. The hero foot keeps its 680px breakpoint below since the
+   lede + scroll CTA still fit side-by-side at moderate widths. */
+@media (max-width: 1024px) {
   .hero__stamp { top: 1.25rem; right: auto; left: 0; }
   .hero__meta { padding-top: 3rem; }
+}
+
+@media (max-width: 680px) {
   .hero__foot { flex-direction: column; align-items: flex-start; }
 }
 
