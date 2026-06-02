@@ -435,6 +435,26 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
     io.observe(card);
 
+    /* ── BFCache restore (Safari) ─────────────────────────────────────
+       When Safari restores this page from its back/forward cache, JS
+       state is preserved but iframes are unloaded. The observer doesn't
+       fire again (cards are still "intersecting" from its POV) so the
+       previews stay blank until manual refresh. Detect the BFCache
+       restore via pageshow.persisted and force a fresh iframe load. */
+    window.addEventListener('pageshow', (e) => {
+      if (!e.persisted || !onScreen) return;
+      frame.classList.remove('is-visible');
+      isPaused = true;
+      cancelAnimationFrame(raf);
+      raf = null;
+      srcSet = false;
+      frame.src = 'about:blank';
+      setTimeout(() => {
+        srcSet = true;
+        frame.src = frame.dataset.src;
+      }, 50);
+    });
+
     /* ── Reduced motion: show page statically, no scrolling ─────────── */
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       frame.addEventListener('load', () => {
@@ -666,6 +686,23 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     });
   }, { threshold: 0.01, rootMargin: '600px 0px 600px 0px' });
   io.observe(stage);
+
+  /* ── BFCache restore (Safari) ─────────────────────────────────────────
+     Same issue as the dossier previews. Safari restores the labs page
+     from cache with the iframe unloaded. The observer doesn't fire
+     because the stage is still "intersecting" from its POV. Force a
+     fresh load on pageshow.persisted. */
+  window.addEventListener('pageshow', function (e) {
+    if (!e.persisted || !onScreen) return;
+    stopScroll();
+    viewport.classList.remove('is-loaded');
+    iframe.src = 'about:blank';
+    setTimeout(function () {
+      iframe.onload = onLoaded;
+      nextPause    = PAUSE_INIT;
+      iframe.src   = currentSrc;
+    }, 50);
+  });
 })();
 
 /* ==========================================================================
