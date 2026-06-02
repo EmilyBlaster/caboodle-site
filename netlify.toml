@@ -3,19 +3,13 @@
 # ============================================================================
 
 [build]
-  # Build step is one job: regenerate the OG preview images by
-  # screenshotting the live hero of each page. Without this, the
-  # social previews on LinkedIn, Slack, iMessage etc. would slowly
-  # drift out of sync with whatever the homepage actually says.
-  # The script runs in seconds and the output PNGs go to assets/og/.
-  command  = "npm install --no-audit --no-fund && npx playwright install chromium && npm run build:og"
+  # No build step. OG preview images are pre-generated locally by
+  # running `node scripts/generate-og.mjs` and committed to the repo
+  # as PNG files in assets/og/. Netlify just serves the files as-is.
+  # Whenever positioning copy changes, update the assets/og/og-*.html
+  # template files, run the script locally, commit the new PNGs, push.
+  command  = "echo 'Static site. OG images are pre-generated and committed.'"
   publish  = "."
-
-[build.environment]
-  # Skip Playwright's heavy chromium re-download if Netlify's cache
-  # already has it from a previous build.
-  PLAYWRIGHT_BROWSERS_PATH = "/opt/buildhome/.cache/ms-playwright"
-  NODE_VERSION             = "20"
 
 # ─── Files to exclude from deploy ───────────────────────────────────────────
 # Belt-and-suspenders alongside .gitignore. If a reference folder ever sneaks
