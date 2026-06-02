@@ -1,5 +1,27 @@
 [
   {
+    "id": "7646520337441574175",
+    "cat": "adoption",
+    "date": "jun 1",
+    "title": "What makes people change how they work because of AI.",
+    "body": "It's not the tool. Behavior change is the bottleneck most AI rollouts ignore."
+  },
+  {
+    "id": "7642454450082270494",
+    "type": "photo",
+    "cat": "career",
+    "date": "may 21",
+    "title": "When leadership calls your real work \"a cool prototype\" and nothing happens.",
+    "body": "Three moves that pay off for you whether the org catches up or not. The proof is the point."
+  },
+  {
+    "id": "7641709325194480926",
+    "cat": "ai tools",
+    "date": "may 19",
+    "title": "Built a tiny Claude fix for my forgetful ADHD brain.",
+    "body": "A small kit for the moments when working memory drops the ball. Free in the comments. Build the system around the human, not the other way."
+  },
+  {
     "id": "7639477140739706143",
     "cat": "systems",
     "date": "may 13",

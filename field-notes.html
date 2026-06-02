@@ -102,7 +102,8 @@
 
 <script>
 // Render field notes from JSON — to add a new post, prepend an object to
-// data/tiktok-posts.json. Fields: id, cat, date, title, body (HTML ok), thumb (optional).
+// data/tiktok-posts.json. Fields: id, cat, date, title, body (HTML ok), thumb (optional),
+// type (optional — "video" default, "photo" for /photo/ carousel posts).
 (function () {
   var PLAY_ICON = '<svg class="post__play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>';
 
@@ -114,7 +115,7 @@
 
       grid.innerHTML = posts.map(function (p) {
         var thumb = p.thumb || ('assets/tiktok/' + p.id + '.jpeg');
-        var url   = 'https://www.tiktok.com/@caboodledesign/video/' + p.id;
+        var url   = 'https://www.tiktok.com/@caboodledesign/' + (p.type || 'video') + '/' + p.id;
         return '<li><a class="post" style="--thumb: url(\'' + thumb + '\')" href="' + url + '" target="_blank" rel="noopener">'
           + '<div class="post__meta"><span class="post__cat">' + p.cat + '</span><span class="post__date">' + p.date + '</span></div>'
           + PLAY_ICON
