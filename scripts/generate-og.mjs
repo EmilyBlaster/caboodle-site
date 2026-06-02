@@ -29,10 +29,14 @@ const OG_DIR = path.join(PROJECT_ROOT, 'assets', 'og');
 const PORT = 8765;
 
 // Each entry produces one OG image at assets/og/<output>.
+// Sources are the bespoke 1200x630 HTML templates at assets/og/og-*.html.
+// Those templates are pre-composed for the OG canvas — full claim
+// fits cleanly, branded chrome, no live-page cropping. Update the
+// copy inside the templates when positioning changes.
 const PAGES = [
-  { url: '/index.html',       output: 'og-home.png' },
-  { url: '/about.html',       output: 'og-about.png' },
-  { url: '/field-notes.html', output: 'og-field-notes.png' },
+  { url: '/assets/og/og-home.html',        output: 'og-home.png' },
+  { url: '/assets/og/og-about.html',       output: 'og-about.png' },
+  { url: '/assets/og/og-field-notes.html', output: 'og-field-notes.png' },
 ];
 
 const OG_VIEWPORT = { width: 1200, height: 630 };
