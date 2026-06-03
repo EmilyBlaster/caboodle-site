@@ -2680,9 +2680,12 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   letter-spacing: -0.04em;
   color: var(--ink);
   text-transform: lowercase;
-  max-width: 14ch;
-  overflow-wrap: break-word;
-  hyphens: auto;
+  /* 14ch was tuned to force the OLD 3-line pattern to wrap as
+     intended. The new 2-line pattern needs roughly twice that width
+     for the longest title (Trust20: "accredited alcohol server
+     training") to fit on one line at the new 5rem font cap. */
+  max-width: 36ch;
+  overflow-wrap: normal;
 }
 .casehero__h em { font-style: italic; color: var(--magenta); }
 
