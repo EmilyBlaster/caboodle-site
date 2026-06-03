@@ -1058,7 +1058,14 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 
 .work__head {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  /* Title column gets 2/3 of the row width, dek column gets 1/3.
+     Previously this was 1fr 2fr which gave the dek paragraph more
+     horizontal space than the giant display-type title, forcing
+     the title to widow on the longer second line ("filed and
+     catalogued."). The dek has its own 48ch max-width so giving it
+     less column space doesn't compress the actual readable line
+     length — it just sits in a narrower column. */
+  grid-template-columns: 2fr 1fr;
   gap: 2rem 4rem;
   align-items: end;
   padding-bottom: 3rem;
