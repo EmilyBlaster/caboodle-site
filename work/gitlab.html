@@ -300,56 +300,6 @@
 }
 .glpdf:hover .glpdf__img { opacity: 1; }
 
-/* Results: editorial ruled rows instead of 4-column stat grid */
-.gl-results {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  border-top: 1px solid var(--rule);
-  border-bottom: none;       /* override results__grid border-bottom */
-  padding: 0;                /* override results__grid padding */
-  margin: 0 0 2rem;
-  grid-template-columns: unset;
-}
-.gl-results > div {
-  display: grid;
-  grid-template-columns: 11rem 1fr;
-  gap: 0 4rem;
-  align-items: center;
-  padding: 2rem 0;
-  border-bottom: 1px solid var(--rule);
-  background: none;
-}
-.gl-results dd {
-  font-family: var(--display);
-  font-weight: 800;
-  font-size: clamp(2.5rem, 4vw, 4rem);
-  letter-spacing: -0.05em;
-  line-height: 1;
-  color: var(--blue);
-  -webkit-text-stroke: 0;
-  margin: 0;
-}
-.gl-results dd span { color: var(--magenta); }
-.gl-results__closing { grid-template-columns: 1fr !important; }
-.gl-results__closing dt {
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: clamp(1.25rem, 2vw, 1.75rem);
-  color: var(--ink);
-  letter-spacing: -0.02em;
-  text-transform: lowercase;
-  line-height: 1.2;
-  text-wrap: balance;
-}
-.gl-results__closing dt em { color: var(--blue); font-style: normal; }
-.gl-results dt {
-  font-size: 1rem;
-  line-height: 1.5;
-  color: var(--ink-2);
-  max-width: 60ch;
-}
-
 /* Responsive */
 @media (max-width: 900px) {
   .glspotlight__inner { grid-template-columns: 1fr; min-height: 0; }
@@ -415,14 +365,6 @@
 @media (max-width: 600px) {
   .glproject__head { grid-template-columns: 1fr; gap: 0.5rem; }
   .glproject__num { font-size: clamp(2.5rem, 10vw, 3.5rem); }
-  /* Stack stat + description vertically; description gets full width */
-  .gl-results > div {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-    padding: 1.5rem 0;
-  }
-  .gl-results dd { font-size: clamp(3rem, 14vw, 4rem); }
-  .gl-results dt { text-transform: none; letter-spacing: 0; font-family: var(--body); font-size: 0.95rem; }
 }
 </style>
 </head>
@@ -861,21 +803,22 @@
     </h2>
   </header>
 
-  <dl class="results__grid gl-results">
+  <dl class="results__grid">
     <div>
+      <dt>countries · nl · de · fr</dt>
       <dd>3</dd>
-      <dt>Countries. The Netherlands, Germany, and France. Each one a distinct legal framework, built into the design from day one.</dt>
     </div>
     <div>
+      <dt>custom-coded interactive tools</dt>
       <dd>11</dd>
-      <dt>Custom-coded interactive tools. Every deliverable async-ready, every one built around a real decision employees needed to make.</dt>
     </div>
     <div>
+      <dt>in-person sessions required</dt>
       <dd>0</dd>
-      <dt>In-person training sessions required. Globally distributed, async-only, no single point of failure.</dt>
     </div>
-    <div class="gl-results__closing">
-      <dt>behavior-first, start to finish. every tool designed around what people need to <em>do</em>, not what they need to know.</dt>
+    <div class="results__grid-word">
+      <dt>globally distributed, no single point of failure</dt>
+      <dd>async-<br/>only</dd>
     </div>
   </dl>
 

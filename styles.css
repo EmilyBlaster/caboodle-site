@@ -7177,6 +7177,53 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 }
 .availability__cta:hover { opacity: 0.65; }
 
+/* ==========================================================================
+   GLOBAL TYPOGRAPHY POLISH
+   Modern browser-level widow and balance handling. Applied site-wide:
+
+   - text-wrap: pretty on body paragraphs prevents the last line of a
+     paragraph from ending with a single orphan word. The browser
+     redistributes words across the last two lines instead.
+
+   - text-wrap: balance on headings keeps multi-line titles from having
+     awkward short trailing lines (e.g. one word on the last line of a
+     three-line H1). Best at small heading sizes where the rendering
+     cost is negligible.
+
+   Supported in Chrome 117+, Safari 17.5+, Firefox 121+. In older
+   browsers these rules are silently ignored, and text wraps normally.
+
+   Skipping anchors and ribbon-style horizontal lists (.dossier__client,
+   .trustband__list, etc.) where pretty/balance can fight with the
+   existing fixed-width treatment.
+   ========================================================================== */
+
+p,
+.about__p,
+.aboutpage__lede,
+.story__head,
+.storyblock p,
+.work__dek,
+.dossier__p,
+.matrix__kicker,
+.casehero__lede,
+.cs__p,
+.cs__lede {
+  text-wrap: pretty;
+}
+
+h1, h2, h3,
+.hero__headline,
+.aboutpage__h,
+.work__title,
+.dossier__h,
+.results__h,
+.casehero__h,
+.closing__h,
+.subscribe__h {
+  text-wrap: balance;
+}
+
 @media (max-width: 720px) {
   .availability__grid { grid-template-columns: 1fr; }
 }
