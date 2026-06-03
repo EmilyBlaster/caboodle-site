@@ -7222,6 +7222,13 @@ h1, h2, h3,
 .closing__h,
 .subscribe__h {
   text-wrap: balance;
+  /* Never auto-hyphenate or break mid-word as a fallback when a forced
+     line break or a nbsp-tied phrase doesn't fit. Better to overflow
+     or accept a widow than to produce "strate-/gy." mid-word hyphens. */
+  hyphens: none;
+  -webkit-hyphens: none;
+  overflow-wrap: normal;
+  word-break: keep-all;
 }
 
 @media (max-width: 720px) {
