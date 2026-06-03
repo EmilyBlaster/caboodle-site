@@ -2675,7 +2675,7 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   padding-top: 0.1em;
   font-family: var(--display);
   font-weight: 800;
-  font-size: clamp(2.4rem, 9vw, 6.5rem);
+  font-size: clamp(2.4rem, 7vw, 5rem);
   line-height: 1.15;
   letter-spacing: -0.04em;
   color: var(--ink);
