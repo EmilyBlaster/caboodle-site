@@ -3938,7 +3938,12 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   padding-top: 0.1em;
   font-family: var(--display);
   font-weight: 800;
-  font-size: clamp(3.5rem, 11vw, 9.5rem);
+  /* Was clamp(3.5rem, 11vw, 9.5rem) — 152px max was the largest
+     display heading on the site and produced the same widow pattern
+     we hit on case study and lab pages. Brought into line with the
+     other landing page hero classes at 5rem max. Still very
+     substantial display type, just no longer screen-filling. */
+  font-size: clamp(2.4rem, 7vw, 5rem);
   line-height: 1.15;
   letter-spacing: -0.04em;
   color: var(--ink);
@@ -4989,13 +4994,18 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   padding-top: 0.1em;
   font-family: var(--display);
   font-weight: 800;
-  font-size: clamp(2.4rem, 11vw, 8rem);
+  /* Was clamp(2.4rem, 11vw, 8rem) — 128px max made the second line
+     ("filed and catalogued." on work, "ai experimentation." on labs)
+     widow. Same 2-line pattern fix as case studies: tame the max so
+     the em phrase fits on one line. */
+  font-size: clamp(2.4rem, 7vw, 5rem);
   line-height: 1.1;
   letter-spacing: -0.04em;
   color: var(--ink);
   text-transform: lowercase;
-  overflow-wrap: break-word;
-  hyphens: auto;
+  /* overflow-wrap: break-word and hyphens: auto removed — the
+     global heading rule sets hyphens: none so words never split
+     mid-character. */
 }
 .labshero__h em { font-style: italic; color: var(--magenta); }
 .labshero__lede {
