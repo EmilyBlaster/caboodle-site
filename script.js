@@ -292,7 +292,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   const SCROLL_SPEED   = 0.4;   /* px per animation frame (gentle)           */
   const IFRAME_W       = 1440;  /* design width to scale from                */
   const VISIBLE_H      = 300;   /* visible viewport height in px             */
-  const PAUSE_START    = 1400;  /* ms — show landing zone before scrolling   */
+  const PAUSE_START    = 700;   /* ms — show landing zone before scrolling   */
   const FADE_MS        = 380;   /* ms — loop crossfade                       */
   const FALLBACK_START = 2000;  /* px fallback if no artifact section found  */
 

@@ -1391,7 +1391,29 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   height: 300px;
   overflow: hidden;
   position: relative;
+  /* Subtle shimmer behind the still-loading iframe so the empty
+     state reads as "preview loading" instead of "broken." Fades
+     out once the iframe gets the .is-visible class on load. */
+  background:
+    linear-gradient(
+      105deg,
+      var(--paper) 0%,
+      var(--paper-2) 45%,
+      var(--paper) 55%,
+      var(--paper-2) 100%
+    );
+  background-size: 220% 100%;
+  animation: dossier-preview-shimmer 2.4s ease-in-out infinite;
+}
+/* When the iframe is loaded and visible, kill the shimmer */
+.dossier__preview-iframe.is-visible ~ ::before,
+.dossier__preview-viewport:has(.is-visible) {
+  animation: none;
   background: var(--paper);
+}
+@keyframes dossier-preview-shimmer {
+  0%   { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* Gradient fade at bottom so content fades out rather than hard-clips */
