@@ -1235,3 +1235,110 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     }, 560);
   }, { passive: true });
 })();
+
+/* ==========================================================================
+   STAT COUNTERS — animate big numbers from 0 to target on scroll-into-view
+   Brand-coherent motion that fits the field-journal voice: numbers reading
+   as measurements being recorded, not generic UI animation. One-shot per
+   element via IntersectionObserver.
+   ========================================================================== */
+(function statCounters() {
+  // Respect motion preferences — never animate for users who asked us not to
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // Every element on the site that holds a big-display stat number.
+  // Mostly <dd> elements inside results / about / facts grids, plus the
+  // <span class="dossier__statnum"> blobs on the homepage dossier cards.
+  const SELECTORS = [
+    '.about__stats dd',
+    '.aboutstats__grid dd',
+    '.results__grid dd',
+    '.dossier__statnum',
+  ].join(',');
+
+  const targets = document.querySelectorAll(SELECTORS);
+  if (!targets.length) return;
+
+  const DURATION = 1400;  /* ms total for the count-up        */
+  const THRESHOLD = 0.4;  /* fraction of element in viewport  */
+
+  /* Cubic ease-out: races to most of the value early, decelerates into
+     the landing. Reads as a measurement settling rather than a uniform
+     counter ticking up. */
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+  /* Read the direct text node of an element (ignoring child <span>, <i>
+     etc. which usually hold the unit suffix like "%", "+", "x"). Returns
+     { value, unit, textNode, originalText } or null if non-numeric. */
+  function parse(el) {
+    let textNode = null;
+    let raw = '';
+    for (const node of el.childNodes) {
+      if (node.nodeType !== Node.TEXT_NODE) continue;
+      const t = node.textContent;
+      if (!t || !t.trim()) continue;
+      textNode = node;
+      raw = t.trim();
+      break;
+    }
+    if (!textNode) return null;
+
+    /* Accept plain integers and K/M shorthand: "15", "95", "10K", "3M".
+       Skip anything that doesn't start with digits ("behavior", "AI",
+       "multi", "async-only" — the categorical word-stats). */
+    const match = raw.match(/^(\d+)([KMB]?)/i);
+    if (!match) return null;
+
+    return {
+      value: parseInt(match[1], 10),
+      unit: (match[2] || '').toUpperCase(),
+      textNode,
+      originalText: raw,
+    };
+  }
+
+  function animate(parsed) {
+    const start = performance.now();
+
+    function tick(now) {
+      const t = Math.min((now - start) / DURATION, 1);
+      const eased = easeOut(t);
+      const current = Math.round(parsed.value * eased);
+      parsed.textNode.textContent = current + parsed.unit;
+
+      if (t < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        /* Snap to the exact original string at the end so we never
+           leave the DOM differing from what shipped in the HTML. */
+        parsed.textNode.textContent = parsed.originalText;
+      }
+    }
+
+    /* Set to "0" immediately so the user sees the count-up begin
+       from zero, not from the cached final value. */
+    parsed.textNode.textContent = '0' + parsed.unit;
+    requestAnimationFrame(tick);
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const parsed = parse(entry.target);
+      if (parsed) animate(parsed);
+      /* One-shot — don't re-animate when user scrolls back */
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: THRESHOLD });
+
+  /* For elements ALREADY in the viewport on page load (e.g. above-the-fold
+     stats), skip the observer entirely — animating something the user is
+     already looking at flickers the value down to 0 first, which looks
+     broken. */
+  targets.forEach((el) => {
+    const rect = el.getBoundingClientRect();
+    const inView = rect.top < window.innerHeight && rect.bottom > 0;
+    if (inView) return;
+    observer.observe(el);
+  });
+})();
