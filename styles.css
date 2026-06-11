@@ -485,7 +485,15 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 2rem;
+  /* 2rem column gap could collapse to look mashed when the trust list
+     wraps right up against the "8+ enterprise teams" note column. */
+  gap: 2rem 3.5rem;
+}
+/* Belt-and-suspenders: explicit whitespace cushion around the note so
+   the last list item ("intuit") never visually crashes into "8+...". */
+.trustband__note {
+  padding-left: 1.5rem;
+  white-space: nowrap;
 }
 .trustband__kicker,
 .trustband__note {
