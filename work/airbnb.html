@@ -31,6 +31,176 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="../styles.css?v=20260516" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+
+<style>
+/* Spotlight: Greenroom lab embedded live. Adapted from the GitLab
+   spotlight pattern — dark rounded two-column inside editorial
+   margins, Mac-style window chrome, live iframe on desktop,
+   tappable preview card on phones. */
+.abspot {
+  background: var(--paper);
+  padding: clamp(2rem, 4vw, 3.5rem) var(--pad-x);
+  color: var(--paper);
+  overflow: visible;
+}
+.abspot__inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 4fr 8fr;
+  min-height: 560px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--ink);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.10);
+}
+.abspot__text {
+  padding: clamp(3rem, 6vw, 6rem) clamp(2rem, 5vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.25rem;
+}
+.abspot__kicker {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lime);
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(150, 230, 80, 0.35);
+  width: fit-content;
+}
+.abspot__h {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  color: var(--paper);
+}
+.abspot__h em { color: var(--lime); font-style: italic; }
+.abspot__p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(242, 239, 232, 0.65);
+  max-width: 44ch;
+}
+.abspot__cta {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lime);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(150, 230, 80, 0.35);
+  padding-bottom: 0.2em;
+  width: fit-content;
+  transition: border-color 0.2s var(--ease);
+}
+.abspot__cta:hover { border-color: var(--lime); }
+.abspot__window {
+  display: flex;
+  flex-direction: column;
+  background: #1e1e2e;
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+  position: relative;
+}
+.abspot__chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1rem;
+  background: #2a2a3c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  flex-shrink: 0;
+}
+.abspot__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.abspot__chrome-title {
+  font-family: var(--body);
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 auto;
+  letter-spacing: 0.03em;
+}
+.abspot__iframe {
+  width: 100%;
+  flex: 1;
+  border: none;
+  display: block;
+  min-height: 560px;
+}
+.abspot__mobilecard { display: none; }
+
+@media (max-width: 900px) {
+  .abspot__inner { grid-template-columns: 1fr; min-height: 0; }
+  .abspot__iframe { min-height: 360px; }
+}
+/* On phones the embedded app is unusable (desktop layout, scaled
+   tiny). Swap for a tappable card that opens it full screen. */
+@media (max-width: 720px) {
+  .abspot__iframe { display: none; }
+  .abspot__mobilecard {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: 2rem 1.5rem;
+    min-height: 240px;
+    background: linear-gradient(135deg, #1a1d29 0%, #2c2f3d 100%);
+    color: var(--paper);
+    text-decoration: none;
+    border-left: 1px solid rgba(255,255,255,0.07);
+  }
+  .abspot__chip {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--lime);
+    align-self: flex-start;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid rgba(200, 255, 53, 0.4);
+    border-radius: 999px;
+  }
+  .abspot__mobilecard-h {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--paper);
+    margin-top: 0.25rem;
+  }
+  .abspot__mobilecard-p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgba(242, 239, 232, 0.7);
+  }
+  .abspot__mobilecard-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: auto;
+  }
+  .abspot__mobilecard-cta svg { width: 14px; height: 14px; }
+}
+</style>
 </head>
 <body>
 
@@ -167,6 +337,52 @@
       </p>
     </div>
   </article>
+</section>
+
+<!-- Spotlight: Greenroom lab, embedded live -->
+<section class="abspot" data-log="002b — spotlight · greenroom lab, live">
+  <div class="abspot__inner">
+    <div class="abspot__text">
+      <span class="abspot__kicker">spotlight · the lab behind the thinking</span>
+      <h3 class="abspot__h">
+        greenroom.<br />
+        <em>the thinking, live.</em>
+      </h3>
+      <p class="abspot__p">
+        The AI101 modules live inside Airbnb. Greenroom is the
+        public lab I built in parallel: a working AI development
+        copilot that shows the same thinking. Performance over
+        content. Behavior change over checkbox completion.
+        Embedded live, right here.
+      </p>
+      <a class="abspot__cta" href="../labs/greenroom.html">
+        read the full lab writeup →
+      </a>
+    </div>
+    <div class="abspot__window">
+      <div class="abspot__chrome">
+        <span class="abspot__dot" style="background:#EC008C"></span>
+        <span class="abspot__dot" style="background:#96E650"></span>
+        <span class="abspot__dot" style="background:#4a4a5a"></span>
+        <span class="abspot__chrome-title">greenroom-strand.netlify.app</span>
+      </div>
+      <iframe
+        src="https://greenroom-strand.netlify.app"
+        class="abspot__iframe"
+        loading="lazy"
+        title="Greenroom — live AI development copilot prototype"
+      ></iframe>
+      <a class="abspot__mobilecard" href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener" aria-label="Open the live Greenroom lab full-screen">
+        <span class="abspot__chip">live lab</span>
+        <span class="abspot__mobilecard-h">greenroom, live.</span>
+        <span class="abspot__mobilecard-p">Best experienced full screen on tablet or desktop. Tap to open the working prototype in a new tab.</span>
+        <span class="abspot__mobilecard-cta">
+          open the live lab
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </span>
+      </a>
+    </div>
+  </div>
 </section>
 
 <!-- Results -->
