@@ -37,6 +37,7 @@ const PAGES = [
   { url: '/assets/og/og-home.html',        output: 'og-home.png' },
   { url: '/assets/og/og-about.html',       output: 'og-about.png' },
   { url: '/assets/og/og-field-notes.html', output: 'og-field-notes.png' },
+  { url: '/assets/og/og-airbnb.html',      output: 'og-airbnb.png' },
 ];
 
 const OG_VIEWPORT = { width: 1200, height: 630 };
