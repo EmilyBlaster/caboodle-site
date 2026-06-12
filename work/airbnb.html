@@ -694,7 +694,11 @@
   text-transform: uppercase;
   color: rgba(242,239,232,0.65);
   margin: 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
 }
+.plchat__title .pl-icon { width: 13px; height: 13px; }
 .plchat__feed {
   height: 340px;
   overflow: hidden;
@@ -731,15 +735,12 @@
   position: relative;
   padding-left: 1.7rem;
 }
-.plchat__msg--pl::before {
-  content: '';
+.plchat__msg--pl .pl-icon {
   position: absolute;
-  left: 0.75rem;
-  top: 1rem;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--lime);
+  left: 0.6rem;
+  top: 0.85rem;
+  width: 13px;
+  height: 13px;
 }
 .plchat__typing {
   align-self: flex-start;
@@ -780,6 +781,14 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-2);
+}
+.plmap__note {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+  text-align: center;
+  padding: 0.15rem 0.5rem 0.4rem;
 }
 .plmap svg { width: 100%; max-width: 320px; height: auto; display: block; }
 .plmap .pl-ring {
@@ -1176,7 +1185,7 @@
           <span class="plchat__cdot" style="background:#EC008C"></span>
           <span class="plchat__cdot" style="background:#96E650"></span>
           <span class="plchat__cdot" style="background:#4a4a5a"></span>
-          <span class="plchat__title">porchlight · cowork</span>
+          <span class="plchat__title"><svg class="pl-icon" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 5 A3.5 3.5 0 0 1 9.5 5 L9.5 5.6 L2.5 5.6 Z" fill="#96E650"/><line x1="4" y1="7.4" x2="3.2" y2="9.6" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/><line x1="6" y1="7.6" x2="6" y2="10" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="7.4" x2="8.8" y2="9.6" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/></svg>porchlight · cowork</span>
         </div>
         <div class="plchat__feed"></div>
       </div>
@@ -1214,6 +1223,7 @@
             <text x="170" y="158" text-anchor="middle">ready.</text>
           </g>
         </svg>
+        <span class="plmap__note">ready means all five are lit · no seat time, no checkbox</span>
       </div>
     </div>
 
@@ -1528,10 +1538,15 @@
   let timer = null;
   let running = false;
 
+  /* Tiny porch light glyph — same one as the window chrome — so the
+     coach's messages read as porchlight, not as a second person. */
+  const PL_ICON = '<svg class="pl-icon" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 5 A3.5 3.5 0 0 1 9.5 5 L9.5 5.6 L2.5 5.6 Z" fill="#96E650"/><line x1="4" y1="7.4" x2="3.2" y2="9.6" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/><line x1="6" y1="7.6" x2="6" y2="10" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="7.4" x2="8.8" y2="9.6" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/></svg>';
+
   function addMsg(step) {
     const el = document.createElement('div');
     el.className = 'plchat__msg plchat__msg--' + step.who;
     el.textContent = step.text;
+    if (step.who === 'pl') el.insertAdjacentHTML('afterbegin', PL_ICON);
     feed.appendChild(el);
     while (feed.children.length > MAX_VISIBLE) feed.removeChild(feed.firstChild);
   }
