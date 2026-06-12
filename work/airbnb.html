@@ -498,60 +498,65 @@
 .aiwt__feedback--right { border-color: rgba(150, 230, 80, 0.8); background: rgba(150, 230, 80, 0.14); }
 .aiwt__feedback--wrong { border-color: rgba(236, 0, 140, 0.4); background: rgba(236, 0, 140, 0.03); }
 
-/* Step 3 — audit rows (tap to reveal, gated) */
-.aiwt__audits { margin: 0; }
-.aiwt__audit {
-  display: grid;
-  grid-template-columns: 3rem 1fr;
-  gap: 2rem;
-  padding: 1.5rem 0;
-  border-top: 1px solid var(--rule);
-}
-.aiwt__audit:last-of-type { border-bottom: 1px solid var(--rule); }
-.aiwt__audit-num {
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 0.85rem;
-  color: var(--ink-2);
-  letter-spacing: 0.04em;
-  line-height: 1.6;
-}
-.aiwt__audit-label {
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: -0.015em;
-  color: var(--ink);
-  display: block;
-  margin-bottom: 0.5rem;
-}
-.aiwt__reveal {
-  background: transparent;
-  border: 0;
-  padding: 0;
+/* Step 3 — inline audit: hover (or tap) the highlighted passages in
+   the AI draft itself. Magenta = deserves a look; lime = caught.
+   The third problem is an absence, so it gets a dashed gap chip at
+   the end of the draft instead of a text highlight. */
+.aiwt__flag {
+  background: rgba(236, 0, 140, 0.07);
+  border-bottom: 2px dotted var(--magenta);
+  padding: 0 0.12em;
   cursor: pointer;
-  font-family: var(--mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  color: var(--blue);
-  text-transform: uppercase;
-  transition: color 0.2s var(--ease);
+  transition: background 0.25s var(--ease), border-color 0.25s var(--ease);
 }
-.aiwt__reveal:hover { color: var(--magenta); }
-.aiwt__answer {
-  display: none;
-  margin-top: 1rem;
-  padding: 1rem 1.25rem;
-  background: rgba(3, 89, 155, 0.04);
-  border: 1px solid rgba(3, 89, 155, 0.2);
-  border-radius: 6px;
+.aiwt__flag:hover { background: rgba(236, 0, 140, 0.15); }
+.aiwt__flag:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.aiwt__flag.is-found {
+  background: rgba(150, 230, 80, 0.18);
+  border-bottom: 2px solid var(--lime);
+}
+.aiwt__flag--gap {
+  display: inline-block;
+  background: transparent;
+  border: 1.5px dashed var(--magenta);
+  border-radius: 999px;
+  padding: 0.05em 0.7em;
+  font-family: var(--mono);
+  font-size: 0.78em;
+  letter-spacing: 0.06em;
+  color: var(--magenta);
+  white-space: nowrap;
+}
+.aiwt__flag--gap:hover { background: rgba(236, 0, 140, 0.06); }
+.aiwt__flag--gap.is-found {
+  border: 1.5px dashed var(--ink);
+  background: rgba(150, 230, 80, 0.18);
+  color: var(--ink);
+}
+.aiwt__callout {
+  margin-top: 1.25rem;
+  padding: 1.1rem 1.3rem;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--paper-2);
+  min-height: 6.4rem;
+  max-width: 62ch;
+}
+.aiwt__callout-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 0.4rem;
+}
+.aiwt__callout p {
+  margin: 0;
   font-size: 0.94rem;
   line-height: 1.55;
   color: var(--ink);
-  max-width: 58ch;
 }
-.aiwt__audit.is-revealed .aiwt__answer { display: block; }
-.aiwt__audit.is-revealed .aiwt__reveal { color: var(--ink-2); }
 .aiwt__progress-note {
   text-align: center;
   font-family: var(--mono);
@@ -628,7 +633,6 @@
 
 @media (max-width: 700px) {
   .aiwt__card { padding: 1.75rem; }
-  .aiwt__audit { grid-template-columns: 2rem 1fr; gap: 1rem; }
   .aiwt__outcome-list li { grid-template-columns: 1fr; gap: 0.25rem; }
   .aiwt__head-bar { flex-direction: column; align-items: flex-start; gap: 1rem; }
   .aiwt__progress-bar { max-width: none; width: 100%; }
@@ -1193,8 +1197,9 @@
         <span class="aiwt__chip">step 3 · the human pass</span>
         <h4 class="aiwt__panel-h">the draft is back. <em>now you audit.</em></h4>
         <p class="aiwt__panel-lede">
-          Eight seconds later you have a one-page draft. It contains
-          three planted problems. Find all three to continue.
+          Eight seconds later you have a one-page draft. Three spots
+          deserve a closer look. Hover or tap each highlight to audit
+          before you ship.
         </p>
         <div class="aiwt__artifact aiwt__artifact--doc">
           <div class="aiwt__artifact-bar">
@@ -1202,51 +1207,15 @@
             <span>generated in 8s</span>
           </div>
           <div class="aiwt__artifact-body">
-            <p><strong>Recommendation:</strong> proceed with Atlas. At $240k per year it is the clear cost leader. The security review will finish within four weeks, keeping the rollout ahead of schedule.</p>
-            <p>The pilot launches with approximately 60 new managers. The Beacon demo and success metrics workstream are already in motion.</p>
+            <p><strong>Recommendation:</strong> proceed with Atlas. <span class="aiwt__flag" data-flag="1" tabindex="0">At $240k per year it is the clear cost leader.</span> <span class="aiwt__flag" data-flag="2" tabindex="0">The security review will finish within four weeks,</span> keeping the rollout ahead of schedule.</p>
+            <p>The pilot launches with approximately 60 new managers. The Beacon demo and success metrics workstream are already in motion. <span class="aiwt__flag aiwt__flag--gap" data-flag="3" tabindex="0">what's missing here?</span></p>
           </div>
         </div>
-        <div class="aiwt__audits">
-          <div class="aiwt__audit">
-            <span class="aiwt__audit-num">01</span>
-            <div>
-              <span class="aiwt__audit-label">Check the numbers</span>
-              <button type="button" class="aiwt__reveal">Tap to reveal →</button>
-              <div class="aiwt__answer">
-                The draft calls Atlas "the clear cost leader." Your notes
-                say the opposite: that price drew the hardest objection in
-                the room. The model inverted a key fact. This is the most
-                common synthesis failure there is.
-              </div>
-            </div>
-          </div>
-          <div class="aiwt__audit">
-            <span class="aiwt__audit-num">02</span>
-            <div>
-              <span class="aiwt__audit-label">Check the certainty</span>
-              <button type="button" class="aiwt__reveal">Tap to reveal →</button>
-              <div class="aiwt__answer">
-                "Will finish within four weeks" upgrades your notes' 4 to
-                6 weeks, unconfirmed, into a promise your director will
-                repeat upward. AI rounds uncertainty up to confidence.
-                The human pass rounds it back down.
-              </div>
-            </div>
-          </div>
-          <div class="aiwt__audit">
-            <span class="aiwt__audit-num">03</span>
-            <div>
-              <span class="aiwt__audit-label">Check what's missing</span>
-              <button type="button" class="aiwt__reveal">Tap to reveal →</button>
-              <div class="aiwt__answer">
-                The end-of-month deadline, the entire reason this brief
-                exists, appears nowhere in the draft. The model summarized
-                the meeting and buried the decision.
-              </div>
-            </div>
-          </div>
+        <div class="aiwt__callout" id="aiwtCallout">
+          <span class="aiwt__callout-label">the audit</span>
+          <p>Hover each highlighted passage to see what deserves a second look before you ship.</p>
         </div>
-        <p class="aiwt__progress-note" id="aiwtGateNote">Reveal all 3 to continue</p>
+        <p class="aiwt__progress-note" id="aiwtGateNote">Hover or tap all 3 highlights to continue</p>
       </div>
 
       <!-- Step 4 — ship the artifact -->
@@ -1592,14 +1561,23 @@
     updateAuditGate();
   }
 
+  const callout = document.getElementById('aiwtCallout');
+  const CALLOUT_DEFAULT = callout ? callout.innerHTML : '';
+  const auditFound = new Set();
+
+  const ANNOTATIONS = {
+    1: { label: "check the numbers", text: "The draft calls Atlas \"the clear cost leader.\" Your notes say the opposite: that price drew the hardest objection in the room. The model inverted a key fact. The most common synthesis failure there is." },
+    2: { label: "check the certainty", text: "\"Will finish within four weeks\" upgrades your notes' 4 to 6 weeks, unconfirmed, into a promise your director will repeat upward. AI rounds uncertainty up to confidence. The human pass rounds it back down." },
+    3: { label: "check what's missing", text: "The end-of-month deadline, the entire reason this brief exists, appears nowhere in the draft. The model summarized the meeting and buried the decision." }
+  };
+
   function updateAuditGate() {
     if (current !== 3) return;
-    const revealed = card.querySelectorAll('.aiwt__audit.is-revealed').length;
-    const all = card.querySelectorAll('.aiwt__audit').length;
-    const done = revealed === all;
+    const left = 3 - auditFound.size;
+    const done = left === 0;
     if (gate) gate.textContent = done
       ? 'All 3 found. Ready to ship.'
-      : `Reveal ${all - revealed} more to continue`;
+      : `Hover or tap ${left} more highlight${left === 1 ? '' : 's'} to continue`;
     nextBtn.disabled = !done;
     nextBtn.style.opacity = done ? '1' : '0.4';
   }
@@ -1610,8 +1588,9 @@
     if (current === total) {
       /* Restart: clear reveals and choice state so the walkthrough
          replays clean. */
-      card.querySelectorAll('.aiwt__audit.is-revealed').forEach(a => a.classList.remove('is-revealed'));
-      card.querySelectorAll('.aiwt__reveal').forEach(b => { b.textContent = 'Tap to reveal →'; });
+      card.querySelectorAll('.aiwt__flag.is-found').forEach(f => f.classList.remove('is-found'));
+      auditFound.clear();
+      if (callout) callout.innerHTML = CALLOUT_DEFAULT;
       card.querySelectorAll('.aiwt__choices button').forEach(b => b.classList.remove('is-right', 'is-wrong'));
       const fb = card.querySelector('[data-feedback]');
       if (fb) { fb.className = 'aiwt__feedback'; fb.textContent = ''; }
@@ -1649,14 +1628,21 @@
     });
   });
 
-  /* Step 3 — audit tap-to-reveal */
-  card.querySelectorAll('.aiwt__reveal').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const audit = btn.closest('.aiwt__audit');
-      audit.classList.toggle('is-revealed');
-      btn.textContent = audit.classList.contains('is-revealed') ? 'Hide ↑' : 'Tap to reveal →';
+  /* Step 3 — inline audit: hovering, tapping, or keyboard-focusing a
+     highlight reveals its annotation in the callout and counts it as
+     found. The annotation stays up until the next highlight is hit. */
+  card.querySelectorAll('.aiwt__flag').forEach(flag => {
+    const fire = () => {
+      const a = ANNOTATIONS[flag.dataset.flag];
+      if (!a || !callout) return;
+      flag.classList.add('is-found');
+      auditFound.add(flag.dataset.flag);
+      callout.innerHTML = '<span class="aiwt__callout-label">' + a.label + '</span><p>' + a.text + '</p>';
       updateAuditGate();
-    });
+    };
+    flag.addEventListener('mouseenter', fire);
+    flag.addEventListener('click', fire);
+    flag.addEventListener('focus', fire);
   });
 
   renderStep(1);
