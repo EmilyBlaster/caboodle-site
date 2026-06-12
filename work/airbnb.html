@@ -591,6 +591,29 @@
   text-transform: uppercase;
   color: var(--ink-2);
   line-height: 1.5;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+/* Row markers in the page's own light language: a lit node for each
+   takeaway (same visual as the prep map's lights), and a dashed
+   unlit circle for the honest limit — three lights on, one
+   deliberately left open. */
+.aiwt__outcome-label::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 0 4px rgba(150, 230, 80, 0.18);
+  flex-shrink: 0;
+}
+.aiwt__outcome--limit .aiwt__outcome-label::before {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+  border: 1.5px dashed var(--ink-2);
+  box-shadow: none;
 }
 .aiwt__outcome-val {
   font-family: var(--display);
@@ -1249,7 +1272,7 @@
             <span class="aiwt__outcome-label">the receipts</span>
             <span class="aiwt__outcome-val">100% of learners reported knowledge gain. Strategy clarity rose 25 points. Tasks like this one did that, not slides.</span>
           </li>
-          <li>
+          <li class="aiwt__outcome--limit">
             <span class="aiwt__outcome-label">one honest limit</span>
             <span class="aiwt__outcome-val">This re-creation runs one fixed path for everyone. The real modules met each learner where they were. The manager skill below takes that even further.</span>
           </li>
