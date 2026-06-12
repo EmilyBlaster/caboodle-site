@@ -50,7 +50,9 @@
   max-width: var(--maxw);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 4fr 8fr;
+  /* 5fr text column (was 4fr) so the card heading fits on one line
+     per break instead of widowing its last word. */
+  grid-template-columns: 5fr 7fr;
   min-height: 560px;
   border-radius: 10px;
   overflow: hidden;
@@ -78,8 +80,10 @@
   margin: 0;
   font-family: var(--display);
   font-weight: 700;
-  font-size: clamp(2rem, 4.5vw, 3.5rem);
-  line-height: 1.1;
+  /* Sized to the narrow dark column, not the viewport, so the em
+     phrase holds one line at every width above the 900px stack. */
+  font-size: clamp(1.9rem, 3.2vw, 2.5rem);
+  line-height: 1.12;
   letter-spacing: -0.03em;
   text-transform: lowercase;
   color: var(--paper);
@@ -173,6 +177,17 @@
   margin: 0 auto;
   letter-spacing: 0.03em;
 }
+.abspot__expand {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(242, 239, 232, 0.55);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s var(--ease);
+}
+.abspot__expand:hover { color: var(--lime); }
 .abspot__iframe {
   width: 100%;
   flex: 1;
@@ -1395,7 +1410,7 @@
       <span class="abspot__kicker">spotlight · greenroom</span>
       <h3 class="abspot__h">
         greenroom.<br />
-        <em>the thinking, live.</em>
+        <em>running live.</em>
       </h3>
       <p class="abspot__p">
         Ask it a real talent-development question. Watch it
@@ -1413,6 +1428,7 @@
         <span class="abspot__dot" style="background:#96E650"></span>
         <span class="abspot__dot" style="background:#4a4a5a"></span>
         <span class="abspot__chrome-title">greenroom-strand.netlify.app</span>
+        <a class="abspot__expand" href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener">open full screen ↗</a>
       </div>
       <iframe
         src="https://greenroom-strand.netlify.app"
