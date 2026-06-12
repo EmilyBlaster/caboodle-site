@@ -103,6 +103,44 @@
   transition: border-color 0.2s var(--ease);
 }
 .abspot__cta:hover { border-color: var(--lime); }
+/* Editorial intro above the dark card — matches the aiwt / abskill
+   section-head pattern. Colors set explicitly because .abspot sets
+   color: var(--paper) for the card's benefit. */
+.abspot__head {
+  max-width: var(--maxw);
+  margin: 0 auto 2.5rem;
+  display: grid;
+  gap: 0.85rem;
+}
+.abspot__head-kicker {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--ink);
+  width: fit-content;
+}
+.abspot__head-h {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  color: var(--ink);
+  max-width: 24ch;
+}
+.abspot__head-h em { color: var(--blue); font-style: italic; }
+.abspot__head-p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 62ch;
+}
 .abspot__window {
   display: flex;
   flex-direction: column;
@@ -322,6 +360,8 @@
   text-transform: lowercase;
   color: var(--ink);
   max-width: 22ch;
+  /* h4 elements sit outside the global h1-h3 balance rule */
+  text-wrap: balance;
 }
 .aiwt__panel-h em { color: var(--magenta); font-style: italic; }
 .aiwt__panel-lede {
@@ -743,7 +783,8 @@
       <span class="caseblock__kicker">the challenge</span>
       <h2 class="caseblock__h">
         AI fluency at scale.<br />
-        Without losing humans in the workflow.
+        Without losing humans<br />
+        in the workflow.
       </h2>
       <p>
         AI enablement inside Fortune 500s tends to fail the same
@@ -1062,19 +1103,32 @@
 
 <!-- Spotlight: Greenroom lab, embedded live -->
 <section class="abspot" data-log="002b — spotlight · greenroom lab, live">
+  <header class="abspot__head">
+    <span class="abspot__head-kicker">the public lab · built in parallel</span>
+    <h3 class="abspot__head-h">
+      the work stays internal.<br />
+      <em>the proof doesn't.</em>
+    </h3>
+    <p class="abspot__head-p">
+      AI101 and the manager skill live inside Airbnb. Greenroom is
+      the lab I built in parallel so the thinking has a public
+      address: a working development copilot with real RAG, a real
+      eval harness, and a documented path to production. Embedded
+      below, running live.
+    </p>
+  </header>
   <div class="abspot__inner">
     <div class="abspot__text">
-      <span class="abspot__kicker">spotlight · the lab behind the thinking</span>
+      <span class="abspot__kicker">spotlight · greenroom</span>
       <h3 class="abspot__h">
         greenroom.<br />
         <em>the thinking, live.</em>
       </h3>
       <p class="abspot__p">
-        The AI101 modules live inside Airbnb. Greenroom is the
-        public lab I built in parallel: a working AI development
-        copilot that shows the same thinking. Performance over
-        content. Behavior change over checkbox completion.
-        Embedded live, right here.
+        Ask it a real talent-development question. Watch it
+        retrieve, cite its sources, refuse the ones out of scope,
+        and follow up. Performance over content. Behavior change
+        over checkbox completion.
       </p>
       <a class="abspot__cta" href="../labs/greenroom.html">
         read the full lab writeup →
