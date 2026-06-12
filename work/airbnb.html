@@ -708,55 +708,58 @@
   justify-content: flex-end;
   gap: 0.7rem;
 }
-.plchat__msg {
-  max-width: 80%;
-  padding: 0.7rem 0.95rem;
-  border-radius: 12px;
-  font-size: 0.92rem;
-  line-height: 1.45;
+/* Each message is a row: bubble + identity marker side by side,
+   bottom-aligned, messenger-style. Avatar sits outside the bubble
+   to the right for the manager; the light glyph sits outside to
+   the left for the coach. */
+.plchat__row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  max-width: 85%;
   animation: plMsgIn 0.35s var(--ease) both;
 }
+.plchat__row--mgr { align-self: flex-end; }
+.plchat__row--pl { align-self: flex-start; }
 @keyframes plMsgIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: none; }
 }
-.plchat__msg--mgr {
-  align-self: flex-end;
+.plchat__msg {
+  padding: 0.7rem 0.95rem;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  min-width: 0;
+}
+.plchat__row--mgr .plchat__msg {
   background: var(--ink);
   color: var(--paper);
   border-bottom-right-radius: 3px;
-  position: relative;
-  padding-right: 2.5rem;
 }
-.plchat__msg--mgr .pl-avatar {
-  position: absolute;
-  right: 0.55rem;
-  top: 0.7rem;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
-  border: 1.5px solid rgba(242, 239, 232, 0.5);
-}
-.plchat__msg--pl {
-  align-self: flex-start;
+.plchat__row--pl .plchat__msg {
   background: var(--paper-2);
   border: 1px solid var(--rule);
   color: var(--ink);
   border-bottom-left-radius: 3px;
-  position: relative;
-  padding-left: 1.7rem;
 }
-.plchat__msg--pl .pl-icon {
-  position: absolute;
-  left: 0.6rem;
-  top: 0.85rem;
-  width: 13px;
-  height: 13px;
+.plchat__row .pl-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin-bottom: 0.5rem;
+}
+.plchat__row .pl-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  margin-bottom: 0.3rem;
+  border: 1.5px solid var(--rule);
+  display: block;
 }
 .plchat__typing {
-  align-self: flex-start;
   display: flex;
   gap: 4px;
   padding: 0.8rem 0.95rem;
@@ -850,7 +853,10 @@
 @media (max-width: 800px) {
   .plight { grid-template-columns: 1fr; }
   .plmap { max-width: 380px; width: 100%; margin: 0 auto; }
-  .plchat__feed { height: 300px; }
+  .plchat__feed { height: 300px; padding: 1rem; }
+  /* Narrow screens: the avatar already costs 32px of row width, so
+     give rows nearly the full feed width to keep bubbles readable. */
+  .plchat__row { max-width: 94%; }
 }
 </style>
 </head>
@@ -1561,12 +1567,19 @@
   const MGR_AVATAR = '<img class="pl-avatar" src="../assets/porchlight-manager.jpg" alt="" loading="lazy" />';
 
   function addMsg(step) {
+    const row = document.createElement('div');
+    row.className = 'plchat__row plchat__row--' + step.who;
     const el = document.createElement('div');
-    el.className = 'plchat__msg plchat__msg--' + step.who;
+    el.className = 'plchat__msg';
     el.textContent = step.text;
-    if (step.who === 'pl') el.insertAdjacentHTML('afterbegin', PL_ICON);
-    if (step.who === 'mgr') el.insertAdjacentHTML('afterbegin', MGR_AVATAR);
-    feed.appendChild(el);
+    if (step.who === 'pl') {
+      row.insertAdjacentHTML('afterbegin', PL_ICON);
+      row.appendChild(el);
+    } else {
+      row.appendChild(el);
+      row.insertAdjacentHTML('beforeend', MGR_AVATAR);
+    }
+    feed.appendChild(row);
     while (feed.children.length > MAX_VISIBLE) feed.removeChild(feed.firstChild);
   }
 
@@ -1602,8 +1615,8 @@
     };
     if (step.who === 'pl') {
       const t = document.createElement('div');
-      t.className = 'plchat__typing';
-      t.innerHTML = '<span></span><span></span><span></span>';
+      t.className = 'plchat__row plchat__row--pl';
+      t.innerHTML = PL_ICON + '<div class="plchat__typing"><span></span><span></span><span></span></div>';
       feed.appendChild(t);
       timer = setTimeout(() => { t.remove(); deliver(); }, 950);
     } else {
