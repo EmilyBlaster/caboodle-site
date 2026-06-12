@@ -1577,6 +1577,35 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   max-width: 16ch;
 }
 
+/* The tab and meta rows sit outside __main, so they need the same
+   right-side reservation __main has — otherwise long role tags run
+   underneath the absolute stat panel. */
+.dossier--panel .dossier__tab,
+.dossier--panel .dossier__meta {
+  padding-right: 250px;
+}
+
+/* Narrow screens: drop the absolute panel entirely. The stat becomes
+   a full-width colored footer band on the card and every row gets
+   its full width back. */
+@media (max-width: 720px) {
+  .dossier--panel .dossier__tab,
+  .dossier--panel .dossier__meta { padding-right: 0; }
+  .dossier--panel .dossier__main {
+    padding-right: 0;
+    padding-bottom: 0;
+  }
+  .dossier--panel .dossier__stat {
+    position: static;
+    width: auto;
+    margin: 1.75rem -1.5rem -2.5rem;
+    padding: 1.5rem 1.5rem 1.75rem;
+  }
+  .dossier--panel .dossier__statnum {
+    font-size: clamp(2.75rem, 12vw, 4rem);
+  }
+}
+
 /* Lime panel: dark text on lime */
 .dossier--panel.dossier--accent-lime .dossier__stat {
   background: var(--lime);
