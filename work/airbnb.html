@@ -725,6 +725,19 @@
   background: var(--ink);
   color: var(--paper);
   border-bottom-right-radius: 3px;
+  position: relative;
+  padding-right: 2.5rem;
+}
+.plchat__msg--mgr .pl-avatar {
+  position: absolute;
+  right: 0.55rem;
+  top: 0.7rem;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  border: 1.5px solid rgba(242, 239, 232, 0.5);
 }
 .plchat__msg--pl {
   align-self: flex-start;
@@ -1542,11 +1555,17 @@
      coach's messages read as porchlight, not as a second person. */
   const PL_ICON = '<svg class="pl-icon" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 5 A3.5 3.5 0 0 1 9.5 5 L9.5 5.6 L2.5 5.6 Z" fill="#96E650"/><line x1="4" y1="7.4" x2="3.2" y2="9.6" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/><line x1="6" y1="7.6" x2="6" y2="10" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="7.4" x2="8.8" y2="9.6" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/></svg>';
 
+  /* Manager avatar — local copy of a Pexels portrait (free license,
+     no attribution required), served from assets so the page never
+     depends on Pexels' CDN. */
+  const MGR_AVATAR = '<img class="pl-avatar" src="../assets/porchlight-manager.jpg" alt="" loading="lazy" />';
+
   function addMsg(step) {
     const el = document.createElement('div');
     el.className = 'plchat__msg plchat__msg--' + step.who;
     el.textContent = step.text;
     if (step.who === 'pl') el.insertAdjacentHTML('afterbegin', PL_ICON);
+    if (step.who === 'mgr') el.insertAdjacentHTML('afterbegin', MGR_AVATAR);
     feed.appendChild(el);
     while (feed.children.length > MAX_VISIBLE) feed.removeChild(feed.firstChild);
   }
