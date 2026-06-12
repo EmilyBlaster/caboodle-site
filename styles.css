@@ -1522,7 +1522,8 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 
 .dossier--accent-lime::after,
 .dossier--accent-blue::after,
-.dossier--accent-magenta::after {
+.dossier--accent-magenta::after,
+.dossier--accent-ink::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -1533,6 +1534,7 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .dossier--accent-lime::after    { background: var(--lime); }
 .dossier--accent-blue::after    { background: var(--blue); }
 .dossier--accent-magenta::after { background: var(--magenta); }
+.dossier--accent-ink::after     { background: var(--ink); }
 
 /* ——— Panel modifier · colored stat block ———————————————————————————
    Stat column is absolutely positioned against the card so it always
@@ -1607,6 +1609,18 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 }
 .dossier--panel.dossier--accent-magenta .dossier__statnum i { color: rgba(255,255,255,0.7); }
 .dossier--panel.dossier--accent-magenta .dossier__statlabel { color: rgba(255,255,255,0.65); }
+
+/* Ink panel: lime text on ink — reserved for self-initiated work so
+   the capstone reads as a different species from client engagements */
+.dossier--panel.dossier--accent-ink .dossier__stat {
+  background: var(--ink);
+}
+.dossier--panel.dossier--accent-ink .dossier__statnum {
+  color: var(--lime);
+  -webkit-text-stroke: 0;
+}
+.dossier--panel.dossier--accent-ink .dossier__statnum i { color: rgba(150,230,80,0.7); }
+.dossier--panel.dossier--accent-ink .dossier__statlabel { color: rgba(242,239,232,0.65); }
 
 /* ——— Featured modifier · People's Professors ———————————————————————— */
 
