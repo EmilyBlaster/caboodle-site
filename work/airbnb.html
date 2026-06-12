@@ -29,6 +29,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<!-- Caveat: handwriting face used only for the step-1 meeting-notes
+     prop in the AI101 walkthrough (human mess in, typed AI doc out) -->
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="../styles.css?v=20260516" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 
@@ -858,14 +861,105 @@
   text-transform: lowercase;
 }
 .plmap.is-ready .pl-ready { opacity: 1; }
+
+/* Surface chips — visual answer to "where does the skill live."
+   Three small icon + label chips under the demo: cowork, claude
+   chat, claude code. */
+.plsurfaces {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem;
+  margin: 1.5rem 0 0;
+}
+.plsurface {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.95rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--paper);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.plsurface svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  stroke: var(--ink-2);
+  fill: none;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.plsurface--primary {
+  border-color: rgba(150, 230, 80, 0.85);
+  background: rgba(150, 230, 80, 0.08);
+}
+.plsurface--primary svg { stroke: var(--ink); }
+
+/* Step-1 prop: handwritten meeting note, pinned with a strip of
+   tape and sitting slightly crooked. The contrast with the typed
+   AI draft in step 3 is the point: human mess in, typed doc out. */
+.aiwt__notepaper {
+  position: relative;
+  max-width: 560px;
+  margin: 0.75rem 0 1.75rem;
+  padding: 1.6rem 1.7rem 1.4rem;
+  background: #fbf5e0;
+  border: 1px solid rgba(40, 40, 40, 0.08);
+  border-radius: 3px;
+  transform: rotate(-0.6deg);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);
+}
+.aiwt__notepaper::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 88px;
+  height: 21px;
+  transform: translateX(-50%) rotate(-1.6deg);
+  background: rgba(242, 239, 232, 0.78);
+  border: 1px solid rgba(40, 40, 40, 0.06);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.aiwt__notepaper-title {
+  font-family: 'Caveat', cursive;
+  font-weight: 600;
+  font-size: 1.4rem;
+  color: var(--ink);
+  margin: 0 0 0.45rem;
+}
+.aiwt__notepaper ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: 'Caveat', cursive;
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.aiwt__notepaper .nu {
+  text-decoration: underline;
+  text-decoration-color: var(--magenta);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
 .abskill__foot {
-  margin: 2rem 0 0;
+  margin: 1.25rem auto 0;
   font-family: var(--mono);
   font-size: 0.74rem;
   letter-spacing: 0.04em;
   line-height: 1.7;
   color: var(--ink-2);
   max-width: 68ch;
+  text-align: center;
 }
 @media (max-width: 800px) {
   .plight { grid-template-columns: 1fr; }
@@ -1044,23 +1138,18 @@
           You just left a 45-minute stakeholder sync. Your director
           needs a decision brief by noon.
         </p>
-        <div class="aiwt__artifact">
-          <div class="aiwt__artifact-bar">
-            <span>raw-notes.txt</span>
-            <span>9:14 am</span>
-          </div>
-          <div class="aiwt__artifact-body">
-            <ul>
-              <li>kickoff recap... timeline slipping, eng can't commit until Q3</li>
-              <li>3 vendor options on table: Atlas / Beacon / build in-house</li>
-              <li>L pushed back hard on Atlas cost (~$240k/yr, "not happening")</li>
-              <li>pilot group = new managers, roughly 60 ppl?</li>
-              <li>IT security review required for any vendor. 4 to 6 wks. J to confirm.</li>
-              <li>DECISION NEEDED by EOM or we lose the Q3 window</li>
-              <li>actions: A sends Beacon demo invite. M drafts success metrics.</li>
-              <li>parking lot: LMS integration, data residency questions</li>
-            </ul>
-          </div>
+        <div class="aiwt__notepaper">
+          <p class="aiwt__notepaper-title">sync notes · 9:14 am</p>
+          <ul>
+            <li>kickoff recap... timeline slipping, eng can't commit until Q3</li>
+            <li>3 vendor options: Atlas / Beacon / build in-house</li>
+            <li>L pushed back hard on Atlas cost (~$240k/yr, "not happening")</li>
+            <li>pilot group = new managers, ~60 ppl?</li>
+            <li>IT security review for any vendor. 4 to 6 wks. J to confirm</li>
+            <li><span class="nu">DECISION NEEDED by EOM</span> or we lose the Q3 window!!</li>
+            <li>actions: A sends Beacon demo. M drafts success metrics</li>
+            <li>parking lot: LMS integration, data residency??</li>
+          </ul>
         </div>
         <p class="aiwt__panel-p">
           In a lecture course, this is where a video about summarization
@@ -1263,10 +1352,24 @@
       </div>
     </div>
 
+    <div class="plsurfaces" aria-label="Surfaces the skill runs in">
+      <span class="plsurface plsurface--primary">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="10.5" rx="1.5"/><line x1="1.5" y1="5.5" x2="14.5" y2="5.5"/><circle cx="3.6" cy="4" r="0.3"/></svg>
+        cowork
+      </span>
+      <span class="plsurface">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 3.5h12v8H7l-3 2.5v-2.5H2z"/></svg>
+        claude chat
+      </span>
+      <span class="plsurface">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><polyline points="4.2 6 6.7 8.2 4.2 10.4"/><line x1="8.3" y1="10.6" x2="11.6" y2="10.6"/></svg>
+        claude code
+      </span>
+    </div>
+
     <p class="abskill__foot">
-      built for cowork · the same skill follows managers into claude
-      chat and claude code · porchlight's five prep points are
-      stand-ins for the internal decision practices
+      porchlight's five prep points are stand-ins for the internal
+      decision practices
     </p>
   </div>
 </section>
