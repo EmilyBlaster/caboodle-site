@@ -662,47 +662,160 @@
   max-width: 62ch;
 }
 .abskill__p strong { color: var(--ink); font-weight: 600; }
-.abskill__surfaces {
+/* porchlight demo — auto-playing chat scene + prep map that lights up */
+.plight {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 7fr 5fr;
   gap: 1.25rem;
+  align-items: stretch;
 }
-.abskill__surface {
+.plchat {
   background: var(--paper);
   border: 1px solid var(--rule);
   border-radius: 10px;
-  padding: 1.6rem 1.6rem 1.75rem;
-  display: grid;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03), 0 10px 40px rgba(0,0,0,0.05);
+}
+.plchat__chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  background: var(--ink);
+  flex-shrink: 0;
+}
+.plchat__cdot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.plchat__title {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(242,239,232,0.65);
+  margin: 0 auto;
+}
+.plchat__feed {
+  height: 340px;
+  overflow: hidden;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   gap: 0.7rem;
-  align-content: start;
 }
-.abskill__surface--primary {
-  border-color: rgba(150, 230, 80, 0.85);
-  background: rgba(150, 230, 80, 0.07);
+.plchat__msg {
+  max-width: 80%;
+  padding: 0.7rem 0.95rem;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  animation: plMsgIn 0.35s var(--ease) both;
 }
-.abskill__surface-tag {
+@keyframes plMsgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.plchat__msg--mgr {
+  align-self: flex-end;
+  background: var(--ink);
+  color: var(--paper);
+  border-bottom-right-radius: 3px;
+}
+.plchat__msg--pl {
+  align-self: flex-start;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  border-bottom-left-radius: 3px;
+  position: relative;
+  padding-left: 1.7rem;
+}
+.plchat__msg--pl::before {
+  content: '';
+  position: absolute;
+  left: 0.75rem;
+  top: 1rem;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lime);
+}
+.plchat__typing {
+  align-self: flex-start;
+  display: flex;
+  gap: 4px;
+  padding: 0.8rem 0.95rem;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  border-bottom-left-radius: 3px;
+}
+.plchat__typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-2);
+  animation: plTyp 1s infinite;
+}
+.plchat__typing span:nth-child(2) { animation-delay: 0.15s; }
+.plchat__typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes plTyp {
+  0%, 100% { opacity: 0.25; transform: none; }
+  50% { opacity: 0.9; transform: translateY(-2px); }
+}
+.plmap {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 1.25rem 0.75rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+.plmap__kicker {
   font-family: var(--mono);
   font-size: 0.62rem;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-2);
 }
-.abskill__surface--primary .abskill__surface-tag { color: var(--ink); }
-.abskill__surface-h {
-  margin: 0;
+.plmap svg { width: 100%; max-width: 320px; height: auto; display: block; }
+.plmap .pl-ring {
+  fill: none;
+  stroke: var(--rule);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 6;
+}
+.pl-node .pl-glow { fill: var(--lime); opacity: 0; transition: opacity 0.45s var(--ease); }
+.pl-node circle.pl-core {
+  fill: var(--paper);
+  stroke: var(--rule);
+  stroke-width: 1.5;
+  transition: fill 0.45s var(--ease), stroke 0.45s var(--ease);
+}
+.pl-node text {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  fill: var(--ink-2);
+  opacity: 0.55;
+  transition: opacity 0.45s var(--ease), fill 0.45s var(--ease);
+}
+.pl-node.is-lit .pl-glow { opacity: 0.18; }
+.pl-node.is-lit circle.pl-core { fill: var(--lime); stroke: var(--lime); }
+.pl-node.is-lit text { opacity: 1; fill: var(--ink); }
+.pl-ready { opacity: 0; transition: opacity 0.5s var(--ease); }
+.pl-ready circle { fill: var(--lime); opacity: 0.15; }
+.pl-ready text {
   font-family: var(--display);
   font-weight: 700;
-  font-size: 1.25rem;
-  letter-spacing: -0.02em;
+  font-size: 26px;
+  fill: var(--ink);
   text-transform: lowercase;
-  color: var(--ink);
 }
-.abskill__surface-p {
-  margin: 0;
-  font-size: 0.92rem;
-  line-height: 1.55;
-  color: var(--ink-2);
-}
+.plmap.is-ready .pl-ready { opacity: 1; }
 .abskill__foot {
   margin: 2rem 0 0;
   font-family: var(--mono);
@@ -713,7 +826,9 @@
   max-width: 68ch;
 }
 @media (max-width: 800px) {
-  .abskill__surfaces { grid-template-columns: 1fr; }
+  .plight { grid-template-columns: 1fr; }
+  .plmap { max-width: 380px; width: 100%; margin: 0 auto; }
+  .plchat__feed { height: 300px; }
 }
 </style>
 </head>
@@ -787,17 +902,16 @@
         in the workflow.
       </h2>
       <p>
-        AI enablement inside Fortune 500s tends to fail the same
-        way: generic training modules stapled on top of existing
-        workflows, no real measurement of adoption, no protection
-        for the human side of the rollout. Airbnb's Employee
-        Experience teams needed something different.
+        AI enablement inside Fortune 500s fails the same way:
+        generic modules stapled onto existing workflows, no real
+        measurement of adoption, no protection for the human side
+        of the rollout.
       </p>
       <p>
-        AI101: five performance-task modules. Ninety days kickoff
-        to launch. Built to a Fortune 500 standard. Designed so the
-        person at the desk on Monday morning would actually open
-        the tool again on Tuesday.
+        Airbnb's Employee Experience teams needed different. AI101:
+        five performance-task modules, ninety days kickoff to
+        launch, designed so the person at the desk on Monday would
+        open the tool again on Tuesday.
       </p>
     </div>
   </article>
@@ -811,16 +925,14 @@
         not lecture.
       </h2>
       <p>
-        Each of the five modules I built for AI101 is a hands-on
-        lab. Learners build, critique, and ship real artifacts
-        using AI inside their actual workflow. The design starts
-        with how the human already works, maps where AI fits, and
-        surfaces the adoption signals that matter more than
-        completion certificates.
+        Every module is a hands-on lab. Learners build, critique,
+        and ship real artifacts with AI inside their actual
+        workflow. No sandbox, no seat time, no completion
+        certificates.
       </p>
       <p>
         Behavior change is the foundation. AI fluency is the
-        outcome. Both have to ship together or neither sticks.
+        outcome. They ship together or neither sticks.
       </p>
       <p>
         <a href="../labs/greenroom.html">See my Greenroom example in Labs for the type of thinking and solution I bring to this kind of work &rarr;</a>
@@ -838,18 +950,15 @@
         adoption moments.
       </h2>
       <p>
-        Each module starts with a real adoption moment Airbnb's
-        Employee Experience teams face daily, then walks the
-        learner through building the AI workflow that handles it.
-        Each module ends with an artifact the learner can keep
+        Each module starts with a real adoption moment EX teams
+        face daily and ends with an artifact the learner keeps
         using on Monday morning.
       </p>
       <p>
-        Action Mapping locked the design to those adoption
-        moments. Kirkpatrick-aligned measurement framed the
-        evaluation. The result: strategy clarity jumped 25
-        percentage points across the program, and every learner
-        reported some or significant knowledge gain.
+        Action Mapping locked the design to those moments.
+        Kirkpatrick-aligned measurement framed the evaluation.
+        Strategy clarity jumped 25 points; every learner reported
+        knowledge gain.
       </p>
     </div>
   </article>
@@ -1045,58 +1154,73 @@
       <span class="abskill__kicker">also shipped · a skill for people managers</span>
       <h3 class="abskill__h">a coach that meets managers <em>where they are.</em></h3>
       <p class="abskill__p">
-        Beyond the five modules, I designed and built a Claude skill
-        for people managers facing difficult conversations: performance
+        Beyond the modules, I built a Claude skill that coaches
+        people managers through difficult conversations: performance
         concerns, role changes, hard feedback. It's grounded in the
-        company's five decision-making best practices, and it doesn't
-        live in a course. It lives wherever the manager already works.
+        company's five decision-making best practices, and it lives
+        wherever the manager already works. That skill stays
+        internal to Airbnb.
       </p>
       <p class="abskill__p">
-        The manager brings a real conversation they're dreading. The
-        skill coaches the preparation: pressure-tests the framing
-        against the decision practices, surfaces what's missing,
-        rehearses the hard moments. <strong>Every manager gets a
-        different experience because every manager brings a different
-        situation.</strong> The tool adapts to the human, never the
-        reverse.
+        So meet <strong>porchlight</strong>, a re-creation built for
+        this page. Same pattern, stand-in content. A manager brings
+        the conversation they're dreading, and the coach won't call
+        them ready until every light on the prep map is on. Watch
+        one prep play out:
       </p>
     </header>
 
-    <div class="abskill__surfaces">
-      <div class="abskill__surface abskill__surface--primary">
-        <span class="abskill__surface-tag">primary surface</span>
-        <h4 class="abskill__surface-h">cowork</h4>
-        <p class="abskill__surface-p">
-          Built for Cowork, where managers already plan their week.
-          The prep happens next to the work it's about, not in a
-          separate tab they have to remember to open.
-        </p>
+    <div class="plight" role="img" aria-label="Animated demo: a manager preps a difficult conversation with the porchlight skill while a five-point prep map lights up beside the chat.">
+      <div class="plchat" aria-hidden="true">
+        <div class="plchat__chrome">
+          <span class="plchat__cdot" style="background:#EC008C"></span>
+          <span class="plchat__cdot" style="background:#96E650"></span>
+          <span class="plchat__cdot" style="background:#4a4a5a"></span>
+          <span class="plchat__title">porchlight · cowork</span>
+        </div>
+        <div class="plchat__feed"></div>
       </div>
-      <div class="abskill__surface">
-        <span class="abskill__surface-tag">same skill</span>
-        <h4 class="abskill__surface-h">claude chat</h4>
-        <p class="abskill__surface-p">
-          Flexible enough to run in plain chat for the five-minutes-
-          before-the-meeting rehearsal, when the manager needs a
-          coach, not a course.
-        </p>
-      </div>
-      <div class="abskill__surface">
-        <span class="abskill__surface-tag">same skill</span>
-        <h4 class="abskill__surface-h">claude code</h4>
-        <p class="abskill__surface-p">
-          And it follows technical managers into Claude Code, the
-          surface where they already spend the day. Zero new tools
-          to adopt.
-        </p>
+      <div class="plmap" aria-hidden="true">
+        <span class="plmap__kicker">the prep map · builds as you go</span>
+        <svg viewBox="-55 0 450 300" xmlns="http://www.w3.org/2000/svg">
+          <path class="pl-ring" d="M170 50 L265 119 L229 231 L111 231 L75 119 Z" />
+          <g class="pl-node" data-node="1">
+            <circle class="pl-glow" cx="170" cy="50" r="16" />
+            <circle class="pl-core" cx="170" cy="50" r="8" />
+            <text x="170" y="30" text-anchor="middle">the facts</text>
+          </g>
+          <g class="pl-node" data-node="2">
+            <circle class="pl-glow" cx="265" cy="119" r="16" />
+            <circle class="pl-core" cx="265" cy="119" r="8" />
+            <text x="281" y="123" text-anchor="start">the goal</text>
+          </g>
+          <g class="pl-node" data-node="3">
+            <circle class="pl-glow" cx="229" cy="231" r="16" />
+            <circle class="pl-core" cx="229" cy="231" r="8" />
+            <text x="229" y="258" text-anchor="middle">their view</text>
+          </g>
+          <g class="pl-node" data-node="4">
+            <circle class="pl-glow" cx="111" cy="231" r="16" />
+            <circle class="pl-core" cx="111" cy="231" r="8" />
+            <text x="111" y="258" text-anchor="middle">the ask</text>
+          </g>
+          <g class="pl-node" data-node="5">
+            <circle class="pl-glow" cx="75" cy="119" r="16" />
+            <circle class="pl-core" cx="75" cy="119" r="8" />
+            <text x="59" y="123" text-anchor="end">the follow-up</text>
+          </g>
+          <g class="pl-ready">
+            <circle cx="170" cy="150" r="46" />
+            <text x="170" y="158" text-anchor="middle">ready.</text>
+          </g>
+        </svg>
       </div>
     </div>
 
     <p class="abskill__foot">
-      The skill and the five practices stay internal to Airbnb. The
-      design pattern is the point: one skill, three surfaces, zero new
-      tabs. Adoption by meeting people in their flow of work, not by
-      asking them to come to the training.
+      built for cowork · the same skill follows managers into claude
+      chat and claude code · porchlight's five prep points are
+      stand-ins for the internal decision practices
     </p>
   </div>
 </section>
@@ -1372,6 +1496,106 @@
   });
 
   renderStep(1);
+})();
+</script>
+
+<script>
+/* ==========================================================================
+   porchlight scene — auto-playing chat loop + prep map that lights up.
+   Starts when scrolled into view, resets when scrolled away, and renders
+   a static final frame for prefers-reduced-motion users.
+   ========================================================================== */
+(function () {
+  const root = document.querySelector('.plight');
+  if (!root) return;
+
+  const feed  = root.querySelector('.plchat__feed');
+  const map   = root.querySelector('.plmap');
+  const nodes = map.querySelectorAll('.pl-node');
+
+  const SCRIPT = [
+    { who: 'mgr', text: "I have to tell one of my best people her role is changing. She's going to take it hard.", wait: 1800 },
+    { who: 'pl',  text: "Let's get you ready before Thursday. One sentence: what is actually changing?", node: 1, wait: 2400 },
+    { who: 'mgr', text: "Her team is merging. Same scope, new lead.", wait: 1800 },
+    { who: 'pl',  text: "Clear. Now the goal: what do you want her walking out of the room with?", node: 2, wait: 2400 },
+    { who: 'pl',  text: "Harder one. What does this change look like from her seat?", node: 3, wait: 2400 },
+    { who: 'pl',  text: "You haven't named your ask yet. Her trust? Her patience? Name it before she has to guess.", node: 4, wait: 2600 },
+    { who: 'pl',  text: "Last light: what happens Friday, after? She will watch what you do next.", node: 5, wait: 2600 },
+    { who: 'pl',  text: "All five lights are on. Want to rehearse your opening line?", ready: true, wait: 4500 }
+  ];
+
+  const MAX_VISIBLE = 5;
+  let timer = null;
+  let running = false;
+
+  function addMsg(step) {
+    const el = document.createElement('div');
+    el.className = 'plchat__msg plchat__msg--' + step.who;
+    el.textContent = step.text;
+    feed.appendChild(el);
+    while (feed.children.length > MAX_VISIBLE) feed.removeChild(feed.firstChild);
+  }
+
+  function light(n) {
+    const el = map.querySelector('.pl-node[data-node="' + n + '"]');
+    if (el) el.classList.add('is-lit');
+  }
+
+  function reset() {
+    feed.innerHTML = '';
+    nodes.forEach(n => n.classList.remove('is-lit'));
+    map.classList.remove('is-ready');
+  }
+
+  function renderStatic() {
+    reset();
+    SCRIPT.slice(-4).forEach(addMsg);
+    nodes.forEach(n => n.classList.add('is-lit'));
+    map.classList.add('is-ready');
+  }
+
+  function playFrom(i) {
+    if (i >= SCRIPT.length) {
+      timer = setTimeout(() => { reset(); playFrom(0); }, 900);
+      return;
+    }
+    const step = SCRIPT[i];
+    const deliver = () => {
+      addMsg(step);
+      if (step.node) light(step.node);
+      if (step.ready) map.classList.add('is-ready');
+      timer = setTimeout(() => playFrom(i + 1), step.wait);
+    };
+    if (step.who === 'pl') {
+      const t = document.createElement('div');
+      t.className = 'plchat__typing';
+      t.innerHTML = '<span></span><span></span><span></span>';
+      feed.appendChild(t);
+      timer = setTimeout(() => { t.remove(); deliver(); }, 950);
+    } else {
+      deliver();
+    }
+  }
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    renderStatic();
+    return;
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting && !running) {
+        running = true;
+        reset();
+        playFrom(0);
+      } else if (!e.isIntersecting && running) {
+        running = false;
+        clearTimeout(timer);
+        reset();
+      }
+    });
+  }, { threshold: 0.35 });
+  io.observe(root);
 })();
 </script>
 </body>
