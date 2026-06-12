@@ -708,55 +708,72 @@
   justify-content: flex-end;
   gap: 0.7rem;
 }
-/* Each message is a row: bubble + identity marker side by side,
-   bottom-aligned, messenger-style. Avatar sits outside the bubble
-   to the right for the manager; the light glyph sits outside to
-   the left for the coach. */
+/* Work-tool layout (the window says cowork, so it behaves like one):
+   every message left-aligned, Slack-style. Matching 28px circular
+   avatars for both actors — the manager's photo and the porchlight
+   badge (lit glyph on an ink circle) — with a small mono name label
+   above each bubble. */
 .plchat__row {
   display: flex;
-  align-items: flex-end;
-  gap: 0.5rem;
-  max-width: 85%;
+  align-items: flex-start;
+  gap: 0.6rem;
+  align-self: flex-start;
+  max-width: 92%;
   animation: plMsgIn 0.35s var(--ease) both;
 }
-.plchat__row--mgr { align-self: flex-end; }
-.plchat__row--pl { align-self: flex-start; }
 @keyframes plMsgIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: none; }
 }
+.plchat__stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+.plchat__who {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 0.3rem;
+}
 .plchat__msg {
   padding: 0.7rem 0.95rem;
   border-radius: 12px;
+  border-top-left-radius: 3px;
   font-size: 0.92rem;
   line-height: 1.45;
   min-width: 0;
 }
-.plchat__row--mgr .plchat__msg {
+.plchat__msg--mgr {
   background: var(--ink);
   color: var(--paper);
-  border-bottom-right-radius: 3px;
 }
-.plchat__row--pl .plchat__msg {
+.plchat__msg--pl {
   background: var(--paper-2);
   border: 1px solid var(--rule);
   color: var(--ink);
-  border-bottom-left-radius: 3px;
 }
-.plchat__row .pl-icon {
-  width: 15px;
-  height: 15px;
+.pl-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  margin-bottom: 0.5rem;
 }
+.pl-badge .pl-icon { width: 14px; height: 14px; display: block; }
 .plchat__row .pl-avatar {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
-  margin-bottom: 0.3rem;
-  border: 1.5px solid var(--rule);
+  border: 1px solid var(--rule);
   display: block;
 }
 .plchat__typing {
@@ -1546,10 +1563,9 @@
     { who: 'mgr', text: "I have to tell one of my best people her role is changing. She's going to take it hard.", wait: 1800 },
     { who: 'pl',  text: "Let's get you ready before Thursday. One sentence: what is actually changing?", node: 1, wait: 2400 },
     { who: 'mgr', text: "Her team is merging. Same scope, new lead.", wait: 1800 },
-    { who: 'pl',  text: "Clear. Now the goal: what do you want her walking out of the room with?", node: 2, wait: 2400 },
-    { who: 'pl',  text: "Harder one. What does this change look like from her seat?", node: 3, wait: 2400 },
-    { who: 'pl',  text: "You haven't named your ask yet. Her trust? Her patience? Name it before she has to guess.", node: 4, wait: 2600 },
-    { who: 'pl',  text: "Last light: what happens Friday, after? She will watch what you do next.", node: 5, wait: 2600 },
+    { who: 'pl',  text: "Clear. Two more lights: what do you want her walking out with, and what does this look like from her seat?", node: [2, 3], wait: 2800 },
+    { who: 'mgr', text: "Honestly? From her seat it's a merger she didn't ask for.", wait: 2000 },
+    { who: 'pl',  text: "Good, you're seeing it. Now name your ask, and what happens Friday after the dust settles. She will watch what you do next.", node: [4, 5], wait: 3000 },
     { who: 'pl',  text: "All five lights are on. Want to rehearse your opening line?", ready: true, wait: 4500 }
   ];
 
@@ -1557,9 +1573,10 @@
   let timer = null;
   let running = false;
 
-  /* Tiny porch light glyph — same one as the window chrome — so the
-     coach's messages read as porchlight, not as a second person. */
-  const PL_ICON = '<svg class="pl-icon" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 5 A3.5 3.5 0 0 1 9.5 5 L9.5 5.6 L2.5 5.6 Z" fill="#96E650"/><line x1="4" y1="7.4" x2="3.2" y2="9.6" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/><line x1="6" y1="7.6" x2="6" y2="10" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="7.4" x2="8.8" y2="9.6" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/></svg>';
+  /* The same porch light glyph as the window chrome, sat on an ink
+     circle so it reads as a lit porch light at night and matches the
+     manager's circular photo avatar. */
+  const PL_BADGE = '<span class="pl-badge"><svg class="pl-icon" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2.5 5 A3.5 3.5 0 0 1 9.5 5 L9.5 5.6 L2.5 5.6 Z" fill="#96E650"/><line x1="4" y1="7.4" x2="3.2" y2="9.6" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/><line x1="6" y1="7.6" x2="6" y2="10" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="7.4" x2="8.8" y2="9.6" stroke="#96E650" stroke-width="1.1" stroke-linecap="round"/></svg></span>';
 
   /* Manager avatar — local copy of a Pexels portrait (free license,
      no attribution required), served from assets so the page never
@@ -1568,24 +1585,22 @@
 
   function addMsg(step) {
     const row = document.createElement('div');
-    row.className = 'plchat__row plchat__row--' + step.who;
-    const el = document.createElement('div');
-    el.className = 'plchat__msg';
-    el.textContent = step.text;
-    if (step.who === 'pl') {
-      row.insertAdjacentHTML('afterbegin', PL_ICON);
-      row.appendChild(el);
-    } else {
-      row.appendChild(el);
-      row.insertAdjacentHTML('beforeend', MGR_AVATAR);
-    }
+    row.className = 'plchat__row';
+    const marker = step.who === 'pl' ? PL_BADGE : MGR_AVATAR;
+    const label  = step.who === 'pl' ? 'porchlight' : 'manager';
+    row.innerHTML = marker
+      + '<div class="plchat__stack"><span class="plchat__who">' + label + '</span>'
+      + '<div class="plchat__msg plchat__msg--' + step.who + '"></div></div>';
+    row.querySelector('.plchat__msg').textContent = step.text;
     feed.appendChild(row);
     while (feed.children.length > MAX_VISIBLE) feed.removeChild(feed.firstChild);
   }
 
   function light(n) {
-    const el = map.querySelector('.pl-node[data-node="' + n + '"]');
-    if (el) el.classList.add('is-lit');
+    [].concat(n).forEach((id) => {
+      const el = map.querySelector('.pl-node[data-node="' + id + '"]');
+      if (el) el.classList.add('is-lit');
+    });
   }
 
   function reset() {
@@ -1615,8 +1630,8 @@
     };
     if (step.who === 'pl') {
       const t = document.createElement('div');
-      t.className = 'plchat__row plchat__row--pl';
-      t.innerHTML = PL_ICON + '<div class="plchat__typing"><span></span><span></span><span></span></div>';
+      t.className = 'plchat__row';
+      t.innerHTML = PL_BADGE + '<div class="plchat__stack"><div class="plchat__typing"><span></span><span></span><span></span></div></div>';
       feed.appendChild(t);
       timer = setTimeout(() => { t.remove(); deliver(); }, 950);
     } else {
