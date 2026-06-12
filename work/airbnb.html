@@ -200,6 +200,381 @@
   }
   .abspot__mobilecard-cta svg { width: 14px; height: 14px; }
 }
+
+/* ==========================================================================
+   AI101 walkthrough — interactive re-creation of one performance task.
+   Same component family as the Apple case study walkthrough (appwt),
+   adapted: notes artifact, AI draft audit, shipped brief.
+   ========================================================================== */
+.aiwt {
+  padding: clamp(4rem, 8vw, 6rem) var(--pad-x);
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+}
+.aiwt__inner { max-width: var(--maxw); margin: 0 auto; }
+.aiwt__head {
+  max-width: 62ch;
+  margin: 0 0 2rem;
+  display: grid;
+  gap: 0.75rem;
+}
+.aiwt__kicker {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+  width: fit-content;
+}
+.aiwt__h {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  color: var(--ink);
+}
+.aiwt__h em { color: var(--blue); font-style: italic; }
+.aiwt__p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 60ch;
+}
+.aiwt__note {
+  margin-top: 0.5rem;
+  padding: 0.85rem 1.1rem;
+  background: rgba(3, 89, 155, 0.05);
+  border: 1px solid rgba(3, 89, 155, 0.25);
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.aiwt__note b { color: var(--blue); font-weight: 600; }
+
+.aiwt__card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: clamp(2rem, 4vw, 3.5rem);
+  max-width: 880px;
+  margin: 0 auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 10px 40px rgba(0, 0, 0, 0.04);
+}
+.aiwt__head-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 2.5rem;
+}
+.aiwt__progress-bar { display: flex; gap: 3px; flex: 1; max-width: 280px; }
+.aiwt__progress-seg {
+  flex: 1;
+  height: 2px;
+  background: var(--rule);
+  border-radius: 1px;
+  transition: background 0.4s var(--ease);
+}
+.aiwt__progress-seg.is-done { background: rgba(3, 89, 155, 0.35); }
+.aiwt__progress-seg.is-active { background: var(--blue); }
+.aiwt__step-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.aiwt__panel { display: none; animation: aiwtFade 0.5s var(--ease) both; }
+.aiwt__panel.is-active { display: block; }
+@keyframes aiwtFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.aiwt__chip {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin: 0 0 1.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--blue);
+}
+.aiwt__panel-h {
+  margin: 0 0 1.25rem;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  color: var(--ink);
+  max-width: 22ch;
+}
+.aiwt__panel-h em { color: var(--magenta); font-style: italic; }
+.aiwt__panel-lede {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  line-height: 1.4;
+  color: var(--ink);
+  margin: 0 0 1.25rem;
+  max-width: 50ch;
+  letter-spacing: -0.01em;
+}
+.aiwt__panel-p {
+  margin: 0 0 1.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 60ch;
+}
+
+/* Artifacts: raw notes (mono) and brief documents (body type) */
+.aiwt__artifact {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 0 1.75rem;
+  background: var(--paper-2);
+}
+.aiwt__artifact-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+}
+.aiwt__artifact-body {
+  padding: 1.25rem 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.75;
+  color: var(--ink);
+}
+.aiwt__artifact-body ul { list-style: none; margin: 0; padding: 0; }
+.aiwt__artifact--doc .aiwt__artifact-body {
+  font-family: var(--body);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+.aiwt__artifact--doc .aiwt__artifact-body p { margin: 0 0 0.85rem; }
+.aiwt__artifact--doc .aiwt__artifact-body p:last-child { margin: 0; }
+.aiwt__artifact--final { border-color: rgba(150, 230, 80, 0.7); background: rgba(150, 230, 80, 0.06); }
+
+/* Step 2 — context choices */
+.aiwt__choices {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  border-top: 1px solid var(--rule);
+}
+.aiwt__choices button {
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  padding: 1.2rem 0.25rem;
+  font-family: var(--body);
+  font-size: 1rem;
+  color: var(--ink);
+  cursor: pointer;
+  transition: color 0.2s var(--ease);
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+.aiwt__choices button::before {
+  content: '';
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.aiwt__choices button:hover { color: var(--blue); }
+.aiwt__choices button:hover::before { border-color: var(--blue); }
+.aiwt__choices button.is-wrong { color: var(--magenta); }
+.aiwt__choices button.is-wrong::before {
+  background: var(--magenta);
+  border-color: var(--magenta);
+  box-shadow: inset 0 0 0 3px var(--paper);
+}
+.aiwt__choices button.is-right { color: var(--blue); font-weight: 600; }
+.aiwt__choices button.is-right::before {
+  background: var(--lime);
+  border-color: var(--lime);
+  box-shadow: inset 0 0 0 3px var(--paper);
+}
+.aiwt__feedback {
+  display: none;
+  padding: 1.25rem 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink);
+  margin-top: 1.75rem;
+  border: 1px solid;
+  border-radius: 6px;
+  max-width: 62ch;
+}
+.aiwt__feedback.is-shown { display: block; }
+.aiwt__feedback--right { border-color: rgba(150, 230, 80, 0.8); background: rgba(150, 230, 80, 0.14); }
+.aiwt__feedback--wrong { border-color: rgba(236, 0, 140, 0.4); background: rgba(236, 0, 140, 0.03); }
+
+/* Step 3 — audit rows (tap to reveal, gated) */
+.aiwt__audits { margin: 0; }
+.aiwt__audit {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 2rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--rule);
+}
+.aiwt__audit:last-of-type { border-bottom: 1px solid var(--rule); }
+.aiwt__audit-num {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+}
+.aiwt__audit-label {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.aiwt__reveal {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--blue);
+  text-transform: uppercase;
+  transition: color 0.2s var(--ease);
+}
+.aiwt__reveal:hover { color: var(--magenta); }
+.aiwt__answer {
+  display: none;
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(3, 89, 155, 0.04);
+  border: 1px solid rgba(3, 89, 155, 0.2);
+  border-radius: 6px;
+  font-size: 0.94rem;
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 58ch;
+}
+.aiwt__audit.is-revealed .aiwt__answer { display: block; }
+.aiwt__audit.is-revealed .aiwt__reveal { color: var(--ink-2); }
+.aiwt__progress-note {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin: 1.5rem 0 0;
+}
+
+/* Step 4 — outcome list */
+.aiwt__outcome-list {
+  display: grid;
+  gap: 0;
+  margin: 2rem 0 0;
+  list-style: none;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+.aiwt__outcome-list li {
+  padding: 1.35rem 0;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 2rem;
+  align-items: baseline;
+}
+.aiwt__outcome-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+.aiwt__outcome-val {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+}
+
+/* Navigation */
+.aiwt__nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2rem;
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--rule);
+  gap: 1rem;
+}
+.aiwt__btn {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  transition: color 0.2s var(--ease), opacity 0.2s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.aiwt__btn:hover:not(:disabled) { color: var(--blue); }
+.aiwt__btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.aiwt__btn--prev::before { content: '←'; font-size: 1.1rem; line-height: 1; }
+.aiwt__btn--next::after { content: '→'; font-size: 1.1rem; line-height: 1; }
+
+@media (max-width: 700px) {
+  .aiwt__card { padding: 1.75rem; }
+  .aiwt__audit { grid-template-columns: 2rem 1fr; gap: 1rem; }
+  .aiwt__outcome-list li { grid-template-columns: 1fr; gap: 0.25rem; }
+  .aiwt__head-bar { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .aiwt__progress-bar { max-width: none; width: 100%; }
+}
 </style>
 </head>
 <body>
@@ -337,6 +712,185 @@
       </p>
     </div>
   </article>
+</section>
+
+<!-- AI101 walkthrough: interactive re-creation of one performance task -->
+<section class="aiwt" data-log="002a — inside a module · interactive walkthrough">
+  <div class="aiwt__inner">
+    <header class="aiwt__head">
+      <span class="aiwt__kicker">inside a module · representative re-creation</span>
+      <h3 class="aiwt__h">step inside one <em>performance task.</em></h3>
+      <p class="aiwt__p">
+        The five AI101 modules are internal to Airbnb. So here is the
+        pattern instead of the content: one of the most common AI tasks
+        on EX teams, turning messy meeting notes into a decision brief,
+        rebuilt as a click-through so you can feel how a performance
+        task works.
+      </p>
+      <p class="aiwt__note"><b>The pattern is real. The content is not Airbnb's.</b> Every name, number, and note below is invented for public view.</p>
+    </header>
+
+    <div class="aiwt__card">
+      <div class="aiwt__head-bar">
+        <div class="aiwt__progress-bar" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1">
+          <span class="aiwt__progress-seg is-active"></span>
+          <span class="aiwt__progress-seg"></span>
+          <span class="aiwt__progress-seg"></span>
+          <span class="aiwt__progress-seg"></span>
+        </div>
+        <span class="aiwt__step-label" id="aiwtStepLabel">Step 1 of 4</span>
+      </div>
+
+      <!-- Step 1 — the adoption moment -->
+      <div class="aiwt__panel is-active" data-panel="1">
+        <span class="aiwt__chip">step 1 · the adoption moment</span>
+        <h4 class="aiwt__panel-h">monday, <em>9:14 am.</em></h4>
+        <p class="aiwt__panel-lede">
+          You just left a 45-minute stakeholder sync. Your director
+          needs a decision brief by noon.
+        </p>
+        <div class="aiwt__artifact">
+          <div class="aiwt__artifact-bar">
+            <span>raw-notes.txt</span>
+            <span>9:14 am</span>
+          </div>
+          <div class="aiwt__artifact-body">
+            <ul>
+              <li>kickoff recap... timeline slipping, eng can't commit until Q3</li>
+              <li>3 vendor options on table: Atlas / Beacon / build in-house</li>
+              <li>L pushed back hard on Atlas cost (~$240k/yr, "not happening")</li>
+              <li>pilot group = new managers, roughly 60 ppl?</li>
+              <li>IT security review required for any vendor. 4 to 6 wks. J to confirm.</li>
+              <li>DECISION NEEDED by EOM or we lose the Q3 window</li>
+              <li>actions: A sends Beacon demo invite. M drafts success metrics.</li>
+              <li>parking lot: LMS integration, data residency questions</li>
+            </ul>
+          </div>
+        </div>
+        <p class="aiwt__panel-p">
+          In a lecture course, this is where a video about summarization
+          plays. In a performance task, this is the assignment. Real
+          input, real deadline. The module starts where the work starts.
+        </p>
+      </div>
+
+      <!-- Step 2 — build with AI -->
+      <div class="aiwt__panel" data-panel="2">
+        <span class="aiwt__chip">step 2 · build with ai</span>
+        <h4 class="aiwt__panel-h">what do you hand <em>the model?</em></h4>
+        <p class="aiwt__panel-lede">
+          The first skill AI101 teaches isn't prompting. It's context.
+          Pick your move:
+        </p>
+        <div class="aiwt__choices">
+          <button type="button" data-choice="paste">Paste the notes. Ask for a summary.</button>
+          <button type="button" data-choice="context">Notes, plus who it's for and the decision it has to support.</button>
+          <button type="button" data-choice="theory">First ask the AI what a great brief looks like.</button>
+        </div>
+        <div class="aiwt__feedback" data-feedback></div>
+      </div>
+
+      <!-- Step 3 — the human pass -->
+      <div class="aiwt__panel" data-panel="3">
+        <span class="aiwt__chip">step 3 · the human pass</span>
+        <h4 class="aiwt__panel-h">the draft is back. <em>now you audit.</em></h4>
+        <p class="aiwt__panel-lede">
+          Eight seconds later you have a one-page draft. It contains
+          three planted problems. Find all three to continue.
+        </p>
+        <div class="aiwt__artifact aiwt__artifact--doc">
+          <div class="aiwt__artifact-bar">
+            <span>decision-brief-DRAFT</span>
+            <span>generated in 8s</span>
+          </div>
+          <div class="aiwt__artifact-body">
+            <p><strong>Recommendation:</strong> proceed with Atlas. At $240k per year it is the clear cost leader. The security review will finish within four weeks, keeping the rollout ahead of schedule.</p>
+            <p>The pilot launches with approximately 60 new managers. The Beacon demo and success metrics workstream are already in motion.</p>
+          </div>
+        </div>
+        <div class="aiwt__audits">
+          <div class="aiwt__audit">
+            <span class="aiwt__audit-num">01</span>
+            <div>
+              <span class="aiwt__audit-label">Check the numbers</span>
+              <button type="button" class="aiwt__reveal">Tap to reveal →</button>
+              <div class="aiwt__answer">
+                The draft calls Atlas "the clear cost leader." Your notes
+                say the opposite: that price drew the hardest objection in
+                the room. The model inverted a key fact. This is the most
+                common synthesis failure there is.
+              </div>
+            </div>
+          </div>
+          <div class="aiwt__audit">
+            <span class="aiwt__audit-num">02</span>
+            <div>
+              <span class="aiwt__audit-label">Check the certainty</span>
+              <button type="button" class="aiwt__reveal">Tap to reveal →</button>
+              <div class="aiwt__answer">
+                "Will finish within four weeks" upgrades your notes' 4 to
+                6 weeks, unconfirmed, into a promise your director will
+                repeat upward. AI rounds uncertainty up to confidence.
+                The human pass rounds it back down.
+              </div>
+            </div>
+          </div>
+          <div class="aiwt__audit">
+            <span class="aiwt__audit-num">03</span>
+            <div>
+              <span class="aiwt__audit-label">Check what's missing</span>
+              <button type="button" class="aiwt__reveal">Tap to reveal →</button>
+              <div class="aiwt__answer">
+                The end-of-month deadline, the entire reason this brief
+                exists, appears nowhere in the draft. The model summarized
+                the meeting and buried the decision.
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="aiwt__progress-note" id="aiwtGateNote">Reveal all 3 to continue</p>
+      </div>
+
+      <!-- Step 4 — ship the artifact -->
+      <div class="aiwt__panel" data-panel="4">
+        <span class="aiwt__chip">step 4 · ship the artifact</span>
+        <h4 class="aiwt__panel-h">the artifact is <em>the assessment.</em></h4>
+        <p class="aiwt__panel-lede">
+          You fix all three problems and send the brief at 11:42. There
+          is no quiz. The brief is the evidence.
+        </p>
+        <div class="aiwt__artifact aiwt__artifact--doc aiwt__artifact--final">
+          <div class="aiwt__artifact-bar">
+            <span>decision-brief-FINAL</span>
+            <span>sent 11:42 am</span>
+          </div>
+          <div class="aiwt__artifact-body">
+            <p><strong>Decision needed by end of month:</strong> select a vendor or commit to building in-house. Missing the date closes the Q3 window.</p>
+            <p>Atlas is strongest on features; its $240k per year cost drew a hard objection. Beacon demo is scheduled. Any vendor path requires an IT security review, estimated 4 to 6 weeks and not yet confirmed. Recommend a vendor decision meeting this week.</p>
+          </div>
+        </div>
+        <ul class="aiwt__outcome-list">
+          <li>
+            <span class="aiwt__outcome-label">the pattern</span>
+            <span class="aiwt__outcome-val">Every AI101 module ends with something built, fixed, and shipped inside the learner's real workflow.</span>
+          </li>
+          <li>
+            <span class="aiwt__outcome-label">why it works</span>
+            <span class="aiwt__outcome-val">The tool earns its place on Monday, so it gets opened again on Tuesday. That is what built for adoption means.</span>
+          </li>
+          <li>
+            <span class="aiwt__outcome-label">the receipts</span>
+            <span class="aiwt__outcome-val">100% of learners reported knowledge gain. Strategy clarity rose 25 points. Tasks like this one did that, not slides.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="aiwt__nav">
+        <button type="button" class="aiwt__btn aiwt__btn--prev" disabled>Back</button>
+        <button type="button" class="aiwt__btn aiwt__btn--next">Next</button>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- Spotlight: Greenroom lab, embedded live -->
@@ -490,5 +1044,114 @@
 </footer>
 
 <script src="../script.js?v=20260516" defer></script>
+
+<script>
+/* ==========================================================================
+   AI101 walkthrough — 4-step performance task re-creation
+   Same driver pattern as the Apple case study walkthrough: stepped
+   panels with segmented progress, choice feedback on step 2, and a
+   reveal-gate on step 3 (find all three planted problems to continue).
+   ========================================================================== */
+(function () {
+  const card = document.querySelector('.aiwt__card');
+  if (!card) return;
+
+  const panels  = card.querySelectorAll('.aiwt__panel');
+  const segs    = card.querySelectorAll('.aiwt__progress-seg');
+  const label   = document.getElementById('aiwtStepLabel');
+  const gate    = document.getElementById('aiwtGateNote');
+  const prevBtn = card.querySelector('.aiwt__btn--prev');
+  const nextBtn = card.querySelector('.aiwt__btn--next');
+  const bar     = card.querySelector('.aiwt__progress-bar');
+  const total   = panels.length;
+
+  let current = 1;
+
+  function renderStep(n) {
+    current = Math.max(1, Math.min(total, n));
+    panels.forEach(p => p.classList.toggle('is-active', parseInt(p.dataset.panel, 10) === current));
+    segs.forEach((s, i) => {
+      s.classList.toggle('is-active', i + 1 === current);
+      s.classList.toggle('is-done', i + 1 < current);
+    });
+    if (label) label.textContent = `Step ${current} of ${total}`;
+    if (bar) bar.setAttribute('aria-valuenow', current);
+    prevBtn.disabled = current === 1;
+    nextBtn.textContent = current === total ? 'Restart' : 'Next';
+    nextBtn.disabled = false;
+    nextBtn.style.opacity = '1';
+    updateAuditGate();
+  }
+
+  function updateAuditGate() {
+    if (current !== 3) return;
+    const revealed = card.querySelectorAll('.aiwt__audit.is-revealed').length;
+    const all = card.querySelectorAll('.aiwt__audit').length;
+    const done = revealed === all;
+    if (gate) gate.textContent = done
+      ? 'All 3 found. Ready to ship.'
+      : `Reveal ${all - revealed} more to continue`;
+    nextBtn.disabled = !done;
+    nextBtn.style.opacity = done ? '1' : '0.4';
+  }
+
+  prevBtn.addEventListener('click', () => renderStep(current - 1));
+  nextBtn.addEventListener('click', () => {
+    if (nextBtn.disabled) return;
+    if (current === total) {
+      /* Restart: clear reveals and choice state so the walkthrough
+         replays clean. */
+      card.querySelectorAll('.aiwt__audit.is-revealed').forEach(a => a.classList.remove('is-revealed'));
+      card.querySelectorAll('.aiwt__reveal').forEach(b => { b.textContent = 'Tap to reveal →'; });
+      card.querySelectorAll('.aiwt__choices button').forEach(b => b.classList.remove('is-right', 'is-wrong'));
+      const fb = card.querySelector('[data-feedback]');
+      if (fb) { fb.className = 'aiwt__feedback'; fb.textContent = ''; }
+      renderStep(1);
+    } else {
+      renderStep(current + 1);
+    }
+  });
+
+  /* Step 2 — context choice feedback */
+  const FEEDBACK = {
+    paste: {
+      kind: 'wrong',
+      text: 'This is what most people do. You get a shorter version of your mess: every topic flattened to equal weight, nothing aimed at what your director actually needs. The module names this move, then teaches the next one.'
+    },
+    context: {
+      kind: 'right',
+      text: 'Audience, purpose, constraint. The director, the vendor-versus-build decision, one page by noon. With working context, the output stops being a summary and starts being a brief.'
+    },
+    theory: {
+      kind: 'wrong',
+      text: 'Not useless, but the clock is running. AI101 teaches working context first: audience, purpose, constraint. Save the theory seminar for after you ship.'
+    }
+  };
+
+  card.querySelectorAll('.aiwt__choices button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const feedback = FEEDBACK[btn.dataset.choice];
+      if (!feedback) return;
+      card.querySelectorAll('.aiwt__choices button').forEach(b => b.classList.remove('is-right', 'is-wrong'));
+      btn.classList.add(feedback.kind === 'right' ? 'is-right' : 'is-wrong');
+      const fb = card.querySelector('[data-feedback]');
+      fb.className = `aiwt__feedback is-shown aiwt__feedback--${feedback.kind}`;
+      fb.textContent = feedback.text;
+    });
+  });
+
+  /* Step 3 — audit tap-to-reveal */
+  card.querySelectorAll('.aiwt__reveal').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const audit = btn.closest('.aiwt__audit');
+      audit.classList.toggle('is-revealed');
+      btn.textContent = audit.classList.contains('is-revealed') ? 'Hide ↑' : 'Tap to reveal →';
+      updateAuditGate();
+    });
+  });
+
+  renderStep(1);
+})();
+</script>
 </body>
 </html>
