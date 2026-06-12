@@ -575,6 +575,106 @@
   .aiwt__head-bar { flex-direction: column; align-items: flex-start; gap: 1rem; }
   .aiwt__progress-bar { max-width: none; width: 100%; }
 }
+
+/* ==========================================================================
+   Manager skill — design description (the skill itself stays internal).
+   One Claude skill, three surfaces: built for Cowork, flexible enough
+   to follow the manager into chat and Claude Code.
+   ========================================================================== */
+.abskill {
+  padding: clamp(4rem, 8vw, 6rem) var(--pad-x);
+  background: var(--paper-2);
+  border-top: 1px solid var(--rule);
+}
+.abskill__inner { max-width: var(--maxw); margin: 0 auto; }
+.abskill__head {
+  max-width: 62ch;
+  margin: 0 0 2.5rem;
+  display: grid;
+  gap: 0.85rem;
+}
+.abskill__kicker {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--ink);
+  width: fit-content;
+}
+.abskill__h {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  color: var(--ink);
+}
+.abskill__h em { color: var(--magenta); font-style: italic; }
+.abskill__p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 62ch;
+}
+.abskill__p strong { color: var(--ink); font-weight: 600; }
+.abskill__surfaces {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+.abskill__surface {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 1.6rem 1.6rem 1.75rem;
+  display: grid;
+  gap: 0.7rem;
+  align-content: start;
+}
+.abskill__surface--primary {
+  border-color: rgba(150, 230, 80, 0.85);
+  background: rgba(150, 230, 80, 0.07);
+}
+.abskill__surface-tag {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.abskill__surface--primary .abskill__surface-tag { color: var(--ink); }
+.abskill__surface-h {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+  text-transform: lowercase;
+  color: var(--ink);
+}
+.abskill__surface-p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.abskill__foot {
+  margin: 2rem 0 0;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  line-height: 1.7;
+  color: var(--ink-2);
+  max-width: 68ch;
+}
+@media (max-width: 800px) {
+  .abskill__surfaces { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -882,6 +982,10 @@
             <span class="aiwt__outcome-label">the receipts</span>
             <span class="aiwt__outcome-val">100% of learners reported knowledge gain. Strategy clarity rose 25 points. Tasks like this one did that, not slides.</span>
           </li>
+          <li>
+            <span class="aiwt__outcome-label">one honest limit</span>
+            <span class="aiwt__outcome-val">This re-creation runs one fixed path for everyone. The real modules met each learner where they were. The manager skill below takes that even further.</span>
+          </li>
         </ul>
       </div>
 
@@ -890,6 +994,69 @@
         <button type="button" class="aiwt__btn aiwt__btn--next">Next</button>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- Manager skill — design description, skill stays internal -->
+<section class="abskill" data-log="002c — also shipped · manager skill">
+  <div class="abskill__inner">
+    <header class="abskill__head">
+      <span class="abskill__kicker">also shipped · a skill for people managers</span>
+      <h3 class="abskill__h">a coach that meets managers <em>where they are.</em></h3>
+      <p class="abskill__p">
+        Beyond the five modules, I designed and built a Claude skill
+        for people managers facing difficult conversations: performance
+        concerns, role changes, hard feedback. It's grounded in the
+        company's five decision-making best practices, and it doesn't
+        live in a course. It lives wherever the manager already works.
+      </p>
+      <p class="abskill__p">
+        The manager brings a real conversation they're dreading. The
+        skill coaches the preparation: pressure-tests the framing
+        against the decision practices, surfaces what's missing,
+        rehearses the hard moments. <strong>Every manager gets a
+        different experience because every manager brings a different
+        situation.</strong> The tool adapts to the human, never the
+        reverse.
+      </p>
+    </header>
+
+    <div class="abskill__surfaces">
+      <div class="abskill__surface abskill__surface--primary">
+        <span class="abskill__surface-tag">primary surface</span>
+        <h4 class="abskill__surface-h">cowork</h4>
+        <p class="abskill__surface-p">
+          Built for Cowork, where managers already plan their week.
+          The prep happens next to the work it's about, not in a
+          separate tab they have to remember to open.
+        </p>
+      </div>
+      <div class="abskill__surface">
+        <span class="abskill__surface-tag">same skill</span>
+        <h4 class="abskill__surface-h">claude chat</h4>
+        <p class="abskill__surface-p">
+          Flexible enough to run in plain chat for the five-minutes-
+          before-the-meeting rehearsal, when the manager needs a
+          coach, not a course.
+        </p>
+      </div>
+      <div class="abskill__surface">
+        <span class="abskill__surface-tag">same skill</span>
+        <h4 class="abskill__surface-h">claude code</h4>
+        <p class="abskill__surface-p">
+          And it follows technical managers into Claude Code, the
+          surface where they already spend the day. Zero new tools
+          to adopt.
+        </p>
+      </div>
+    </div>
+
+    <p class="abskill__foot">
+      The skill and the five practices stay internal to Airbnb. The
+      design pattern is the point: one skill, three surfaces, zero new
+      tabs. Adoption by meeting people in their flow of work, not by
+      asking them to come to the training.
+    </p>
   </div>
 </section>
 
