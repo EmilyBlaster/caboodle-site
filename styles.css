@@ -524,6 +524,19 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 }
 .trustband__list li:hover { color: var(--lime); }
 
+/* Six names + the two side labels never share one line: the band's
+   inner container caps at --maxw, so the list column tops out near
+   800px while one line needs ~860px. Free wrapping strands a single
+   name ("intuit") as a widow at every desktop width. Capping the
+   list width forces a balanced 3 / 3 break instead. Below 820px the
+   band stacks and centers anyway. */
+@media (min-width: 821px) {
+  .trustband__list {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+}
+
 @media (max-width: 820px) {
   .trustband__inner {
     grid-template-columns: 1fr;
