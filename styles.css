@@ -432,6 +432,8 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   display: block;
   position: relative;
   overflow: hidden;
+  padding-top: 0.18em;      /* room for ascenders / the dot on 'i' in the clip */
+  margin-top: -0.18em;      /* ...without shifting the headline down */
   padding-bottom: 0.22em;   /* room for descenders inside the clip window */
   margin-bottom: -0.22em;   /* ...without changing line spacing */
 }
