@@ -183,13 +183,30 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     el.setAttribute('data-reveal', '');
   });
 
-  /* Stagger children of the same parent for a gentler cascade */
+  /* The hero elements aren't all siblings, so the default sibling-index
+     stagger reveals them near-simultaneously. Give the hero a deliberate
+     top-to-bottom cascade on load: stamp, eyebrow, headline, lede, scroll,
+     then the trust band. The page assembles itself, editorially. */
+  ['.hero__stamp', '.hero__eyebrow', '.hero__headline', '.hero__lede', '.hero__scroll', '.trustband__inner']
+    .forEach((sel, i) => {
+      const el = document.querySelector(sel);
+      if (el) el.setAttribute('data-reveal-order', String(i));
+    });
+
+  /* Stagger children of the same parent for a gentler cascade; honor an
+     explicit data-reveal-order when set (the hero cascade above). */
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       const el = entry.target;
-      const siblings = Array.from(el.parentElement.querySelectorAll(':scope > [data-reveal]'));
-      const delay = Math.min(siblings.indexOf(el), 4) * 80;
+      const ord = el.getAttribute('data-reveal-order');
+      let delay;
+      if (ord !== null) {
+        delay = parseInt(ord, 10) * 95;
+      } else {
+        const siblings = Array.from(el.parentElement.querySelectorAll(':scope > [data-reveal]'));
+        delay = Math.min(siblings.indexOf(el), 4) * 80;
+      }
       el.style.transitionDelay = `${delay}ms`;
       el.classList.add('is-in');
       revealObserver.unobserve(el);
