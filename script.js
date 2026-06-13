@@ -1120,14 +1120,23 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     return false;
   }
 
-  function tick() {
-    gx += (x - gx) * 0.2;
-    gy += (y - gy) * 0.2;
+  function place() {
     glow.style.transform =
       'translate(' + gx.toFixed(1) + 'px,' + gy.toFixed(1) + 'px) translate(-50%, -50%)';
-    if (Math.abs(x - gx) > 0.4 || Math.abs(y - gy) > 0.4) {
+  }
+
+  function tick() {
+    /* Tight follow (0.5) so the glow reads as attached to the cursor,
+       not chasing it. Snaps to exact position once it's within range
+       and the rAF stops. */
+    gx += (x - gx) * 0.5;
+    gy += (y - gy) * 0.5;
+    place();
+    if (Math.abs(x - gx) > 0.3 || Math.abs(y - gy) > 0.3) {
       requestAnimationFrame(tick);
     } else {
+      gx = x; gy = y;
+      place();
       raf = false;
     }
   }
@@ -1143,6 +1152,13 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       var nowActive = isInteractive(e.target);
       if (nowActive !== active) {
         active = nowActive;
+        if (active) {
+          /* Snap to the cursor on activation so the glow appears AT
+             the pointer and fades in cleanly — never swoops in from
+             the corner (its last resting position). */
+          gx = x; gy = y;
+          place();
+        }
         glow.classList.toggle('is-on', active);
       }
     }
