@@ -48,6 +48,11 @@
   .htrust .hkick { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-2); }
   .htrust ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.3rem 1.6rem; font-family: var(--display); font-weight: 700; text-transform: lowercase; font-size: clamp(1rem, 2vw, 1.4rem); color: var(--ink); }
 
+  /* Lens-mode reveal: the hero opens through a vesica (the logo's
+     overlap lens) that starts tall + narrow and rounds out as it grows. */
+  .stage.lens .stagehero,
+  .stage.lens .htrust { clip-path: ellipse(var(--rx, 175%) var(--ry, 175%) at 50% 50%); }
+
   /* Aperture layers */
   .ap-field { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; background: var(--ink); opacity: 0; visibility: hidden; }
   .ap-glow { position: absolute; top: 50%; left: 50%; width: 260px; height: 260px; border-radius: 50%; transform: translate(-50%,-50%) scale(0.5); background: radial-gradient(circle, rgba(150,230,80,0.4) 0%, rgba(150,230,80,0) 64%); opacity: 0; mix-blend-mode: screen; z-index: 2; pointer-events: none; }
@@ -78,10 +83,11 @@
 
 <div class="bar">
   <span class="bar__label">intro demos</span>
+  <button data-play="lens">the lens · gsap</button>
   <button data-play="aperture">the aperture · gsap</button>
   <button data-play="A">headline assembles</button>
   <button class="bar__replay" data-replay>↻ replay</button>
-  <span class="bar__cap">Your real solid mark now: it inks in, a lime sheen sweeps across it, then it opens to reveal the page. GSAP-driven. Not on your live site yet.</span>
+  <span class="bar__cap">"The lens": the page opens through your logo's own overlap lens, an iris from the vesica. Compare with the round aperture. GSAP-driven, not on your live site yet.</span>
 </div>
 
 <div class="stage" id="stage">
@@ -177,11 +183,48 @@
     return tl;
   }
 
+  /* Lens variant: same mark entrance, but the reveal opens through the
+     logo's overlap lens — a vesica that starts tall + narrow (1:2, the
+     real lens proportion) and rounds out as it grows, like an iris. */
+  function buildLens() {
+    var tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
+
+    tl.set('.ap-field', { autoAlpha: 1 }, 0);
+    tl.set('.ap-mark', { autoAlpha: 0, scale: 0.7, transformOrigin: '50% 50%' }, 0);
+    tl.set('.sheen', { attr: { x: -60 } }, 0);
+    tl.set('.ap-glow', { autoAlpha: 0, scale: 0.5, transformOrigin: '50% 50%' }, 0);
+    tl.set('.ap-edge', { autoAlpha: 0, scaleX: 0, scaleY: 0, transformOrigin: '50% 50%' }, 0);
+    tl.set(['.stagehero', '.htrust'], { '--rx': '1.2%', '--ry': '2.6%' }, 0);
+    tl.set('.hline > span', { yPercent: 110 }, 0);
+
+    /* mark inks in + glow */
+    tl.to('.ap-glow', { autoAlpha: 0.55, scale: 1, duration: 0.6, ease: 'quart.out' }, 0.1);
+    tl.to('.ap-mark', { autoAlpha: 1, scale: 1, duration: 0.65 }, 0.2);
+    /* lime sheen sweep */
+    tl.to('.sheen', { attr: { x: 92 }, duration: 0.75, ease: 'sine.inOut' }, 0.8);
+    /* charge */
+    tl.to('.ap-glow', { autoAlpha: 0.85, scale: 1.25, duration: 0.3, ease: 'quart.out' }, 1.25);
+    /* the lens opens: ry leads (stays a vertical slit), rx follows and rounds it out */
+    tl.to('.stagehero, .htrust', { '--ry': '175%', duration: 1.0 }, 1.5);
+    tl.to('.stagehero, .htrust', { '--rx': '175%', duration: 1.05 }, 1.62);
+    tl.to('.ap-edge', { autoAlpha: 1, scaleX: 14, scaleY: 26, duration: 1.0 }, 1.5);
+    tl.to('.ap-edge', { autoAlpha: 0, duration: 0.4, ease: 'quart.out' }, 2.25);
+    tl.to('.ap-mark', { scale: 1.5, autoAlpha: 0, duration: 0.55, ease: 'quart.out' }, 1.55);
+    tl.to('.ap-glow', { scale: 3.2, autoAlpha: 0, duration: 0.7 }, 1.5);
+    tl.to('.ap-field', { autoAlpha: 0, duration: 0.5, ease: 'quart.out' }, 2.0);
+
+    tl.to('.hline:nth-child(1) > span', { yPercent: 0, duration: 0.6, ease: 'quint.out' }, 2.2);
+    tl.to('.hline:nth-child(2) > span', { yPercent: 0, duration: 0.6, ease: 'quint.out' }, 2.35);
+    tl.to('.hline:nth-child(3) > span', { yPercent: 0, duration: 0.6, ease: 'quint.out' }, 2.5);
+
+    return tl;
+  }
+
   function resetToRest() {
     stage.className = 'stage';
     if (window.gsap) {
       gsap.killTweensOf('*');
-      gsap.set(['.stagehero', '.htrust'], { clearProps: '--rev' });
+      gsap.set(['.stagehero', '.htrust'], { clearProps: '--rev,--rx,--ry' });
       gsap.set('.hline > span', { clearProps: 'all' });
       gsap.set(['.ap-field', '.ap-mark', '.ap-edge', '.ap-glow'], { clearProps: 'all' });
       gsap.set('.sheen', { clearProps: 'all' });
@@ -193,7 +236,12 @@
     setActive(mode);
     if (reduce) return;
     resetToRest();
-    if (mode === 'aperture') {
+    if (mode === 'lens') {
+      if (!window.gsap) return;
+      stage.classList.add('lens');
+      apt = buildLens();
+      apt.restart();
+    } else if (mode === 'aperture') {
       if (!window.gsap) return;
       apt = buildAperture();
       apt.restart();
@@ -205,7 +253,7 @@
 
   buttons.forEach(function (b) { b.addEventListener('click', function () { play(b.dataset.play); }); });
   document.querySelector('[data-replay]').addEventListener('click', function () { play(current); });
-  window.addEventListener('load', function () { setTimeout(function () { play('aperture'); }, 300); });
+  window.addEventListener('load', function () { setTimeout(function () { play('lens'); }, 300); });
 })();
 </script>
 </body>
