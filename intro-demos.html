@@ -25,18 +25,9 @@
   body { font-family: var(--body); background: var(--ink); color: var(--paper); }
 
   /* ── Control bar ─────────────────────────────────────────── */
-  .bar {
-    position: sticky; top: 0; z-index: 50;
-    display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
-    padding: 0.9rem 1.25rem; background: var(--ink);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-  }
+  .bar { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; padding: 0.9rem 1.25rem; background: var(--ink); border-bottom: 1px solid rgba(255,255,255,0.08); }
   .bar__label { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(242,239,232,0.55); margin-right: 0.5rem; }
-  .bar button {
-    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
-    padding: 0.5rem 0.9rem; border-radius: 999px; border: 1px solid rgba(255,255,255,0.18); background: transparent; color: var(--paper);
-    transition: border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease);
-  }
+  .bar button { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; padding: 0.5rem 0.9rem; border-radius: 999px; border: 1px solid rgba(255,255,255,0.18); background: transparent; color: var(--paper); transition: border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease); }
   .bar button:hover { border-color: var(--lime); color: var(--lime); }
   .bar button.is-active { background: var(--lime); color: var(--ink); border-color: var(--lime); }
   .bar__replay { margin-left: auto; }
@@ -46,38 +37,33 @@
   /* ── Stage ───────────────────────────────────────────────── */
   .stage { position: relative; overflow: hidden; min-height: calc(100vh - 78px); background: var(--paper); }
 
-  /* ── Mock hero (shared, base = final visible state) ──────── */
-  .stagehero {
-    position: relative; z-index: 2; max-width: 1180px; margin: 0 auto;
-    padding: clamp(3rem, 8vw, 7rem) clamp(1.5rem, 5vw, 5rem) 0;
-    clip-path: circle(160% at 50% 50%);
-  }
+  /* ── Mock hero (base = final visible) ─────────────────────── */
+  .stagehero { position: relative; z-index: 3; max-width: 1180px; margin: 0 auto; padding: clamp(3rem, 8vw, 7rem) clamp(1.5rem, 5vw, 5rem) 0; clip-path: circle(var(--rev, 165%) at 50% 50%); }
   .hframe { position: relative; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 1.75rem 0; }
-  .hstamp {
-    position: absolute; top: 1.75rem; right: 0; display: inline-flex; gap: 0.9rem; padding: 0.45rem 0.95rem;
-    border: 1px solid var(--ink); background: var(--paper);
-    font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink);
-  }
+  .hstamp { position: absolute; top: 1.75rem; right: 0; display: inline-flex; gap: 0.9rem; padding: 0.45rem 0.95rem; border: 1px solid var(--ink); background: var(--paper); font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
   .heyebrow { display: block; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-2); padding-bottom: 0.5rem; }
   .hhead { font-family: var(--display); font-weight: 800; text-transform: lowercase; font-size: clamp(2.6rem, 9vw, 7rem); line-height: 1.04; letter-spacing: -0.04em; color: var(--ink); margin: 0.25rem 0 0; }
   .hhead em { font-style: italic; color: var(--magenta); }
   .hline { display: block; overflow: hidden; }
   .hline > span { display: block; }
   .hlede { max-width: 46ch; margin: 1.5rem 0 0; font-size: 1.02rem; line-height: 1.55; color: var(--ink); }
-  .htrust {
-    max-width: 1180px; margin: clamp(2rem, 5vw, 3.5rem) auto 0; padding: 1.25rem clamp(1.5rem, 5vw, 5rem) 3rem;
-    display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 2rem; position: relative; z-index: 2;
-    clip-path: circle(160% at 50% 50%);
-  }
+  .htrust { max-width: 1180px; margin: clamp(2rem, 5vw, 3.5rem) auto 0; padding: 1.25rem clamp(1.5rem, 5vw, 5rem) 3rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 2rem; position: relative; z-index: 3; clip-path: circle(var(--rev, 165%) at 50% 50%); }
   .htrust .hkick { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-2); }
   .htrust ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.3rem 1.6rem; font-family: var(--display); font-weight: 700; text-transform: lowercase; font-size: clamp(1rem, 2vw, 1.4rem); color: var(--ink); }
 
-  /* The real caboodle mark — single evenodd path, interlocking rings */
-  .cdmark { display: block; }
-  .cdmark path { fill: var(--magenta); }
+  /* ════════════════════════════════════════════════════════════
+     APERTURE LAYERS (GSAP-driven). Hidden until the aperture plays.
+     ════════════════════════════════════════════════════════════ */
+  .ap-field { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; background: var(--ink); opacity: 0; visibility: hidden; }
+  .ap-spark { position: absolute; top: 50%; left: 50%; width: 130px; height: 130px; border-radius: 50%; transform: translate(-50%,-50%) scale(0.5); background: radial-gradient(circle, rgba(150,230,80,0.65) 0%, rgba(150,230,80,0) 66%); opacity: 0; mix-blend-mode: screen; z-index: 2; pointer-events: none; }
+  .ap-mark { position: absolute; top: 50%; left: 50%; width: 168px; height: 112px; transform: translate(-50%,-50%); z-index: 2; opacity: 0; visibility: hidden; }
+  .ap-mark circle { fill: none; stroke-width: 4; stroke-dasharray: 158; stroke-dashoffset: 158; }
+  .ap-mark .ring-b { stroke: var(--blue); }
+  .ap-mark .ring-m { stroke: var(--magenta); }
+  .ap-edge { position: absolute; top: 50%; left: 50%; width: 160px; height: 160px; border-radius: 50%; transform: translate(-50%,-50%) scale(0); background: radial-gradient(circle, transparent 56%, rgba(150,230,80,0.55) 76%, rgba(236,0,140,0.5) 90%, transparent 100%); filter: blur(5px); mix-blend-mode: screen; opacity: 0; z-index: 4; pointer-events: none; }
 
   /* ════════════════════════════════════════════════════════════
-     A — headline assembles (no overlay)
+     CSS fallback intro: headline assembles (no overlay) — comparison
      ════════════════════════════════════════════════════════════ */
   .play-A .hstamp { animation: aStamp 0.55s var(--ease) 0.15s backwards; }
   .play-A .heyebrow { animation: aWipe 0.55s var(--ease) 0.35s backwards; }
@@ -91,39 +77,8 @@
   @keyframes aLine { from { transform: translateY(110%); } to { transform: translateY(0); } }
   @keyframes aUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 
-  /* ════════════════════════════════════════════════════════════
-     B — the mark blooms  (real mark + circular reveal)
-     C — bloom + assemble (same reveal, headline rises after)
-     ════════════════════════════════════════════════════════════ */
-  .bloomfield { position: absolute; inset: 0; z-index: 1; display: none; align-items: center; justify-content: center; background: var(--ink); }
-  .play-B .bloomfield, .play-C .bloomfield { display: flex; }
-  /* Soft lime halo behind the mark */
-  .bloom__halo {
-    position: absolute; top: 50%; left: 50%; width: 320px; height: 320px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(150,230,80,0.22) 0%, rgba(150,230,80,0) 65%);
-    transform: translate(-50%,-50%) scale(0.4); opacity: 0;
-  }
-  .play-B .bloom__halo, .play-C .bloom__halo { animation: bHalo 0.7s var(--ease) 0.2s backwards, bHaloOut 0.6s var(--ease) 0.85s forwards; }
-  .bloom__mark { width: 150px; height: 100px; opacity: 0; transform: scale(0.42); position: relative; }
-  .play-B .bloom__mark, .play-C .bloom__mark { animation: bMark 0.6s var(--ease) 0.2s backwards, bMarkOut 0.65s var(--ease) 0.9s forwards; }
-  .bloom__ring { position: absolute; top: 50%; left: 50%; width: 130px; height: 130px; border-radius: 50%; border: 2px solid var(--lime); transform: translate(-50%,-50%) scale(0); opacity: 0; }
-  .play-B .bloom__ring, .play-C .bloom__ring { animation: bRing 0.95s var(--ease) 0.85s forwards; }
-  .play-B .stagehero, .play-B .htrust,
-  .play-C .stagehero, .play-C .htrust { animation: bReveal 0.95s var(--ease) 0.88s backwards; }
-  @keyframes bHalo { from { opacity: 0; transform: translate(-50%,-50%) scale(0.4); } to { opacity: 1; transform: translate(-50%,-50%) scale(1); } }
-  @keyframes bHaloOut { to { opacity: 0; transform: translate(-50%,-50%) scale(1.6); } }
-  @keyframes bMark { from { opacity: 0; transform: scale(0.42); } to { opacity: 1; transform: scale(1); } }
-  @keyframes bMarkOut { to { opacity: 0; transform: scale(1.35); } }
-  @keyframes bRing { 0% { transform: translate(-50%,-50%) scale(0.25); opacity: 0; border-color: var(--lime); } 30% { opacity: 0.9; } 100% { transform: translate(-50%,-50%) scale(15); opacity: 0; border-color: var(--magenta); } }
-  @keyframes bReveal { from { clip-path: circle(0% at 50% 50%); } to { clip-path: circle(160% at 50% 50%); } }
-
-  /* C adds the headline rising in after the reveal opens */
-  .play-C .hline:nth-child(1) > span { animation: aLine 0.6s var(--ease) 1.15s backwards; }
-  .play-C .hline:nth-child(2) > span { animation: aLine 0.6s var(--ease) 1.3s backwards; }
-  .play-C .hline:nth-child(3) > span { animation: aLine 0.6s var(--ease) 1.45s backwards; }
-
   @media (prefers-reduced-motion: reduce) {
-    .bloomfield { display: none !important; }
+    .ap-field, .ap-mark, .ap-edge, .ap-spark { display: none !important; }
     [class*="play-"] * { animation: none !important; }
     .stagehero, .htrust { clip-path: none !important; }
   }
@@ -133,11 +88,10 @@
 
 <div class="bar">
   <span class="bar__label">intro demos</span>
-  <button data-play="B">the mark blooms</button>
+  <button data-play="aperture">the aperture · gsap</button>
   <button data-play="A">headline assembles</button>
-  <button data-play="C">bloom + assemble</button>
   <button class="bar__replay" data-replay>↻ replay</button>
-  <span class="bar__cap">Now using your real caboodle mark. Pick a button to watch each first-visit intro. None of this is on your live site yet.</span>
+  <span class="bar__cap">The mark becomes the aperture: blue + magenta rings come together, then open to reveal the page. GSAP-driven. Not on your live site yet.</span>
 </div>
 
 <div class="stage" id="stage">
@@ -160,34 +114,102 @@
     <ul><li>apple</li><li>airbnb</li><li>gitlab</li><li>johnson &amp; johnson</li><li>t-mobile</li><li>intuit</li></ul>
   </div>
 
-  <!-- Bloom field with the REAL mark -->
-  <div class="bloomfield">
-    <span class="bloom__halo"></span>
-    <svg class="cdmark bloom__mark" viewBox="0 0 90 60" aria-hidden="true">
-      <path fill-rule="evenodd" d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>
+  <!-- Aperture layers -->
+  <div class="ap-field">
+    <span class="ap-spark"></span>
+    <svg class="ap-mark" viewBox="0 0 90 60" aria-hidden="true">
+      <circle class="ring-b" cx="30" cy="30" r="25" />
+      <circle class="ring-m" cx="60" cy="30" r="25" />
     </svg>
-    <span class="bloom__ring"></span>
   </div>
+  <div class="ap-edge"></div>
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
 <script>
 (function () {
   var stage = document.getElementById('stage');
   var buttons = document.querySelectorAll('.bar button[data-play]');
-  var current = 'B';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var current = 'aperture';
+  var apt = null;
 
-  function play(n) {
-    current = n;
+  function setActive(mode) {
+    buttons.forEach(function (b) { b.classList.toggle('is-active', b.dataset.play === mode); });
+  }
+
+  function buildAperture() {
+    var tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
+
+    /* initial states at t0 (so restart re-establishes them) */
+    tl.set('.ap-field', { autoAlpha: 1 }, 0);
+    tl.set('.ap-mark', { autoAlpha: 1, scale: 1, transformOrigin: '50% 50%' }, 0);
+    tl.set('.ring-b', { x: -46, strokeDashoffset: 158 }, 0);
+    tl.set('.ring-m', { x: 46, strokeDashoffset: 158 }, 0);
+    tl.set('.ap-spark', { autoAlpha: 0, scale: 0.5, transformOrigin: '50% 50%' }, 0);
+    tl.set('.ap-edge', { autoAlpha: 0, scale: 0, transformOrigin: '50% 50%' }, 0);
+    tl.set(['.stagehero', '.htrust'], { '--rev': '0%' }, 0);
+    tl.set('.hline > span', { yPercent: 110 }, 0);
+
+    /* Beat 0 — anticipation: a faint point of lime light */
+    tl.to('.ap-spark', { autoAlpha: 0.32, scale: 0.72, duration: 0.3, ease: 'quart.out' }, 0.0);
+
+    /* Beat 1 — the two rings drift in from opposite sides and draw on */
+    tl.to('.ring-b', { x: 0, strokeDashoffset: 0, duration: 0.7 }, 0.3);
+    tl.to('.ring-m', { x: 0, strokeDashoffset: 0, duration: 0.7 }, 0.3);
+
+    /* interlock: lime spark flashes at the overlap */
+    tl.to('.ap-spark', { autoAlpha: 0.92, scale: 1.0, duration: 0.28, ease: 'quart.out' }, 0.92);
+
+    /* Beat 2 — charge: a held beat of brightness before the aperture opens */
+    tl.to('.ap-mark', { scale: 1.06, duration: 0.32, ease: 'quart.out' }, 1.0);
+
+    /* Beat 3 — the aperture opens; reveal grows, edge of light travels out */
+    tl.to(['.stagehero', '.htrust'], { '--rev': '165%', duration: 0.9 }, 1.3);
+    tl.to('.ap-edge', { autoAlpha: 1, scale: 22, duration: 0.95 }, 1.3);
+    tl.to('.ap-edge', { autoAlpha: 0, duration: 0.4, ease: 'quart.out' }, 2.0);
+    tl.to('.ap-mark', { scale: 1.6, autoAlpha: 0, duration: 0.5, ease: 'quart.out' }, 1.3);
+    tl.to('.ap-spark', { scale: 3.4, autoAlpha: 0, duration: 0.7 }, 1.3);
+    tl.to('.ap-field', { autoAlpha: 0, duration: 0.5, ease: 'quart.out' }, 1.75);
+
+    /* Beat 4 — headline rises in as the light edge sweeps past */
+    tl.to('.hline:nth-child(1) > span', { yPercent: 0, duration: 0.6, ease: 'quint.out' }, 2.0);
+    tl.to('.hline:nth-child(2) > span', { yPercent: 0, duration: 0.6, ease: 'quint.out' }, 2.15);
+    tl.to('.hline:nth-child(3) > span', { yPercent: 0, duration: 0.6, ease: 'quint.out' }, 2.3);
+
+    return tl;
+  }
+
+  function resetToRest() {
     stage.className = 'stage';
-    void stage.offsetWidth;
-    stage.classList.add('play-' + n);
-    buttons.forEach(function (b) { b.classList.toggle('is-active', b.dataset.play === n); });
+    if (window.gsap) {
+      gsap.killTweensOf('*');
+      gsap.set(['.stagehero', '.htrust'], { clearProps: '--rev' });
+      gsap.set('.hline > span', { clearProps: 'all' });
+      gsap.set(['.ap-field', '.ap-mark', '.ap-edge', '.ap-spark', '.ring-b', '.ring-m'], { clearProps: 'all' });
+    }
+  }
+
+  function play(mode) {
+    current = mode;
+    setActive(mode);
+    if (reduce) return; /* reduced motion: leave hero at final state */
+    resetToRest();
+    if (mode === 'aperture') {
+      if (!window.gsap) return; /* GSAP failed to load: just show the hero */
+      apt = buildAperture();
+      apt.restart();
+    } else if (mode === 'A') {
+      void stage.offsetWidth;
+      stage.classList.add('play-A');
+    }
   }
 
   buttons.forEach(function (b) { b.addEventListener('click', function () { play(b.dataset.play); }); });
   document.querySelector('[data-replay]').addEventListener('click', function () { play(current); });
-  window.addEventListener('load', function () { setTimeout(function () { play('B'); }, 250); });
+
+  window.addEventListener('load', function () { setTimeout(function () { play('aperture'); }, 300); });
 })();
 </script>
 </body>
