@@ -422,9 +422,31 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   font-style: italic;
   color: var(--magenta);
 }
-/* Each headline line is its own block so it can rise independently in the
-   on-load cascade. Replaces the old <br> line breaks; layout is identical. */
-.hero__line { display: block; }
+/* Each headline line is a clipping window for the on-load "curtain" reveal:
+   a solid brand-color bar (::after) covers the line, then lifts away to
+   uncover the ink type (.hero__line-inner) beneath it. Replaces the old <br>
+   breaks; layout is identical. The base/rest state is always the visible
+   headline (bar lifted, ink at rest), so if the animation never runs the
+   type is never stuck hidden. */
+.hero__line {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 0.22em;   /* room for descenders inside the clip window */
+  margin-bottom: -0.22em;   /* ...without changing line spacing */
+}
+.hero__line-inner { display: block; position: relative; z-index: 1; }
+.hero__line::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: -2px; bottom: -2px;
+  z-index: 2;
+  transform: translateY(-102%);   /* base: lifted away, type visible */
+  pointer-events: none;
+}
+.hero__line:nth-child(1)::after { background: var(--lime); }
+.hero__line:nth-child(2)::after { background: var(--blue); }
+.hero__line:nth-child(3)::after { background: var(--magenta); }
 
 .hero__foot {
   display: flex;
@@ -2720,26 +2742,35 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
    hidden. Gated to no-preference so reduced-motion users get it instantly.
    ========================================================================== */
 @media (prefers-reduced-motion: no-preference) {
-  /* Deliberate top-to-bottom cascade. The three headline lines each rise on
-     their own, with wider gaps than the small chrome, so the eye reads it as
-     a sequence rather than one blur. Big type travels farther (heroLine). */
+  /* Small chrome fades up. The three headline lines reveal via a brand-color
+     curtain (::after) that covers each line then lifts away, while the ink
+     type rises into place beneath it. Bars start covering (backwards fill),
+     lift in sequence: lime, then blue, then magenta. */
   .hero__stamp             { animation: heroEnter 0.7s var(--ease) 0.20s backwards; }
   .hero__eyebrow           { animation: heroEnter 0.7s var(--ease) 0.45s backwards; }
-  .hero__line:nth-child(1) { animation: heroLine 0.9s var(--ease) 0.75s backwards; }
-  .hero__line:nth-child(2) { animation: heroLine 0.9s var(--ease) 1.15s backwards; }
-  .hero__line:nth-child(3) { animation: heroLine 0.9s var(--ease) 1.55s backwards; }
-  .hero__lede              { animation: heroEnter 0.7s var(--ease) 2.00s backwards; }
-  .hero__scroll            { animation: heroEnter 0.7s var(--ease) 2.20s backwards; }
-  .trustband__inner        { animation: heroEnter 0.7s var(--ease) 2.35s backwards; }
+  .hero__line:nth-child(1) .hero__line-inner { animation: inkRise 0.72s var(--ease) 0.70s backwards; }
+  .hero__line:nth-child(1)::after            { animation: barLift 0.70s cubic-bezier(0.76, 0, 0.24, 1) 0.70s backwards; }
+  .hero__line:nth-child(2) .hero__line-inner { animation: inkRise 0.72s var(--ease) 1.00s backwards; }
+  .hero__line:nth-child(2)::after            { animation: barLift 0.70s cubic-bezier(0.76, 0, 0.24, 1) 1.00s backwards; }
+  .hero__line:nth-child(3) .hero__line-inner { animation: inkRise 0.72s var(--ease) 1.30s backwards; }
+  .hero__line:nth-child(3)::after            { animation: barLift 0.70s cubic-bezier(0.76, 0, 0.24, 1) 1.30s backwards; }
+  .hero__lede              { animation: heroEnter 0.7s var(--ease) 1.95s backwards; }
+  .hero__scroll            { animation: heroEnter 0.7s var(--ease) 2.10s backwards; }
+  .trustband__inner        { animation: heroEnter 0.7s var(--ease) 2.25s backwards; }
 }
 @keyframes heroEnter {
   from { opacity: 0; transform: translateY(34px); }
   to   { opacity: 1; transform: none; }
 }
-/* Headline lines: more travel so the big lowercase type visibly sweeps up. */
-@keyframes heroLine {
-  from { opacity: 0; transform: translateY(64px); }
-  to   { opacity: 1; transform: none; }
+/* Curtain lifts off the top of the line (from covering to lifted-away). */
+@keyframes barLift {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-102%); }
+}
+/* Ink type rises into place as its curtain clears. */
+@keyframes inkRise {
+  from { transform: translateY(34%); }
+  to   { transform: translateY(0); }
 }
 /* Reduce-motion fallback: no positional travel, just a soft staggered
    cross-fade so the page still has a visible, sequenced entrance for anyone
@@ -2747,13 +2778,13 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
    guidance; large positional motion is not. */
 @media (prefers-reduced-motion: reduce) {
   .hero__stamp             { animation: heroFade 0.6s ease 0.20s backwards; }
-  .hero__eyebrow           { animation: heroFade 0.6s ease 0.45s backwards; }
-  .hero__line:nth-child(1) { animation: heroFade 0.7s ease 0.75s backwards; }
-  .hero__line:nth-child(2) { animation: heroFade 0.7s ease 1.15s backwards; }
-  .hero__line:nth-child(3) { animation: heroFade 0.7s ease 1.55s backwards; }
-  .hero__lede              { animation: heroFade 0.6s ease 2.00s backwards; }
-  .hero__scroll            { animation: heroFade 0.6s ease 2.20s backwards; }
-  .trustband__inner        { animation: heroFade 0.6s ease 2.35s backwards; }
+  .hero__eyebrow           { animation: heroFade 0.6s ease 0.40s backwards; }
+  .hero__line:nth-child(1) .hero__line-inner { animation: heroFade 0.6s ease 0.60s backwards; }
+  .hero__line:nth-child(2) .hero__line-inner { animation: heroFade 0.6s ease 0.85s backwards; }
+  .hero__line:nth-child(3) .hero__line-inner { animation: heroFade 0.6s ease 1.10s backwards; }
+  .hero__lede              { animation: heroFade 0.6s ease 1.45s backwards; }
+  .hero__scroll            { animation: heroFade 0.6s ease 1.60s backwards; }
+  .trustband__inner        { animation: heroFade 0.6s ease 1.75s backwards; }
 }
 @keyframes heroFade {
   from { opacity: 0; }
