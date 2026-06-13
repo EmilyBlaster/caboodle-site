@@ -2723,14 +2723,14 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   /* Deliberate top-to-bottom cascade. The three headline lines each rise on
      their own, with wider gaps than the small chrome, so the eye reads it as
      a sequence rather than one blur. Big type travels farther (heroLine). */
-  .hero__stamp             { animation: heroEnter 0.62s var(--ease) 0.10s backwards; }
-  .hero__eyebrow           { animation: heroEnter 0.62s var(--ease) 0.24s backwards; }
-  .hero__line:nth-child(1) { animation: heroLine 0.72s var(--ease) 0.42s backwards; }
-  .hero__line:nth-child(2) { animation: heroLine 0.72s var(--ease) 0.62s backwards; }
-  .hero__line:nth-child(3) { animation: heroLine 0.72s var(--ease) 0.82s backwards; }
-  .hero__lede              { animation: heroEnter 0.62s var(--ease) 1.06s backwards; }
-  .hero__scroll            { animation: heroEnter 0.62s var(--ease) 1.18s backwards; }
-  .trustband__inner        { animation: heroEnter 0.62s var(--ease) 1.30s backwards; }
+  .hero__stamp             { animation: heroEnter 0.7s var(--ease) 0.20s backwards; }
+  .hero__eyebrow           { animation: heroEnter 0.7s var(--ease) 0.45s backwards; }
+  .hero__line:nth-child(1) { animation: heroLine 0.9s var(--ease) 0.75s backwards; }
+  .hero__line:nth-child(2) { animation: heroLine 0.9s var(--ease) 1.15s backwards; }
+  .hero__line:nth-child(3) { animation: heroLine 0.9s var(--ease) 1.55s backwards; }
+  .hero__lede              { animation: heroEnter 0.7s var(--ease) 2.00s backwards; }
+  .hero__scroll            { animation: heroEnter 0.7s var(--ease) 2.20s backwards; }
+  .trustband__inner        { animation: heroEnter 0.7s var(--ease) 2.35s backwards; }
 }
 @keyframes heroEnter {
   from { opacity: 0; transform: translateY(34px); }
@@ -2738,7 +2738,7 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 }
 /* Headline lines: more travel so the big lowercase type visibly sweeps up. */
 @keyframes heroLine {
-  from { opacity: 0; transform: translateY(54px); }
+  from { opacity: 0; transform: translateY(64px); }
   to   { opacity: 1; transform: none; }
 }
 /* Reduce-motion fallback: no positional travel, just a soft staggered
@@ -2746,14 +2746,14 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
    with macOS Reduce Motion on. Gentle opacity is within reduced-motion
    guidance; large positional motion is not. */
 @media (prefers-reduced-motion: reduce) {
-  .hero__stamp             { animation: heroFade 0.55s ease 0.10s backwards; }
-  .hero__eyebrow           { animation: heroFade 0.55s ease 0.24s backwards; }
-  .hero__line:nth-child(1) { animation: heroFade 0.6s ease 0.42s backwards; }
-  .hero__line:nth-child(2) { animation: heroFade 0.6s ease 0.62s backwards; }
-  .hero__line:nth-child(3) { animation: heroFade 0.6s ease 0.82s backwards; }
-  .hero__lede              { animation: heroFade 0.55s ease 1.06s backwards; }
-  .hero__scroll            { animation: heroFade 0.55s ease 1.18s backwards; }
-  .trustband__inner        { animation: heroFade 0.55s ease 1.30s backwards; }
+  .hero__stamp             { animation: heroFade 0.6s ease 0.20s backwards; }
+  .hero__eyebrow           { animation: heroFade 0.6s ease 0.45s backwards; }
+  .hero__line:nth-child(1) { animation: heroFade 0.7s ease 0.75s backwards; }
+  .hero__line:nth-child(2) { animation: heroFade 0.7s ease 1.15s backwards; }
+  .hero__line:nth-child(3) { animation: heroFade 0.7s ease 1.55s backwards; }
+  .hero__lede              { animation: heroFade 0.6s ease 2.00s backwards; }
+  .hero__scroll            { animation: heroFade 0.6s ease 2.20s backwards; }
+  .trustband__inner        { animation: heroFade 0.6s ease 2.35s backwards; }
 }
 @keyframes heroFade {
   from { opacity: 0; }
