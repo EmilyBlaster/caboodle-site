@@ -2704,6 +2704,21 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   will-change: auto;
 }
 
+/* Hero assemble: more pronounced + clearly sequential than the site-wide
+   reveal, so the page reads as deliberately assembling itself on load.
+   Bigger rise, snappier per-element transition; the JS stagger (150ms per
+   step in document order) spaces the arrivals so they cascade. Scoped to
+   the hero only — every other reveal keeps the gentle global treatment. */
+.hero [data-reveal],
+.trustband__inner[data-reveal] {
+  transform: translateY(40px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+.hero [data-reveal].is-in,
+.trustband__inner[data-reveal].is-in {
+  transform: translateY(0);
+}
+
 /* ==========================================================================
    DEEP PAGE — CASE STUDY HERO
    Shared base for all case-study pages. Field-note framed top, editorial body.

@@ -202,7 +202,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       const ord = el.getAttribute('data-reveal-order');
       let delay;
       if (ord !== null) {
-        delay = parseInt(ord, 10) * 95;
+        delay = parseInt(ord, 10) * 150;
       } else {
         const siblings = Array.from(el.parentElement.querySelectorAll(':scope > [data-reveal]'));
         delay = Math.min(siblings.indexOf(el), 4) * 80;
