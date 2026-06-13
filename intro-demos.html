@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>intro demos · caboodle design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  @font-face { font-family: 'Bauhaus Bool'; src: url('./fonts/BauhausBoolDisplay-Bold.woff') format('woff'); font-weight: 700; font-display: swap; }
+  @font-face { font-family: 'Bauhaus Bool'; src: url('./fonts/BauhausBoolDisplay-ExtraBold.woff') format('woff'); font-weight: 800; font-display: swap; }
+
+  :root {
+    --lime: #96E650; --blue: #03599B; --magenta: #EC008C;
+    --ink: #282828; --ink-2: #686868; --rule: #d6d3cc;
+    --paper: #f2efe8; --paper-2: #e8e3d8;
+    --display: 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif;
+    --body: 'DM Sans', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--body); background: var(--ink); color: var(--paper); }
+
+  /* ── Control bar ─────────────────────────────────────────── */
+  .bar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+    padding: 0.9rem 1.25rem;
+    background: var(--ink);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .bar__label {
+    font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: rgba(242,239,232,0.55); margin-right: 0.5rem;
+  }
+  .bar button {
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em;
+    text-transform: uppercase; cursor: pointer;
+    padding: 0.5rem 0.9rem; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.18); background: transparent; color: var(--paper);
+    transition: border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease);
+  }
+  .bar button:hover { border-color: var(--lime); color: var(--lime); }
+  .bar button.is-active { background: var(--lime); color: var(--ink); border-color: var(--lime); }
+  .bar__replay { margin-left: auto; }
+  .bar__replay:hover { border-color: var(--magenta); color: var(--magenta); }
+  .bar__cap {
+    width: 100%; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.04em;
+    color: rgba(242,239,232,0.4); padding-top: 0.15rem;
+  }
+
+  /* ── Stage ───────────────────────────────────────────────── */
+  .stage {
+    position: relative; overflow: hidden;
+    min-height: calc(100vh - 78px);
+    background: var(--paper);
+  }
+
+  /* ── Mock hero (shared, base = final visible state) ──────── */
+  .stagehero {
+    position: relative; z-index: 2;
+    max-width: 1180px; margin: 0 auto;
+    padding: clamp(3rem, 8vw, 7rem) clamp(1.5rem, 5vw, 5rem) 0;
+    clip-path: circle(160% at 50% 50%);
+  }
+  .hframe { position: relative; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 1.75rem 0; }
+  .hstamp {
+    position: absolute; top: 1.75rem; right: 0;
+    display: inline-flex; gap: 0.9rem; padding: 0.45rem 0.95rem;
+    border: 1px solid var(--ink); background: var(--paper);
+    font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink);
+  }
+  .heyebrow {
+    display: block; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--ink-2); padding-bottom: 0.5rem;
+  }
+  .hhead {
+    font-family: var(--display); font-weight: 800; text-transform: lowercase;
+    font-size: clamp(2.6rem, 9vw, 7rem); line-height: 1.04; letter-spacing: -0.04em; color: var(--ink);
+    margin: 0.25rem 0 0;
+  }
+  .hhead em { font-style: italic; color: var(--magenta); }
+  .hline { display: block; overflow: hidden; }
+  .hline > span { display: block; }
+  .hlede {
+    max-width: 46ch; margin: 1.5rem 0 0; font-size: 1.02rem; line-height: 1.55; color: var(--ink);
+  }
+  .htrust {
+    max-width: 1180px; margin: clamp(2rem, 5vw, 3.5rem) auto 0;
+    padding: 1.25rem clamp(1.5rem, 5vw, 5rem) 3rem;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 2rem;
+    position: relative; z-index: 2;
+  }
+  .htrust .hkick { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-2); }
+  .htrust ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.3rem 1.6rem; font-family: var(--display); font-weight: 700; text-transform: lowercase; font-size: clamp(1rem, 2vw, 1.4rem); color: var(--ink); }
+
+  .cdmark { display: block; }
+  .cdmark circle { fill: none; stroke-width: 4; }
+
+  /* ════════════════════════════════════════════════════════════
+     INTRO 3 — headline assembles (no overlay)
+     Hero base = visible; play-3 animates sub-parts in from hidden.
+     ════════════════════════════════════════════════════════════ */
+  .play-3 .hstamp { animation: a3stamp 0.55s var(--ease) 0.15s backwards; }
+  .play-3 .heyebrow { animation: a3wipe 0.55s var(--ease) 0.35s backwards; }
+  .play-3 .hline:nth-child(1) > span { animation: a3line 0.6s var(--ease) 0.5s backwards; }
+  .play-3 .hline:nth-child(2) > span { animation: a3line 0.6s var(--ease) 0.66s backwards; }
+  .play-3 .hline:nth-child(3) > span { animation: a3line 0.6s var(--ease) 0.82s backwards; }
+  .play-3 .hlede { animation: a3up 0.55s var(--ease) 1.05s backwards; }
+  .play-3 .htrust { animation: a3up 0.55s var(--ease) 1.2s backwards; }
+  @keyframes a3stamp { from { opacity: 0; transform: scale(1.18) rotate(-2deg); } to { opacity: 1; transform: none; } }
+  @keyframes a3wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes a3line { from { transform: translateY(110%); } to { transform: translateY(0); } }
+  @keyframes a3up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+  /* ════════════════════════════════════════════════════════════
+     INTRO 1 — case file opens (ink cover lifts away)
+     ════════════════════════════════════════════════════════════ */
+  .cover {
+    position: absolute; inset: 0; z-index: 5;
+    display: none; flex-direction: column; align-items: center; justify-content: center; gap: 1.4rem;
+    background: var(--ink); color: var(--paper);
+  }
+  .play-1 .cover { display: flex; animation: c1lift 0.85s var(--ease) 1.5s forwards; }
+  .cover__mark { width: 96px; height: 64px; }
+  .cover__mark circle { stroke-dasharray: 139; stroke-dashoffset: 139; }
+  .cover__mark circle:nth-child(1) { stroke: var(--blue); }
+  .cover__mark circle:nth-child(2) { stroke: var(--magenta); }
+  .play-1 .cover__mark circle:nth-child(1) { animation: c1draw 0.7s var(--ease) 0.15s forwards; }
+  .play-1 .cover__mark circle:nth-child(2) { animation: c1draw 0.7s var(--ease) 0.35s forwards; }
+  .cover__line {
+    font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--lime);
+    white-space: nowrap; clip-path: inset(0 100% 0 0);
+  }
+  .play-1 .cover__line { animation: c1type 0.75s steps(28, end) 0.7s forwards; }
+  .cover__stamp {
+    font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+    font-size: 1.5rem; color: var(--magenta); border: 2px solid var(--magenta); padding: 0.25rem 0.9rem;
+    transform: scale(1.4) rotate(-3deg); opacity: 0;
+  }
+  .play-1 .cover__stamp { animation: c1stamp 0.4s var(--ease) 1.15s forwards; }
+  @keyframes c1draw { to { stroke-dashoffset: 0; } }
+  @keyframes c1type { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes c1stamp { 0% { opacity: 0; transform: scale(1.4) rotate(-3deg); } 60% { opacity: 1; } 100% { opacity: 1; transform: scale(1) rotate(-3deg); } }
+  @keyframes c1lift { to { transform: translateY(-105%); } }
+
+  /* ════════════════════════════════════════════════════════════
+     INTRO 2 — the mark blooms (circular reveal from logo)
+     ════════════════════════════════════════════════════════════ */
+  .bloomfield {
+    position: absolute; inset: 0; z-index: 1;
+    display: none; align-items: center; justify-content: center;
+    background: var(--ink);
+  }
+  .play-2 .bloomfield { display: flex; }
+  .bloom__mark { width: 120px; height: 80px; opacity: 0; transform: scale(0.4); }
+  .bloom__mark circle:nth-child(1) { stroke: var(--lime); }
+  .bloom__mark circle:nth-child(2) { stroke: var(--magenta); }
+  .play-2 .bloom__mark { animation: b2mark 0.55s var(--ease) 0.2s backwards, b2markhold 0.6s var(--ease) 0.75s forwards; }
+  .bloom__ring {
+    position: absolute; top: 50%; left: 50%; width: 120px; height: 120px; border-radius: 50%;
+    border: 2px solid var(--lime); transform: translate(-50%, -50%) scale(0); opacity: 0;
+  }
+  .play-2 .bloom__ring { animation: b2ring 0.85s var(--ease) 0.7s forwards; }
+  .play-2 .stagehero { animation: b2reveal 0.85s var(--ease) 0.72s backwards; }
+  .play-2 .htrust { animation: b2reveal 0.85s var(--ease) 0.72s backwards; }
+  @keyframes b2mark { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: scale(1); } }
+  @keyframes b2markhold { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(1.3); } }
+  @keyframes b2ring { 0% { transform: translate(-50%,-50%) scale(0.2); opacity: 0; border-color: var(--lime); }
+                      35% { opacity: 1; }
+                      100% { transform: translate(-50%,-50%) scale(16); opacity: 0; border-color: var(--magenta); } }
+  @keyframes b2reveal { from { clip-path: circle(0% at 50% 50%); } to { clip-path: circle(160% at 50% 50%); } }
+  .htrust { clip-path: circle(160% at 50% 50%); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .play-1 .cover, .play-2 .bloomfield { display: none; }
+    [class*="play-"] * { animation: none !important; }
+    .stagehero, .htrust { clip-path: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="bar__label">intro demos</span>
+  <button data-play="1">1 · case file opens</button>
+  <button data-play="2">2 · the mark blooms</button>
+  <button data-play="3">3 · headline assembles</button>
+  <button class="bar__replay" data-replay>↻ replay</button>
+  <span class="bar__cap">Pick a button to watch each first-visit intro over a mock of your real hero. None of this is on your live site yet.</span>
+</div>
+
+<div class="stage" id="stage">
+
+  <!-- Mock hero (shared) -->
+  <div class="stagehero">
+    <div class="hframe">
+      <div class="hstamp"><span>field note</span><span>grand rapids, mi · 2026</span></div>
+      <span class="heyebrow">ai program lead · behavior change · learning systems</span>
+      <h1 class="hhead">
+        <span class="hline"><span>ai rollouts</span></span>
+        <span class="hline"><span>that humans</span></span>
+        <span class="hline"><span>actually <em>adopt.</em></span></span>
+      </h1>
+      <p class="hlede">Most AI rollouts change nothing. I lead the kind that do. 15 years of behavior change for Fortune 500s, now leading AI programs the same way.</p>
+    </div>
+  </div>
+
+  <div class="htrust">
+    <span class="hkick">trusted by fortune 500</span>
+    <ul><li>apple</li><li>airbnb</li><li>gitlab</li><li>johnson &amp; johnson</li><li>t-mobile</li><li>intuit</li></ul>
+  </div>
+
+  <!-- Intro 1 cover -->
+  <div class="cover">
+    <svg class="cdmark cover__mark" viewBox="0 0 84 56"><circle cx="28" cy="28" r="22"/><circle cx="56" cy="28" r="22"/></svg>
+    <div class="cover__line">field note · grand rapids · 2026</div>
+    <div class="cover__stamp">subject · 2026</div>
+  </div>
+
+  <!-- Intro 2 bloom field -->
+  <div class="bloomfield">
+    <svg class="cdmark bloom__mark" viewBox="0 0 84 56"><circle cx="28" cy="28" r="22"/><circle cx="56" cy="28" r="22"/></svg>
+    <span class="bloom__ring"></span>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  var stage = document.getElementById('stage');
+  var buttons = document.querySelectorAll('.bar button[data-play]');
+  var current = 1;
+
+  function play(n) {
+    current = n;
+    stage.className = 'stage';
+    /* force reflow so re-adding the class restarts the animations */
+    void stage.offsetWidth;
+    stage.classList.add('play-' + n);
+    buttons.forEach(function (b) { b.classList.toggle('is-active', b.dataset.play === String(n)); });
+  }
+
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () { play(parseInt(b.dataset.play, 10)); });
+  });
+  document.querySelector('[data-replay]').addEventListener('click', function () { play(current); });
+
+  /* Auto-play concept 1 on load so the page opens with motion. */
+  window.addEventListener('load', function () { setTimeout(function () { play(1); }, 250); });
+})();
+</script>
+</body>
+</html>
