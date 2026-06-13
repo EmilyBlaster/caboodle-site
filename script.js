@@ -1297,14 +1297,22 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     });
   }, { threshold: THRESHOLD });
 
-  /* For elements ALREADY in the viewport on page load (e.g. above-the-fold
-     stats), skip the observer entirely — animating something the user is
-     already looking at flickers the value down to 0 first, which looks
-     broken. */
+  /* Elements below the fold are observed and count up when scrolled into
+     view. Elements ALREADY on screen when this script runs (above-the-fold
+     stats, or the featured stat near the top of the work page on a tall
+     window) used to be skipped entirely — so they never animated. Instead,
+     set them to 0 synchronously (no flick down from the final value), then
+     count them up after a short beat once the page has settled. */
   targets.forEach((el) => {
     const rect = el.getBoundingClientRect();
     const inView = rect.top < window.innerHeight && rect.bottom > 0;
-    if (inView) return;
-    observer.observe(el);
+    if (!inView) {
+      observer.observe(el);
+      return;
+    }
+    const parsed = parse(el);
+    if (!parsed) return;
+    parsed.textNode.textContent = '0' + parsed.unit;
+    setTimeout(() => animate(parsed), 450);
   });
 })();
