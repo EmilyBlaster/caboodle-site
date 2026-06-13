@@ -7132,53 +7132,44 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 }
 
 /* ============================================================
-   COMET CURSOR — bold dot + long lime→magenta color trail
-   No ring. The trail is the whole effect.
-   Only activates on hover-capable pointer devices.
-   The prefers-reduced-motion: no-preference gate is essential:
-   without it, a reduced-motion user (whose comet JS bails out)
-   would be left with no cursor at all.
+   CURSOR HOVER GLOW — native cursor stays; a soft lime halo
+   appears only over interactive elements, following the pointer.
+   The motion is functional: it signals "this is clickable" rather
+   than replacing the cursor. The real arrow/pointer renders on
+   top of the glow at all times, so precision is never lost.
    ============================================================ */
-
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  *, *::before, *::after { cursor: none !important; }
-  input, textarea, select { cursor: text !important; }
-}
-
-/* Leading dot */
-#cursorDot {
+#cursorGlow {
   position: fixed;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--lime, #96E650);
-  pointer-events: none;
-  z-index: 9999;
   top: 0;
   left: 0;
-  transform: translate(-50%, -50%);
-  will-change: left, top;
-  transition: opacity 0.15s ease;
-}
-
-/* Trail dots — all same size, colour set per-dot in JS */
-.cursor-trail {
-  position: fixed;
-  width: 20px;
-  height: 20px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
-  top: 0;
-  left: 0;
-  transform: translate(-50%, -50%);
+  background: radial-gradient(circle,
+    rgba(150, 230, 80, 0.50) 0%,
+    rgba(150, 230, 80, 0.18) 45%,
+    rgba(150, 230, 80, 0) 72%);
   opacity: 0;
-  will-change: left, top, opacity;
+  transform: translate(-400px, -400px);
+  transition: opacity 0.22s ease, width 0.18s ease, height 0.18s ease;
+  will-change: transform, opacity;
+}
+#cursorGlow.is-on { opacity: 1; }
+/* Slightly larger + warmer toward magenta while pressing */
+#cursorGlow.is-press {
+  width: 56px;
+  height: 56px;
+  background: radial-gradient(circle,
+    rgba(236, 0, 140, 0.40) 0%,
+    rgba(150, 230, 80, 0.18) 50%,
+    rgba(150, 230, 80, 0) 72%);
 }
 
-/* Touch / stylus — keep native cursor */
+/* Touch / stylus — no glow (native cursor / touch handles it) */
 @media not all and (hover: hover) {
-  #cursorDot, .cursor-trail { display: none; }
+  #cursorGlow { display: none; }
 }
 
 /* ── Mobile tap ripple ───────────────────────────────────── */

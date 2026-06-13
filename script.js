@@ -1083,131 +1083,82 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 })();
 
 /* ============================================================
-   COMET CURSOR — bold leading dot + long lime→magenta trail
-   No ring. Everything is a dot. The colour progression across
-   16 uniform-sized dots is the whole effect.
+   CURSOR HOVER GLOW — native cursor stays; a soft lime halo
+   appears only over clickable elements and trails the pointer.
+   The motion is functional (it marks what's interactive), so it
+   adds personality without replacing or obscuring the cursor.
    ============================================================ */
-(function cometCursor() {
-  /* Skip inside preview iframes — saves 17 DOM nodes + mousemove listeners
-     per embedded page (iframe's pointer-events:none means it never fires). */
+(function cursorGlow() {
+  /* Skip inside preview iframes — the iframe's pointer-events:none
+     means mousemove never fires there anyway. */
   if (window.self !== window.top) return;
   if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-  /* Respect reduced-motion: skip the comet entirely so the native cursor
-     shows. The trail is continuous full-screen motion — exactly what users
-     with vestibular sensitivity opt out of. Matches the rest of the site. */
+  /* Respect reduced-motion: no following glow for users who opt out.
+     The native cursor is always present, so nothing is lost. */
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (document.getElementById('cursorDot')) return;
+  if (document.getElementById('cursorGlow')) return;
 
-  var TRAIL      = 16;   /* length of the comet tail */
-  var DOT_LERP   = 0.30; /* leading dot lag — slight but responsive */
-  var TRAIL_LERP = 0.22; /* trail spread — lower = more dramatic sweep */
-  var MIN_DIST   = 10;   /* min px between dot centres — prevents blobbing */
+  var glow = document.createElement('div');
+  glow.id = 'cursorGlow';
+  document.body.appendChild(glow);
 
-  /* ── DOM ───────────────────────────────────────────────────── */
-  var dot = document.createElement('div');
-  dot.id = 'cursorDot';
-  document.body.appendChild(dot);
+  var x = -400, y = -400;   /* raw pointer */
+  var gx = -400, gy = -400; /* eased glow position */
+  var active = false;       /* over a clickable element? */
+  var raf = false;
+  var lastTarget = null;
 
-  var trails = [];
-  for (var i = 0; i < TRAIL; i++) {
-    var td = document.createElement('div');
-    td.className = 'cursor-trail';
-    document.body.appendChild(td);
-    trails.push(td);
-  }
-
-  /* ── Position chain ────────────────────────────────────────── */
-  /* pos[0] = raw mouse; pos[1] = leading dot; pos[2..] = trail */
-  var pos = [];
-  for (var j = 0; j <= TRAIL + 1; j++) { pos.push({ x: -400, y: -400 }); }
-
-  var mouseX = -400, mouseY = -400;
-  var rafRunning = false, lastMove = 0;
-  var trailVel = 0; /* smoothed cursor speed — drives trail fade at rest */
-
-  /* ── Colour: lime (#96E650) → magenta (#EC008C) ────────────── */
-  function cometColor(t) {
-    var r = Math.round(150 + 86  * t);
-    var g = Math.round(230 - 230 * t);
-    var b = Math.round(80  + 60  * t);
-    return 'rgb(' + r + ',' + g + ',' + b + ')';
-  }
-
-  /* ── Tick ──────────────────────────────────────────────────── */
-  function tick() {
-    /* pos[0] is the raw mouse anchor */
-    pos[0].x = mouseX;
-    pos[0].y = mouseY;
-
-    /* pos[1] = leading dot — lerps toward mouse */
-    var prevX = pos[1].x, prevY = pos[1].y;
-    pos[1].x += (pos[0].x - pos[1].x) * DOT_LERP;
-    pos[1].y += (pos[0].y - pos[1].y) * DOT_LERP;
-    dot.style.left = pos[1].x.toFixed(1) + 'px';
-    dot.style.top  = pos[1].y.toFixed(1) + 'px';
-
-    /* Smoothed cursor speed. The trail is a motion effect — when the
-       cursor is at rest the trail fades out so the comet collapses to
-       just the dot, instead of freezing as a static chain of circles. */
-    var mvX   = pos[1].x - prevX, mvY = pos[1].y - prevY;
-    var speed = Math.sqrt(mvX * mvX + mvY * mvY);
-    trailVel += (speed - trailVel) * 0.15;
-    var visMul = Math.min(trailVel / 3.5, 1); /* 0 at rest → 1 when moving */
-
-    /* pos[2..] = each trail dot chasing the one ahead */
-    for (var k = 2; k <= TRAIL + 1; k++) {
-      pos[k].x += (pos[k - 1].x - pos[k].x) * TRAIL_LERP;
-      pos[k].y += (pos[k - 1].y - pos[k].y) * TRAIL_LERP;
-
-      /* Minimum spacing prevents dots blobbing — but only while moving.
-         At rest, skipping it lets every dot lerp all the way onto the
-         leading dot and stack, so the comet collapses to a single point
-         instead of freezing as a spread-out chain of circles. */
-      if (trailVel > 1) {
-        var dx   = pos[k].x - pos[k - 1].x;
-        var dy   = pos[k].y - pos[k - 1].y;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist > 0 && dist < MIN_DIST) {
-          var r    = MIN_DIST / dist;
-          pos[k].x = pos[k - 1].x + dx * r;
-          pos[k].y = pos[k - 1].y + dy * r;
-        }
-      }
-
-      var td       = trails[k - 2];
-      var progress = (k - 1) / TRAIL;               /* 0 = closest, 1 = tail */
-      var opacity  = (1 - progress) * 0.88 * visMul;
-
-      td.style.left       = pos[k].x.toFixed(1) + 'px';
-      td.style.top        = pos[k].y.toFixed(1) + 'px';
-      td.style.opacity    = opacity.toFixed(3);
-      td.style.background = cometColor(progress);
+  /* Treat anything the browser styles as clickable (cursor: pointer)
+     as interactive. Auto-covers links, buttons, dossiers, the reveal
+     chips, etc. without a brittle hand-maintained selector list. */
+  function isInteractive(el) {
+    var node = el;
+    while (node && node.nodeType === 1 && node !== document.body) {
+      if (getComputedStyle(node).cursor === 'pointer') return true;
+      node = node.parentElement;
     }
+    return false;
+  }
 
-    /* Keep ticking while there's recent movement OR the trail is still
-       fading out. Once both settle, hard-clear the trail and stop. */
-    if (Date.now() - lastMove < 1000 || trailVel > 0.1) {
+  function tick() {
+    gx += (x - gx) * 0.2;
+    gy += (y - gy) * 0.2;
+    glow.style.transform =
+      'translate(' + gx.toFixed(1) + 'px,' + gy.toFixed(1) + 'px) translate(-50%, -50%)';
+    if (Math.abs(x - gx) > 0.4 || Math.abs(y - gy) > 0.4) {
       requestAnimationFrame(tick);
     } else {
-      for (var t = 0; t < trails.length; t++) { trails[t].style.opacity = '0'; }
-      rafRunning = false;
+      raf = false;
     }
   }
 
-  /* ── Events ────────────────────────────────────────────────── */
   document.addEventListener('mousemove', function (e) {
-    mouseX   = e.clientX;
-    mouseY   = e.clientY;
-    lastMove = Date.now();
-    if (!rafRunning) { rafRunning = true; requestAnimationFrame(tick); }
-  });
+    x = e.clientX;
+    y = e.clientY;
+    /* Only recompute interactivity when the element under the
+       pointer actually changes — keeps getComputedStyle off the
+       per-pixel path. */
+    if (e.target !== lastTarget) {
+      lastTarget = e.target;
+      var nowActive = isInteractive(e.target);
+      if (nowActive !== active) {
+        active = nowActive;
+        glow.classList.toggle('is-on', active);
+      }
+    }
+    if (!raf) { raf = true; requestAnimationFrame(tick); }
+  }, { passive: true });
 
-  document.addEventListener('mouseleave', function () {
-    dot.style.opacity = '0';
-    trails.forEach(function (t) { t.style.opacity = '0'; });
+  document.addEventListener('mousedown', function () {
+    if (active) glow.classList.add('is-press');
   });
-  document.addEventListener('mouseenter', function () {
-    dot.style.opacity = '1';
+  document.addEventListener('mouseup', function () {
+    glow.classList.remove('is-press');
+  });
+  document.addEventListener('mouseleave', function () {
+    active = false;
+    lastTarget = null;
+    glow.classList.remove('is-on', 'is-press');
   });
 })();
 
