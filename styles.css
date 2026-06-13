@@ -2704,19 +2704,29 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   will-change: auto;
 }
 
-/* Hero assemble: more pronounced + clearly sequential than the site-wide
-   reveal, so the page reads as deliberately assembling itself on load.
-   Bigger rise, snappier per-element transition; the JS stagger (150ms per
-   step in document order) spaces the arrivals so they cascade. Scoped to
-   the hero only — every other reveal keeps the gentle global treatment. */
-.hero [data-reveal],
-.trustband__inner[data-reveal] {
-  transform: translateY(40px);
-  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+/* ==========================================================================
+   HERO ON-LOAD ENTRANCE
+   The scroll-reveal system can't animate above-the-fold content (it hides
+   then reveals in the same frame, so no transition runs). The hero gets a
+   real keyframe entrance instead: it runs at first paint, every load.
+
+   `backwards` fill is the fail-safe — before each animation starts it shows
+   the hidden "from" state (so there's no flash of the assembled hero), and
+   after it finishes the element rests at its normal visible base. If the
+   animation never runs for any reason, the base is visible. Never stuck
+   hidden. Gated to no-preference so reduced-motion users get it instantly.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__stamp      { animation: heroEnter 0.7s var(--ease) 0.15s backwards; }
+  .hero__eyebrow    { animation: heroEnter 0.7s var(--ease) 0.30s backwards; }
+  .hero__headline   { animation: heroEnter 0.8s var(--ease) 0.45s backwards; }
+  .hero__lede       { animation: heroEnter 0.7s var(--ease) 0.68s backwards; }
+  .hero__scroll     { animation: heroEnter 0.7s var(--ease) 0.80s backwards; }
+  .trustband__inner { animation: heroEnter 0.7s var(--ease) 0.92s backwards; }
 }
-.hero [data-reveal].is-in,
-.trustband__inner[data-reveal].is-in {
-  transform: translateY(0);
+@keyframes heroEnter {
+  from { opacity: 0; transform: translateY(38px); }
+  to   { opacity: 1; transform: none; }
 }
 
 /* ==========================================================================
