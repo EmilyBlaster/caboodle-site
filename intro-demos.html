@@ -48,18 +48,16 @@
   .htrust .hkick { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-2); }
   .htrust ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.3rem 1.6rem; font-family: var(--display); font-weight: 700; text-transform: lowercase; font-size: clamp(1rem, 2vw, 1.4rem); color: var(--ink); }
 
-  /* Lens-mode reveal: the hero opens through a vesica (the logo's
-     overlap lens) that starts tall + narrow and rounds out as it grows. */
-  .stage.lens .stagehero,
-  .stage.lens .htrust { clip-path: ellipse(var(--rx, 175%) var(--ry, 175%) at 50% 50%); }
+  /* MOVE A — magenta veil over the real page, lens window opens through it */
+  .ap-veil { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; opacity: 0; visibility: hidden; pointer-events: none; }
 
-  /* Aperture layers */
+  /* APERTURE (black field + solid mark) — kept for comparison */
   .ap-field { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; background: var(--ink); opacity: 0; visibility: hidden; }
   .ap-glow { position: absolute; top: 50%; left: 50%; width: 260px; height: 260px; border-radius: 50%; transform: translate(-50%,-50%) scale(0.5); background: radial-gradient(circle, rgba(150,230,80,0.4) 0%, rgba(150,230,80,0) 64%); opacity: 0; mix-blend-mode: screen; z-index: 2; pointer-events: none; }
   .ap-mark { position: absolute; top: 50%; left: 50%; width: 172px; height: 115px; transform: translate(-50%,-50%); z-index: 2; opacity: 0; visibility: hidden; }
   .ap-edge { position: absolute; top: 50%; left: 50%; width: 150px; height: 150px; border-radius: 50%; transform: translate(-50%,-50%) scale(0); background: radial-gradient(circle, transparent 58%, rgba(150,230,80,0.6) 74%, rgba(236,0,140,0.55) 88%, transparent 100%); filter: blur(4px); mix-blend-mode: screen; opacity: 0; z-index: 4; pointer-events: none; }
 
-  /* CSS comparison: headline assembles */
+  /* MOVE B — headline assembles (CSS) */
   .play-A .hstamp { animation: aStamp 0.55s var(--ease) 0.15s backwards; }
   .play-A .heyebrow { animation: aWipe 0.55s var(--ease) 0.35s backwards; }
   .play-A .hline:nth-child(1) > span { animation: aLine 0.6s var(--ease) 0.5s backwards; }
@@ -73,7 +71,7 @@
   @keyframes aUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 
   @media (prefers-reduced-motion: reduce) {
-    .ap-field, .ap-mark, .ap-edge, .ap-glow { display: none !important; }
+    .ap-field, .ap-mark, .ap-edge, .ap-glow, .ap-veil { display: none !important; }
     [class*="play-"] * { animation: none !important; }
     .stagehero, .htrust { clip-path: none !important; }
   }
@@ -83,11 +81,11 @@
 
 <div class="bar">
   <span class="bar__label">intro demos</span>
-  <button data-play="lens">the lens · gsap</button>
-  <button data-play="aperture">the aperture · gsap</button>
+  <button data-play="veil">the lens · see-through</button>
+  <button data-play="aperture">the aperture</button>
   <button data-play="A">headline assembles</button>
   <button class="bar__replay" data-replay>↻ replay</button>
-  <span class="bar__cap">"The lens": the page opens through your logo's own overlap lens, an iris from the vesica. Compare with the round aperture. GSAP-driven, not on your live site yet.</span>
+  <span class="bar__cap">"See-through": a big magenta veil over the real page; you see the headline through your logo's lens, then it opens. GSAP-driven, not on your live site yet.</span>
 </div>
 
 <div class="stage" id="stage">
@@ -110,25 +108,29 @@
     <ul><li>apple</li><li>airbnb</li><li>gitlab</li><li>johnson &amp; johnson</li><li>t-mobile</li><li>intuit</li></ul>
   </div>
 
-  <!-- Aperture layers: the REAL solid mark + a lime sheen sweep -->
+  <!-- MOVE A: magenta veil with a lens window (sized by JS) -->
+  <svg class="ap-veil" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <mask id="lensM" maskUnits="userSpaceOnUse">
+        <rect class="m-bg" fill="#fff" />
+        <ellipse class="m-hole" fill="#000" rx="15" ry="32" />
+      </mask>
+      <filter id="rimBlur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4" /></filter>
+    </defs>
+    <rect class="v-fill" fill="#EC008C" mask="url(#lensM)" />
+    <ellipse class="v-rim" fill="none" stroke="#96E650" stroke-width="3" rx="15" ry="32" filter="url(#rimBlur)" />
+  </svg>
+
+  <!-- APERTURE layers (comparison) -->
   <div class="ap-field">
     <span class="ap-glow"></span>
     <svg class="ap-mark" viewBox="0 0 90 60" aria-hidden="true">
       <defs>
-        <clipPath id="markClip">
-          <path fill-rule="evenodd" d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0" />
-        </clipPath>
-        <linearGradient id="sheenGrad" x1="0" y1="0" x2="1" y2="0.35">
-          <stop offset="0" stop-color="#96E650" stop-opacity="0" />
-          <stop offset="0.5" stop-color="#bdf08f" stop-opacity="0.95" />
-          <stop offset="1" stop-color="#96E650" stop-opacity="0" />
-        </linearGradient>
+        <clipPath id="markClip"><path fill-rule="evenodd" d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0" /></clipPath>
+        <linearGradient id="sheenGrad" x1="0" y1="0" x2="1" y2="0.35"><stop offset="0" stop-color="#96E650" stop-opacity="0" /><stop offset="0.5" stop-color="#bdf08f" stop-opacity="0.95" /><stop offset="1" stop-color="#96E650" stop-opacity="0" /></linearGradient>
       </defs>
-      <path class="markbody" fill-rule="evenodd" fill="#EC008C"
-            d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0" />
-      <g clip-path="url(#markClip)">
-        <rect class="sheen" x="-60" y="-10" width="34" height="80" fill="url(#sheenGrad)" />
-      </g>
+      <path class="markbody" fill-rule="evenodd" fill="#EC008C" d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0" />
+      <g clip-path="url(#markClip)"><rect class="sheen" x="-60" y="-10" width="34" height="80" fill="url(#sheenGrad)" /></g>
     </svg>
   </div>
   <div class="ap-edge"></div>
@@ -141,14 +143,52 @@
   var stage = document.getElementById('stage');
   var buttons = document.querySelectorAll('.bar button[data-play]');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var current = 'aperture';
-  var apt = null;
+  var current = 'veil';
+  var t = null;
 
   function setActive(mode) { buttons.forEach(function (b) { b.classList.toggle('is-active', b.dataset.play === mode); }); }
 
-  function buildAperture() {
+  /* ── MOVE A: size the veil SVG to the stage, then open the lens ── */
+  function sizeVeil() {
+    var w = stage.clientWidth, h = stage.clientHeight;
+    document.querySelector('.ap-veil').setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    [document.querySelector('.m-bg'), document.querySelector('.v-fill')].forEach(function (r) {
+      r.setAttribute('x', 0); r.setAttribute('y', 0); r.setAttribute('width', w); r.setAttribute('height', h);
+    });
+    [document.querySelector('.m-hole'), document.querySelector('.v-rim')].forEach(function (e) {
+      e.setAttribute('cx', w / 2); e.setAttribute('cy', h / 2);
+    });
+    return { w: w, h: h };
+  }
+
+  function buildVeil() {
+    var dim = sizeVeil();
+    var maxR = Math.max(dim.w, dim.h) * 1.25;
+    var hole = document.querySelector('.m-hole');
+    var rim = document.querySelector('.v-rim');
     var tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
 
+    /* the page is already there, on paper, beneath the veil */
+    tl.set('.ap-veil', { autoAlpha: 1 }, 0);
+    tl.set(hole, { attr: { rx: 16, ry: 34 } }, 0);
+    tl.set(rim, { attr: { rx: 16, ry: 34 }, autoAlpha: 0.9 }, 0);
+
+    /* hold the lens read — you see the headline through your mark's gap */
+    tl.to({}, { duration: 0.45 }, 0);
+
+    /* the lens opens: ry leads (vertical vesica), rx follows and rounds it out */
+    tl.to(hole, { attr: { ry: maxR }, duration: 1.05 }, 0.45);
+    tl.to(hole, { attr: { rx: maxR }, duration: 1.1 }, 0.6);
+    tl.to(rim, { attr: { ry: maxR }, duration: 1.05 }, 0.45);
+    tl.to(rim, { attr: { rx: maxR }, duration: 1.1 }, 0.6);
+    tl.to(rim, { autoAlpha: 0, duration: 0.5, ease: 'quart.out' }, 1.25);
+    tl.to('.ap-veil', { autoAlpha: 0, duration: 0.35, ease: 'quart.out' }, 1.5);
+    return tl;
+  }
+
+  /* ── APERTURE (comparison): solid mark inks in, sheen, opens round ── */
+  function buildAperture() {
+    var tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
     tl.set('.ap-field', { autoAlpha: 1 }, 0);
     tl.set('.ap-mark', { autoAlpha: 0, scale: 0.7, transformOrigin: '50% 50%' }, 0);
     tl.set('.sheen', { attr: { x: -60 } }, 0);
@@ -156,67 +196,19 @@
     tl.set('.ap-edge', { autoAlpha: 0, scale: 0, transformOrigin: '50% 50%' }, 0);
     tl.set(['.stagehero', '.htrust'], { '--rev': '0%' }, 0);
     tl.set('.hline > span', { yPercent: 110 }, 0);
-
-    /* Beat 1 — the solid mark inks in, a lime glow blooms behind it */
     tl.to('.ap-glow', { autoAlpha: 0.55, scale: 1, duration: 0.6, ease: 'quart.out' }, 0.1);
     tl.to('.ap-mark', { autoAlpha: 1, scale: 1, duration: 0.65 }, 0.2);
-
-    /* Beat 2 — a lime sheen sweeps across the mark (the specialized touch) */
     tl.to('.sheen', { attr: { x: 92 }, duration: 0.75, ease: 'sine.inOut' }, 0.8);
-
-    /* Beat 3 — charge: glow swells before it opens */
     tl.to('.ap-glow', { autoAlpha: 0.85, scale: 1.25, duration: 0.3, ease: 'quart.out' }, 1.25);
-
-    /* Beat 4 — the mark opens into an aperture; the page is revealed */
     tl.to(['.stagehero', '.htrust'], { '--rev': '165%', duration: 0.9 }, 1.5);
     tl.to('.ap-edge', { autoAlpha: 1, scale: 24, duration: 0.95 }, 1.5);
     tl.to('.ap-edge', { autoAlpha: 0, duration: 0.4, ease: 'quart.out' }, 2.2);
     tl.to('.ap-mark', { scale: 1.55, autoAlpha: 0, duration: 0.5, ease: 'quart.out' }, 1.5);
     tl.to('.ap-glow', { scale: 3.2, autoAlpha: 0, duration: 0.7 }, 1.5);
     tl.to('.ap-field', { autoAlpha: 0, duration: 0.5, ease: 'quart.out' }, 1.95);
-
-    /* Beat 5 — headline rises in as the reveal sweeps over it */
     tl.to('.hline:nth-child(1) > span', { yPercent: 0, duration: 0.6, ease: 'quint.out' }, 2.15);
     tl.to('.hline:nth-child(2) > span', { yPercent: 0, duration: 0.6, ease: 'quint.out' }, 2.3);
     tl.to('.hline:nth-child(3) > span', { yPercent: 0, duration: 0.6, ease: 'quint.out' }, 2.45);
-
-    return tl;
-  }
-
-  /* Lens variant: same mark entrance, but the reveal opens through the
-     logo's overlap lens — a vesica that starts tall + narrow (1:2, the
-     real lens proportion) and rounds out as it grows, like an iris. */
-  function buildLens() {
-    var tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
-
-    tl.set('.ap-field', { autoAlpha: 1 }, 0);
-    tl.set('.ap-mark', { autoAlpha: 0, scale: 0.7, transformOrigin: '50% 50%' }, 0);
-    tl.set('.sheen', { attr: { x: -60 } }, 0);
-    tl.set('.ap-glow', { autoAlpha: 0, scale: 0.5, transformOrigin: '50% 50%' }, 0);
-    tl.set('.ap-edge', { autoAlpha: 0, scaleX: 0, scaleY: 0, transformOrigin: '50% 50%' }, 0);
-    tl.set(['.stagehero', '.htrust'], { '--rx': '1.2%', '--ry': '2.6%' }, 0);
-    tl.set('.hline > span', { yPercent: 110 }, 0);
-
-    /* mark inks in + glow */
-    tl.to('.ap-glow', { autoAlpha: 0.55, scale: 1, duration: 0.6, ease: 'quart.out' }, 0.1);
-    tl.to('.ap-mark', { autoAlpha: 1, scale: 1, duration: 0.65 }, 0.2);
-    /* lime sheen sweep */
-    tl.to('.sheen', { attr: { x: 92 }, duration: 0.75, ease: 'sine.inOut' }, 0.8);
-    /* charge */
-    tl.to('.ap-glow', { autoAlpha: 0.85, scale: 1.25, duration: 0.3, ease: 'quart.out' }, 1.25);
-    /* the lens opens: ry leads (stays a vertical slit), rx follows and rounds it out */
-    tl.to('.stagehero, .htrust', { '--ry': '175%', duration: 1.0 }, 1.5);
-    tl.to('.stagehero, .htrust', { '--rx': '175%', duration: 1.05 }, 1.62);
-    tl.to('.ap-edge', { autoAlpha: 1, scaleX: 14, scaleY: 26, duration: 1.0 }, 1.5);
-    tl.to('.ap-edge', { autoAlpha: 0, duration: 0.4, ease: 'quart.out' }, 2.25);
-    tl.to('.ap-mark', { scale: 1.5, autoAlpha: 0, duration: 0.55, ease: 'quart.out' }, 1.55);
-    tl.to('.ap-glow', { scale: 3.2, autoAlpha: 0, duration: 0.7 }, 1.5);
-    tl.to('.ap-field', { autoAlpha: 0, duration: 0.5, ease: 'quart.out' }, 2.0);
-
-    tl.to('.hline:nth-child(1) > span', { yPercent: 0, duration: 0.6, ease: 'quint.out' }, 2.2);
-    tl.to('.hline:nth-child(2) > span', { yPercent: 0, duration: 0.6, ease: 'quint.out' }, 2.35);
-    tl.to('.hline:nth-child(3) > span', { yPercent: 0, duration: 0.6, ease: 'quint.out' }, 2.5);
-
     return tl;
   }
 
@@ -226,7 +218,7 @@
       gsap.killTweensOf('*');
       gsap.set(['.stagehero', '.htrust'], { clearProps: '--rev,--rx,--ry' });
       gsap.set('.hline > span', { clearProps: 'all' });
-      gsap.set(['.ap-field', '.ap-mark', '.ap-edge', '.ap-glow'], { clearProps: 'all' });
+      gsap.set(['.ap-field', '.ap-mark', '.ap-edge', '.ap-glow', '.ap-veil'], { clearProps: 'all' });
       gsap.set('.sheen', { clearProps: 'all' });
     }
   }
@@ -236,15 +228,14 @@
     setActive(mode);
     if (reduce) return;
     resetToRest();
-    if (mode === 'lens') {
+    if (mode === 'veil') {
       if (!window.gsap) return;
-      stage.classList.add('lens');
-      apt = buildLens();
-      apt.restart();
+      t = buildVeil();
+      t.restart();
     } else if (mode === 'aperture') {
       if (!window.gsap) return;
-      apt = buildAperture();
-      apt.restart();
+      t = buildAperture();
+      t.restart();
     } else if (mode === 'A') {
       void stage.offsetWidth;
       stage.classList.add('play-A');
@@ -253,7 +244,7 @@
 
   buttons.forEach(function (b) { b.addEventListener('click', function () { play(b.dataset.play); }); });
   document.querySelector('[data-replay]').addEventListener('click', function () { play(current); });
-  window.addEventListener('load', function () { setTimeout(function () { play('lens'); }, 300); });
+  window.addEventListener('load', function () { setTimeout(function () { play('veil'); }, 300); });
 })();
 </script>
 </body>
