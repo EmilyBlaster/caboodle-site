@@ -409,10 +409,14 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
         pageH       = 6000;
         scrollStart = FALLBACK_START;
       }
-      /* On phones, never start near the very top — keep the preview anchored
-         in the body content (the desktop slice is tall enough that this is a
-        non-issue there). */
-      if (isPhone()) scrollStart = Math.max(scrollStart, Math.round(pageH * 0.20));
+      /* On phones the visible window is short, so start deeper in the body —
+         otherwise it opens on the text at the top of a section. Native-mobile
+         cards land best ~38% down; desktop-rendered cards (forceDesktop, e.g.
+         People's Professors) already land perfectly, so leave those alone. */
+      if (isPhone()) {
+        const floor = forceDesktop ? 0.20 : 0.38;
+        scrollStart = Math.max(scrollStart, Math.round(pageH * floor));
+      }
       /* Set position instantly via CSS transform — no scrollTo needed */
       scrollY = scrollStart;
       scaleFrame();
