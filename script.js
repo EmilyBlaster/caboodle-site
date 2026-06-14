@@ -1297,22 +1297,24 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     });
   }, { threshold: THRESHOLD });
 
-  /* Elements below the fold are observed and count up when scrolled into
-     view. Elements ALREADY on screen when this script runs (above-the-fold
-     stats, or the featured stat near the top of the work page on a tall
-     window) used to be skipped entirely — so they never animated. Instead,
-     set them to 0 synchronously (no flick down from the final value), then
-     count them up after a short beat once the page has settled. */
+  /* Observe EVERY stat and let the observer drive the count-up — both
+     below-the-fold stats (animate when scrolled in) and ones already on
+     screen at load (the observer's initial callback fires immediately).
+     The earlier version branched on whether the element was on screen when
+     this deferred script ran, but that moment shifts as the dossier preview
+     iframes load and push the layout down — so the featured stat near the
+     top of the work page could land in a path that never animated it.
+     Observing unconditionally removes that race. For stats already on screen
+     we blank them to 0 now so the final value never flashes before the
+     count-up; below-fold stats keep their value until animate() zeroes them
+     at the moment they scroll in, so we don't show a premature 0 down-page. */
   targets.forEach((el) => {
     const rect = el.getBoundingClientRect();
     const inView = rect.top < window.innerHeight && rect.bottom > 0;
-    if (!inView) {
-      observer.observe(el);
-      return;
+    if (inView) {
+      const parsed = parse(el);
+      if (parsed) parsed.textNode.textContent = '0' + parsed.unit;
     }
-    const parsed = parse(el);
-    if (!parsed) return;
-    parsed.textNode.textContent = '0' + parsed.unit;
-    setTimeout(() => animate(parsed), 450);
+    observer.observe(el);
   });
 })();
