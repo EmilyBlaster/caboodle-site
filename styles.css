@@ -1550,9 +1550,11 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   }
   .dossier--withpreview .dossier__statlabel { margin-top: 0.85rem; }
 }
-@media (max-width: 600px) {
-  /* Phone: scale drops to ~27% — preview is a postage stamp, not worth the space */
-  .dossier__preview { display: none; }
+@media (max-width: 700px) {
+  /* Phone: the iframe is rendered at the card's own width (see script.js), so
+     it shows the case study's native mobile layout at full scale instead of a
+     shrunken desktop postage stamp. Give it a taller window to read in. */
+  .dossier__preview-viewport { height: clamp(340px, 56vh, 460px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .dossier__preview-iframe { transition: none; }
@@ -2109,8 +2111,10 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   }
 }
 @media (max-width: 680px) {
-  /* Too narrow for a useful preview — cards carry the section alone */
-  .labs-stage { display: none; }
+  /* Phone: keep the stage. The iframe renders at its own width (see
+     script.js) so it shows each lab's native mobile layout at full scale,
+     and it auto-rotates through the labs since there's no hover on touch. */
+  .labs-stage__viewport { height: clamp(360px, 60vh, 520px); }
   /* Chips shrink on narrow screens */
   .labs__guide { gap: 0.4rem; }
   .labs__guide-action { padding: 0.35rem 0.75rem; font-size: 0.65rem; }

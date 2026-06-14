@@ -310,8 +310,9 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     return Math.max(top - 80, 0);
   }
 
-  /* Skip entirely on screens where preview is hidden anyway */
-  if (window.matchMedia('(max-width: 800px)').matches) return;
+  /* On phones we render the iframe at the card's own width so the embedded
+     page shows its native MOBILE layout at full scale (set in scaleFrame). */
+  const isPhone = () => window.matchMedia('(max-width: 700px)').matches;
 
   document.querySelectorAll('.dossier--withpreview').forEach((card) => {
     const vp    = card.querySelector('.dossier__preview-viewport');
@@ -329,9 +330,15 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     /* ── Scale iframe and position via transform (no scrollTo) ──────────── */
     /* We control the visible position with translateY instead of scrollTo,
        avoiding scroll-behavior:smooth interference from the iframe's own CSS. */
+    /* Phone → render at the card width (scale 1, native mobile layout).
+       Larger → render at the 1440 design width and scale it down. */
+    function frameWidth () {
+      return isPhone() ? Math.round(vp.offsetWidth) : IFRAME_W;
+    }
     function scaleFrame () {
-      const scale = vp.offsetWidth / IFRAME_W;
-      frame.style.width           = IFRAME_W + 'px';
+      const iw    = frameWidth();
+      const scale = vp.offsetWidth / iw;
+      frame.style.width           = iw + 'px';
       frame.style.height          = pageH + 'px';
       frame.style.transformOrigin = '0 0';
       frame.style.transform       = `scale(${scale}) translateY(${-scrollY}px)`;
@@ -347,8 +354,8 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       scrollY += SCROLL_SPEED;
 
       /* Stop when the bottom of the visible window reaches the page bottom */
-      const scale     = vp.offsetWidth / IFRAME_W;
-      const maxScroll = Math.max(pageH - VISIBLE_H / scale, 400);
+      const scale     = vp.offsetWidth / frameWidth();
+      const maxScroll = Math.max(pageH - vp.offsetHeight / scale, 400);
 
       if (scrollY >= maxScroll) {
         /* Bottom reached — fade out, reset to start, fade in, repeat */
@@ -516,9 +523,17 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
      fast-scroll on first load) by setting inline scrollBehavior:auto on
      the iframe's <html> before each scrollTo, and using behavior:'instant'
      on the call itself. Inline style + explicit instant = no animation. */
+  /* Phone → render at the stage width (scale 1, native mobile layout).
+     Larger → render at the 1440 design width and scale down. */
+  function frameW() {
+    return window.matchMedia('(max-width: 680px)').matches
+      ? Math.round(viewport.offsetWidth)
+      : 1440;
+  }
   function scaleFrame() {
-    const scale = viewport.offsetWidth / 1440;
-    iframe.style.width           = '1440px';
+    const iw    = frameW();
+    const scale = viewport.offsetWidth / iw;
+    iframe.style.width           = iw + 'px';
     iframe.style.height          = Math.ceil(viewport.offsetHeight / scale) + 'px';
     iframe.style.transformOrigin = '0 0';
     iframe.style.transform       = `scale(${scale})`;
@@ -533,7 +548,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     (function tick() {
       if (!isPaused) {
         scrollY += SCROLL_SPEED;
-        const scale     = viewport.offsetWidth / 1440;
+        const scale     = viewport.offsetWidth / frameW();
         const maxScroll = Math.max(pageH - viewport.offsetHeight / scale, 200);
         if (scrollY >= maxScroll) { scrollY = scrollStart; } /* loop to experiment, not page top */
         try { iframe.contentWindow.scrollTo(0, scrollY); } catch (_) {}
@@ -659,6 +674,18 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       switchTo(lab.dataset.labSrc, lab.dataset.labName);
     });
   });
+
+  /* ── Touch (no hover): auto-rotate through the labs so each preview is
+        showcased without a pointer. Only while the stage is on screen. ── */
+  if (window.matchMedia('(max-width: 680px)').matches) {
+    stage.classList.add('has-hovered'); /* drop the "hover a card" hint */
+    let rotIdx = 0;
+    setInterval(function () {
+      if (!onScreen) return;
+      rotIdx = (rotIdx + 1) % labs.length;
+      switchTo(labs[rotIdx].dataset.labSrc, labs[rotIdx].dataset.labName);
+    }, 5600);
+  }
 
   /* ── IntersectionObserver: pause + unload when off-screen ──────────────
      Lab pages are heavy (full HTML + their own script.js running inside).
