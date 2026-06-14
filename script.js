@@ -391,6 +391,12 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       /* Measure full page height. Shrink the iframe first so its own height
          doesn't inflate the page's reported scrollHeight. */
       try {
+        /* Render at the FINAL width before measuring, so the page height and
+           the artifact offset match the layout the user actually sees. On
+           phones the width (and therefore the offset) differs a lot from the
+           1440 design width, so measuring at the wrong width starts the
+           preview in the wrong place. */
+        frame.style.width  = frameWidth() + 'px';
         frame.style.height = '100px';
         pageH       = frame.contentDocument.documentElement.scrollHeight || 6000;
         scrollStart = findArtifactOffset(frame.contentDocument);
@@ -398,6 +404,10 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
         pageH       = 6000;
         scrollStart = FALLBACK_START;
       }
+      /* On phones, never start near the very top — keep the preview anchored
+         in the body content (the desktop slice is tall enough that this is a
+        non-issue there). */
+      if (isPhone()) scrollStart = Math.max(scrollStart, Math.round(pageH * 0.20));
       /* Set position instantly via CSS transform — no scrollTo needed */
       scrollY = scrollStart;
       scaleFrame();
@@ -571,12 +581,19 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       /* Defeat scroll-behavior:smooth in the lab page's own CSS so every
          scrollTo below jumps instantly. Inline style beats external CSS. */
       iframe.contentDocument.documentElement.style.scrollBehavior = 'auto';
+      /* Measure at the FINAL render width so the offset matches what the user
+         sees (phones use a much narrower width than the 1440 design width). */
+      iframe.style.width  = frameW() + 'px';
       iframe.style.height = '100px'; /* shrink for accurate scrollHeight read */
       pageH       = iframe.contentDocument.documentElement.scrollHeight || 6000;
       scrollStart = findLabsOffset(iframe.contentDocument);
     } catch (_) {
       pageH       = 6000;
       scrollStart = 400;
+    }
+    /* On phones, never start near the very top — keep it in the experiment. */
+    if (window.matchMedia('(max-width: 680px)').matches) {
+      scrollStart = Math.max(scrollStart, Math.round(pageH * 0.20));
     }
     /* scaleFrame restores iframe to a small height and scrolls instantly */
     scrollY = scrollStart;
