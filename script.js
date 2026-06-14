@@ -414,8 +414,15 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
          cards land best ~38% down; desktop-rendered cards (forceDesktop, e.g.
          People's Professors) already land perfectly, so leave those alone. */
       if (isPhone()) {
-        const floor = forceDesktop ? 0.20 : 0.38;
-        scrollStart = Math.max(scrollStart, Math.round(pageH * floor));
+        const override = parseFloat(card.dataset.previewStart);
+        if (!Number.isNaN(override)) {
+          /* Per-card hard start, as a fraction of page height (e.g. T-Mobile,
+             tuned to land on its carousel visual rather than the intro text). */
+          scrollStart = Math.round(pageH * override);
+        } else {
+          const floor = forceDesktop ? 0.20 : 0.38;
+          scrollStart = Math.max(scrollStart, Math.round(pageH * floor));
+        }
       }
       /* Set position instantly via CSS transform — no scrollTo needed */
       scrollY = scrollStart;
