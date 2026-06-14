@@ -509,6 +509,11 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   const labs      = Array.from(document.querySelectorAll('.lab[data-lab-src]'));
   if (!labs.length) return;
 
+  /* Phones use a different layout entirely: the stage is hidden (CSS) and the
+     bold cards carry the section. Skip all the iframe/hover/scroll machinery
+     so we never load a preview the user can't see. */
+  if (window.matchMedia('(max-width: 680px)').matches) return;
+
   const SCROLL_SPEED  = 0.35;  // px per rAF tick
   const PAUSE_INIT    = 1400;  // ms before first scroll
   const SWITCH_PAUSE  = 900;   // ms pause after switching
@@ -700,18 +705,6 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       switchTo(lab.dataset.labSrc, lab.dataset.labName);
     });
   });
-
-  /* ── Touch (no hover): auto-rotate through the labs so each preview is
-        showcased without a pointer. Only while the stage is on screen. ── */
-  if (window.matchMedia('(max-width: 680px)').matches) {
-    stage.classList.add('has-hovered'); /* drop the "hover a card" hint */
-    let rotIdx = 0;
-    setInterval(function () {
-      if (!onScreen) return;
-      rotIdx = (rotIdx + 1) % labs.length;
-      switchTo(labs[rotIdx].dataset.labSrc, labs[rotIdx].dataset.labName);
-    }, 5600);
-  }
 
   /* ── IntersectionObserver: pause + unload when off-screen ──────────────
      Lab pages are heavy (full HTML + their own script.js running inside).
