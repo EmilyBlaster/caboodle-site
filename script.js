@@ -1265,6 +1265,13 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
   function animate(parsed) {
     const start = performance.now();
+    let finished = false;
+
+    function settle() {
+      /* Snap to the exact original string so the DOM matches what shipped. */
+      finished = true;
+      parsed.textNode.textContent = parsed.originalText;
+    }
 
     function tick(now) {
       const t = Math.min((now - start) / DURATION, 1);
@@ -1275,9 +1282,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       if (t < 1) {
         requestAnimationFrame(tick);
       } else {
-        /* Snap to the exact original string at the end so we never
-           leave the DOM differing from what shipped in the HTML. */
-        parsed.textNode.textContent = parsed.originalText;
+        settle();
       }
     }
 
@@ -1285,6 +1290,11 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
        from zero, not from the cached final value. */
     parsed.textNode.textContent = '0' + parsed.unit;
     requestAnimationFrame(tick);
+
+    /* Safety net: if requestAnimationFrame is throttled (background tab) or
+       otherwise never completes, force the real value rather than leaving the
+       stat frozen at 0. Worst case the count-up is skipped, never stuck. */
+    setTimeout(() => { if (!finished) settle(); }, DURATION + 800);
   }
 
   /* Fire each stat at most once. */
