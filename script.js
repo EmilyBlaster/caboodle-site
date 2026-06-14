@@ -330,10 +330,15 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     /* ── Scale iframe and position via transform (no scrollTo) ──────────── */
     /* We control the visible position with translateY instead of scrollTo,
        avoiding scroll-behavior:smooth interference from the iframe's own CSS. */
+    /* Cards flagged data-preview-desktop (media/embed-heavy pages whose
+       layout breaks at a phone ratio) always render at the 1440 design width
+       and scale down, even on phones — so their embeds stay in the layout
+       they were built for instead of distorting. */
+    const forceDesktop = card.hasAttribute('data-preview-desktop');
     /* Phone → render at the card width (scale 1, native mobile layout).
-       Larger → render at the 1440 design width and scale it down. */
+       Larger (or forceDesktop) → render at 1440 and scale it down. */
     function frameWidth () {
-      return isPhone() ? Math.round(vp.offsetWidth) : IFRAME_W;
+      return (isPhone() && !forceDesktop) ? Math.round(vp.offsetWidth) : IFRAME_W;
     }
     function scaleFrame () {
       const iw    = frameWidth();
