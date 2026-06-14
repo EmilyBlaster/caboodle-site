@@ -1305,13 +1305,10 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     });
   }, { threshold: THRESHOLD });
 
-  /* Blank every numeric stat to 0 up front (synchronously, before paint) so
-     none flashes its final value, then count each one up as it enters view. */
-  targets.forEach((el) => {
-    const parsed = parse(el);
-    if (parsed) parsed.textNode.textContent = '0' + parsed.unit;
-    observer.observe(el);
-  });
+  /* Observe every stat. We deliberately do NOT blank to 0 up front: if a stat
+     somehow never fires, it must fall back to showing its real value, never a
+     frozen 0. animate() zeroes the value itself the instant it starts. */
+  targets.forEach((el) => observer.observe(el));
 
   /* Safety net. This deferred script runs while the dossier preview iframes
      are still loading and shifting the layout, which can leave the observer
