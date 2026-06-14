@@ -1287,34 +1287,50 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     requestAnimationFrame(tick);
   }
 
+  /* Fire each stat at most once. */
+  const done = new WeakSet();
+  function fire(el) {
+    if (done.has(el)) return;
+    const parsed = parse(el);
+    if (!parsed) return;        /* categorical word-stats: leave as-is */
+    done.add(el);
+    animate(parsed);            /* animate() zeroes then counts up */
+  }
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
-      const parsed = parse(entry.target);
-      if (parsed) animate(parsed);
-      /* One-shot — don't re-animate when user scrolls back */
-      observer.unobserve(entry.target);
+      observer.unobserve(entry.target);   /* one-shot */
+      fire(entry.target);
     });
   }, { threshold: THRESHOLD });
 
-  /* Observe EVERY stat and let the observer drive the count-up — both
-     below-the-fold stats (animate when scrolled in) and ones already on
-     screen at load (the observer's initial callback fires immediately).
-     The earlier version branched on whether the element was on screen when
-     this deferred script ran, but that moment shifts as the dossier preview
-     iframes load and push the layout down — so the featured stat near the
-     top of the work page could land in a path that never animated it.
-     Observing unconditionally removes that race. For stats already on screen
-     we blank them to 0 now so the final value never flashes before the
-     count-up; below-fold stats keep their value until animate() zeroes them
-     at the moment they scroll in, so we don't show a premature 0 down-page. */
+  /* Blank every numeric stat to 0 up front (synchronously, before paint) so
+     none flashes its final value, then count each one up as it enters view. */
   targets.forEach((el) => {
-    const rect = el.getBoundingClientRect();
-    const inView = rect.top < window.innerHeight && rect.bottom > 0;
-    if (inView) {
-      const parsed = parse(el);
-      if (parsed) parsed.textNode.textContent = '0' + parsed.unit;
-    }
+    const parsed = parse(el);
+    if (parsed) parsed.textNode.textContent = '0' + parsed.unit;
     observer.observe(el);
   });
+
+  /* Safety net. This deferred script runs while the dossier preview iframes
+     are still loading and shifting the layout, which can leave the observer
+     never firing for a stat that ends up on screen (e.g. the featured stat
+     near the top of the work page) — it would sit blanked at 0 forever.
+     Once the page has settled, force any on-screen stat that hasn't fired. */
+  function sweep() {
+    targets.forEach((el) => {
+      if (done.has(el)) return;
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        observer.unobserve(el);
+        fire(el);
+      }
+    });
+  }
+  if (document.readyState === 'complete') {
+    setTimeout(sweep, 400);
+  } else {
+    window.addEventListener('load', () => setTimeout(sweep, 400));
+  }
 })();
