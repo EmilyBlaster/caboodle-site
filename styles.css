@@ -639,8 +639,6 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
   counter-reset: proofcard;
-  /* One shared tile height so the lead tile can be wider without a ragged row. */
-  --tile-h: clamp(210px, 18.75vw, 300px);
   /* Full-bleed: the rail runs to the right edge so the strip owns the page on
      wide screens instead of sitting marooned in a centered 1440 box. The first
      tile stays aligned to the content column (the head above it is capped at
@@ -674,13 +672,10 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   flex-direction: column;
   gap: 0.7rem;
 }
-/* Lead tile runs wider (a cinematic anchor) at the shared height, so the rail
-   has a focal point instead of reading as five identical cards. */
-.proofcard:first-child { width: clamp(440px, 42vw, 680px); }
 .proofcard__shot {
   display: block;
   position: relative;
-  height: var(--tile-h);
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   border-radius: var(--r-card);
   border: 1px solid var(--rule);
