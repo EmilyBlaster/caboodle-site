@@ -1273,6 +1273,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     '.aboutstats__grid dd',
     '.results__grid dd',
     '.dossier__statnum',
+    '.matrix__stat',
   ].join(',');
 
   const targets = document.querySelectorAll(SELECTORS);

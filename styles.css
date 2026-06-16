@@ -90,6 +90,10 @@
 
   /* Motion — Apple easing */
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Duration tokens — one system so identical gestures share timing */
+  --t-micro: 0.2s;   /* hovers, taps */
+  --t-ui: 0.4s;      /* UI state: nav, panels, toggles */
+  --t-reveal: 0.6s;  /* entrances, scroll reveals */
 
   /* Rhythm */
   --pad-x: clamp(1.25rem, 5vw, 5rem);
@@ -638,7 +642,6 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   overflow-x: auto;
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
-  counter-reset: proofcard;
   /* Full-bleed: the rail runs to the right edge so the strip owns the page on
      wide screens instead of sitting marooned in a centered 1440 box. The first
      tile stays aligned to the content column (the head above it is capped at
@@ -664,7 +667,7 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .proofstrip__rail::-webkit-scrollbar { width: 0; height: 0; display: none; }
 .proofcard {
   flex: 0 0 auto;
-  width: clamp(320px, 30vw, 520px);
+  width: clamp(380px, 36vw, 640px);
   scroll-snap-align: start;
   text-decoration: none;
   color: inherit;
@@ -726,14 +729,6 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   line-height: 1.4;
 }
 .proofcard__label b { color: var(--ink); font-weight: 500; }
-/* Catalogue index — a magenta field-journal number per artifact. Commits a
-   touch of brand color and reads like a filed entry, not a repeated card. */
-.proofcard__label { counter-increment: proofcard; }
-.proofcard__label::before {
-  content: counter(proofcard, decimal-leading-zero) "\00a0\00a0";
-  color: var(--magenta);
-  font-weight: 500;
-}
 
 /* Terminal "see all work" tile — slim rectangle, not a full artifact tile */
 .proofcard--more { width: clamp(150px, 11vw, 190px); }
@@ -802,40 +797,6 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 
 @media (max-width: 700px) {
   .proofcard { width: 78vw; max-width: 320px; }
-}
-
-/* ==========================================================================
-   02b — TICKER
-   ========================================================================== */
-
-.ticker {
-  background: var(--ink);
-  color: var(--paper);
-  padding: 1.2rem 0;
-  overflow: hidden;
-  border-block: 1px solid var(--ink);
-}
-.ticker__track {
-  display: flex; align-items: center; gap: 2.5rem;
-  white-space: nowrap;
-  font-family: var(--display);
-  font-weight: 500;
-  font-size: clamp(1.25rem, 2.5vw, 2rem);
-  letter-spacing: -0.01em;
-  text-transform: lowercase;
-  animation: marquee 28s linear infinite;
-  width: max-content;
-}
-.ticker__track span:nth-child(7n+1) { color: var(--lime); }
-.ticker__track span:nth-child(7n+5) { color: var(--magenta); font-style: italic; }
-.ticker__track i {
-  font-style: normal;
-  color: var(--ink-2);
-  font-size: 1em;
-}
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
 }
 
 /* ==========================================================================
@@ -2978,8 +2939,8 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 
 [data-reveal] {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 1s var(--ease), transform 1s var(--ease);
+  transform: translateY(16px);
+  transition: opacity var(--t-reveal) var(--ease), transform var(--t-reveal) var(--ease);
   will-change: transform, opacity;
 }
 [data-reveal].is-in {

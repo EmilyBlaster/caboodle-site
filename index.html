@@ -32,7 +32,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=20260613jj" />
+<link rel="stylesheet" href="styles.css?v=20260613kk" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
 <!-- Prefetch case study HTML on browser idle so the dossier preview
@@ -48,7 +48,6 @@
 </head>
 <body>
 
-<!-- Scroll-driven research-log sidebar — the "one weird move" -->
 
 <!-- Nav — matches live site structure -->
 <header class="nav">
@@ -70,7 +69,7 @@
 </header>
 
 <!-- 01 — Field-note hero -->
-<section class="hero" id="top" data-log="001 — subject enters the field">
+<section class="hero" id="top">
   <div class="hero__frame">
     <div class="hero__stamp">
       <span>field note</span>
@@ -102,8 +101,8 @@
   </div>
 </section>
 
-<!-- 02 — Trust band + ticker -->
-<section class="trustband" data-log="002 — fortune 500 trust signal">
+<!-- 02 — Trust band -->
+<section class="trustband">
   <div class="trustband__inner">
     <span class="trustband__kicker">trusted by fortune 500</span>
     <ul class="trustband__list">
@@ -180,10 +179,10 @@
 
   <div class="dossiers">
 
-    <a class="dossier dossier--link dossier--accent-blue dossier--withpreview" href="work/intuit.html" data-log="010 — dossier · intuit">
+    <a class="dossier dossier--link dossier--accent-blue dossier--withpreview" href="work/intuit.html">
       <div class="dossier__tab">
         <span class="dossier__code">ENG-INTUIT</span>
-        <span class="dossier__year">10,000+ employees</span>
+        <span class="dossier__year">10K+ employees</span>
       </div>
       <div class="dossier__body">
         <div class="dossier__text">
@@ -215,7 +214,7 @@
       </div>
     </a>
 
-    <a class="dossier dossier--link dossier--accent-lime dossier--withpreview" href="work/airbnb.html" data-log="014 — dossier · airbnb">
+    <a class="dossier dossier--link dossier--accent-lime dossier--withpreview" href="work/airbnb.html">
       <div class="dossier__tab">
         <span class="dossier__code">ENG-AIRBNB</span>
         <span class="dossier__year">5 modules · 90 days</span>
@@ -251,10 +250,10 @@
       </div>
     </a>
 
-    <a class="dossier dossier--link dossier--accent-magenta dossier--withpreview" href="work/apple.html" data-log="011 — dossier · apple">
+    <a class="dossier dossier--link dossier--accent-magenta dossier--withpreview" href="work/apple.html">
       <div class="dossier__tab">
         <span class="dossier__code">ENG-APPLE</span>
-        <span class="dossier__year">251 companies · 31 countries</span>
+        <span class="dossier__year">251 suppliers · 31 countries</span>
       </div>
       <div class="dossier__body">
         <div class="dossier__text">
@@ -286,7 +285,7 @@
       </div>
     </a>
 
-    <a class="dossier dossier--link dossier--accent-blue dossier--withpreview" href="work/gitlab.html" data-log="009 — dossier · gitlab" data-preview-desktop>
+    <a class="dossier dossier--link dossier--accent-blue dossier--withpreview" href="work/gitlab.html" data-preview-desktop>
       <div class="dossier__tab">
         <span class="dossier__code">ENG-GITLAB</span>
         <span class="dossier__year">2 months · nl · de · fr</span>
@@ -321,7 +320,7 @@
       </div>
     </a>
 
-    <a class="dossier dossier--link dossier--accent-lime dossier--withpreview" href="work/tmobile.html" data-log="012 — dossier · t-mobile" data-preview-start="0.55">
+    <a class="dossier dossier--link dossier--accent-lime dossier--withpreview" href="work/tmobile.html" data-preview-start="0.55">
       <div class="dossier__tab">
         <span class="dossier__code">ENG-TMOBILE</span>
         <span class="dossier__year">corporate legal</span>
@@ -356,7 +355,7 @@
       </div>
     </a>
 
-    <a class="dossier dossier--link dossier--accent-magenta dossier--withpreview" href="work/trust20.html" data-log="013 — dossier · trust20">
+    <a class="dossier dossier--link dossier--accent-magenta dossier--withpreview" href="work/trust20.html">
       <div class="dossier__tab">
         <span class="dossier__code">ENG-TRUST20</span>
         <span class="dossier__year">5 weeks · multi-state</span>
@@ -391,7 +390,7 @@
       </div>
     </a>
 
-    <a class="dossier dossier--link dossier--accent-ink dossier--withpreview" href="work/peoples-professors.html" data-log="008 — dossier · peoples professors" data-preview-desktop>
+    <a class="dossier dossier--link dossier--accent-ink dossier--withpreview" href="work/peoples-professors.html" data-preview-desktop>
       <div class="dossier__tab">
         <span class="dossier__code">PROJ-PP001</span>
         <span class="dossier__year">self-initiated · 2026</span>
@@ -459,7 +458,7 @@
   </header>
 
   <!-- Pillar 01 — left weight -->
-  <article class="pillar pillar--left" data-log="003 — subject reads pillar 01">
+  <article class="pillar pillar--left">
     <div class="pillar__num" aria-hidden="true">01</div>
     <div class="pillar__body">
       <span class="pillar__tag">ethnographic research</span>
@@ -479,7 +478,7 @@
   </article>
 
   <!-- Pillar 02 — right weight -->
-  <article class="pillar pillar--right" data-log="004 — subject reads pillar 02">
+  <article class="pillar pillar--right">
     <div class="pillar__num" aria-hidden="true">02</div>
     <div class="pillar__body">
       <span class="pillar__tag">behavioral strategy</span>
@@ -500,7 +499,7 @@
   </article>
 
   <!-- Pillar 03 — left weight -->
-  <article class="pillar pillar--left" data-log="005 — subject reads pillar 03">
+  <article class="pillar pillar--left">
     <div class="pillar__num" aria-hidden="true">03</div>
     <div class="pillar__body">
       <span class="pillar__tag">creative media</span>
@@ -522,7 +521,7 @@
 </section>
 
 <!-- Action Mapping × Kirkpatrick editorial table -->
-<section class="matrix" data-log="007 — action mapping crossed with kirkpatrick">
+<section class="matrix">
   <header class="matrix__head">
     <span class="matrix__kicker">design meets measurement</span>
     <h2 class="matrix__title">
@@ -572,7 +571,7 @@
       </div>
       <aside class="matrix__proof">
         <span class="matrix__client">intuit</span>
-        <span class="matrix__stat">3<i>x</i></span>
+        <span class="matrix__stat">3<i>×</i></span>
         <p>increase in internal mobility applications. We identified
           the 5 manager behaviors that predicted mobility. Training
           rehearsed those actions. Everything else was cut.</p>
@@ -814,7 +813,7 @@
 </section>
 
 <!-- 10 — Closing card -->
-<section class="closing" id="contact" data-log="014 — subject reaches exit · field closed">
+<section class="closing" id="contact">
   <div class="closing__card">
     <div class="closing__stamp" aria-hidden="true">
       <svg class="cd-stamp-mark" viewBox="0 0 90 60" aria-hidden="true">
@@ -907,6 +906,6 @@
   </div>
 </div>
 
-<script src="script.js?v=20260613jj" defer></script>
+<script src="script.js?v=20260613kk" defer></script>
 </body>
 </html>
