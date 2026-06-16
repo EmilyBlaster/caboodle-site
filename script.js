@@ -1462,3 +1462,29 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   window.addEventListener('resize', update);
   update();
 })();
+
+/* ==========================================================================
+   PROOF STRIP REVEAL — when the strip scrolls into view it "deals out" its
+   evidence: head leads, a beat on the lead tile, then the tiles cascade. The
+   choreography (stagger + easing) lives in CSS; this only flips .is-in.
+   ========================================================================== */
+(function proofStripReveal() {
+  'use strict';
+  const strip = document.querySelector('.proofstrip');
+  if (!strip) return;
+  const reveal = () => strip.classList.add('is-in');
+
+  /* Reduced motion or no observer support: show it at once, no choreography. */
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+    reveal();
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) { reveal(); io.disconnect(); }
+    });
+  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 });
+  io.observe(strip);
+  /* Fail-safe: never leave the strip hidden if the observer never fires. */
+  setTimeout(reveal, 2600);
+})();

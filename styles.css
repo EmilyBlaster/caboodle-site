@@ -720,6 +720,49 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .proofcard--more .proofcard__more em { color: var(--magenta); font-style: normal; }
 .proofcard--more:hover .proofcard__more { background: var(--lime); border-color: var(--lime); }
 
+/* ── Entrance: the strip "deals out" its evidence as it scrolls into view ──
+   Head leads (kicker, dek, arrows); a beat on the lead tile; then the rest
+   cascade. transform + opacity only, ease-out-expo. JS flips .is-in; the
+   stagger + easing live here. The reduced-motion block below is the safety
+   net (and doubles as the no-JS fallback for those users). */
+.proofstrip__kicker,
+.proofstrip__dek,
+.proofstrip__nav,
+.proofcard {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+.proofcard { transform: translateY(28px); }   /* tiles travel further, for depth */
+
+.proofstrip.is-in .proofstrip__kicker,
+.proofstrip.is-in .proofstrip__dek,
+.proofstrip.is-in .proofstrip__nav,
+.proofstrip.is-in .proofcard {
+  opacity: 1;
+  transform: none;
+}
+.proofstrip.is-in .proofstrip__kicker { transition-delay: 0ms; }
+.proofstrip.is-in .proofstrip__dek    { transition-delay: 80ms; }
+.proofstrip.is-in .proofstrip__nav    { transition-delay: 150ms; }
+.proofstrip.is-in .proofcard:nth-child(1) { transition-delay: 250ms; }  /* lead tile lands */
+.proofstrip.is-in .proofcard:nth-child(2) { transition-delay: 400ms; }  /* beat, then cascade */
+.proofstrip.is-in .proofcard:nth-child(3) { transition-delay: 470ms; }
+.proofstrip.is-in .proofcard:nth-child(4) { transition-delay: 540ms; }
+.proofstrip.is-in .proofcard:nth-child(5) { transition-delay: 610ms; }
+.proofstrip.is-in .proofcard:nth-child(6) { transition-delay: 680ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .proofstrip__kicker,
+  .proofstrip__dek,
+  .proofstrip__nav,
+  .proofcard {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 @media (max-width: 700px) {
   .proofcard { width: 78vw; max-width: 320px; }
 }
