@@ -613,6 +613,11 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
   padding: 0.5rem var(--pad-x) 1.25rem;
+  /* Align the first tile with the page's content column (the kicker/dek) and
+     tell scroll-snap to respect that start — otherwise snap pulls the first
+     tile flush to the window edge on screens wider than --maxw. */
+  padding-left: max(var(--pad-x), calc((100% - var(--maxw)) / 2 + var(--pad-x)));
+  scroll-padding-left: max(var(--pad-x), calc((100% - var(--maxw)) / 2 + var(--pad-x)));
   /* Hide the scrollbar — it reads as cheap. Scroll still works via
      trackpad/swipe; the peeking next tile + the soft right-edge fade signal
      there's more without an ugly bar. */
@@ -665,21 +670,22 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 }
 .proofcard__label b { color: var(--ink); font-weight: 500; }
 
-/* Terminal "see all work" tile */
+/* Terminal "see all work" tile — slim rectangle, not a full artifact tile */
+.proofcard--more { width: 132px; }
 .proofcard--more .proofcard__more {
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  aspect-ratio: 4 / 3;
+  height: 100%;          /* fill the rail height — a tall, narrow rectangle */
   border-radius: var(--r-card);
   border: 1px dashed var(--rule);
   background: var(--paper-2);
   font-family: var(--display);
   font-weight: 700;
-  font-size: 1.35rem;
+  font-size: 1.05rem;
   text-transform: lowercase;
-  line-height: 1.1;
+  line-height: 1.15;
   color: var(--ink);
   transition: background 0.4s var(--ease), border-color 0.4s var(--ease);
 }
