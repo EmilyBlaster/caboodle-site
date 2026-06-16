@@ -1420,12 +1420,17 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     const start = rail.scrollLeft;
     const target = Math.max(0, Math.min(rail.scrollWidth - rail.clientWidth, start + delta));
     const t0 = performance.now(), dur = 420;
+    let done = false;
     const ease = (t) => 1 - Math.pow(1 - t, 3);
-    (function tick(now) {
-      const t = Math.min(((now || performance.now()) - t0) / dur, 1);
+    function tick(now) {
+      const t = Math.min((now - t0) / dur, 1);
       rail.scrollLeft = start + (target - start) * ease(t);
-      if (t < 1) requestAnimationFrame(tick);
-    })(t0);
+      if (t < 1) requestAnimationFrame(tick); else done = true;
+    }
+    requestAnimationFrame(tick);
+    /* Fail-safe: if rAF is throttled and never progresses, jump to target so
+       the arrow always works. */
+    setTimeout(() => { if (!done) rail.scrollLeft = target; }, 600);
   }
   arrows.forEach((btn) => {
     btn.addEventListener('click', () => {
