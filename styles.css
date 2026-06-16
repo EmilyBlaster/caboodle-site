@@ -679,6 +679,7 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .proofcard:first-child { width: clamp(440px, 42vw, 680px); }
 .proofcard__shot {
   display: block;
+  position: relative;
   height: var(--tile-h);
   overflow: hidden;
   border-radius: var(--r-card);
@@ -700,6 +701,24 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 26px 50px -22px rgba(40,40,40,.45);
 }
 .proofcard:hover .proofcard__shot img { transform: scale(1.04); }
+/* Outcome reveal — the result slides up over the artifact on hover/focus, so a
+   proof tile becomes a proof claim. Transform-only (no layout animation). */
+.proofcard__outcome {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 0.62rem 0.9rem;
+  background: var(--ink);
+  color: var(--lime);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.45;
+  transform: translateY(101%);
+  transition: transform 0.45s var(--ease);
+}
+.proofcard:hover .proofcard__outcome,
+.proofcard:focus-visible .proofcard__outcome { transform: translateY(0); }
 /* Tighter crop on tiles whose subject sits small in a wide screenshot. */
 .proofcard__shot--zoom img { transform: scale(1.2); }
 .proofcard:hover .proofcard__shot--zoom img { transform: scale(1.25); }
