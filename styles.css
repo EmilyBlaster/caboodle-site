@@ -613,9 +613,15 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
   padding: 0.5rem var(--pad-x) 1.25rem;
-  scrollbar-width: thin;
-  scrollbar-color: var(--rule) transparent;
+  /* Hide the scrollbar — it reads as cheap. Scroll still works via
+     trackpad/swipe; the peeking next tile + the soft right-edge fade signal
+     there's more without an ugly bar. */
+  scrollbar-width: none;            /* Firefox */
+  -ms-overflow-style: none;         /* legacy Edge */
+  -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 3rem), transparent 100%);
+          mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 3rem), transparent 100%);
 }
+.proofstrip__rail::-webkit-scrollbar { width: 0; height: 0; display: none; }
 .proofcard {
   flex: 0 0 auto;
   width: clamp(255px, 30vw, 340px);
