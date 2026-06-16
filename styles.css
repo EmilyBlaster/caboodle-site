@@ -678,6 +678,9 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 26px 50px -22px rgba(40,40,40,.45);
 }
 .proofcard:hover .proofcard__shot img { transform: scale(1.04); }
+/* Tighter crop on tiles whose subject sits small in a wide screenshot. */
+.proofcard__shot--zoom img { transform: scale(1.2); }
+.proofcard:hover .proofcard__shot--zoom img { transform: scale(1.25); }
 .proofcard__label {
   font-family: var(--mono);
   font-size: 0.72rem;
