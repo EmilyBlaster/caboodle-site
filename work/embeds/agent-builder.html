@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Agent Builder · performance task · caboodle design</title>
+<meta name="robots" content="noindex" />
+<meta name="description" content="A de-branded sample from an enterprise AI-enablement program: a hands-on performance task where the learner scopes and builds an AI agent brief, with a live preview that assembles as they type." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #FFFFFF; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  #root { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+/* ===================================================================
+   AGENT BUILDER — de-branded performance-task sample (caboodle design).
+   Adapted from Emily Green's real, built AI-enablement module. Airbnb's
+   Cereal font + Rausch red + Glean/AirAssist/EX specifics swapped for
+   neutral, representative equivalents. The interaction is unchanged:
+   a learner scopes and defines an AI agent (purpose, scope, instructions,
+   escalation rules) and a live preview assembles the brief as they type.
+   =================================================================== */
+var useState = React.useState;
+var useEffect = React.useEffect;
+var useRef = React.useRef;
+
+function AgentBuilder() {
+  var COLORS = {
+    hof:           '#222222',
+    rausch:        '#4F46E5',   /* indigo (was Airbnb Rausch #FF385C) */
+    productRausch: '#4338CA',
+    white:         '#FFFFFF',
+    foggy:         '#6C6C6C',
+    deco:          '#DDDDDD',
+    faint:         '#F7F7F7',
+    beige:         '#F4F2EC',
+    rauschLight:   '#ECECFE',
+    hofLight:      '#484848',
+    teal:          '#0E9F8E',
+    tealLight:     '#E6F7F4',
+    yellow:        '#C98A12',
+    yellowLight:   '#FDF6E3',
+    orange:        '#D93900',
+    orangeLight:   '#FFF3E0',
+    plus:          '#7C3AED',   /* violet (was Airbnb plus #92174D) */
+    plusLight:     '#F3EEFE',
+    luxe:          '#5B21B6',
+    purpleLight:   '#F3E8FF',
+    lightGray:     '#DDDDDD',
+    bgLight:       '#F7F7F7',
+    green:         '#0E9F8E',
+    greenLight:    '#E6F7F4',
+    red:           '#4F46E5',
+    redLight:      '#ECECFE',
+  };
+
+  var FONT = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+
+  var containerRef = useRef(null);
+  var _cw = useState(800);   var containerWidth = _cw[0];   var setContainerWidth = _cw[1];
+  var _at = useState(true);  var ariaTyping = _at[0];       var setAriaTyping = _at[1];
+  var _lc = useState(false); var limitsCollapsed = _lc[0];  var setLimitsCollapsed = _lc[1];
+  var _ready = useState(false); var isDefined = _ready[0];  var setIsDefined = _ready[1];
+  var _mode = useState('structured'); var formMode = _mode[0]; var setFormMode = _mode[1];
+  var _ft = useState('');    var freeText = _ft[0];         var setFreeText = _ft[1];
+  var _pv = useState(false); var showPreview = _pv[0];      var setShowPreview = _pv[1];
+
+  var _f = useState({
+    name: '', purpose: '', scopeIn: '', scopeOut: '',
+    instructions: '', escalation1: '', escalation2: '', escalation3: '',
+  });
+  var formVals = _f[0]; var setFormVals = _f[1];
+
+  var isMobile = containerWidth < 600;
+
+  function handleChange(field, val) {
+    var next = Object.assign({}, formVals);
+    next[field] = val;
+    setFormVals(next);
+    var allFilled = next.name.trim() && next.purpose.trim() && next.scopeIn.trim() && next.instructions.trim() && next.escalation1.trim() && next.escalation2.trim() && next.escalation3.trim();
+    setIsDefined(!!allFilled);
+    if (next.name.trim() || next.purpose.trim()) setShowPreview(true);
+  }
+
+  function handleFreeTextChange(val) {
+    setFreeText(val);
+    setIsDefined(val.trim().length > 30);
+    if (val.trim().length > 30) setShowPreview(true);
+  }
+
+  useEffect(function() {
+    setAriaTyping(true);
+    var t = setTimeout(function() { setAriaTyping(false); }, 1300);
+    return function() { clearTimeout(t); };
+  }, []);
+
+  useEffect(function() {
+    var el = containerRef.current;
+    if (!el) return;
+    var observer = new ResizeObserver(function(entries) {
+      if (entries[0]) setContainerWidth(entries[0].contentRect.width);
+    });
+    observer.observe(el);
+    setContainerWidth(el.offsetWidth);
+    return function() { observer.disconnect(); };
+  }, []);
+
+  var keyframesStyle =
+    "@keyframes ab-bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-6px)} }" +
+    "@keyframes ab-pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }" +
+    "@keyframes ab-msgIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }" +
+    "@keyframes ab-previewIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }" +
+    ".ab-input { border: 1.5px solid #DDDDDD; border-radius: 8px; padding: 10px 14px; font-size: 14px; font-family: " + FONT + "; color: #222222; width: 100%; box-sizing: border-box; outline: none; resize: vertical; background: #FFFFFF; transition: border-color 0.2s; }" +
+    ".ab-input:focus { border-color: #4F46E5; }" +
+    ".ab-input::placeholder { color: #AAAAAA; }" +
+    ".ab-toggle-btn { border: 1.5px solid #DDDDDD; padding: 8px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: " + FONT + "; }" +
+    ".ab-toggle-btn:first-child { border-radius: 8px 0 0 8px; border-right: none; }" +
+    ".ab-toggle-btn:last-child { border-radius: 0 8px 8px 0; border-left: 1px solid #DDDDDD; }";
+
+  var limits = [
+    { label: 'Docs / Sheets', note: 'Create new files only — cannot edit existing docs or sheets' },
+    { label: 'Email', note: 'Create draft only — cannot send email directly' },
+    { label: 'Chat channels', note: 'Embedding agents directly into channels is pending approval' },
+    { label: 'Databases', note: 'Limited ability to read connected database interfaces' },
+  ];
+
+  var existingAgents = [
+    'Daily Action Items or Weekly Accomplishments',
+    'Weekly Appreciation Recommendations',
+    'Brand Writing Style — reviews text for on-brand voice',
+    'Find People with Specific Skills or Interests',
+    'Agenda Builder for team meetings',
+    'Agent Platform FAQ',
+  ];
+
+  function renderAriaAvatar(sz) {
+    sz = sz || 40;
+    return React.createElement('div', { style: { width: sz, height: sz, flexShrink: 0 } },
+      React.createElement('svg', { width: sz, height: sz, viewBox: '0 0 40 40' },
+        React.createElement('rect', { x: 4, y: 8, width: 32, height: 28, rx: 10, fill: COLORS.rausch }),
+        React.createElement('line', { x1: 20, y1: 8, x2: 20, y2: 3, stroke: COLORS.rausch, strokeWidth: 2.5, strokeLinecap: 'round' }),
+        React.createElement('circle', { cx: 20, cy: 2, r: 2.5, fill: COLORS.rausch, style: { animation: 'ab-pulse 2s ease-in-out infinite' } }),
+        React.createElement('circle', { cx: 14, cy: 20, r: 3, fill: COLORS.white }),
+        React.createElement('circle', { cx: 26, cy: 20, r: 3, fill: COLORS.white }),
+        React.createElement('circle', { cx: 15, cy: 19.5, r: 1.3, fill: COLORS.hof }),
+        React.createElement('circle', { cx: 27, cy: 19.5, r: 1.3, fill: COLORS.hof }),
+        React.createElement('path', { d: 'M16 27 Q20 31 24 27', stroke: COLORS.white, strokeWidth: 2, fill: 'none', strokeLinecap: 'round' })
+      )
+    );
+  }
+
+  function renderAria(message) {
+    return React.createElement('div', {
+      style: { display: 'flex', flexDirection: 'row', gap: '12px', alignItems: 'flex-start', marginBottom: '24px' }
+    },
+      renderAriaAvatar(40),
+      React.createElement('div', { style: { flex: 1 } },
+        React.createElement('div', {
+          style: { fontSize: '12px', fontWeight: 700, letterSpacing: '0.05em', color: COLORS.hof, textTransform: 'uppercase', marginBottom: '4px', fontFamily: FONT }
+        }, 'Coach · AI Mentor'),
+        React.createElement('div', {
+          style: { background: COLORS.faint, border: '1px solid ' + COLORS.deco, borderRadius: '4px 16px 16px 16px', padding: '12px 16px', minHeight: '46px', display: 'flex', alignItems: 'center', fontFamily: FONT }
+        },
+          ariaTyping
+            ? React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '5px' } },
+                React.createElement('div', { style: { width: '7px', height: '7px', borderRadius: '50%', background: COLORS.foggy, animation: 'ab-bounce 1.3s ease-in-out 0s infinite' } }),
+                React.createElement('div', { style: { width: '7px', height: '7px', borderRadius: '50%', background: COLORS.foggy, animation: 'ab-bounce 1.3s ease-in-out 0.18s infinite' } }),
+                React.createElement('div', { style: { width: '7px', height: '7px', borderRadius: '50%', background: COLORS.foggy, animation: 'ab-bounce 1.3s ease-in-out 0.36s infinite' } })
+              )
+            : React.createElement('div', { style: { fontSize: isMobile ? '14px' : '15px', lineHeight: 1.6, color: COLORS.hof, animation: 'ab-msgIn 0.35s ease' } }, message)
+        )
+      )
+    );
+  }
+
+  function renderField(label, field, placeholder, multiline, hint) {
+    return React.createElement('div', { style: { marginBottom: 20 } },
+      React.createElement('label', { style: { display: 'block', fontWeight: 700, fontSize: 14, color: COLORS.hof, marginBottom: 6, fontFamily: FONT } }, label),
+      hint ? React.createElement('p', { style: { margin: '0 0 8px', fontSize: 12, color: COLORS.foggy, fontFamily: FONT } }, hint) : null,
+      multiline
+        ? React.createElement('textarea', { className: 'ab-input', rows: 4, placeholder: placeholder, value: formVals[field], onChange: function(e) { handleChange(field, e.target.value); } })
+        : React.createElement('input', { className: 'ab-input', type: 'text', placeholder: placeholder, value: formVals[field], onChange: function(e) { handleChange(field, e.target.value); } })
+    );
+  }
+
+  function renderBriefSection(label, content, accentColor, accentBg) {
+    return React.createElement('div', {
+      style: { border: '1px solid ' + accentColor + '40', borderLeft: '3px solid ' + accentColor, borderRadius: 8, padding: '14px 16px', background: accentBg }
+    },
+      React.createElement('p', { style: { margin: '0 0 6px', fontSize: 11, fontWeight: 700, color: accentColor, textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: FONT } }, label),
+      React.createElement('p', { style: { margin: 0, fontSize: 13, color: COLORS.hof, lineHeight: 1.7, fontFamily: FONT } }, content)
+    );
+  }
+
+  function renderPreview() {
+    var hasContent = formMode === 'freetext' ? freeText.trim().length > 0 : (formVals.name.trim() || formVals.purpose.trim());
+    if (!hasContent) return null;
+
+    return React.createElement('div', {
+      style: { border: '1px solid ' + COLORS.teal + '60', borderRadius: 16, overflow: 'hidden', marginBottom: 28, animation: 'ab-previewIn 0.4s ease both' }
+    },
+      React.createElement('button', {
+        onClick: function() { setShowPreview(!showPreview); },
+        style: { width: '100%', background: COLORS.tealLight, border: 'none', padding: '14px 20px', textAlign: 'left', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: FONT }
+      },
+        React.createElement('div', { style: { display: 'flex', gap: 10, alignItems: 'center' } },
+          React.createElement('svg', { width: 18, height: 18, viewBox: '0 0 16 16', fill: 'none', stroke: COLORS.teal, strokeWidth: 1.5, strokeLinecap: 'round' },
+            React.createElement('path', { d: 'M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z' }),
+            React.createElement('path', { d: 'M10 2v3h3', strokeLinejoin: 'round' }),
+            React.createElement('line', { x1: 5, y1: 8, x2: 11, y2: 8 }),
+            React.createElement('line', { x1: 5, y1: 11, x2: 9, y2: 11 })
+          ),
+          React.createElement('span', { style: { fontWeight: 700, fontSize: 14, color: COLORS.teal, fontFamily: FONT } }, 'Agent Brief Preview'),
+          React.createElement('span', { style: { fontSize: 12, color: COLORS.foggy, fontFamily: FONT, marginLeft: 6 } }, 'Updates as you type')
+        ),
+        React.createElement('span', { style: { fontSize: 20, color: COLORS.teal, fontWeight: 300 } }, showPreview ? '−' : '+')
+      ),
+
+      showPreview ? React.createElement('div', { style: { background: COLORS.white, padding: '24px' } },
+        formMode === 'freetext'
+          ? React.createElement('div', {
+              style: { background: COLORS.faint, border: '1px solid ' + COLORS.deco, borderRadius: 12, padding: '20px', fontSize: 14, color: COLORS.hof, lineHeight: 1.7, fontFamily: FONT, whiteSpace: 'pre-wrap' }
+            }, freeText || '')
+          : React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: 16 } },
+              formVals.name.trim()
+                ? React.createElement('div', { style: { background: COLORS.hof, borderRadius: 10, padding: '14px 20px' } },
+                    React.createElement('p', { style: { margin: 0, fontSize: 11, fontWeight: 700, color: COLORS.deco, textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: FONT, marginBottom: 4 } }, 'Agent Name'),
+                    React.createElement('p', { style: { margin: 0, fontSize: 20, fontWeight: 700, color: COLORS.white, fontFamily: FONT } }, formVals.name)
+                  )
+                : null,
+              formVals.purpose.trim() ? renderBriefSection('PURPOSE', formVals.purpose, COLORS.rausch, COLORS.rauschLight) : null,
+              (formVals.scopeIn.trim() || formVals.scopeOut.trim())
+                ? React.createElement('div', { style: { border: '1px solid ' + COLORS.yellow + '50', borderLeft: '3px solid ' + COLORS.yellow, borderRadius: 8, padding: '14px 16px', background: COLORS.yellowLight } },
+                    React.createElement('p', { style: { margin: '0 0 10px', fontSize: 11, fontWeight: 700, color: COLORS.yellow, textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: FONT } }, 'SCOPE'),
+                    formVals.scopeIn.trim() ? React.createElement('p', { style: { margin: '0 0 6px', fontSize: 13, color: COLORS.hof, fontFamily: FONT } }, React.createElement('span', { style: { fontWeight: 700 } }, 'Includes: '), formVals.scopeIn) : null,
+                    formVals.scopeOut.trim() ? React.createElement('p', { style: { margin: 0, fontSize: 13, color: COLORS.hof, fontFamily: FONT } }, React.createElement('span', { style: { fontWeight: 700 } }, 'Off-limits: '), formVals.scopeOut) : null
+                  )
+                : null,
+              formVals.instructions.trim() ? renderBriefSection('INSTRUCTIONS', formVals.instructions, COLORS.teal, COLORS.tealLight) : null,
+              (formVals.escalation1.trim() || formVals.escalation2.trim() || formVals.escalation3.trim())
+                ? React.createElement('div', { style: { border: '1px solid ' + COLORS.plus + '40', borderLeft: '3px solid ' + COLORS.plus, borderRadius: 8, padding: '14px 16px', background: COLORS.plusLight } },
+                    React.createElement('p', { style: { margin: '0 0 10px', fontSize: 11, fontWeight: 700, color: COLORS.plus, textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: FONT } }, 'ESCALATION RULES'),
+                    [formVals.escalation1, formVals.escalation2, formVals.escalation3].filter(function(r) { return r.trim(); }).map(function(r, i) {
+                      return React.createElement('div', { key: i, style: { display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 6 } },
+                        React.createElement('span', { style: { fontSize: 12, fontWeight: 700, color: COLORS.plus, minWidth: 18, fontFamily: FONT } }, (i + 1) + '.'),
+                        React.createElement('span', { style: { fontSize: 13, color: COLORS.hof, fontFamily: FONT } }, r)
+                      );
+                    })
+                  )
+                : null,
+              !isDefined
+                ? React.createElement('p', { style: { margin: 0, fontSize: 12, color: COLORS.foggy, fontFamily: FONT, textAlign: 'center', fontStyle: 'italic' } }, 'Keep filling in the form above — your brief will build in real time.')
+                : React.createElement('p', { style: { margin: 0, fontSize: 12, color: COLORS.teal, fontFamily: FONT, textAlign: 'center', fontWeight: 600 } }, 'Agent brief complete. Copy or screenshot this before you open your agent platform.')
+            )
+      ) : null
+    );
+  }
+
+  return React.createElement(React.Fragment, null,
+    React.createElement('style', null, keyframesStyle),
+    React.createElement('div', {
+      ref: containerRef,
+      style: { fontFamily: FONT, maxWidth: 1400, margin: '0 auto', padding: isMobile ? 20 : 60, paddingTop: 20, color: COLORS.hof, boxSizing: 'border-box' }
+    },
+      React.createElement('h1', { style: { fontSize: isMobile ? 28 : 40, fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.01em', margin: '0 0 8px', fontFamily: FONT, color: COLORS.hof } }, 'The Agent Builder'),
+      React.createElement('p', { style: { fontSize: isMobile ? 15 : 17, color: COLORS.foggy, margin: '0 0 8px', lineHeight: 1.5, fontFamily: FONT } }, 'Advanced track · performance task'),
+
+      renderAria("Time to build. Use your four foundations. The form below generates the draft you'll take directly into your agent platform — and the documentation you'll need for your intake form."),
+
+      React.createElement('div', { style: { background: COLORS.yellowLight, border: '1px solid ' + COLORS.yellow + '60', borderRadius: 16, marginBottom: 24, overflow: 'hidden' } },
+        React.createElement('button', {
+          onClick: function() { setLimitsCollapsed(!limitsCollapsed); },
+          style: { width: '100%', background: 'transparent', border: 'none', padding: '16px 20px', textAlign: 'left', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: FONT }
+        },
+          React.createElement('div', null,
+            React.createElement('p', { style: { margin: '0 0 2px', fontWeight: 700, fontSize: 14, color: COLORS.hof, fontFamily: FONT, textTransform: 'uppercase', letterSpacing: '0.05em' } }, 'Know before you build'),
+            React.createElement('p', { style: { margin: 0, fontSize: 13, color: COLORS.foggy, fontFamily: FONT } }, 'Current agent-platform limitations')
+          ),
+          React.createElement('span', { style: { fontSize: 20, color: COLORS.yellow, fontWeight: 300 } }, limitsCollapsed ? '+' : '−')
+        ),
+        !limitsCollapsed ? React.createElement('div', { style: { padding: '0 20px 20px', display: 'flex', flexDirection: 'column', gap: 8 } },
+          limits.map(function(l, i) {
+            return React.createElement('div', { key: i, style: { display: 'flex', gap: 12, alignItems: 'flex-start' } },
+              React.createElement('div', { style: { width: 6, height: 6, borderRadius: '50%', flexShrink: 0, background: COLORS.yellow, marginTop: 7 } }),
+              React.createElement('div', null,
+                React.createElement('span', { style: { fontWeight: 700, fontSize: 14, color: COLORS.hof, fontFamily: FONT } }, l.label + ': '),
+                React.createElement('span', { style: { fontSize: 14, color: COLORS.foggy, fontFamily: FONT } }, l.note)
+              )
+            );
+          }),
+          React.createElement('p', { style: { margin: '8px 0 0', fontSize: 12, color: COLORS.foggy, fontFamily: FONT, fontStyle: 'italic' } }, "Check your platform's changelog for updates. If your use case depends on these, design around the constraints now.")
+        ) : null
+      ),
+
+      React.createElement('div', { style: { background: COLORS.tealLight, border: '1px solid ' + COLORS.teal + '40', borderRadius: 16, padding: '20px', marginBottom: 28 } },
+        React.createElement('p', { style: { margin: '0 0 6px', fontWeight: 700, fontSize: 14, color: COLORS.teal, fontFamily: FONT } }, 'First: have you tried the agents that already exist?'),
+        React.createElement('p', { style: { margin: '0 0 14px', fontSize: 13, color: COLORS.foggy, fontFamily: FONT } }, 'A few agents already live in your catalog:'),
+        React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: 8 } },
+          existingAgents.map(function(a, i) {
+            return React.createElement('div', { key: i, style: { display: 'flex', gap: 10, alignItems: 'flex-start' } },
+              React.createElement('div', { style: { width: 18, height: 18, borderRadius: '50%', flexShrink: 0, background: COLORS.teal, color: COLORS.white, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, marginTop: 1, fontFamily: FONT } }, '✓'),
+              React.createElement('span', { style: { fontSize: 14, color: COLORS.hof, lineHeight: 1.5, fontFamily: FONT } }, a)
+            );
+          })
+        ),
+        React.createElement('div', { style: { marginTop: 12, padding: '10px 14px', background: COLORS.white, border: '1px solid ' + COLORS.teal + '40', borderRadius: 8, display: 'flex', alignItems: 'flex-start', gap: 8 } },
+          React.createElement('svg', { width: 16, height: 16, viewBox: '0 0 16 16', fill: 'none', stroke: COLORS.teal, strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round', style: { flexShrink: 0, marginTop: 1 } },
+            React.createElement('circle', { cx: 8, cy: 8, r: 6.5 }),
+            React.createElement('line', { x1: 8, y1: 7, x2: 8, y2: 11 }),
+            React.createElement('circle', { cx: 8, cy: 5, r: 0.8, fill: COLORS.teal, stroke: 'none' })
+          ),
+          React.createElement('span', { style: { fontSize: 13, color: COLORS.hof, fontFamily: FONT, lineHeight: 1.5 } }, 'Browse the full catalog before you build. Some agents are only shared with specific teams and may not appear in your view.')
+        ),
+        React.createElement('p', { style: { margin: '14px 0 0', fontSize: 13, color: COLORS.teal, fontFamily: FONT, fontWeight: 600 } }, "If one of these solves your problem — use it. Building is for gaps that don't yet exist.")
+      ),
+
+      React.createElement('div', { style: { border: '1px solid ' + COLORS.deco, borderRadius: 16, overflow: 'hidden', marginBottom: 28 } },
+        React.createElement('div', { style: { background: COLORS.hof, padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 } },
+          React.createElement('p', { style: { margin: 0, fontWeight: 700, fontSize: 15, color: COLORS.white, fontFamily: FONT } }, 'Define your agent'),
+          React.createElement('div', { style: { display: 'flex' } },
+            React.createElement('button', { className: 'ab-toggle-btn', onClick: function() { setFormMode('structured'); }, style: { background: formMode === 'structured' ? COLORS.rausch : COLORS.white, color: formMode === 'structured' ? COLORS.white : COLORS.foggy, borderColor: formMode === 'structured' ? COLORS.rausch : COLORS.deco } }, 'Structured'),
+            React.createElement('button', { className: 'ab-toggle-btn', onClick: function() { setFormMode('freetext'); }, style: { background: formMode === 'freetext' ? COLORS.rausch : COLORS.white, color: formMode === 'freetext' ? COLORS.white : COLORS.foggy, borderColor: formMode === 'freetext' ? COLORS.rausch : COLORS.deco } }, 'Free text')
+          )
+        ),
+        React.createElement('div', { style: { padding: '24px', background: COLORS.white } },
+          formMode === 'structured'
+            ? React.createElement(React.Fragment, null,
+                renderField('Agent Name', 'name', 'e.g. New-Hire Onboarding Assistant', false, null),
+                renderField('Purpose (1–2 sentences)', 'purpose', 'What is this agent for? Keep it focused. If the purpose keeps expanding, you may be describing more than one agent.', true, null),
+                renderField('Scope — Sources to include', 'scopeIn', 'e.g. #new-hires, the onboarding wiki, the HR support FAQs', true, null),
+                renderField('Scope — Topics or data this agent should NOT cover', 'scopeOut', 'e.g. individual employee records, performance data, compensation', true, null),
+                renderField('Instructions — What the agent does, step by step', 'instructions', "Describe what it does, how it responds, what it never says. This is your CRAFT prompt made permanent.", true, 'Context + Role + Action + Format + Target'),
+                React.createElement('div', { style: { marginBottom: 4 } },
+                  React.createElement('label', { style: { display: 'block', fontWeight: 700, fontSize: 14, color: COLORS.hof, marginBottom: 6, fontFamily: FONT } }, 'Escalation Rules (define at least 3)'),
+                  React.createElement('p', { style: { margin: '0 0 10px', fontSize: 12, color: COLORS.foggy, fontFamily: FONT } }, 'When should it hand off to a human?'),
+                  React.createElement('input', { className: 'ab-input', type: 'text', placeholder: 'Escalation rule 1', value: formVals.escalation1, onChange: function(e) { handleChange('escalation1', e.target.value); }, style: { marginBottom: 8 } }),
+                  React.createElement('input', { className: 'ab-input', type: 'text', placeholder: 'Escalation rule 2', value: formVals.escalation2, onChange: function(e) { handleChange('escalation2', e.target.value); }, style: { marginBottom: 8 } }),
+                  React.createElement('input', { className: 'ab-input', type: 'text', placeholder: 'Escalation rule 3', value: formVals.escalation3, onChange: function(e) { handleChange('escalation3', e.target.value); } })
+                )
+              )
+            : React.createElement(React.Fragment, null,
+                React.createElement('div', { style: { background: COLORS.faint, border: '1px solid ' + COLORS.deco, borderRadius: 12, padding: '14px 16px', marginBottom: 16 } },
+                  React.createElement('p', { style: { margin: 0, fontSize: 13, color: COLORS.foggy, lineHeight: 1.6, fontFamily: FONT } }, 'Prefer to write it out? Describe your agent in your own words. Cover: what it’s for, which sources it can use, what it should never say or do, how it should respond, and when it should hand off to a human. We’ll build your brief from this.')
+                ),
+                React.createElement('textarea', { className: 'ab-input', rows: 12, placeholder: 'e.g. I want to build an agent that answers onboarding questions for new hires. It should pull from our onboarding wiki and the #new-hires channel...', value: freeText, onChange: function(e) { handleFreeTextChange(e.target.value); } }),
+                freeText.trim().length > 0
+                  ? React.createElement('p', { style: { margin: '8px 0 0', fontSize: 12, color: freeText.trim().length > 30 ? COLORS.teal : COLORS.foggy, fontFamily: FONT, textAlign: 'right' } }, freeText.trim().length > 30 ? 'Looking good. Continue below or review your preview.' : 'Keep going — a bit more detail and your preview will activate.')
+                  : null
+              )
+        ),
+        React.createElement('div', { style: { padding: '16px 24px', background: COLORS.faint, borderTop: '1px solid ' + COLORS.deco, textAlign: 'right' } },
+          React.createElement('button', {
+            disabled: !isDefined,
+            style: { padding: '16px 32px', borderRadius: 12, background: COLORS.rausch, color: COLORS.white, border: 'none', cursor: isDefined ? 'pointer' : 'not-allowed', fontSize: 17, fontWeight: 600, fontFamily: FONT, transition: 'all 0.2s ease', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, opacity: isDefined ? 1 : 0.4 }
+          }, isDefined ? 'My agent is defined → Continue to testing' : 'Fill in all fields to continue')
+        )
+      ),
+
+      renderPreview(),
+
+      React.createElement('p', { style: { fontSize: 13, color: COLORS.foggy, textAlign: 'center', fontFamily: FONT } }, 'Continue below to test your agent before deployment.')
+    )
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(AgentBuilder));
+</script>
+</body>
+</html>
