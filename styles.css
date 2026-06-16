@@ -593,20 +593,27 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   gap: 1.5rem;
 }
 .proofstrip__intro { min-width: 0; }
-.proofstrip__nav { display: flex; gap: 0.5rem; flex-shrink: 0; }
+/* Connected ink stepper, not the default circular pill pair. Squared to echo
+   the cards; the divider and lime-on-ink hover make it brand-owned chrome. */
+.proofstrip__nav {
+  display: flex;
+  flex-shrink: 0;
+  border: 1px solid var(--ink);
+  border-radius: var(--r-card);
+  overflow: hidden;
+}
 .proofstrip__arrow {
-  width: 44px; height: 44px;
-  border-radius: var(--r-pill);
-  border: 1px solid var(--rule);
-  background: var(--paper);
+  width: 50px; height: 42px;
+  border: none;
+  background: transparent;
   color: var(--ink);
   display: inline-flex; align-items: center; justify-content: center;
   cursor: pointer;
-  transition: background 0.3s var(--ease), border-color 0.3s var(--ease),
-              color 0.3s var(--ease), opacity 0.3s var(--ease);
+  transition: background 0.3s var(--ease), color 0.3s var(--ease), opacity 0.3s var(--ease);
 }
-.proofstrip__arrow:hover { background: var(--ink); color: var(--lime); border-color: var(--ink); }
-.proofstrip__arrow:disabled { opacity: 0.3; cursor: default; }
+.proofstrip__arrow + .proofstrip__arrow { border-left: 1px solid var(--ink); }
+.proofstrip__arrow:hover:not(:disabled) { background: var(--ink); color: var(--lime); }
+.proofstrip__arrow:disabled { opacity: 0.22; cursor: default; }
 .proofstrip__kicker {
   display: block;
   font-family: var(--mono);
