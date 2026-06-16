@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>hero baseline demo · caboodle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css?v=20260613kk" />
+<style>
+  /* ---- The proposed change: the curtain DEPOSITS a colored baseline rule
+     under each headline line (line1 lime, line2 blue, line3 magenta) instead
+     of the color vanishing. Scoped to body.baseline so the toggle compares. */
+  body.baseline .hero__line {
+    border-bottom: 6px solid var(--lime);
+    padding-bottom: 0.16em;
+  }
+  body.baseline .hero__headline .hero__line:nth-child(2) { border-bottom-color: var(--blue); }
+  body.baseline .hero__headline .hero__line:nth-child(3) { border-bottom-color: var(--magenta); }
+
+  .demo-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 99;
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper); border: none; border-radius: 8px;
+    padding: 10px 16px; cursor: pointer;
+  }
+  .demo-tag {
+    position: fixed; top: 16px; left: 16px; z-index: 99;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-2);
+  }
+</style>
+</head>
+<body class="baseline">
+<span class="demo-tag" id="tag">variant: baseline ON</span>
+<button class="demo-toggle" id="toggle">toggle baseline</button>
+
+<section class="hero" id="top">
+  <div class="hero__frame">
+    <div class="hero__stamp">
+      <span>field note</span>
+      <span>grand rapids, mi · 2026</span>
+    </div>
+    <div class="hero__meta">
+      <span class="hero__eyebrow">ai program lead · behavior change · learning systems</span>
+    </div>
+    <h1 class="hero__headline">
+      <span class="hero__line"><span class="hero__line-inner">ai rollouts</span></span>
+      <span class="hero__line"><span class="hero__line-inner">that humans</span></span>
+      <span class="hero__line"><span class="hero__line-inner">actually <em>adopt.</em></span></span>
+    </h1>
+    <div class="hero__foot">
+      <p class="hero__lede">
+        Most AI rollouts change nothing. I lead the kind that do.
+        I'm Emily Green. 15 years of behavior change and learning
+        systems for Fortune 500s. Now leading AI programs the same way.
+        The&nbsp;whole&nbsp;caboodle.
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  var t = document.getElementById('toggle');
+  var tag = document.getElementById('tag');
+  t.addEventListener('click', function () {
+    document.body.classList.toggle('baseline');
+    var on = document.body.classList.contains('baseline');
+    tag.textContent = 'variant: baseline ' + (on ? 'ON' : 'OFF (current)');
+  });
+</script>
+</body>
+</html>
