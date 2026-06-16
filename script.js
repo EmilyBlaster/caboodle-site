@@ -1414,10 +1414,23 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     return (w + 18) * 1.5;
   }
 
+  /* Native scrollBy({behavior:'smooth'}) is a no-op on this rail (a scroll-snap
+     quirk), so animate scrollLeft by hand — reliable and still smooth. */
+  function smoothBy(delta) {
+    const start = rail.scrollLeft;
+    const target = Math.max(0, Math.min(rail.scrollWidth - rail.clientWidth, start + delta));
+    const t0 = performance.now(), dur = 420;
+    const ease = (t) => 1 - Math.pow(1 - t, 3);
+    (function tick(now) {
+      const t = Math.min(((now || performance.now()) - t0) / dur, 1);
+      rail.scrollLeft = start + (target - start) * ease(t);
+      if (t < 1) requestAnimationFrame(tick);
+    })(t0);
+  }
   arrows.forEach((btn) => {
     btn.addEventListener('click', () => {
       const dir = Number(btn.dataset.proofDir) || 1;
-      rail.scrollBy({ left: dir * step(), behavior: 'smooth' });
+      smoothBy(dir * step());
     });
   });
 
