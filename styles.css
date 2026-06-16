@@ -585,7 +585,7 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 }
 .proofstrip__head {
   max-width: var(--maxw);
-  margin: 0 auto 1.6rem;
+  margin: 0 auto 1.1rem;
   padding: 0 var(--pad-x);
   display: flex;
   align-items: flex-end;
@@ -627,16 +627,21 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 /* Horizontal rail — scroll-snap, peeks the next tile to invite scrolling */
 .proofstrip__rail {
   display: flex;
-  gap: 1.1rem;
+  gap: clamp(1.25rem, 1.8vw, 2rem);
   overflow-x: auto;
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
-  /* Contained to the page's content column so the tiles align with the rest
-     of the site (left AND right) and don't bleed past it on wide screens. */
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 0.5rem var(--pad-x) 1.25rem;
-  scroll-padding-left: var(--pad-x);
+  counter-reset: proofcard;
+  /* One shared tile height so the lead tile can be wider without a ragged row. */
+  --tile-h: clamp(210px, 18.75vw, 300px);
+  /* Full-bleed: the rail runs to the right edge so the strip owns the page on
+     wide screens instead of sitting marooned in a centered 1440 box. The first
+     tile stays aligned to the content column (the head above it is capped at
+     --maxw), and the last tiles bleed off the right behind the fade. */
+  padding: 0.5rem 0 1.5rem;
+  padding-left: max(var(--pad-x), calc((100% - var(--maxw)) / 2 + var(--pad-x)));
+  padding-right: max(var(--pad-x), 9vw);
+  scroll-padding-left: max(var(--pad-x), calc((100% - var(--maxw)) / 2 + var(--pad-x)));
   /* Hide the scrollbar — it reads as cheap. The arrow buttons + the soft
      right-edge fade are the scroll affordance instead. */
   scrollbar-width: none;            /* Firefox */
@@ -654,7 +659,7 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
 .proofstrip__rail::-webkit-scrollbar { width: 0; height: 0; display: none; }
 .proofcard {
   flex: 0 0 auto;
-  width: clamp(255px, 30vw, 340px);
+  width: clamp(320px, 30vw, 520px);
   scroll-snap-align: start;
   text-decoration: none;
   color: inherit;
@@ -662,9 +667,12 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   flex-direction: column;
   gap: 0.7rem;
 }
+/* Lead tile runs wider (a cinematic anchor) at the shared height, so the rail
+   has a focal point instead of reading as five identical cards. */
+.proofcard:first-child { width: clamp(440px, 42vw, 680px); }
 .proofcard__shot {
   display: block;
-  aspect-ratio: 16 / 10;
+  height: var(--tile-h);
   overflow: hidden;
   border-radius: var(--r-card);
   border: 1px solid var(--rule);
@@ -697,9 +705,17 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   line-height: 1.4;
 }
 .proofcard__label b { color: var(--ink); font-weight: 500; }
+/* Catalogue index — a magenta field-journal number per artifact. Commits a
+   touch of brand color and reads like a filed entry, not a repeated card. */
+.proofcard__label { counter-increment: proofcard; }
+.proofcard__label::before {
+  content: counter(proofcard, decimal-leading-zero) "\00a0\00a0";
+  color: var(--magenta);
+  font-weight: 500;
+}
 
 /* Terminal "see all work" tile — slim rectangle, not a full artifact tile */
-.proofcard--more { width: 132px; }
+.proofcard--more { width: clamp(150px, 11vw, 190px); }
 .proofcard--more .proofcard__more {
   display: flex;
   align-items: center;
