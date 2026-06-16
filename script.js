@@ -1394,3 +1394,42 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     window.addEventListener('load', () => setTimeout(sweep, 400));
   }
 })();
+
+/* ==========================================================================
+   PROOF STRIP NAV — arrow buttons scroll the artifact rail (the scrollbar is
+   hidden, so these are the desktop scroll affordance). Buttons disable at the
+   start/end of the rail. Phones swipe, so the arrows are hidden there via CSS.
+   ========================================================================== */
+(function proofStripNav() {
+  'use strict';
+  const rail = document.querySelector('.proofstrip__rail');
+  if (!rail) return;
+  const arrows = Array.from(document.querySelectorAll('.proofstrip__arrow'));
+  if (!arrows.length) return;
+
+  /* One click moves ~1.5 tiles so it feels like browsing, not nudging. */
+  function step() {
+    const card = rail.querySelector('.proofcard');
+    const w = card ? card.getBoundingClientRect().width : 320;
+    return (w + 18) * 1.5;
+  }
+
+  arrows.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const dir = Number(btn.dataset.proofDir) || 1;
+      rail.scrollBy({ left: dir * step(), behavior: 'smooth' });
+    });
+  });
+
+  function update() {
+    const max = rail.scrollWidth - rail.clientWidth - 2;
+    arrows.forEach((btn) => {
+      const dir = Number(btn.dataset.proofDir);
+      if (dir < 0) btn.disabled = rail.scrollLeft <= 2;
+      else         btn.disabled = rail.scrollLeft >= max;
+    });
+  }
+  rail.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();

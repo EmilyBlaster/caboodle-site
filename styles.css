@@ -587,7 +587,26 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   max-width: var(--maxw);
   margin: 0 auto 1.6rem;
   padding: 0 var(--pad-x);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
 }
+.proofstrip__intro { min-width: 0; }
+.proofstrip__nav { display: flex; gap: 0.5rem; flex-shrink: 0; }
+.proofstrip__arrow {
+  width: 44px; height: 44px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease),
+              color 0.3s var(--ease), opacity 0.3s var(--ease);
+}
+.proofstrip__arrow:hover { background: var(--ink); color: var(--lime); border-color: var(--ink); }
+.proofstrip__arrow:disabled { opacity: 0.3; cursor: default; }
 .proofstrip__kicker {
   display: block;
   font-family: var(--mono);
@@ -612,15 +631,14 @@ body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   overflow-x: auto;
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
+  /* Contained to the page's content column so the tiles align with the rest
+     of the site (left AND right) and don't bleed past it on wide screens. */
+  max-width: var(--maxw);
+  margin: 0 auto;
   padding: 0.5rem var(--pad-x) 1.25rem;
-  /* Align the first tile with the page's content column (the kicker/dek) and
-     tell scroll-snap to respect that start — otherwise snap pulls the first
-     tile flush to the window edge on screens wider than --maxw. */
-  padding-left: max(var(--pad-x), calc((100% - var(--maxw)) / 2 + var(--pad-x)));
-  scroll-padding-left: max(var(--pad-x), calc((100% - var(--maxw)) / 2 + var(--pad-x)));
-  /* Hide the scrollbar — it reads as cheap. Scroll still works via
-     trackpad/swipe; the peeking next tile + the soft right-edge fade signal
-     there's more without an ugly bar. */
+  scroll-padding-left: var(--pad-x);
+  /* Hide the scrollbar — it reads as cheap. The arrow buttons + the soft
+     right-edge fade are the scroll affordance instead. */
   scrollbar-width: none;            /* Firefox */
   -ms-overflow-style: none;         /* legacy Edge */
   -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 3rem), transparent 100%);
