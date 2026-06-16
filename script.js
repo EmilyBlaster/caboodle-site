@@ -1418,7 +1418,14 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
      quirk), so animate scrollLeft by hand — reliable and still smooth. */
   function smoothBy(delta) {
     const start = rail.scrollLeft;
-    const target = Math.max(0, Math.min(rail.scrollWidth - rail.clientWidth, start + delta));
+    const max = rail.scrollWidth - rail.clientWidth;
+    const half = step() / 2;
+    let target = start + delta;
+    /* Snap to the very start/end when we land within half a step of it, so the
+       first/last tile is never left partly clipped after a click. */
+    if (target < half) target = 0;
+    else if (target > max - half) target = max;
+    target = Math.max(0, Math.min(max, target));
     const t0 = performance.now(), dur = 420;
     let done = false;
     const ease = (t) => 1 - Math.pow(1 - t, 3);
@@ -1441,11 +1448,15 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
   function update() {
     const max = rail.scrollWidth - rail.clientWidth - 2;
+    const atStart = rail.scrollLeft <= 2;
+    const atEnd = rail.scrollLeft >= max;
     arrows.forEach((btn) => {
       const dir = Number(btn.dataset.proofDir);
-      if (dir < 0) btn.disabled = rail.scrollLeft <= 2;
-      else         btn.disabled = rail.scrollLeft >= max;
+      btn.disabled = dir < 0 ? atStart : atEnd;
     });
+    /* Fade only the side that still has tiles to reach. */
+    rail.classList.toggle('fade-left', !atStart);
+    rail.classList.toggle('fade-right', !atEnd);
   }
   rail.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update);
