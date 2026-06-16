@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../styles.css?v=20260613kk" />
+<link rel="stylesheet" href="../styles.css?v=20260613ll" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 
 <style>
@@ -92,8 +92,10 @@
   color: rgba(255,255,255,0.6);
   max-width: 52ch;
   margin-bottom: 2rem;
+  text-wrap: pretty;   /* no orphaned last-line words (widows) */
 }
 .labero__lede--lead {
+  text-wrap: balance;  /* even line lengths on the display lede */
   color: rgba(255,255,255,0.92);
   font-family: var(--display);
   font-weight: 700;
@@ -708,6 +710,6 @@
 })();
 </script>
 
-<script src="../script.js?v=20260613kk" defer></script>
+<script src="../script.js?v=20260613ll" defer></script>
 </body>
 </html>

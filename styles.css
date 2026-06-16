@@ -222,6 +222,11 @@ em { font-style: italic; color: var(--blue); }
 body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   --logo-word: var(--white);
 }
+/* ...and light the nav links too, so they aren't dark-on-dark over the dark
+   page. When scrolled, the nav frosts to light and links revert to ink. */
+body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
+  color: var(--white);
+}
 
 /* Closing-card stamp mark — symbol only, used inside dark stamps */
 .cd-stamp-mark {
