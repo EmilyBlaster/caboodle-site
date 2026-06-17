@@ -607,6 +607,12 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 @media (prefers-reduced-motion: reduce) {
   .reel__video { -webkit-mask-image: none; mask-image: none; }
 }
+/* Phones get the portrait cut (loaded by script.js) with a taller band and no
+   edge mask (the mobile cut ends in a solid label bar). */
+@media (max-width: 700px) {
+  .reel { aspect-ratio: 4 / 5; }
+  .reel__video { -webkit-mask-image: none; mask-image: none; }
+}
 
 /* ==========================================================================
    PROOF STRIP — retired (superseded by .reel above); kept for any other surface.

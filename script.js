@@ -1496,6 +1496,13 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   'use strict';
   const vid = document.querySelector('.reel__video');
   if (!vid) return;
+  /* Phones load the portrait cut instead of the 16:9 desktop reel. */
+  if (window.matchMedia('(max-width: 700px)').matches) {
+    const ms = vid.getAttribute('data-mobile-src');
+    const mp = vid.getAttribute('data-mobile-poster');
+    const src = vid.querySelector('source');
+    if (ms && src) { src.src = ms; if (mp) vid.setAttribute('poster', mp); vid.load(); }
+  }
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   function apply() {
     if (reduce.matches) {
