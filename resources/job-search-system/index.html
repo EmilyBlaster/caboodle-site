@@ -692,7 +692,7 @@ body[data-mode="conservative"] .closing-contact .block .val { text-transform: no
     <p class="lede">This is a three-layer setup. Master files keep both layers honest. The scan keeps you informed without doomscrolling LinkedIn. The tailoring pass keeps applications high-quality without starting from a blank page each time.</p>
 
     <table class="doc-table" aria-describedby="mental-model-caption">
-      <caption id="mental-model-caption">The mental model — increasing automation, decreasing involvement</caption>
+      <caption id="mental-model-caption">The mental model: increasing automation, decreasing involvement</caption>
       <thead>
         <tr>
           <th scope="col" style="width: 1.6in;">Layer</th>
@@ -721,7 +721,7 @@ body[data-mode="conservative"] .closing-contact .block .val { text-transform: no
 
     <div class="callout">
       <span class="lbl">Why tailoring stays manual</span>
-      <p style="margin:0;">You could automate this too — have the scheduled task auto-generate materials for every flagged role. <strong>Don't.</strong> You want to read the JD yourself before deciding it's worth applying to. Auto-applying is a fast path to pattern-matched rejection and burned reputation with companies you actually care about.</p>
+      <p style="margin:0;">You could automate this too. Have the scheduled task auto-generate materials for every flagged role. <strong>Don't.</strong> You want to read the JD yourself before deciding it's worth applying to. Auto-applying is a fast path to pattern-matched rejection and burned reputation with companies you actually care about.</p>
     </div>
 
     <div class="part-marker">
@@ -754,7 +754,7 @@ body[data-mode="conservative"] .closing-contact .block .val { text-transform: no
       <h2 id="layer-1-title" class="part-heading">master files.</h2>
     </div>
 
-    <p>Before automating anything, you need clean source-of-truth files. Set these up first — the scheduled scan and the tailoring pass both point back here.</p>
+    <p>Before automating anything, you need clean source-of-truth files. Set these up first. The scheduled scan and the tailoring pass both point back here.</p>
 
     <ol class="steps">
       <li>
@@ -767,7 +767,7 @@ body[data-mode="conservative"] .closing-contact .block .val { text-transform: no
       </li>
       <li>
         <h4>folder structure.</h4>
-        <p style="margin:0;">Pick one folder on your computer where everything lives — master resume, branded versions, headshots, and tailored versions per company. Pointing Claude at one folder makes the whole workflow simpler.</p>
+        <p style="margin:0;">Pick one folder on your computer where everything lives: master resume, branded versions, headshots, and tailored versions per company. Pointing Claude at one folder makes the whole workflow simpler.</p>
       </li>
     </ol>
 
@@ -812,7 +812,7 @@ body[data-mode="conservative"] .closing-contact .block .val { text-transform: no
     <p>This is the piece that does morning research while you're still drinking coffee. In Cowork, ask: <em>"Create a scheduled task that scans job boards for me every weekday at 8am."</em> Cowork will load its schedule skill and walk you through it. The output is a <code class="inline">SKILL.md</code> file containing your brief.</p>
 
     <h3>what goes in the brief.</h3>
-    <p style="margin-bottom:8px;">Six sections. Be specific — the more specific the brief, the less noise comes back.</p>
+    <p style="margin-bottom:8px;">Six sections. Be specific. The more specific the brief, the less noise comes back.</p>
 
     <table class="doc-table" aria-describedby="brief-caption">
       <caption id="brief-caption">The six sections of a scheduled-scan brief</caption>
@@ -853,7 +853,7 @@ body[data-mode="conservative"] .closing-contact .block .val { text-transform: no
     </div>
 
     <h3>output format.</h3>
-    <p style="margin:0;">Tell it to keep updates short and direct. Say no to corporate fluff if you don't want it. The brief is where you set tone for everything that comes back — including how the scan reports to you each morning.</p>
+    <p style="margin:0;">Tell it to keep updates short and direct. Say no to corporate fluff if you don't want it. The brief is where you set tone for everything that comes back, including how the scan reports to you each morning.</p>
 
     <footer class="doc-footer">
       <span class="brand">caboodle design</span>
@@ -874,7 +874,7 @@ body[data-mode="conservative"] .closing-contact .block .val { text-transform: no
       <h2 id="layer-3-title" class="part-heading">per-role tailoring.</h2>
     </div>
 
-    <p>When the morning scan flags a role you want to pursue, this is the next step. For each role, you'll generate two files — a tailored resume and a tailored cover letter — both saved as <code class="inline">.docx</code> to your folder.</p>
+    <p>When the morning scan flags a role you want to pursue, this is the next step. For each role, you'll generate two files, a tailored resume and a tailored cover letter, both saved as <code class="inline">.docx</code> to your folder.</p>
 
     <h3>the prompt.</h3>
     <p style="margin:0 0 8px;">Open Cowork and say something like:</p>
@@ -905,7 +905,7 @@ Tailor my master resume and write a cover letter for it.
       </li>
       <li>
         <h4>saves both files.</h4>
-        <p style="margin:0;">Filenames include the company name so they're easy to find later — e.g. <code class="inline">resume-acme.docx</code>, <code class="inline">coverletter-acme.docx</code>.</p>
+        <p style="margin:0;">Filenames include the company name so they're easy to find later, e.g. <code class="inline">resume-acme.docx</code>, <code class="inline">coverletter-acme.docx</code>.</p>
       </li>
     </ol>
 
@@ -938,11 +938,11 @@ Tailor my master resume and write a cover letter for it.
 
     <ol class="checklist">
       <li>Build ATS-safe master resume (<code class="inline" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.25);color:var(--white);">.txt</code> and <code class="inline" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.25);color:var(--white);">.docx</code>).</li>
-      <li>Optional — build a branded portfolio version.</li>
+      <li>Optional: build a branded portfolio version.</li>
       <li>Create one folder for everything.</li>
       <li>Set up Cowork voice and preference rules.</li>
       <li>Write the scheduled-task brief (six sections).</li>
-      <li>Schedule it — daily, weekday mornings.</li>
+      <li>Schedule it, daily, weekday mornings.</li>
       <li>Add the read-only guardrail line.</li>
       <li>Test the first scan, refine the brief based on what comes back.</li>
       <li>When a role hits, run a tailoring pass.</li>

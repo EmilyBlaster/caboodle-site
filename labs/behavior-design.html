@@ -269,7 +269,7 @@
     <span class="lab-s__kicker">try it</span>
     <h2 class="lab-s__h">the interactive <em>micro-lesson</em></h2>
     <p class="lab-s__p">
-      Tell the system who you are and how you work. Watch the content adapt in real time — different framing, different depth, different scenario.
+      Tell the system who you are and how you work. Watch the content adapt in real time: different framing, different depth, different scenario.
     </p>
 
     <div class="lesson-shell" id="lesson-shell">
@@ -305,11 +305,11 @@
     <div class="about-grid">
       <div class="about-item">
         <span class="about-item__label">the problem</span>
-        <p class="about-item__p">Most digital learning is one-size-fits-all — same content, same depth, same examples regardless of who the learner is.</p>
+        <p class="about-item__p">Most digital learning is one-size-fits-all: same content, same depth, same examples regardless of who the learner is.</p>
       </div>
       <div class="about-item">
         <span class="about-item__label">the demonstration</span>
-        <p class="about-item__p">How a micro-lesson can adapt its framing, depth, and scenarios in real-time based on a few simple learner inputs — role and experience level.</p>
+        <p class="about-item__p">How a micro-lesson can adapt its framing, depth, and scenarios in real-time based on a few simple learner inputs: role and experience level.</p>
       </div>
       <div class="about-item">
         <span class="about-item__label">design techniques</span>
@@ -317,7 +317,7 @@
       </div>
       <div class="about-item">
         <span class="about-item__label">the annotation track</span>
-        <p class="about-item__p"><strong>Watch for the designer's notes</strong> alongside each step — they surface the design decision and its rationale. This is the thinking behind the thing.</p>
+        <p class="about-item__p"><strong>Watch for the designer's notes</strong> alongside each step: they surface the design decision and its rationale. This is the thinking behind the thing.</p>
       </div>
     </div>
 
@@ -360,7 +360,7 @@
         <em>something.</em>
       </h2>
       <p class="closing__p">
-        Behavior change over checkbox training. Send the shape of your problem and I'll tell you whether training is the answer — and what works better if it isn't.
+        Behavior change over checkbox training. Send the shape of your problem and I'll tell you whether training is the answer, and what works better if it isn't.
       </p>
       <a class="closing__cta" href="../contact.html">
         <span>start a conversation</span>
@@ -404,7 +404,7 @@
   </div>
 </footer>
 
-<script src="../script.js?v=20260617k" defer></script>
+<script src="../script.js?v=20260617l" defer></script>
 <script>
 // ============================================================
 // Behavior Design 101 — personalized micro-lesson
@@ -413,7 +413,7 @@
   const TOTAL_STEPS = 6;
   const STEP_NAMES = ['meet the learner', 'personalized intro', 'the behavior model', 'transition', 'apply it', 'reflect + summary'];
   const NOTES = {
-    0: "In production, this data comes from an HRIS or LMS profile — no intake form needed.",
+    0: "In production, this data comes from an HRIS or LMS profile. No intake form needed.",
     1: "3 content variants were authored. An AI-driven version could generate unlimited role-specific framings.",
     2: "Tap-to-reveal tests recognition, not recall. Genuine retrieval practice asks learners to generate answers first.",
     3: "This transition reduces cognitive load before the scenario. Without it, learners feel 'dropped in.'",
@@ -434,10 +434,10 @@
 
   const INTROS = {
     designer: {
-      role: "As a designer, you already think about how people interact with what you build. Behavior design gives you a framework to go deeper — designing not just for usability, but for action.",
+      role: "As a designer, you already think about how people interact with what you build. Behavior design gives you a framework to go deeper, designing not just for usability, but for action.",
     },
     manager: {
-      role: "As a manager, you see the gap between what people know and what they actually do. Behavior design helps you close that gap — moving your team from 'trained' to 'changed.'",
+      role: "As a manager, you see the gap between what people know and what they actually do. Behavior design helps you close that gap, moving your team from 'trained' to 'changed.'",
     },
     ld_pro: {
       role: "As an L&D professional, you've probably felt the frustration of building training that checks boxes but doesn't change behavior. This framework puts behavior change at the center of everything you design.",
@@ -445,7 +445,7 @@
   };
 
   const EXP_FRAMES = {
-    none: "We'll start from the fundamentals and build up — no jargon, just practical concepts you can use immediately.",
+    none: "We'll start from the fundamentals and build up. No jargon, just practical concepts you can use immediately.",
     some: "Since you've got some foundation, we'll move quickly through the basics and focus on application.",
     advanced: "You already know the territory, so we'll focus on a nuanced scenario that challenges even experienced practitioners."
   };
@@ -454,29 +454,29 @@
     none: [
       { label: "Motivation", detail: "The person needs a reason to act. This could be a reward, avoiding pain, or social pressure. But motivation alone isn't enough.", hint: "tap to reveal" },
       { label: "Ability", detail: "The behavior needs to be easy enough to do. If something is too hard or time-consuming, even motivated people won't do it.", hint: "tap to reveal" },
-      { label: "Prompt", detail: "Something has to trigger the behavior at the right moment. A notification, a visual cue, a question — without a prompt, nothing happens.", hint: "tap to reveal" }
+      { label: "Prompt", detail: "Something has to trigger the behavior at the right moment. A notification, a visual cue, a question. Without a prompt, nothing happens.", hint: "tap to reveal" }
     ],
     some: [
       { label: "Motivation", detail: "The person needs a reason to act. This could be a reward, avoiding pain, or social pressure. But motivation alone isn't enough.", hint: "tap to reveal" },
       { label: "Ability", detail: "The behavior needs to be easy enough to do. If something is too hard or time-consuming, even motivated people won't do it.", hint: "tap to reveal" },
-      { label: "Prompt", detail: "Something has to trigger the behavior at the right moment. A notification, a visual cue, a question — without a prompt, nothing happens.", hint: "tap to reveal" }
+      { label: "Prompt", detail: "Something has to trigger the behavior at the right moment. A notification, a visual cue, a question. Without a prompt, nothing happens.", hint: "tap to reveal" }
     ],
     advanced: [
       { label: "Motivation", detail: "Motivation is unreliable. Designing for motivation alone is designing for failure. The real lever is reducing friction.", hint: "tap to pressure-test" },
       { label: "Ability", detail: "Ability is where the real leverage is. Reduce friction before trying to increase motivation. The easier the behavior, the less motivation required.", hint: "tap to pressure-test" },
-      { label: "Prompt", detail: "Without a well-timed prompt, even motivated, able people won't act. This is where most training falls apart — no prompt at the moment of performance.", hint: "tap to pressure-test" }
+      { label: "Prompt", detail: "Without a well-timed prompt, even motivated, able people won't act. This is where most training falls apart: no prompt at the moment of performance.", hint: "tap to pressure-test" }
     ]
   };
 
   const SCENARIOS = {
     designer: {
-      situation: "You've designed a beautiful onboarding flow for a new app. Analytics show 90% of users complete it — but only 15% use the key feature it teaches within the first week.",
+      situation: "You've designed a beautiful onboarding flow for a new app. Analytics show 90% of users complete it, but only 15% use the key feature it teaches within the first week.",
       character: "Product Lead",
       quote: "The onboarding metrics look great, but feature adoption is flat. What should we try?",
       options: [
-        { label: "Add more detail", desc: "Expand the onboarding to explain the feature more thoroughly.", quality: "poor", icon: "📖", feedback: "More information rarely changes behavior. The users completed the onboarding — they have the knowledge. The gap is between knowing and doing.", consequence: "You'd likely see completion rates drop with no improvement in feature adoption." },
+        { label: "Add more detail", desc: "Expand the onboarding to explain the feature more thoroughly.", quality: "poor", icon: "📖", feedback: "More information rarely changes behavior. The users completed the onboarding. They have the knowledge. The gap is between knowing and doing.", consequence: "You'd likely see completion rates drop with no improvement in feature adoption." },
         { label: "Add contextual prompts", desc: "Surface the feature with a nudge when users hit the natural moment they'd need it.", quality: "best", icon: "🎯", feedback: "The knowledge is there, so the gap is a missing prompt at the right moment. A contextual nudge when users encounter the problem the feature solves closes the loop.", consequence: "Feature adoption jumps to 40% in the first week. Users feel like the app 'just gets them.'" },
-        { label: "Simplify the feature", desc: "Reduce the number of steps required to use the feature for the first time.", quality: "okay", icon: "🔧", feedback: "Good instinct — reducing friction is a strong lever. But first check: is the feature actually hard to use, or are users just not reaching for it?", consequence: "Adoption improves slightly, but the core issue — users forgetting the feature exists — remains." }
+        { label: "Simplify the feature", desc: "Reduce the number of steps required to use the feature for the first time.", quality: "okay", icon: "🔧", feedback: "Good instinct: reducing friction is a strong lever. But first check: is the feature actually hard to use, or are users just not reaching for it?", consequence: "Adoption improves slightly, but the core issue, users forgetting the feature exists, remains." }
       ]
     },
     manager: {
@@ -484,19 +484,19 @@
       character: "Team Member",
       quote: "I passed the training, I know the rules. I just... forget in the moment when things get busy.",
       options: [
-        { label: "Retake the training", desc: "Require the team to complete the course again, with a higher pass threshold.", quality: "poor", icon: "🔄", feedback: "If they passed at 95%, they know the content. Repeating information they've already learned won't change behavior — it'll just frustrate your team.", consequence: "Morale drops. Mistakes continue at the same rate because the problem was never knowledge." },
-        { label: "Add point-of-action aids", desc: "Place job aids, checklists, and visual cues at the exact locations where mistakes happen.", quality: "best", icon: "👁", feedback: "This addresses the prompt and ability components. People forget in the moment — a checklist at the point of action bridges the gap between training and performance.", consequence: "Error rates drop 60% in two weeks. The aids become part of the workflow." },
+        { label: "Retake the training", desc: "Require the team to complete the course again, with a higher pass threshold.", quality: "poor", icon: "🔄", feedback: "If they passed at 95%, they know the content. Repeating information they've already learned won't change behavior. It'll just frustrate your team.", consequence: "Morale drops. Mistakes continue at the same rate because the problem was never knowledge." },
+        { label: "Add point-of-action aids", desc: "Place job aids, checklists, and visual cues at the exact locations where mistakes happen.", quality: "best", icon: "👁", feedback: "This addresses the prompt and ability components. People forget in the moment, and a checklist at the point of action bridges the gap between training and performance.", consequence: "Error rates drop 60% in two weeks. The aids become part of the workflow." },
         { label: "Real-time coaching", desc: "Have managers observe and provide coaching during the task as it happens.", quality: "okay", icon: "👥", feedback: "Real-time coaching provides both a prompt and social motivation. But it's resource-intensive and doesn't scale.", consequence: "Mistakes decrease while managers are watching. But errors creep back when attention moves elsewhere." }
       ]
     },
     ld_pro: {
       situation: "A stakeholder asks you to build a 45-minute e-learning module on 'data privacy best practices.' They've already written 30 slides of content.",
       character: "Stakeholder",
-      quote: "Here are the slides — can you just make them interactive? Maybe add some quizzes? We need this by Friday.",
+      quote: "Here are the slides. Can you just make them interactive? Maybe add some quizzes? We need this by Friday.",
       options: [
         { label: "Build as requested", desc: "Convert the 30 slides into an interactive module with knowledge checks throughout.", quality: "poor", icon: "📋", feedback: "This is the path of least resistance, but also the path to shelf-ware. 30 slides is information, not behavior change. Your role is to challenge 'more content = better training.'", consequence: "The module launches on time. Six months later, the same data breaches are happening." },
         { label: "Reframe around behaviors", desc: "Ask 'What mistakes are people making?' and design around those specific behaviors instead.", quality: "best", icon: "🎯", feedback: "This is action mapping in practice. By identifying actual performance gaps, you design targeted practice around the 3-4 decisions that matter most.", consequence: "You co-design 4 scenario-based micro-experiences targeting real mistakes. 12 minutes, not 45. Incident reports drop 35%." },
-        { label: "Shorten the content", desc: "Suggest condensing the 30 slides into a focused 15-minute micro-lesson.", quality: "okay", icon: "⏱", feedback: "Shorter is often better, but shorter information is still just information. The format isn't the problem — the approach is.", consequence: "Learners appreciate the brevity. But behavior doesn't change because the content still teaches knowledge, not action." }
+        { label: "Shorten the content", desc: "Suggest condensing the 30 slides into a focused 15-minute micro-lesson.", quality: "okay", icon: "⏱", feedback: "Shorter is often better, but shorter information is still just information. The format isn't the problem, the approach is.", consequence: "Learners appreciate the brevity. But behavior doesn't change because the content still teaches knowledge, not action." }
       ]
     }
   };
@@ -548,7 +548,7 @@
     if (step === 0) {
       body.innerHTML = `
         <div>
-          <p style="font-size:0.95rem;color:var(--ink-2);margin-bottom:1.5rem;line-height:1.6">Tell the system who you are. This shapes everything that follows — framing, depth, and the scenario you'll work through.</p>
+          <p style="font-size:0.95rem;color:var(--ink-2);margin-bottom:1.5rem;line-height:1.6">Tell the system who you are. This shapes everything that follows: framing, depth, and the scenario you'll work through.</p>
           <div class="intake-field">
             <label class="intake-label" for="il-name">your name</label>
             <input class="intake-input" id="il-name" type="text" placeholder="first name" value="${profile.name}" autocomplete="off" />
@@ -589,7 +589,7 @@
 
     else if (step === 2) {
       const principles = PRINCIPLES[profile.experience] || PRINCIPLES.none;
-      const title = profile.experience === 'advanced' ? 'the behavior model — pressure-test it.' : profile.experience === 'some' ? 'the behavior model — quick review.' : 'the behavior model.';
+      const title = profile.experience === 'advanced' ? 'the behavior model: pressure-test it.' : profile.experience === 'some' ? 'the behavior model: quick review.' : 'the behavior model.';
       const subtitle = profile.experience === 'none'
         ? 'Every behavior requires three things to happen at the same moment. Tap each to reveal.'
         : profile.experience === 'advanced'
@@ -625,7 +625,7 @@
         <div style="display:flex;flex-direction:column;justify-content:center;flex:1;padding:1rem 0">
           <p style="font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--magenta);margin-bottom:0.5rem">up next</p>
           <h3 style="font-family:var(--display);font-weight:700;font-size:clamp(1.5rem,3vw,2.25rem);letter-spacing:-0.04em;text-transform:lowercase;line-height:1.05;margin-bottom:0.75rem">a scenario<br><em>built for ${role.toLowerCase()}s.</em></h3>
-          <p style="font-size:0.9rem;color:var(--ink-2);max-width:44ch;line-height:1.6">You've seen the model. Now apply it. Read the situation, consider the character's question, and pick the best response — then see why it works (or doesn't).</p>
+          <p style="font-size:0.9rem;color:var(--ink-2);max-width:44ch;line-height:1.6">You've seen the model. Now apply it. Read the situation, consider the character's question, and pick the best response, then see why it works (or doesn't).</p>
           ${noteHtml(3)}
         </div>
       `;
@@ -636,7 +636,7 @@
       body.innerHTML = `
         <div>
           <div class="scenario-situation">${scenario.situation}</div>
-          <div class="scenario-quote">"${scenario.quote}" — ${scenario.character}</div>
+          <div class="scenario-quote">"${scenario.quote}", ${scenario.character}</div>
           <div class="choice-btns" id="choice-btns">
             ${scenario.options.map((opt, i) => `
               <button class="choice-btn choice-btn--${opt.quality}${selectedChoice!==null?' selected':''}" data-i="${i}" ${selectedChoice!==null?'disabled':''}>
@@ -644,7 +644,7 @@
                 <div>
                   <div class="choice-label">${opt.label}</div>
                   <div class="choice-desc">${opt.desc}</div>
-                  <div class="choice-feedback${selectedChoice===i?' visible':''}"><strong>${opt.quality==='best'?'✓ best choice':opt.quality==='okay'?'partial':'not quite'}</strong> — ${opt.feedback}</div>
+                  <div class="choice-feedback${selectedChoice===i?' visible':''}"><strong>${opt.quality==='best'?'✓ best choice':opt.quality==='okay'?'partial':'not quite'}</strong>: ${opt.feedback}</div>
                   <div class="consequence${selectedChoice===i?' visible':''}">${opt.consequence}</div>
                 </div>
               </button>
@@ -670,7 +670,7 @@
       body.innerHTML = `
         <div>
           <h3 style="font-family:var(--display);font-weight:700;font-size:1.2rem;text-transform:lowercase;letter-spacing:-0.02em;margin-bottom:0.3rem">reflect.</h3>
-          <p class="reflection-q">Where in your actual work could you apply the behavior model this week? Be specific — name the context, the behavior, and the lever you'd pull.</p>
+          <p class="reflection-q">Where in your actual work could you apply the behavior model this week? Be specific: name the context, the behavior, and the lever you'd pull.</p>
           <textarea class="reflection-area" id="reflection-area" placeholder="Your answer...">${reflection}</textarea>
           ${noteHtml(5)}
           <h4 style="font-family:var(--display);font-weight:700;font-size:1rem;text-transform:lowercase;letter-spacing:-0.01em;margin:1.5rem 0 0.75rem">what this lesson demonstrated</h4>

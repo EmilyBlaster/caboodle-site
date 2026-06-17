@@ -240,7 +240,7 @@ function AgentBuilder() {
     React.createElement('style', null, css),
     React.createElement('div', { ref: containerRef, style: { fontFamily: FONT, maxWidth: 880, margin: '0 auto', padding: isMobile ? '32px 22px' : '64px 56px', color: C.ink, boxSizing: 'border-box' } },
 
-      React.createElement('div', { style: Object.assign({}, kicker, { color: C.muted, marginBottom: 20 }) }, 'Module 04 — Lesson 03 / performance task'),
+      React.createElement('div', { style: Object.assign({}, kicker, { color: C.muted, marginBottom: 20 }) }, 'Module 04, Lesson 03 / performance task'),
       React.createElement('h1', { style: { fontFamily: SERIF, fontSize: isMobile ? 44 : 76, fontWeight: 600, lineHeight: 0.98, letterSpacing: '-0.015em', margin: '0 0 18px', color: C.ink } }, 'The Agent Builder'),
       React.createElement('p', { style: { fontSize: isMobile ? 16 : 19, color: C.inkSoft, margin: '0 0 44px', lineHeight: 1.5, maxWidth: '42ch', fontFamily: FONT } }, 'Define an AI agent, then put it to work. Watch it answer in scope, refuse what’s off-limits, and escalate what needs a human.'),
 
@@ -260,10 +260,10 @@ function AgentBuilder() {
           ? React.createElement(React.Fragment, null,
               field('Agent name', 'name', 'e.g. New-Hire Onboarding Assistant', false, null),
               field('Purpose', 'purpose', 'What is this agent for? Keep it to one job.', true, null),
-              field('Scope — sources it can use', 'scopeIn', 'e.g. the onboarding wiki, the #new-hires channel, the HR FAQs', true, null),
-              field('Scope — what it must never touch', 'scopeOut', 'e.g. individual employee records, performance reviews, compensation', true, null),
-              field('Instructions — how it should respond', 'instructions', 'Voice, what it cites, what it never says. Your CRAFT prompt, made permanent.', true, 'Context + Role + Action + Format + Target'),
-              React.createElement('label', { style: fieldLabel }, 'Escalation rules — when to hand off to a human'),
+              field('Scope: sources it can use', 'scopeIn', 'e.g. the onboarding wiki, the #new-hires channel, the HR FAQs', true, null),
+              field('Scope: what it must never touch', 'scopeOut', 'e.g. individual employee records, performance reviews, compensation', true, null),
+              field('Instructions: how it should respond', 'instructions', 'Voice, what it cites, what it never says. Your CRAFT prompt, made permanent.', true, 'Context + Role + Action + Format + Target'),
+              React.createElement('label', { style: fieldLabel }, 'Escalation rules: when to hand off to a human'),
               React.createElement('input', { className: 'ab-input', type: 'text', placeholder: 'Escalation rule 1', value: formVals.escalation1, onChange: function(e){ handleChange('escalation1', e.target.value); }, style: { marginBottom: 8 } }),
               React.createElement('input', { className: 'ab-input', type: 'text', placeholder: 'Escalation rule 2', value: formVals.escalation2, onChange: function(e){ handleChange('escalation2', e.target.value); }, style: { marginBottom: 8 } }),
               React.createElement('input', { className: 'ab-input', type: 'text', placeholder: 'Escalation rule 3', value: formVals.escalation3, onChange: function(e){ handleChange('escalation3', e.target.value); } })

@@ -238,7 +238,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       const pad = String(idx + 1).padStart(2, '0');
       const tot = String(total).padStart(2, '0');
       if (counter) counter.innerHTML = `<em>${pad}</em> / ${tot}`;
-      if (caption) caption.innerHTML = `<span>${s.dataset.label || ''}</span><b>${s.dataset.title || ''}</b>${s.dataset.desc ? ' — ' + s.dataset.desc : ''}`;
+      if (caption) caption.innerHTML = `<span>${s.dataset.label || ''}</span><b>${s.dataset.title || ''}</b>${s.dataset.desc ? ' · ' + s.dataset.desc : ''}`;
     }
 
     prev && prev.addEventListener('click', () => go(idx - 1));
@@ -783,7 +783,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
         '</svg>' +
         '<span>field guide</span>' +
       '</button>' +
-      '<div class="guide-panel" id="guidePanel" aria-hidden="true" role="dialog" aria-label="Field guide — ask about emily green and caboodle design">' +
+      '<div class="guide-panel" id="guidePanel" aria-hidden="true" role="dialog" aria-label="Field guide: ask about emily green and caboodle design">' +
         '<div class="guide-panel__chrome">' +
           '<div class="guide-panel__status">' +
             '<span class="guide-panel__dot" aria-hidden="true"></span>' +
@@ -821,7 +821,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   const NODES = {
 
     start: {
-      msg: 'field guide online. ask me anything — work stuff, methodology, or the important things like her coffee order.',
+      msg: 'field guide online. ask me anything: work stuff, methodology, or the important things like her coffee order.',
       chips: [
         { label: 'emily\'s background', next: 'background' },
         { label: 'clients + work',      next: 'clients'    },
@@ -834,7 +834,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
     /* ── Background branch ── */
     background: {
-      msg: 'emily green is the founder of caboodle design. she designs learning that actually changes what people do — for apple, airbnb, gitlab, intuit, t-mobile, and j&j. behavioral science, instructional design, media production, and UX all in one place. ai is a field tool here, not a shortcut. <a class="guide-link" href="about.html">more about emily →</a>',
+      msg: 'emily green is the founder of caboodle design. she designs learning that actually changes what people do, for apple, airbnb, gitlab, intuit, t-mobile, and j&j. behavioral science, instructional design, media production, and UX all in one place. ai is a field tool here, not a shortcut. <a class="guide-link" href="about.html">more about emily →</a>',
       chips: [
         { label: 'her approach',  next: 'approach'  },
         { label: 'where based?',  next: 'location'  },
@@ -844,7 +844,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     },
 
     approach: {
-      msg: 'she treats learning design like anthropology — show up, study how things actually work, then design for how people actually change. not how training assumes they should. she\'s pretty allergic to training that exists just to say training happened.',
+      msg: 'she treats learning design like anthropology: show up, study how things actually work, then design for how people actually change. not how training assumes they should. she\'s pretty allergic to training that exists just to say training happened.',
       chips: [
         { label: 'action mapping',    next: 'actionmap'   },
         { label: 'kirkpatrick model', next: 'kirkpatrick' },
@@ -862,7 +862,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     },
 
     kirkpatrick: {
-      msg: 'four levels: reaction, learning, behavior, results. most L&D stops at 1 and 2 — did people like it, did they pass the quiz. emily designs to 3 and 4 — did behavior actually change on the job? can you measure it? that\'s the real bar.',
+      msg: 'four levels: reaction, learning, behavior, results. most L&D stops at 1 and 2: did people like it, did they pass the quiz. emily designs to 3 and 4: did behavior actually change on the job? can you measure it? that\'s the real bar.',
       chips: [
         { label: 'action mapping', next: 'actionmap' },
         { label: '← back',        next: 'method'    },
@@ -870,7 +870,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     },
 
     location: {
-      msg: 'grand rapids, michigan. but she works remotely with clients everywhere — apple, airbnb, gitlab are all remote engagements. the zip code doesn\'t limit the work.',
+      msg: 'grand rapids, michigan. but she works remotely with clients everywhere: apple, airbnb, gitlab are all remote engagements. the zip code doesn\'t limit the work.',
       chips: [
         { label: '← back', next: 'background' }
       ]
@@ -885,7 +885,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
     /* ── Methodology branch ── */
     method: {
-      msg: 'action mapping and kirkpatrick — applied anthropologically. she studies what\'s actually causing the behavior gap before designing anything. spoiler: it\'s usually not a content problem.',
+      msg: 'action mapping and kirkpatrick, applied anthropologically. she studies what\'s actually causing the behavior gap before designing anything. spoiler: it\'s usually not a content problem.',
       chips: [
         { label: 'action mapping',    next: 'actionmap'   },
         { label: 'kirkpatrick model', next: 'kirkpatrick' },
@@ -895,7 +895,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
     /* ── Clients branch ── */
     clients: {
-      msg: 'apple, airbnb, gitlab, johnson & johnson, t-mobile, intuit. each engagement is scoped to actual behavior change — not "we need a course." she\'ll push back if the problem doesn\'t call for training. <a class="guide-link" href="work.html">see the case files →</a>',
+      msg: 'apple, airbnb, gitlab, johnson & johnson, t-mobile, intuit. each engagement is scoped to actual behavior change, not "we need a course." she\'ll push back if the problem doesn\'t call for training. <a class="guide-link" href="work.html">see the case files →</a>',
       chips: [
         { label: 'kind of work', next: 'worktype' },
         { label: 'results',      next: 'results'  },
@@ -985,7 +985,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     },
 
     alter: {
-      msg: 'reporter. she\'s basically doing that anyway — shows up, studies how things actually work, then translates it for the people who need to act on it. the job descriptions aren\'t that different.',
+      msg: 'reporter. she\'s basically doing that anyway: shows up, studies how things actually work, then translates it for the people who need to act on it. the job descriptions aren\'t that different.',
       chips: [
         { label: 'industry hot take?', next: 'hottake' },
         { label: '← fun stuff',       next: 'fun'     },
@@ -1009,7 +1009,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     },
 
     loves: {
-      msg: 'empowering people. when the right training actually changes what someone can do — when a manager has a conversation they couldn\'t have before, or a new hire gets up to speed in half the time — that\'s the whole point.',
+      msg: 'empowering people. when the right training actually changes what someone can do, when a manager has a conversation they couldn\'t have before, or a new hire gets up to speed in half the time, that\'s the whole point.',
       chips: [
         { label: 'contact emily', next: 'contact' },
         { label: '← fun stuff',  next: 'fun'     },
@@ -1093,7 +1093,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       if (matched) {
         goTo(matched);
       } else {
-        addMsg('i don\'t have a specific answer for that — here\'s what i know best:', 'bot');
+        addMsg('i don\'t have a specific answer for that. here\'s what i know best:', 'bot');
         renderChips(NODES.start.chips);
       }
     }, 280);
