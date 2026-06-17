@@ -117,13 +117,14 @@
       'body { align-items: stretch !important; justify-content: flex-start !important; }',
       /* The diagram is a fixed 1920px canvas scaled down to fit, so its labels
          render tiny. Scale the mono + text variables up for readability. */
-      ':root { --mono-sm: 1.12rem !important; --mono-md: 1.2rem !important; --mono-lg: 1.3rem !important; --text-sm: 1.32rem !important; --text-md: 1.44rem !important; --text-lg: 1.56rem !important; }',
+      ':root { --mono-sm: 0.88rem !important; --mono-md: 0.95rem !important; --mono-lg: 1.02rem !important; --text-sm: 1.08rem !important; --text-md: 1.16rem !important; --text-lg: 1.26rem !important; }',
       /* The kicker numbers (01-05), sub-labels and mono chrome use hardcoded
-         inline px sizes, not the variables, so override those px directly. */
-      '[style*="font-size: 11px"] { font-size: 18px !important; }',
-      '[style*="font-size: 12px"] { font-size: 19px !important; }',
-      '[style*="font-size: 13px"] { font-size: 19px !important; }',
-      '[style*="font-size: 14px"] { font-size: 20px !important; }',
+         inline px sizes, not the variables, so override those px directly.
+         Kept moderate so the dense labels stay readable but don't wrap/collide. */
+      '[style*="font-size: 11px"] { font-size: 14px !important; }',
+      '[style*="font-size: 12px"] { font-size: 14px !important; }',
+      '[style*="font-size: 13px"] { font-size: 15px !important; }',
+      '[style*="font-size: 14px"] { font-size: 15px !important; }',
       /* Embed shell: full width, position:relative so controls can overlay */
       '.embed-shell { position: relative !important; max-width: 100% !important; gap: 0 !important; }',
       /* Remove height cap so arc scales naturally */
@@ -232,13 +233,17 @@
       'html, body { padding: 0 !important; margin: 0 !important; overflow: hidden !important; }',
       'body { align-items: stretch !important; justify-content: flex-start !important; }',
       /* Bigger type for readability (1920px canvas scaled down makes labels tiny). */
-      ':root { --mono-sm: 1.42rem !important; --mono-md: 1.52rem !important; --mono-lg: 1.62rem !important; --text-sm: 1.62rem !important; --text-md: 1.74rem !important; --text-lg: 1.86rem !important; }',
+      ':root { --mono-sm: 1.04rem !important; --mono-md: 1.12rem !important; --mono-lg: 1.2rem !important; --text-sm: 1.24rem !important; --text-md: 1.34rem !important; --text-lg: 1.44rem !important; }',
       /* Kicker numbers, sub-labels and mono chrome use hardcoded inline px
-         sizes, not the variables. The ladder scales down harder, so bump more. */
-      '[style*="font-size: 11px"] { font-size: 21px !important; }',
-      '[style*="font-size: 12px"] { font-size: 22px !important; }',
-      '[style*="font-size: 13px"] { font-size: 22px !important; }',
-      '[style*="font-size: 14px"] { font-size: 23px !important; }',
+         sizes, not the variables. Moderate bump (ladder scales smaller) so the
+         labels read but the caption/credits row doesn't collide. */
+      '[style*="font-size: 11px"] { font-size: 15px !important; }',
+      /* 12px = the AM/KP credits (and kickers) and 13px = the centered footer
+         caption all share the tight bottom row; keep them at their original
+         sizes (which fit side by side) so they don't collide. */
+      '[style*="font-size: 12px"] { font-size: 12px !important; }',
+      '[style*="font-size: 13px"] { font-size: 12px !important; }',
+      '[style*="font-size: 14px"] { font-size: 16px !important; }',
       '.embed-shell { max-width: 100% !important; }',
       '.arc-embed { max-height: none !important; }',
       /* Hide the note text */
