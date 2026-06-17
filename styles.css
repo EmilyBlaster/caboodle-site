@@ -879,7 +879,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 }
 .approach__title em { font-style: italic; color: var(--blue); }
 .approach__dek {
-  grid-column: 2 / 3;
+  grid-column: 1 / -1;
   margin: 0;
   max-width: 44ch;
   font-size: 1.05rem;
@@ -2064,7 +2064,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 }
 .labs__title em { font-style: italic; color: var(--magenta); }
 .labs__dek {
-  grid-column: 2 / 3;
+  grid-column: 1 / -1;
   margin: 0;
   max-width: 48ch;
   font-size: 1.05rem;
