@@ -583,9 +583,33 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 }
 
 /* ==========================================================================
-   PROOF STRIP — instant visual proof. A horizontally-scrollable rail of real
-   work artifacts, placed between the Fortune 500 logos and the detailed
-   dossiers so a fast scan sees actual shipped work, not just claims.
+   FIELD REEL — full-bleed "selected work in motion" right after the hero.
+   Renders on a paper base that matches --paper so the loop seam is invisible;
+   a contained 2:1 band (not a second full screen) with the very top/bottom
+   edges melted into the page. Replaces the old static proof strip.
+   ========================================================================== */
+.reel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  background: var(--paper);
+  overflow: hidden;
+}
+.reel__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 1.6%, #000 98.4%, transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 0, #000 1.6%, #000 98.4%, transparent 100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reel__video { -webkit-mask-image: none; mask-image: none; }
+}
+
+/* ==========================================================================
+   PROOF STRIP — retired (superseded by .reel above); kept for any other surface.
    ========================================================================== */
 .proofstrip {
   padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(1.5rem, 3vw, 2.5rem);

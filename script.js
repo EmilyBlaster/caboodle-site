@@ -1489,3 +1489,24 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   /* Fail-safe: never leave the strip hidden if the observer never fires. */
   setTimeout(reveal, 2600);
 })();
+
+/* Field reel: honour reduced-motion (park on a work frame, no loop) and nudge
+   playback in browsers that defer muted autoplay. */
+(function fieldReelMotion() {
+  'use strict';
+  const vid = document.querySelector('.reel__video');
+  if (!vid) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function apply() {
+    if (reduce.matches) {
+      vid.removeAttribute('autoplay');
+      try { vid.pause(); vid.currentTime = 4.8; } catch (e) {}
+    } else {
+      const p = vid.play();
+      if (p && p.catch) p.catch(() => {});
+    }
+  }
+  apply();
+  if (reduce.addEventListener) reduce.addEventListener('change', apply);
+  else if (reduce.addListener) reduce.addListener(apply);
+})();

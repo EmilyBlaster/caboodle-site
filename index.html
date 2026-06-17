@@ -32,7 +32,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=20260613ll" />
+<link rel="stylesheet" href="styles.css?v=20260617g" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
 <!-- Prefetch case study HTML on browser idle so the dossier preview
@@ -101,7 +101,15 @@
   </div>
 </section>
 
-<!-- 02 — Trust band -->
+<!-- 02 — Field reel: selected work in motion (replaces the static proof strip below) -->
+<section class="reel" aria-label="Selected work in motion">
+  <video class="reel__video" autoplay muted loop playsinline preload="auto"
+         poster="assets/field-reel-poster.jpg?v=20260617f">
+    <source src="assets/field-reel.mp4?v=20260617f" type="video/mp4" />
+  </video>
+</section>
+
+<!-- 03 — Trust band -->
 <section class="trustband">
   <div class="trustband__inner">
     <span class="trustband__kicker">trusted by fortune 500</span>
@@ -117,49 +125,7 @@
   </div>
 </section>
 
-<!-- Proof strip: real artifacts from shipped work — instant visual proof
-     between the logos and the detailed dossiers. -->
-<section class="proofstrip" aria-label="Selected work artifacts">
-  <div class="proofstrip__head">
-    <div class="proofstrip__intro">
-      <span class="proofstrip__kicker">field evidence</span>
-      <p class="proofstrip__dek">Artifacts from real programs I shipped for Fortune 500 teams. Tap any to open the case file.</p>
-    </div>
-    <div class="proofstrip__nav">
-      <button type="button" class="proofstrip__arrow" data-proof-dir="-1" aria-label="Scroll to previous artifacts">
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-      <button type="button" class="proofstrip__arrow" data-proof-dir="1" aria-label="Scroll to more artifacts">
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-    </div>
-  </div>
-  <div class="proofstrip__rail">
-    <a class="proofcard" href="work/apple.html">
-      <span class="proofcard__shot"><img src="assets/demos/fire-extinguisher-3d.png" alt="Apple interactive 3D fire-extinguisher inspection trainer" loading="lazy" /><span class="proofcard__outcome">251 suppliers, 31 countries, 95% completion</span></span>
-      <span class="proofcard__label"><b>apple</b> · interactive 3d training</span>
-    </a>
-    <a class="proofcard" href="work/gitlab.html">
-      <span class="proofcard__shot"><img src="assets/demos/job-arch-landing-crop.png" alt="GitLab job-architecture interactive decision tool" loading="lazy" /><span class="proofcard__outcome">100% self-service, 3-country rollout</span></span>
-      <span class="proofcard__label"><b>gitlab</b> · interactive decision tools</span>
-    </a>
-    <a class="proofcard" href="work/tmobile.html">
-      <span class="proofcard__shot"><img src="assets/cs/tmobile-design-video-gallery.png" alt="T-Mobile AI-generated video scenario" loading="lazy" /><span class="proofcard__outcome">legal inquiries cut 40%, 100% completion</span></span>
-      <span class="proofcard__label"><b>t-mobile</b> · ai-generated video</span>
-    </a>
-    <a class="proofcard" href="work/trust20.html">
-      <span class="proofcard__shot"><img src="assets/cs/trust20/t20-course-interactive.png" alt="Trust20 scenario-based e-learning module" loading="lazy" style="object-position:top center" /><span class="proofcard__outcome">5+ states, multi-region accreditation rollout</span></span>
-      <span class="proofcard__label"><b>trust20</b> · scenario-based e-learning</span>
-    </a>
-    <a class="proofcard" href="work/peoples-professors.html">
-      <span class="proofcard__shot proofcard__shot--zoom"><img src="assets/pp-skip-or-watch.png" alt="People's Professors gamified microlearning game" loading="lazy" /><span class="proofcard__outcome">3 conference keynotes</span></span>
-      <span class="proofcard__label"><b>people's professors</b> · gamified microlearning</span>
-    </a>
-    <a class="proofcard proofcard--more" href="work.html" aria-label="See all work">
-      <span class="proofcard__more">see all<br />work <em>→</em></span>
-    </a>
-  </div>
-</section>
+<!-- (static proof strip removed — the field reel above is its motion replacement) -->
 
 <!-- Work: real case studies as dossiers
      (testimonial section moved to about.html as a consolidated grid) -->
@@ -906,6 +872,6 @@
   </div>
 </div>
 
-<script src="script.js?v=20260613ll" defer></script>
+<script src="script.js?v=20260617g" defer></script>
 </body>
 </html>
