@@ -5,23 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Agent Builder · performance task · caboodle design</title>
 <meta name="robots" content="noindex" />
-<meta name="description" content="A de-branded sample from an enterprise AI-enablement program: a hands-on performance task where the learner scopes an AI agent, watches its brief assemble live, then tests it, answering in scope, refusing what's off-limits, and escalating what needs a human." />
+<meta name="description" content="A de-branded sample from an enterprise AI-enablement program: a hands-on performance task where the learner scopes an AI agent, watches its brief assemble, then tests it, answering in scope, refusing what's off-limits, and escalating what needs a human." />
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <style>
-  html, body { margin: 0; padding: 0; background: #0E0C14; }
+  html, body { margin: 0; padding: 0; background: #F3F1EC; }
   body { font-family: 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  #root { min-height: 100vh;
-    background:
-      radial-gradient(120% 80% at 12% -5%, rgba(80,232,178,0.10), transparent 55%),
-      radial-gradient(90% 70% at 100% 0%, rgba(143,176,255,0.08), transparent 55%),
-      #0E0C14;
-  }
+  #root { min-height: 100vh; }
 </style>
 </head>
 <body>
@@ -30,11 +25,10 @@
 /* ===================================================================
    AGENT BUILDER: de-branded performance-task sample (caboodle design).
    Adapted from Emily Green's real built AI-enablement module. Airbnb brand
-   removed. Rebuilt to be hands-on, not sit-and-get: the learner scopes an
-   agent, watches the brief assemble live, then TESTS it, the agent answers
-   in scope, refuses what's off-limits, and escalates what needs a human,
-   all driven by the scope + escalation rules the learner just wrote.
-   Type: General Sans + JetBrains Mono on a dark console.
+   removed. Editorial direction (warm paper, high-contrast serif display,
+   mono metadata, generous whitespace) — modeled on the energy of an
+   editorial motion-studio portfolio, not the default "AI dark console."
+   Hands-on: scope an agent, watch the brief assemble, then test it.
    =================================================================== */
 var useState = React.useState;
 var useEffect = React.useEffect;
@@ -42,47 +36,40 @@ var useRef = React.useRef;
 
 function AgentBuilder() {
   var C = {
-    bg:'#0E0C14', surface:'#191622', surface2:'#221E2D', deepBar:'#0A0810',
-    hairline:'rgba(255,255,255,0.10)', ink:'#ECEAF4', inkSoft:'#C7C3D4', muted:'#8E8AA0',
-    mint:'#5BE9B0', mintInk:'#06231A', mintDim:'rgba(91,233,176,0.12)',
-    cyan:'#43D9CF', cyanDim:'rgba(67,217,207,0.12)',
-    amber:'#F2C45E', amberDim:'rgba(242,196,94,0.12)',
-    violet:'#AC9BFF', violetDim:'rgba(172,155,255,0.13)',
+    paper:'#F3F1EC', surface:'#FBFAF6', sunk:'#EFEDE6', ink:'#16140F', inkSoft:'#45413A',
+    muted:'#8E897C', line:'#DED9CD', line2:'#CDC7B8',
+    scope:'#A77B2E', instr:'#2E6A57', esc:'#A8472E', go:'#2E6A57', stop:'#A8472E',
     white:'#FFFFFF',
   };
   var FONT = "'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  var SERIF = "'Bodoni Moda', Georgia, 'Times New Roman', serif";
   var MONO = "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace";
 
   var containerRef = useRef(null);
   var chatRef = useRef(null);
-  var _cw = useState(800);  var containerWidth = _cw[0]; var setContainerWidth = _cw[1];
+  var _cw = useState(820); var containerWidth = _cw[0]; var setContainerWidth = _cw[1];
   var _ready = useState(false); var isDefined = _ready[0]; var setIsDefined = _ready[1];
   var _mode = useState('structured'); var formMode = _mode[0]; var setFormMode = _mode[1];
   var _ft = useState(''); var freeText = _ft[0]; var setFreeText = _ft[1];
   var _pv = useState(false); var showPreview = _pv[0]; var setShowPreview = _pv[1];
   var _f = useState({ name:'', purpose:'', scopeIn:'', scopeOut:'', instructions:'', escalation1:'', escalation2:'', escalation3:'' });
   var formVals = _f[0]; var setFormVals = _f[1];
-  /* test console */
   var _msgs = useState([]); var msgs = _msgs[0]; var setMsgs = _msgs[1];
   var _q = useState(''); var q = _q[0]; var setQ = _q[1];
   var _think = useState(false); var thinking = _think[0]; var setThinking = _think[1];
 
   var isMobile = containerWidth < 600;
 
-  function checkDefined(v) {
-    return !!(v.name.trim() && v.purpose.trim() && v.scopeIn.trim() && v.instructions.trim() && v.escalation1.trim() && v.escalation2.trim() && v.escalation3.trim());
-  }
+  function checkDefined(v) { return !!(v.name.trim() && v.purpose.trim() && v.scopeIn.trim() && v.instructions.trim() && v.escalation1.trim() && v.escalation2.trim() && v.escalation3.trim()); }
   function handleChange(field, val) {
     var next = Object.assign({}, formVals); next[field] = val;
     setFormVals(next); setIsDefined(checkDefined(next));
     if (next.name.trim() || next.purpose.trim()) setShowPreview(true);
   }
-  function handleFreeTextChange(val) {
-    setFreeText(val); setIsDefined(val.trim().length > 30);
-    if (val.trim().length > 30) setShowPreview(true);
-  }
+  function handleFreeTextChange(val) { setFreeText(val); setIsDefined(val.trim().length > 30); if (val.trim().length > 30) setShowPreview(true); }
   function loadExample() {
-    var ex = {
+    setFormMode('structured');
+    setFormVals({
       name: 'New-Hire Onboarding Assistant',
       purpose: 'Answer common onboarding questions in a new hire’s first 30 days, and route to the right person when it can’t.',
       scopeIn: 'the onboarding wiki, the #new-hires channel, the HR support FAQs',
@@ -91,8 +78,8 @@ function AgentBuilder() {
       escalation1: 'Anything about pay, benefits eligibility, or leave',
       escalation2: 'A question asked 3+ times (flag it for the wiki team)',
       escalation3: 'Any sign of distress or a sensitive personal situation',
-    };
-    setFormMode('structured'); setFormVals(ex); setIsDefined(true); setShowPreview(true); setMsgs([]);
+    });
+    setIsDefined(true); setShowPreview(true); setMsgs([]);
   }
 
   useEffect(function() {
@@ -101,31 +88,25 @@ function AgentBuilder() {
     ro.observe(el); setContainerWidth(el.offsetWidth);
     return function(){ ro.disconnect(); };
   }, []);
-  useEffect(function() {
-    if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
-  }, [msgs, thinking]);
+  useEffect(function() { if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight; }, [msgs, thinking]);
 
-  /* ---- the agent "runs" on the scope + rules the learner wrote ---- */
   var STOP = { about:1,your:1,this:1,that:1,with:1,from:1,what:1,when:1,where:1,have:1,will:1,would:1,could:1,should:1,there:1,they:1,them:1,then:1,than:1,these:1,those:1,into:1,over:1,more:1,some:1,like:1,just:1,also:1,only:1,even:1,much:1,many:1,most:1,such:1,been:1,were:1,does:1,need:1,find:1,help:1,tell:1,give:1,want:1,know:1,anything:1,something:1,please:1 };
   function sigWords(s) { return ((s||'').toLowerCase().match(/[a-z]{4,}/g) || []).filter(function(w){ return !STOP[w]; }); }
-  function firstWord(s, fb) { var w = sigWords(s); return w.length ? w[0] : fb; }
   function clip(s, n) { s = (s||'').trim(); return s.length <= n ? s : s.slice(0, n).replace(/\s+\S*$/, '') + '…'; }
   function hit(ql, s) { var w = sigWords(s); for (var i=0;i<w.length;i++){ if (ql.indexOf(w[i]) >= 0) return w[i]; } return null; }
-
   function classify(ql) {
     if (hit(ql, formVals.scopeOut)) return { kind:'offlimits' };
     var rules = [formVals.escalation1, formVals.escalation2, formVals.escalation3];
-    for (var i=0;i<rules.length;i++) { if (rules[i] && hit(ql, rules[i])) return { kind:'escalate', rule: rules[i] }; }
+    for (var i=0;i<rules.length;i++){ if (rules[i] && hit(ql, rules[i])) return { kind:'escalate', rule: rules[i] }; }
     return { kind:'inscope' };
   }
   function render(kind, rule) {
-    if (kind === 'offlimits') return { tag:'OFF-LIMITS', color:C.amber, dim:C.amberDim,
+    if (kind === 'offlimits') return { tag:'OFF-LIMITS', color:C.stop,
       body: 'I can’t help with that, it’s off-limits. Your scope rules it out: “' + clip(formVals.scopeOut, 60) + '”. I’ll point you to the right team instead.' };
-    if (kind === 'escalate') return { tag:'ESCALATED', color:C.violet, dim:C.violetDim,
+    if (kind === 'escalate') return { tag:'ESCALATED', color:C.esc,
       body: 'This one needs a person. It matches the escalation rule you set: “' + (rule || formVals.escalation1).trim() + '”. Handing you to a human now.' };
-    var src = clip(formVals.scopeIn, 70) || 'your connected sources';
-    return { tag:'IN SCOPE', color:C.mint, dim:C.mintDim,
-      body: 'Pulling from ' + src + ', here’s a concise, cited answer in the voice you defined. I stayed in scope and linked the source, exactly as your instructions say.' };
+    return { tag:'IN SCOPE', color:C.go,
+      body: 'Pulling from ' + (clip(formVals.scopeIn, 70) || 'your connected sources') + ', here’s a concise, cited answer in the voice you defined. I stayed in scope and linked the source, exactly as your instructions say.' };
   }
   function ask(text, forced) {
     text = (text||'').trim(); if (!text || thinking) return;
@@ -135,87 +116,83 @@ function AgentBuilder() {
       var c = forced ? { kind: forced, rule: formVals.escalation1 } : classify(text.toLowerCase());
       var r = render(c.kind, c.rule);
       setThinking(false);
-      setMsgs(function(m){ return m.concat([{ role:'agent', body:r.body, tag:r.tag, color:r.color, dim:r.dim }]); });
-    }, 850);
+      setMsgs(function(m){ return m.concat([{ role:'agent', body:r.body, tag:r.tag, color:r.color }]); });
+    }, 800);
   }
 
   var css =
-    "@keyframes ab-pulse{0%,100%{opacity:1}50%{opacity:.35}}" +
-    "@keyframes ab-bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}" +
-    "@keyframes ab-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}" +
-    "@keyframes ab-msg{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}" +
-    ".ab-input{border:1px solid " + C.hairline + ";border-radius:10px;padding:11px 14px;font-size:14px;font-family:" + FONT + ";color:" + C.ink + ";width:100%;box-sizing:border-box;outline:none;resize:vertical;background:" + C.surface2 + ";transition:border-color .2s,box-shadow .2s}" +
-    ".ab-input:focus{border-color:" + C.mint + ";box-shadow:0 0 0 3px " + C.mintDim + "}" +
-    ".ab-input::placeholder{color:#6E6A80}" +
-    ".ab-toggle{border:1px solid " + C.hairline + ";padding:8px 18px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:" + MONO + ";letter-spacing:.04em;text-transform:uppercase}" +
-    ".ab-toggle:first-child{border-radius:8px 0 0 8px;border-right:none}" +
-    ".ab-toggle:last-child{border-radius:0 8px 8px 0}" +
-    ".ab-chip{border:1px solid " + C.hairline + ";background:" + C.surface2 + ";color:" + C.inkSoft + ";border-radius:999px;padding:8px 14px;font-size:12.5px;font-family:" + FONT + ";cursor:pointer;transition:border-color .2s,color .2s}" +
-    ".ab-chip:hover{border-color:" + C.mint + ";color:" + C.mint + "}";
+    "@keyframes ab-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}" +
+    "@keyframes ab-blink{0%,100%{opacity:.25}50%{opacity:1}}" +
+    ".ab-input{border:1px solid " + C.line2 + ";border-radius:7px;padding:11px 13px;font-size:15px;font-family:" + FONT + ";color:" + C.ink + ";width:100%;box-sizing:border-box;outline:none;resize:vertical;background:" + C.white + ";transition:border-color .2s,box-shadow .2s}" +
+    ".ab-input:focus{border-color:" + C.ink + ";box-shadow:0 0 0 3px rgba(22,20,15,.08)}" +
+    ".ab-input::placeholder{color:#B3AE9F}" +
+    ".ab-toggle{border:1px solid " + C.line2 + ";padding:7px 16px;font-size:11px;font-weight:500;cursor:pointer;transition:all .2s;font-family:" + MONO + ";letter-spacing:.06em;text-transform:uppercase;background:" + C.white + ";color:" + C.muted + "}" +
+    ".ab-toggle:first-child{border-radius:7px 0 0 7px;border-right:none}" +
+    ".ab-toggle:last-child{border-radius:0 7px 7px 0}" +
+    ".ab-toggle.on{background:" + C.ink + ";color:" + C.paper + ";border-color:" + C.ink + "}" +
+    ".ab-chip{border:1px solid " + C.line2 + ";background:transparent;color:" + C.inkSoft + ";border-radius:999px;padding:8px 15px;font-size:13.5px;font-family:" + FONT + ";cursor:pointer;transition:border-color .2s,color .2s}" +
+    ".ab-chip:hover{border-color:" + C.ink + ";color:" + C.ink + "}" +
+    ".ab-link{background:none;border:none;color:" + C.ink + ";font-family:" + MONO + ";font-size:11px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border-bottom:1px solid " + C.ink + ";padding:0 0 2px;font-weight:500}";
 
-  var label = { fontFamily: MONO, fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase' };
-
-  function robot(sz) {
-    sz = sz || 34;
-    return React.createElement('svg', { width: sz, height: sz, viewBox: '0 0 40 40', style: { flexShrink: 0 } },
-      React.createElement('rect', { x: 4, y: 8, width: 32, height: 28, rx: 10, fill: C.mint }),
-      React.createElement('line', { x1: 20, y1: 8, x2: 20, y2: 3, stroke: C.mint, strokeWidth: 2.5, strokeLinecap: 'round' }),
-      React.createElement('circle', { cx: 20, cy: 2, r: 2.5, fill: C.mint, style: { animation: 'ab-pulse 2s ease-in-out infinite' } }),
-      React.createElement('circle', { cx: 14, cy: 20, r: 3, fill: C.deepBar }),
-      React.createElement('circle', { cx: 26, cy: 20, r: 3, fill: C.deepBar }),
-      React.createElement('path', { d: 'M16 27 Q20 31 24 27', stroke: C.deepBar, strokeWidth: 2, fill: 'none', strokeLinecap: 'round' })
-    );
-  }
+  var kicker = { fontFamily: MONO, fontSize: 11, fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase' };
+  var fieldLabel = { display:'block', fontWeight:500, fontSize:14.5, color:C.ink, marginBottom:6, fontFamily:FONT };
 
   function field(lbl, key, placeholder, multiline, hint) {
-    return React.createElement('div', { style: { marginBottom: 18 } },
-      React.createElement('label', { style: { display: 'block', fontWeight: 600, fontSize: 14, color: C.ink, marginBottom: 6, fontFamily: FONT } }, lbl),
-      hint ? React.createElement('p', { style: { margin: '0 0 8px', fontSize: 12, color: C.muted, fontFamily: MONO, letterSpacing: '0.02em' } }, hint) : null,
+    return React.createElement('div', { style: { marginBottom: 20 } },
+      React.createElement('label', { style: fieldLabel }, lbl),
+      hint ? React.createElement('p', { style: { margin: '0 0 8px', fontSize: 11.5, color: C.muted, fontFamily: MONO, letterSpacing: '0.03em' } }, hint) : null,
       multiline
         ? React.createElement('textarea', { className: 'ab-input', rows: 3, placeholder: placeholder, value: formVals[key], onChange: function(e){ handleChange(key, e.target.value); } })
         : React.createElement('input', { className: 'ab-input', type: 'text', placeholder: placeholder, value: formVals[key], onChange: function(e){ handleChange(key, e.target.value); } })
     );
   }
-  function brief(lbl, content, accent, tint) {
-    return React.createElement('div', { style: { border: '1px solid ' + accent + '44', borderRadius: 10, padding: '14px 16px', background: tint } },
-      React.createElement('p', { style: Object.assign({}, label, { margin: '0 0 6px', color: accent }) }, lbl),
-      React.createElement('p', { style: { margin: 0, fontSize: 13.5, color: C.inkSoft, lineHeight: 1.7, fontFamily: FONT } }, content)
+  function briefRow(lbl, content, color) {
+    return React.createElement('div', { style: { paddingTop: 16, borderTop: '1px solid ' + C.line } },
+      React.createElement('p', { style: Object.assign({}, kicker, { margin: '0 0 7px', color: color }) }, lbl),
+      React.createElement('p', { style: { margin: 0, fontSize: 15, color: C.inkSoft, lineHeight: 1.65, fontFamily: FONT } }, content)
     );
+  }
+
+  function card(children, extra) {
+    return React.createElement('div', { style: Object.assign({ background: C.surface, border: '1px solid ' + C.line, borderRadius: 12 }, extra || {}) }, children);
   }
 
   function preview() {
     var has = formMode === 'freetext' ? freeText.trim().length > 0 : (formVals.name.trim() || formVals.purpose.trim());
     if (!has) return null;
-    return React.createElement('div', { style: { border: '1px solid ' + C.mint + '55', borderRadius: 16, overflow: 'hidden', marginBottom: 28, background: C.surface, animation: 'ab-in .4s ease both', boxShadow: '0 24px 60px -30px ' + C.mint + '55' } },
-      React.createElement('div', { style: { background: C.mintDim, borderBottom: '1px solid ' + C.mint + '33', padding: '13px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
-        React.createElement('span', { style: Object.assign({}, label, { color: C.mint }) }, 'Agent Brief'),
-        React.createElement('span', { style: { fontSize: 11, color: C.muted, fontFamily: MONO } }, 'updates as you type')
+    var rows = [];
+    if (formMode === 'freetext') {
+      rows.push(React.createElement('p', { key:'ft', style: { margin: 0, fontSize: 15, color: C.inkSoft, lineHeight: 1.7, fontFamily: FONT, whiteSpace: 'pre-wrap' } }, freeText));
+    } else {
+      if (formVals.name.trim()) rows.push(React.createElement('div', { key:'n', style: { marginBottom: 4 } },
+        React.createElement('p', { style: Object.assign({}, kicker, { margin: '0 0 6px', color: C.muted }) }, 'Agent'),
+        React.createElement('p', { style: { margin: 0, fontFamily: SERIF, fontWeight: 600, fontSize: isMobile ? 30 : 38, lineHeight: 1.05, color: C.ink, letterSpacing: '-0.01em' } }, formVals.name)
+      ));
+      if (formVals.purpose.trim()) rows.push(React.createElement('div', { key:'p' }, briefRow('Purpose', formVals.purpose, C.ink)));
+      if (formVals.scopeIn.trim() || formVals.scopeOut.trim()) rows.push(React.createElement('div', { key:'s', style: { paddingTop: 16, borderTop: '1px solid ' + C.line } },
+        React.createElement('p', { style: Object.assign({}, kicker, { margin: '0 0 8px', color: C.scope }) }, 'Scope'),
+        formVals.scopeIn.trim() ? React.createElement('p', { style: { margin: '0 0 6px', fontSize: 15, color: C.inkSoft, fontFamily: FONT, lineHeight: 1.6 } }, React.createElement('span', { style: { color: C.ink, fontWeight: 500 } }, 'Includes: '), formVals.scopeIn) : null,
+        formVals.scopeOut.trim() ? React.createElement('p', { style: { margin: 0, fontSize: 15, color: C.inkSoft, fontFamily: FONT, lineHeight: 1.6 } }, React.createElement('span', { style: { color: C.ink, fontWeight: 500 } }, 'Off-limits: '), formVals.scopeOut) : null
+      ));
+      if (formVals.instructions.trim()) rows.push(React.createElement('div', { key:'i' }, briefRow('Instructions', formVals.instructions, C.instr)));
+      if (formVals.escalation1.trim() || formVals.escalation2.trim() || formVals.escalation3.trim()) rows.push(React.createElement('div', { key:'e', style: { paddingTop: 16, borderTop: '1px solid ' + C.line } },
+        React.createElement('p', { style: Object.assign({}, kicker, { margin: '0 0 8px', color: C.esc }) }, 'Escalation Rules'),
+        [formVals.escalation1, formVals.escalation2, formVals.escalation3].filter(function(r){ return r.trim(); }).map(function(r, i) {
+          return React.createElement('div', { key: i, style: { display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 6 } },
+            React.createElement('span', { style: { fontSize: 12, color: C.esc, minWidth: 16, fontFamily: MONO } }, (i + 1)),
+            React.createElement('span', { style: { fontSize: 15, color: C.inkSoft, fontFamily: FONT, lineHeight: 1.6 } }, r));
+        })
+      ));
+    }
+    return card(
+      React.createElement(React.Fragment, null,
+        React.createElement('div', { style: { padding: '13px 22px', borderBottom: '1px solid ' + C.line, display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
+          React.createElement('span', { style: Object.assign({}, kicker, { color: C.ink }) }, 'Agent Brief'),
+          React.createElement('span', { style: { fontSize: 11, color: C.muted, fontFamily: MONO } }, 'updates as you type')
+        ),
+        React.createElement('div', { style: { padding: 22, display: 'flex', flexDirection: 'column', gap: 16 } }, rows)
       ),
-      React.createElement('div', { style: { padding: 22 } },
-        formMode === 'freetext'
-          ? React.createElement('div', { style: { background: C.surface2, border: '1px solid ' + C.hairline, borderRadius: 12, padding: 18, fontSize: 14, color: C.inkSoft, lineHeight: 1.7, fontFamily: FONT, whiteSpace: 'pre-wrap' } }, freeText)
-          : React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: 13 } },
-              formVals.name.trim() ? React.createElement('div', { style: { background: C.deepBar, border: '1px solid ' + C.mint + '40', borderRadius: 12, padding: '14px 18px' } },
-                React.createElement('p', { style: Object.assign({}, label, { margin: '0 0 5px', color: C.mint }) }, 'Agent Name'),
-                React.createElement('p', { style: { margin: 0, fontSize: 20, fontWeight: 700, color: C.ink, fontFamily: FONT, letterSpacing: '-0.01em' } }, formVals.name)
-              ) : null,
-              formVals.purpose.trim() ? brief('Purpose', formVals.purpose, C.mint, C.mintDim) : null,
-              (formVals.scopeIn.trim() || formVals.scopeOut.trim()) ? React.createElement('div', { style: { border: '1px solid ' + C.amber + '44', borderRadius: 10, padding: '14px 16px', background: C.amberDim } },
-                React.createElement('p', { style: Object.assign({}, label, { margin: '0 0 10px', color: C.amber }) }, 'Scope'),
-                formVals.scopeIn.trim() ? React.createElement('p', { style: { margin: '0 0 6px', fontSize: 13.5, color: C.inkSoft, fontFamily: FONT } }, React.createElement('span', { style: { fontWeight: 700, color: C.ink } }, 'Includes: '), formVals.scopeIn) : null,
-                formVals.scopeOut.trim() ? React.createElement('p', { style: { margin: 0, fontSize: 13.5, color: C.inkSoft, fontFamily: FONT } }, React.createElement('span', { style: { fontWeight: 700, color: C.ink } }, 'Off-limits: '), formVals.scopeOut) : null
-              ) : null,
-              formVals.instructions.trim() ? brief('Instructions', formVals.instructions, C.cyan, C.cyanDim) : null,
-              (formVals.escalation1.trim() || formVals.escalation2.trim() || formVals.escalation3.trim()) ? React.createElement('div', { style: { border: '1px solid ' + C.violet + '44', borderRadius: 10, padding: '14px 16px', background: C.violetDim } },
-                React.createElement('p', { style: Object.assign({}, label, { margin: '0 0 10px', color: C.violet }) }, 'Escalation Rules'),
-                [formVals.escalation1, formVals.escalation2, formVals.escalation3].filter(function(r){ return r.trim(); }).map(function(r, i) {
-                  return React.createElement('div', { key: i, style: { display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 6 } },
-                    React.createElement('span', { style: { fontSize: 12, fontWeight: 700, color: C.violet, minWidth: 18, fontFamily: MONO } }, (i + 1) + '.'),
-                    React.createElement('span', { style: { fontSize: 13.5, color: C.inkSoft, fontFamily: FONT } }, r));
-                })
-              ) : null
-            )
-      )
+      { marginBottom: 30, animation: 'ab-in .4s ease both' }
     );
   }
 
@@ -226,90 +203,73 @@ function AgentBuilder() {
       { q: 'Can you pull up a colleague’s private records?', kind: 'offlimits' },
       { q: 'I’m dealing with something stressful and personal.', kind: 'escalate' }
     ];
-    return React.createElement('div', { style: { border: '1px solid ' + C.hairline, borderRadius: 16, overflow: 'hidden', background: C.surface, animation: 'ab-in .45s ease both' } },
-      React.createElement('div', { style: { background: C.deepBar, padding: '15px 22px', borderBottom: '1px solid ' + C.hairline } },
-        React.createElement('p', { style: Object.assign({}, label, { margin: '0 0 4px', color: C.mint }) }, 'Step 2 · Test your agent'),
-        React.createElement('p', { style: { margin: 0, fontSize: 13, color: C.muted, fontFamily: FONT } }, 'Ask it anything. Watch it answer in scope, refuse what’s off-limits, and escalate what needs a human, all from the rules you just wrote.')
+    return card(
+      React.createElement(React.Fragment, null,
+        React.createElement('div', { style: { padding: '18px 22px', borderBottom: '1px solid ' + C.line } },
+          React.createElement('p', { style: Object.assign({}, kicker, { margin: '0 0 6px', color: C.ink }) }, 'Step 02 / Test your agent'),
+          React.createElement('p', { style: { margin: 0, fontSize: 14.5, color: C.inkSoft, fontFamily: FONT, lineHeight: 1.55 } }, 'Ask it anything. Watch it answer in scope, refuse what’s off-limits, and escalate what needs a human, all from the rules you just wrote.')
+        ),
+        React.createElement('div', { ref: chatRef, style: { padding: 22, maxHeight: 360, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 20 } },
+          msgs.length === 0 && !thinking ? React.createElement('p', { style: { margin: '4px 0', fontSize: 12.5, color: C.muted, fontFamily: MONO, textAlign: 'center', letterSpacing: '0.04em' } }, 'try a question below') : null,
+          msgs.map(function(m, i) {
+            if (m.role === 'user')
+              return React.createElement('div', { key: i, style: { animation: 'ab-in .3s ease' } },
+                React.createElement('p', { style: Object.assign({}, kicker, { margin: '0 0 5px', color: C.muted, fontSize: 10 }) }, 'You asked'),
+                React.createElement('p', { style: { margin: 0, fontFamily: SERIF, fontSize: isMobile ? 19 : 22, fontWeight: 500, color: C.ink, lineHeight: 1.25 } }, m.body)
+              );
+            return React.createElement('div', { key: i, style: { paddingLeft: 16, borderLeft: '2px solid ' + m.color, animation: 'ab-in .3s ease' } },
+              React.createElement('span', { style: Object.assign({}, kicker, { display: 'inline-block', fontSize: 10, color: m.color, marginBottom: 7 }) }, m.tag),
+              React.createElement('p', { style: { margin: 0, fontSize: 15, color: C.inkSoft, lineHeight: 1.65, fontFamily: FONT } }, m.body)
+            );
+          }),
+          thinking ? React.createElement('p', { style: { margin: 0, fontFamily: MONO, fontSize: 13, color: C.muted, animation: 'ab-blink 1.1s ease-in-out infinite' } }, 'the agent is thinking…') : null
+        ),
+        React.createElement('div', { style: { padding: '0 22px 16px', display: 'flex', flexWrap: 'wrap', gap: 8 } },
+          chips.map(function(c, i) { return React.createElement('button', { key: i, className: 'ab-chip', onClick: function(){ ask(c.q, c.kind); } }, c.q); })
+        ),
+        React.createElement('div', { style: { display: 'flex', gap: 10, padding: '16px 22px', borderTop: '1px solid ' + C.line, background: C.sunk } },
+          React.createElement('input', { className: 'ab-input', type: 'text', placeholder: 'Ask your agent a question…', value: q, onChange: function(e){ setQ(e.target.value); }, onKeyDown: function(e){ if (e.key === 'Enter') ask(q); } }),
+          React.createElement('button', { onClick: function(){ ask(q); }, disabled: !q.trim() || thinking, style: { flexShrink: 0, padding: '0 22px', borderRadius: 7, background: C.ink, color: C.paper, border: 'none', cursor: (q.trim() && !thinking) ? 'pointer' : 'not-allowed', fontSize: 14, fontWeight: 500, fontFamily: FONT, opacity: (q.trim() && !thinking) ? 1 : 0.35 } }, 'Send')
+        )
       ),
-      React.createElement('div', { ref: chatRef, style: { padding: 20, maxHeight: 340, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 14 } },
-        msgs.length === 0 && !thinking
-          ? React.createElement('p', { style: { margin: '6px 0', fontSize: 13, color: C.muted, fontFamily: MONO, textAlign: 'center' } }, 'try a question below ↓')
-          : null,
-        msgs.map(function(m, i) {
-          if (m.role === 'user')
-            return React.createElement('div', { key: i, style: { alignSelf: 'flex-end', maxWidth: '80%', background: C.surface2, border: '1px solid ' + C.hairline, borderRadius: '14px 14px 4px 14px', padding: '10px 14px', fontSize: 14, color: C.ink, fontFamily: FONT, animation: 'ab-msg .3s ease' } }, m.body);
-          return React.createElement('div', { key: i, style: { display: 'flex', gap: 11, alignItems: 'flex-start', maxWidth: '88%', animation: 'ab-msg .3s ease' } },
-            robot(32),
-            React.createElement('div', { style: { background: C.surface2, border: '1px solid ' + m.color + '55', borderRadius: '14px 14px 14px 4px', padding: '12px 15px' } },
-              React.createElement('span', { style: Object.assign({}, label, { display: 'inline-block', fontSize: 9.5, color: m.color, background: m.dim, padding: '3px 8px', borderRadius: 5, marginBottom: 8 }) }, m.tag),
-              React.createElement('p', { style: { margin: 0, fontSize: 14, color: C.inkSoft, lineHeight: 1.6, fontFamily: FONT } }, m.body)
-            )
-          );
-        }),
-        thinking ? React.createElement('div', { style: { display: 'flex', gap: 11, alignItems: 'center' } },
-          robot(32),
-          React.createElement('div', { style: { display: 'flex', gap: 5, padding: '12px 4px' } },
-            React.createElement('div', { style: { width: 7, height: 7, borderRadius: '50%', background: C.muted, animation: 'ab-bounce 1.3s ease-in-out 0s infinite' } }),
-            React.createElement('div', { style: { width: 7, height: 7, borderRadius: '50%', background: C.muted, animation: 'ab-bounce 1.3s ease-in-out .18s infinite' } }),
-            React.createElement('div', { style: { width: 7, height: 7, borderRadius: '50%', background: C.muted, animation: 'ab-bounce 1.3s ease-in-out .36s infinite' } })
-          )
-        ) : null
-      ),
-      React.createElement('div', { style: { padding: '0 20px 14px', display: 'flex', flexWrap: 'wrap', gap: 8 } },
-        chips.map(function(c, i) {
-          return React.createElement('button', { key: i, className: 'ab-chip', onClick: function(){ ask(c.q, c.kind); } }, c.q);
-        })
-      ),
-      React.createElement('div', { style: { display: 'flex', gap: 10, padding: '14px 20px', borderTop: '1px solid ' + C.hairline, background: C.deepBar } },
-        React.createElement('input', { className: 'ab-input', type: 'text', placeholder: 'Ask your agent a question…', value: q,
-          onChange: function(e){ setQ(e.target.value); },
-          onKeyDown: function(e){ if (e.key === 'Enter') ask(q); } }),
-        React.createElement('button', { onClick: function(){ ask(q); }, disabled: !q.trim() || thinking,
-          style: { flexShrink: 0, padding: '0 22px', borderRadius: 10, background: C.mint, color: C.mintInk, border: 'none', cursor: (q.trim() && !thinking) ? 'pointer' : 'not-allowed', fontSize: 14, fontWeight: 600, fontFamily: FONT, opacity: (q.trim() && !thinking) ? 1 : 0.4 } }, 'Send')
-      )
+      { animation: 'ab-in .45s ease both' }
     );
   }
 
   return React.createElement(React.Fragment, null,
     React.createElement('style', null, css),
-    React.createElement('div', { ref: containerRef, style: { fontFamily: FONT, maxWidth: 880, margin: '0 auto', padding: isMobile ? 22 : 56, paddingTop: 40, color: C.ink, boxSizing: 'border-box' } },
+    React.createElement('div', { ref: containerRef, style: { fontFamily: FONT, maxWidth: 880, margin: '0 auto', padding: isMobile ? '32px 22px' : '64px 56px', color: C.ink, boxSizing: 'border-box' } },
 
-      React.createElement('div', { style: Object.assign({}, label, { color: C.mint, marginBottom: 14 }) }, 'Module 4 · Lesson 3 · performance task'),
-      React.createElement('h1', { style: { fontSize: isMobile ? 32 : 46, fontWeight: 700, lineHeight: 1.06, letterSpacing: '-0.02em', margin: '0 0 12px', color: C.ink, fontFamily: FONT } }, 'The Agent Builder'),
-      React.createElement('p', { style: { fontSize: isMobile ? 15.5 : 18, color: C.inkSoft, margin: '0 0 30px', lineHeight: 1.5, maxWidth: '40ch' } }, 'Define an AI agent, then put it to work. Watch it answer in scope, refuse what’s off-limits, and escalate what needs a human.'),
+      React.createElement('div', { style: Object.assign({}, kicker, { color: C.muted, marginBottom: 20 }) }, 'Module 04 — Lesson 03 / performance task'),
+      React.createElement('h1', { style: { fontFamily: SERIF, fontSize: isMobile ? 44 : 76, fontWeight: 600, lineHeight: 0.98, letterSpacing: '-0.015em', margin: '0 0 18px', color: C.ink } }, 'The Agent Builder'),
+      React.createElement('p', { style: { fontSize: isMobile ? 16 : 19, color: C.inkSoft, margin: '0 0 44px', lineHeight: 1.5, maxWidth: '42ch', fontFamily: FONT } }, 'Define an AI agent, then put it to work. Watch it answer in scope, refuse what’s off-limits, and escalate what needs a human.'),
 
-      /* ── Step 1: build ── */
-      React.createElement('div', { style: { border: '1px solid ' + C.hairline, borderRadius: 16, overflow: 'hidden', marginBottom: 26, background: C.surface } },
-        React.createElement('div', { style: { background: C.deepBar, padding: '14px 22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, borderBottom: '1px solid ' + C.hairline } },
-          React.createElement('p', { style: Object.assign({}, label, { margin: 0, color: C.mint, fontSize: 11 }) }, 'Step 1 · Define your agent'),
-          React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 14 } },
-            React.createElement('button', { onClick: loadExample, style: { background: 'none', border: 'none', color: C.mint, fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', textTransform: 'uppercase', cursor: 'pointer', fontWeight: 600 } }, 'Load an example →'),
-            React.createElement('div', { style: { display: 'flex' } },
-              React.createElement('button', { className: 'ab-toggle', onClick: function(){ setFormMode('structured'); }, style: { background: formMode === 'structured' ? C.mint : 'transparent', color: formMode === 'structured' ? C.mintInk : C.muted, borderColor: formMode === 'structured' ? C.mint : C.hairline } }, 'Structured'),
-              React.createElement('button', { className: 'ab-toggle', onClick: function(){ setFormMode('freetext'); }, style: { background: formMode === 'freetext' ? C.mint : 'transparent', color: formMode === 'freetext' ? C.mintInk : C.muted, borderColor: formMode === 'freetext' ? C.mint : C.hairline } }, 'Free text')
-            )
+      /* Step 1 */
+      React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: 12, marginBottom: 16 } },
+        React.createElement('p', { style: Object.assign({}, kicker, { margin: 0, color: C.ink }) }, 'Step 01 / Define your agent'),
+        React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 18 } },
+          React.createElement('button', { className: 'ab-link', onClick: loadExample }, 'Load an example'),
+          React.createElement('div', { style: { display: 'flex' } },
+            React.createElement('button', { className: 'ab-toggle' + (formMode === 'structured' ? ' on' : ''), onClick: function(){ setFormMode('structured'); } }, 'Structured'),
+            React.createElement('button', { className: 'ab-toggle' + (formMode === 'freetext' ? ' on' : ''), onClick: function(){ setFormMode('freetext'); } }, 'Free text')
           )
-        ),
-        React.createElement('div', { style: { padding: 22 } },
-          formMode === 'structured'
-            ? React.createElement(React.Fragment, null,
-                field('Agent Name', 'name', 'e.g. New-Hire Onboarding Assistant', false, null),
-                field('Purpose', 'purpose', 'What is this agent for? Keep it to one job.', true, null),
-                field('Scope: sources it can use', 'scopeIn', 'e.g. the onboarding wiki, the #new-hires channel, the HR FAQs', true, null),
-                field('Scope: what it must never touch', 'scopeOut', 'e.g. individual employee records, performance reviews, compensation', true, null),
-                field('Instructions: how it should respond', 'instructions', 'Voice, what it cites, what it never says. Your CRAFT prompt, made permanent.', true, 'Context + Role + Action + Format + Target'),
-                React.createElement('div', null,
-                  React.createElement('label', { style: { display: 'block', fontWeight: 600, fontSize: 14, color: C.ink, marginBottom: 6, fontFamily: FONT } }, 'Escalation rules (when to hand off to a human)'),
-                  React.createElement('input', { className: 'ab-input', type: 'text', placeholder: 'Escalation rule 1', value: formVals.escalation1, onChange: function(e){ handleChange('escalation1', e.target.value); }, style: { marginBottom: 8 } }),
-                  React.createElement('input', { className: 'ab-input', type: 'text', placeholder: 'Escalation rule 2', value: formVals.escalation2, onChange: function(e){ handleChange('escalation2', e.target.value); }, style: { marginBottom: 8 } }),
-                  React.createElement('input', { className: 'ab-input', type: 'text', placeholder: 'Escalation rule 3', value: formVals.escalation3, onChange: function(e){ handleChange('escalation3', e.target.value); } })
-                )
-              )
-            : React.createElement(React.Fragment, null,
-                React.createElement('textarea', { className: 'ab-input', rows: 9, placeholder: 'Describe your agent in your own words: what it’s for, which sources it can use, what it must never touch, how it should respond, and when it should hand off to a human.', value: freeText, onChange: function(e){ handleFreeTextChange(e.target.value); } })
-              )
         )
       ),
+      card(React.createElement('div', { style: { padding: 24 } },
+        formMode === 'structured'
+          ? React.createElement(React.Fragment, null,
+              field('Agent name', 'name', 'e.g. New-Hire Onboarding Assistant', false, null),
+              field('Purpose', 'purpose', 'What is this agent for? Keep it to one job.', true, null),
+              field('Scope — sources it can use', 'scopeIn', 'e.g. the onboarding wiki, the #new-hires channel, the HR FAQs', true, null),
+              field('Scope — what it must never touch', 'scopeOut', 'e.g. individual employee records, performance reviews, compensation', true, null),
+              field('Instructions — how it should respond', 'instructions', 'Voice, what it cites, what it never says. Your CRAFT prompt, made permanent.', true, 'Context + Role + Action + Format + Target'),
+              React.createElement('label', { style: fieldLabel }, 'Escalation rules — when to hand off to a human'),
+              React.createElement('input', { className: 'ab-input', type: 'text', placeholder: 'Escalation rule 1', value: formVals.escalation1, onChange: function(e){ handleChange('escalation1', e.target.value); }, style: { marginBottom: 8 } }),
+              React.createElement('input', { className: 'ab-input', type: 'text', placeholder: 'Escalation rule 2', value: formVals.escalation2, onChange: function(e){ handleChange('escalation2', e.target.value); }, style: { marginBottom: 8 } }),
+              React.createElement('input', { className: 'ab-input', type: 'text', placeholder: 'Escalation rule 3', value: formVals.escalation3, onChange: function(e){ handleChange('escalation3', e.target.value); } })
+            )
+          : React.createElement('textarea', { className: 'ab-input', rows: 9, placeholder: 'Describe your agent in your own words: what it’s for, which sources it can use, what it must never touch, how it should respond, and when it should hand off to a human.', value: freeText, onChange: function(e){ handleFreeTextChange(e.target.value); } })
+      ), { marginBottom: 30 }),
 
       preview(),
 
