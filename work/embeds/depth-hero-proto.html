@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>depth hero · proof of concept · caboodle design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  @font-face{
+    font-family:'Bauhaus Bool';
+    src:url('../../fonts/BauhausBoolDisplay-Bold.woff') format('woff');
+    font-weight:700;font-style:normal;font-display:swap;
+  }
+  @font-face{
+    font-family:'Bauhaus Bool';
+    src:url('../../fonts/BauhausBoolDisplay-ExtraBold.woff') format('woff');
+    font-weight:800;font-style:normal;font-display:swap;
+  }
+  :root{
+    --blue:#03599B; --lime:#96E650; --magenta:#EC008C;
+    --paper:#F2EFE8; --ink:#282828;
+    --display:'Bauhaus Bool','Futura','Century Gothic',sans-serif;
+    --body:'DM Sans',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --ease:cubic-bezier(0.16,1,0.3,1);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;}
+  body{
+    background:#022f55;
+    color:#fff;font-family:var(--body);overflow:hidden;
+  }
+
+  /* ── Stage: the perspective viewport ───────────────────────────── */
+  .stage{
+    position:relative;width:100vw;height:100vh;overflow:hidden;
+    perspective:1300px;perspective-origin:50% 48%;
+    background:
+      radial-gradient(120% 90% at 50% 40%, #0a66ad 0%, #03559a 38%, #023a6e 72%, #022a50 100%);
+  }
+  .scene{
+    position:absolute;inset:0;transform-style:preserve-3d;
+    will-change:transform;transition:transform .14s var(--ease);
+  }
+  .layer{position:absolute;inset:0;transform-style:preserve-3d;}
+
+  /* ── Blueprint back layer (golden-ratio construction) ──────────── */
+  .blueprint{opacity:.5;}
+  .blueprint line,.blueprint rect,.blueprint path{vector-effect:non-scaling-stroke;}
+
+  /* soft glow behind the headline */
+  .glow{
+    position:absolute;left:50%;top:46%;width:60vw;height:60vw;
+    transform:translate(-50%,-50%) translateZ(-520px);
+    background:radial-gradient(circle, rgba(150,230,80,.16) 0%, rgba(3,89,155,0) 60%);
+    pointer-events:none;
+  }
+
+  /* ── Floating work cards ───────────────────────────────────────── */
+  .card{
+    position:absolute;border-radius:10px;overflow:hidden;background:#fff;
+    border:1px solid rgba(255,255,255,.7);
+    box-shadow:0 40px 80px -30px rgba(0,0,0,.6);
+    transform:translateZ(var(--z,0)) rotateY(var(--ry,0deg)) rotateX(var(--rx,0deg));
+    animation:float var(--dur,9s) ease-in-out infinite alternate;
+    animation-delay:var(--delay,0s);
+  }
+  .card__bar{
+    height:26px;display:flex;align-items:center;gap:6px;padding:0 12px;
+    background:#fff;border-bottom:1px solid #ECEAE2;
+  }
+  .card__bar i{width:8px;height:8px;border-radius:50%;display:block;}
+  .card__img{display:block;width:100%;height:calc(100% - 26px);object-fit:cover;object-position:top center;}
+  .card__tag{
+    position:absolute;left:0;bottom:0;width:100%;
+    font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:#fff;padding:18px 12px 9px;
+    background:linear-gradient(to top, rgba(20,20,20,.82), rgba(20,20,20,0));
+  }
+  @keyframes float{
+    from{transform:translateZ(var(--z,0)) translateY(0) rotateY(var(--ry,0deg)) rotateX(var(--rx,0deg));}
+    to{transform:translateZ(var(--z,0)) translateY(-16px) rotateY(var(--ry,0deg)) rotateX(var(--rx,0deg));}
+  }
+
+  /* ── Accent shapes + sparkles ──────────────────────────────────── */
+  .dot{position:absolute;border-radius:50%;}
+  .spark{position:absolute;width:6px;height:6px;border-radius:50%;background:#fff;
+    box-shadow:0 0 8px 2px rgba(255,255,255,.6);animation:twinkle 2.6s ease-in-out infinite;}
+  @keyframes twinkle{0%,100%{opacity:.15;transform:scale(.6);}50%{opacity:1;transform:scale(1);}}
+
+  /* registration / crop marks (field-journal chrome) */
+  .mark{position:absolute;width:30px;height:30px;}
+  .mark::before,.mark::after{content:"";position:absolute;background:var(--lime);opacity:.65;}
+  .mark::before{left:0;top:14px;width:30px;height:1.5px;}
+  .mark::after{left:14px;top:0;width:1.5px;height:30px;}
+
+  /* ── Headline (front layer) ────────────────────────────────────── */
+  .copy{
+    position:absolute;left:0;top:0;width:100%;height:100%;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;transform:translateZ(60px);pointer-events:none;padding:0 24px;
+  }
+  .kicker{font-family:var(--mono);font-size:14px;letter-spacing:.28em;text-transform:uppercase;color:var(--magenta);}
+  .headline{
+    font-family:var(--display);font-weight:800;color:#fff;line-height:.98;
+    font-size:clamp(48px,8.4vw,128px);letter-spacing:-.01em;margin:18px 0 0;
+    text-shadow:0 24px 60px rgba(0,0,0,.45);
+  }
+  .headline em{font-style:normal;color:var(--lime);}
+  .subline{font-size:clamp(16px,1.5vw,22px);color:rgba(255,255,255,.82);margin-top:22px;max-width:620px;}
+  .hint{
+    position:absolute;left:50%;bottom:34px;transform:translateX(-50%);
+    font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:rgba(255,255,255,.5);display:flex;align-items:center;gap:10px;
+  }
+  .hint::before{content:"";width:26px;height:1px;background:rgba(255,255,255,.4);}
+
+  /* reveal on load */
+  .copy>*{opacity:0;transform:translateY(18px);animation:rise .9s var(--ease) forwards;}
+  .kicker{animation-delay:.15s;}
+  .headline{animation-delay:.3s;}
+  .subline{animation-delay:.55s;}
+  @keyframes rise{to{opacity:1;transform:translateY(0);}}
+
+  @media (prefers-reduced-motion: reduce){
+    .card{animation:none;}
+    .scene{transition:none;}
+    .copy>*{animation:none;opacity:1;transform:none;}
+    .spark{animation:none;opacity:.5;}
+  }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="scene" id="scene">
+
+    <!-- back: blueprint construction lines -->
+    <div class="layer" style="transform:translateZ(-560px) scale(1.55);">
+      <svg class="blueprint" width="100%" height="100%" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+        <g fill="none" stroke="#ffffff" stroke-width="1" opacity=".5">
+          <line x1="960" y1="0" x2="960" y2="1080"/>
+          <line x1="0" y1="540" x2="1920" y2="540"/>
+          <rect x="360" y="169" width="1200" height="742"/>
+          <line x1="1102" y1="169" x2="1102" y2="911"/>
+          <line x1="1102" y1="627" x2="1560" y2="627"/>
+          <line x1="1276" y1="627" x2="1276" y2="911"/>
+        </g>
+        <path d="M 1560 169 A 1200 1200 0 0 1 360 911 A 742 742 0 0 1 1102 627 A 458 458 0 0 1 1276 911 A 284 284 0 0 1 1102 737"
+          fill="none" stroke="#96E650" stroke-width="1.5" opacity=".55"/>
+      </svg>
+    </div>
+
+    <div class="glow"></div>
+
+    <!-- mid-back: big faint spiral + marks -->
+    <div class="layer" style="transform:translateZ(-380px) scale(1.32);">
+      <div class="mark" style="left:7%;top:12%;"></div>
+      <div class="mark" style="right:7%;top:12%;"></div>
+      <div class="mark" style="left:7%;bottom:12%;"></div>
+      <div class="mark" style="right:7%;bottom:12%;"></div>
+      <span class="dot" style="left:18%;top:30%;width:120px;height:120px;background:rgba(236,0,140,.16);filter:blur(8px);"></span>
+      <span class="dot" style="right:16%;bottom:24%;width:160px;height:160px;background:rgba(150,230,80,.14);filter:blur(10px);"></span>
+    </div>
+
+    <!-- mid: floating work cards -->
+    <div class="layer">
+      <div class="card" style="left:5%;top:16%;width:300px;height:210px;--z:-220px;--ry:9deg;--rx:3deg;--dur:8.5s;--delay:-1s;">
+        <div class="card__bar"><i style="background:#EC008C"></i><i style="background:#96E650"></i><i style="background:#03599B"></i></div>
+        <img class="card__img" src="../../assets/cs/apple-case-study-hero.jpg" alt="">
+        <span class="card__tag">Apple · interactive 3D</span>
+      </div>
+
+      <div class="card" style="right:4%;top:13%;width:280px;height:196px;--z:-280px;--ry:-10deg;--rx:3deg;--dur:9.5s;--delay:-3s;">
+        <div class="card__bar"><i style="background:#EC008C"></i><i style="background:#96E650"></i><i style="background:#03599B"></i></div>
+        <img class="card__img" src="../../assets/cs/tmobile-design-chris.png" alt="">
+        <span class="card__tag">T-Mobile · AI video</span>
+      </div>
+
+      <div class="card" style="right:7%;bottom:11%;width:330px;height:220px;--z:-70px;--ry:-7deg;--rx:-3deg;--dur:7.5s;--delay:-2s;">
+        <div class="card__bar"><i style="background:#EC008C"></i><i style="background:#96E650"></i><i style="background:#03599B"></i></div>
+        <img class="card__img" src="../../assets/cs/gitlab-case-study-hero.jpg" alt="">
+        <span class="card__tag">GitLab · decision tools</span>
+      </div>
+
+      <div class="card" style="left:6%;bottom:9%;width:340px;height:226px;--z:-40px;--ry:8deg;--rx:-3deg;--dur:8s;--delay:-4s;">
+        <div class="card__bar"><i style="background:#EC008C"></i><i style="background:#96E650"></i><i style="background:#03599B"></i></div>
+        <img class="card__img" src="../../assets/cs/intuit-case-study-hero.jpg" alt="">
+        <span class="card__tag">Intuit · career matching</span>
+      </div>
+
+      <div class="card" style="left:50%;top:5%;width:230px;height:158px;--z:-340px;--ry:0deg;--rx:4deg;--dur:10s;--delay:-1.5s;margin-left:-115px;">
+        <div class="card__bar"><i style="background:#EC008C"></i><i style="background:#96E650"></i><i style="background:#03599B"></i></div>
+        <img class="card__img" src="../../assets/pp-cover.png" alt="">
+        <span class="card__tag">People’s Professors · gamified</span>
+      </div>
+    </div>
+
+    <!-- front: sparkles + accent dots -->
+    <div class="layer" style="transform:translateZ(40px);">
+      <span class="spark" style="left:22%;top:24%;animation-delay:0s;"></span>
+      <span class="spark" style="left:74%;top:30%;animation-delay:.6s;background:#96E650;box-shadow:0 0 8px 2px rgba(150,230,80,.7);"></span>
+      <span class="spark" style="left:64%;top:68%;animation-delay:1.1s;"></span>
+      <span class="spark" style="left:30%;top:72%;animation-delay:1.6s;background:#EC008C;box-shadow:0 0 8px 2px rgba(236,0,140,.7);"></span>
+      <span class="spark" style="left:48%;top:18%;animation-delay:.9s;"></span>
+    </div>
+
+    <!-- headline -->
+    <div class="copy">
+      <div class="kicker">Field Evidence · Est. 2026</div>
+      <h1 class="headline">how humans<br><em>actually change</em></h1>
+      <p class="subline">Strategy, media, and behavioral science, built into the work itself.</p>
+    </div>
+  </div>
+
+  <div class="hint">move your cursor</div>
+</div>
+
+<script>
+(function(){
+  var scene = document.getElementById('scene');
+  var stage = document.getElementById('stage');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce) return;
+
+  // target + current values, lerped each frame for a smooth, weighty feel
+  var tx=0, ty=0, cx=0, cy=0;   // mouse, normalized -1..1
+  var sy=0, csy=0;              // scroll factor
+
+  function onMove(e){
+    var r = stage.getBoundingClientRect();
+    tx = ((e.clientX - r.left)/r.width  - 0.5) * 2;
+    ty = ((e.clientY - r.top )/r.height - 0.5) * 2;
+  }
+  stage.addEventListener('mousemove', onMove);
+  stage.addEventListener('mouseleave', function(){ tx=0; ty=0; });
+
+  // demo scroll parallax (page doesn't scroll here, but wheel nudges depth)
+  window.addEventListener('wheel', function(e){
+    sy = Math.max(-1, Math.min(1, sy + e.deltaY*0.0006));
+  }, {passive:true});
+
+  function frame(){
+    cx += (tx - cx)*0.08;
+    cy += (ty - cy)*0.08;
+    csy += (sy - csy)*0.08;
+    var ry =  cx*6;            // rotate scene with cursor → near layers shift more
+    var rx = -cy*4.5;
+    var px = -cx*16;
+    var py = -cy*12 + csy*40;
+    scene.style.transform =
+      'rotateY('+ry.toFixed(2)+'deg) rotateX('+rx.toFixed(2)+'deg) translate3d('+px.toFixed(1)+'px,'+py.toFixed(1)+'px,0)';
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

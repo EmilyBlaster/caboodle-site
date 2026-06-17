@@ -867,6 +867,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   width: fit-content;
 }
 .approach__title {
+  grid-column: 1 / -1;
   margin: 0;
   font-family: var(--display);
   font-weight: 700;
@@ -2052,6 +2053,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   align-self: start;
 }
 .labs__title {
+  grid-column: 1 / -1;
   margin: 0;
   font-family: var(--display);
   font-weight: 700;
