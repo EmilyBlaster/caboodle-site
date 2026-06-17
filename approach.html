@@ -210,6 +210,10 @@
          src="/assets/ladder-static.jpg"
          alt="Action Mapping × Kirkpatrick ladder: four rungs pairing business goal with results, critical actions with behavior, practice activities with learning, and essential info with reaction."
          width="1456" height="816" />
+    <figcaption class="ladder__caption" style="padding: 0.75rem 0 0;">
+      Fig. 02 · Every row of action mapping has a direct Kirkpatrick partner.
+      The business goal proves results. Essential info just drives reaction.
+    </figcaption>
   </figure>
 
   <script>
@@ -226,6 +230,10 @@
       '.arc-embed { max-height: none !important; }',
       /* Hide the note text */
       '.note { display: none !important; }',
+      /* Hide the in-canvas footer caption (the lone absolute bottom:60px div);
+         approach.html prints its own caption below the figure, matching the arc.
+         The AM/KP credits have no bottom style, so they stay. */
+      '[style*="bottom: 60px"] { display: none !important; }',
     ].join('\n');
 
     function inject(doc) {
