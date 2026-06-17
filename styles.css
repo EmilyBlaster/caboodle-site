@@ -4450,7 +4450,13 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 }
 
 .phases__figure {
-  margin: 0 0 2.5rem;
+  /* Break out wider than the text column so the wide 1920px diagram scales up
+     and its labels read at a legible size. Everything scales together, so the
+     pinned layout can't overlap (unlike per-label font tweaks). */
+  width: min(96vw, 1840px);
+  max-width: none;
+  margin: 0 0 2.5rem 50%;
+  transform: translateX(-50%);
   padding: 1.5rem 1.25rem 1.75rem;
   background: var(--paper);
   border: 1px solid var(--ink);
@@ -4641,8 +4647,11 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   align-items: end;
 }
 .ladder__figure {
-  max-width: var(--maxw);
-  margin: 0 auto;
+  /* Break out wider than the text column (see .phases__figure). */
+  width: min(96vw, 1840px);
+  max-width: none;
+  margin: 0 0 0 50%;
+  transform: translateX(-50%);
   padding: 1.5rem;
   background: var(--paper);
   border: 1px solid var(--ink);
