@@ -1262,7 +1262,10 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
    element via IntersectionObserver.
    ========================================================================== */
 (function statCounters() {
-  // Respect motion preferences — never animate for users who asked us not to
+  // Count-up animation removed (restraint pass): numbers should sit still, not
+  // perform. They render at their static HTML values; nothing animates from 0.
+  return;
+  // eslint-disable-next-line no-unreachable
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   // Every element on the site that holds a big-display stat number.
