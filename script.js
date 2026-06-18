@@ -1578,17 +1578,17 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 })();
 
 /* ==========================================================================
-   Greenroom embed — only load it when the case study is viewed directly
-   work/airbnb.html embeds the live, cross-origin Greenroom app. When this
-   page is rendered inside a homepage preview, that nested app is pure dead
-   weight: the preview starts below the Greenroom section and never shows it,
-   yet loading a third-party app makes the preview slow and flaky. So only
-   wire up its src at the top level; in a preview it stays unloaded.
-   ========================================================================== */
-(function greenroomEmbed() {
-  var gr = document.querySelector('.abspot__iframe');
-  if (!gr || !gr.dataset.src) return;
+   Case-study media embeds — only load when the case study is viewed directly
+   The Airbnb page embeds the live Greenroom app; the Trust20 page embeds a
+   Vimeo player. Both are heavy cross-origin embeds. Inside a homepage preview
+   they're dead weight (the preview never lands on them) and make it laggy, so
+   they're deferred via data-src and only wired up at the top level. Scoped to
+   these specific embeds so the homepage's own preview iframes are untouched. */
+(function caseStudyMedia() {
+  var embeds = document.querySelectorAll('.abspot__iframe[data-src], .stage__video iframe[data-src]');
+  if (!embeds.length) return;
   var inPreview = true;
   try { inPreview = window.self !== window.top; } catch (e) { inPreview = true; }
-  if (!inPreview) gr.src = gr.dataset.src;
+  if (inPreview) return; /* in a preview: leave them unloaded */
+  embeds.forEach(function (f) { if (!f.getAttribute('src')) f.src = f.dataset.src; });
 })();
