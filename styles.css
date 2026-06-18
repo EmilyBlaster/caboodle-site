@@ -1835,11 +1835,11 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
    :has() guard means no-JS falls back to the stacked panel below. */
 .dossier--panel:has(> .dossier__cover) {
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: 248px 1fr;
   align-items: center;
-  column-gap: 2.25rem;
+  column-gap: 2.5rem;
   background: transparent;
-  padding: 1.5rem 0;
+  padding: 1.85rem 0;
   border-top: 1px solid var(--rule);
   box-shadow: none;
 }
@@ -1856,7 +1856,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   top: auto;
   right: auto;
   transform: none;
-  width: 200px;
+  width: 248px;
   aspect-ratio: 16 / 10;
   object-fit: cover;
   object-position: center top;
@@ -1887,7 +1887,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 }
 .dossier--panel:has(> .dossier__cover) .dossier__text { display: block; }
 .dossier--panel:has(> .dossier__cover) .dossier__h {
-  font-size: clamp(1.3rem, 1.9vw, 1.7rem);
+  font-size: clamp(1.45rem, 2.1vw, 1.9rem);
   line-height: 1.1;
   margin: 0;
   max-width: 32ch;
