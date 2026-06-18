@@ -2065,9 +2065,13 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 /* Featured stat */
 .dossier--featured .dossier__stat {
   border-top-color: var(--lime);
+  align-self: center; /* fill the right column rather than hugging the top */
 }
 .dossier--featured .dossier__statnum {
   -webkit-text-stroke: 1px rgba(242, 239, 232, 0.25);
+}
+.dossier--featured .dossier__statnum i {
+  color: rgba(242, 239, 232, 0.85); /* the % was ink — invisible on the dark card */
 }
 .dossier--featured .dossier__statlabel {
   color: rgba(242, 239, 232, 0.5);
