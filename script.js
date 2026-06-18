@@ -1520,3 +1520,37 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   if (reduce.addEventListener) reduce.addEventListener('change', apply);
   else if (reduce.addListener) reduce.addListener(apply);
 })();
+
+/* ==========================================================================
+   Work-page case covers
+   Pins a framed screenshot of each real deliverable into the panel-card
+   gutter. Progressive enhancement: the text card stands on its own, and
+   this no-ops on pages without .dossier--panel cards (e.g. the homepage,
+   whose cards use live iframe previews instead).
+   ========================================================================== */
+(function dossierCovers() {
+  var COVERS = {
+    'intuit':  ['intuit.jpg',  'Intuit nudge-system email surfacing AI skill-match recommendations'],
+    'apple':   ['apple.jpg',   'Apple 3D fire-extinguisher inspection viewer'],
+    'gitlab':  ['gitlab.jpg',  'GitLab works-council interactive map of Europe'],
+    'tmobile': ['tmobile.jpg', 'T-Mobile privacy-scenario customer-call interface'],
+    'trust20': ['trust20.jpg', 'Trust20 ID-verification scenario video'],
+    'peoples': ['pp.jpg',      "The People's Professors skip-or-watch caption demo"]
+  };
+  var cards = document.querySelectorAll('.dossier--panel');
+  if (!cards.length) return;
+  cards.forEach(function (card) {
+    var main = card.querySelector('.dossier__main');
+    if (!main || main.querySelector('.dossier__cover')) return;
+    var href = card.getAttribute('href') || '';
+    var key = Object.keys(COVERS).find(function (k) { return href.indexOf(k) !== -1; });
+    if (!key) return;
+    var img = document.createElement('img');
+    img.className = 'dossier__cover';
+    img.src = 'assets/work-covers/' + COVERS[key][0];
+    img.alt = COVERS[key][1];
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    main.appendChild(img);
+  });
+})();

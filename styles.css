@@ -1821,8 +1821,33 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 /* Text column: single-column, reserves right space for the panel */
 .dossier--panel .dossier__main {
   display: block;
+  position: relative; /* anchors the case cover in the reserved gutter */
   padding-right: 250px; /* panel width (230px) + 20px gap */
   padding-bottom: 3rem;
+}
+
+/* Case cover — a framed glimpse of the actual deliverable, pinned into the
+   reserved gutter. The homepage shows the live page; the work page shows the
+   work itself. Injected by dossierCovers() in script.js. */
+.dossier--panel .dossier__cover {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 230px;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 9px;
+  border: 1px solid rgba(40, 40, 40, 0.12);
+  box-shadow: 0 1px 2px rgba(40, 40, 40, 0.05), 0 14px 30px -14px rgba(40, 40, 40, 0.3);
+  background: var(--paper);
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.45s ease;
+}
+.dossier--panel:hover .dossier__cover,
+.dossier--panel:focus-visible .dossier__cover {
+  transform: translateY(-50%) translateY(-3px);
+  box-shadow: 0 2px 4px rgba(40, 40, 40, 0.06), 0 20px 38px -14px rgba(40, 40, 40, 0.36);
 }
 
 /* Stat panel: absolute, always full card height, flush right */
@@ -1865,6 +1890,15 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
     padding-right: 0;
     padding-bottom: 0;
   }
+  /* No gutter on narrow screens — the cover flows full-width under the text */
+  .dossier--panel .dossier__cover {
+    position: static;
+    transform: none;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin-top: 1.5rem;
+  }
+  .dossier--panel:hover .dossier__cover { transform: none; }
   .dossier--panel .dossier__stat {
     position: static;
     width: auto;
