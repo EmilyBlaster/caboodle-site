@@ -1955,8 +1955,18 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
     width: 100%;
     aspect-ratio: 16 / 10;
   }
-  .dossier--panel:has(> .dossier__cover) .dossier__h { font-size: 1.4rem; }
+  .dossier--panel:has(> .dossier__cover) .dossier__h { font-size: 1.45rem; }
   .dossier--panel:has(> .dossier__cover):hover > .dossier__cover { transform: none; }
+  /* Lead the text with the title right under the image; demote the mono code
+     and category below it so the headline isn't buried under the labels. */
+  .dossier--panel:has(> .dossier__cover) .dossier__rowtext {
+    display: flex;
+    flex-direction: column;
+  }
+  .dossier--panel:has(> .dossier__cover) .dossier__main {
+    order: -1;
+    margin-bottom: 0.85rem;
+  }
   .dossier--panel .dossier__stat {
     position: static;
     width: auto;
