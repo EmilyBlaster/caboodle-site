@@ -393,6 +393,20 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
          iframe below). Without this guard the empty document would trigger
          a useless layout pass + start the scroll loop on a blank frame. */
       if (!srcSet) return;
+      /* Kill the embedded page's scrollbar. The parent drives the scroll via
+         transform, so the bar is dead chrome — it was showing as a strip on
+         the right edge of every preview. Same-origin, so we can inject it. */
+      try {
+        const idoc = frame.contentDocument;
+        if (idoc && idoc.head && !idoc.getElementById('cd-noscroll')) {
+          const st = idoc.createElement('style');
+          st.id = 'cd-noscroll';
+          st.textContent =
+            'html{scrollbar-width:none;-ms-overflow-style:none}' +
+            'html::-webkit-scrollbar,body::-webkit-scrollbar{width:0!important;height:0!important;display:none!important}';
+          idoc.head.appendChild(st);
+        }
+      } catch (e) {}
       /* Measure full page height. Shrink the iframe first so its own height
          doesn't inflate the page's reported scrollHeight. */
       try {

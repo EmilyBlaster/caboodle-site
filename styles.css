@@ -1508,7 +1508,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   opacity: 0.4;
 }
 .dossier__role {
-  color: var(--magenta) !important;
+  color: var(--ink-2) !important; /* was magenta — muted to calm the card */
 }
 
 /* ——— Main: text left · newspaper stat right ———————————————————————— */
@@ -1605,8 +1605,15 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 .dossier--withpreview .dossier__body {
   display: grid;
   grid-template-columns: 2fr 3fr;
-  gap: 2.5rem 3rem;
-  align-items: start;
+  grid-template-rows: minmax(380px, auto); /* a generous floor so the preview reads big */
+  gap: 2.5rem 3.5rem;
+  align-items: stretch; /* preview matches the text column height — no dead white */
+}
+/* Push the CTA to the bottom of the text column so it fills the stretched
+   height instead of leaving a gap under the copy. */
+.dossier--withpreview .dossier__cta {
+  margin-top: auto;
+  padding-top: 1.5rem;
 }
 
 /* Even cards: flip — preview left (3fr), text right (2fr) */
@@ -1621,10 +1628,11 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 .dossier__preview {
   border-radius: var(--r-card);
   overflow: hidden;
+  display: flex;
+  flex-direction: column; /* lets the viewport flex-fill the stretched height */
   box-shadow:
-    0 1px 3px rgba(0,0,0,0.05),
-    0 6px 20px rgba(0,0,0,0.08),
-    0 20px 40px rgba(0,0,0,0.05);
+    0 2px 8px rgba(40,40,40,0.05),
+    0 26px 50px -18px rgba(40,40,40,0.18);
   /* Prevent the preview from triggering card link — handled by
      pointer-events:none on the iframe itself */
 }
@@ -1664,7 +1672,8 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 
 /* Viewport: clips the scaled iframe */
 .dossier__preview-viewport {
-  height: 300px;
+  flex: 1 1 0; /* fill the stretched preview height; the tall iframe is clipped, not sizing */
+  min-height: 0;
   overflow: hidden;
   position: relative;
   /* Subtle shimmer behind the still-loading iframe so the empty
