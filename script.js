@@ -1520,3 +1520,26 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   if (reduce.addEventListener) reduce.addEventListener('change', apply);
   else if (reduce.addListener) reduce.addListener(apply);
 })();
+
+
+/* ── Work-card spines ───────────────────────────────────────────────────────
+   Each .dossier--panel reserves a right gutter that used to hold a big stat.
+   Fill it as the filed dossier's spine: a quiet "case file · <code>" label,
+   read from the card's own code so it stays in sync. ── */
+(function dossierSpines() {
+  var cards = document.querySelectorAll('.dossier--panel');
+  for (var i = 0; i < cards.length; i++) {
+    var card = cards[i];
+    var main = card.querySelector('.dossier__main');
+    if (!main || main.querySelector('.dossier__spine')) continue;
+    var codeEl = card.querySelector('.dossier__code');
+    if (!codeEl) continue;
+    var spine = document.createElement('div');
+    spine.className = 'dossier__spine';
+    spine.setAttribute('aria-hidden', 'true');
+    var label = document.createElement('span');
+    label.textContent = 'case file · ' + codeEl.textContent.trim();
+    spine.appendChild(label);
+    main.appendChild(spine);
+  }
+})();
