@@ -3006,11 +3006,11 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   .hero__stamp             { animation: heroEnter 0.7s var(--ease) 0.20s backwards; }
   .hero__eyebrow           { animation: heroEnter 0.7s var(--ease) 0.45s backwards; }
   .hero__line:nth-child(1) .hero__line-inner { animation: inkRise 0.72s var(--ease) 0.70s backwards; }
-  .hero__line:nth-child(1)::after            { animation: barLift 0.54s cubic-bezier(0.7, 0, 0.84, 0) 0.70s backwards; }
+  .hero__line:nth-child(1)::after            { animation: barLift 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.70s backwards; }
   .hero__line:nth-child(2) .hero__line-inner { animation: inkRise 0.72s var(--ease) 1.00s backwards; }
-  .hero__line:nth-child(2)::after            { animation: barLift 0.54s cubic-bezier(0.7, 0, 0.84, 0) 1.00s backwards; }
+  .hero__line:nth-child(2)::after            { animation: barLift 0.8s cubic-bezier(0.65, 0, 0.35, 1) 1.00s backwards; }
   .hero__line:nth-child(3) .hero__line-inner { animation: inkRise 0.72s var(--ease) 1.30s backwards; }
-  .hero__line:nth-child(3)::after            { animation: barLift 0.54s cubic-bezier(0.7, 0, 0.84, 0) 1.30s backwards; }
+  .hero__line:nth-child(3)::after            { animation: barLift 0.8s cubic-bezier(0.65, 0, 0.35, 1) 1.30s backwards; }
   .hero__lede              { animation: heroEnter 0.7s var(--ease) 1.95s backwards; }
   .hero__scroll            { animation: heroEnter 0.7s var(--ease) 2.10s backwards; }
   .trustband__inner        { animation: heroEnter 0.7s var(--ease) 2.25s backwards; }
@@ -3019,10 +3019,9 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   from { opacity: 0; transform: translateY(34px); }
   to   { opacity: 1; transform: none; }
 }
-/* Curtain lifts off the top of the line (covering to lifted-away). It's a
-   leaving element, so it uses ease-in and runs at ~75% of the ink's duration
-   (faster exit than entrance) per the motion spec — it whips away while the
-   type settles in behind it. */
+/* Curtain lifts off the top of the line (covering to lifted-away). Gentle
+   ease-in-out over 0.8s so it glides away rather than whipping, while the type
+   settles in behind it. */
 @keyframes barLift {
   from { transform: translateY(0); }
   to   { transform: translateY(-102%); }
