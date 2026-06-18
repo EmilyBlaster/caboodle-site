@@ -1806,39 +1806,6 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 .dossier--accent-magenta::after { background: var(--magenta); }
 .dossier--accent-ink::after     { background: var(--ink); }
 
-/* Work-card spine: the panel's reserved right gutter (where the stat used to
-   sit) reads as the filed dossier's spine — a faint wash of the card's accent,
-   an accent seam, and a quiet vertical "case file · <code>" label. Injected by
-   dossierSpines() in script.js; hidden below 720px where the gutter collapses. */
-.dossier__spine {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;                 /* sits in .dossier__main's 250px right-padding gutter */
-  width: 250px;             /* the gutter reserved by .dossier__main padding-right */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-left: 2px solid rgba(40, 40, 40, 0.12);
-  pointer-events: none;
-}
-.dossier__spine span {
-  writing-mode: vertical-rl;
-  font-family: var(--mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: var(--ink-2);
-}
-.dossier--panel.dossier--accent-blue    .dossier__spine { background: rgba(3, 89, 155, 0.05);  border-left-color: rgba(3, 89, 155, 0.35); }
-.dossier--panel.dossier--accent-magenta .dossier__spine { background: rgba(236, 0, 140, 0.05); border-left-color: rgba(236, 0, 140, 0.35); }
-.dossier--panel.dossier--accent-lime    .dossier__spine { background: rgba(150, 230, 80, 0.1); border-left-color: rgba(150, 230, 80, 0.55); }
-.dossier--panel.dossier--accent-ink     .dossier__spine { background: rgba(40, 40, 40, 0.035); border-left-color: rgba(40, 40, 40, 0.18); }
-@media (max-width: 720px) {
-  .dossier__spine { display: none; }
-}
-
 /* ——— Panel modifier · colored stat block ———————————————————————————
    Stat column is absolutely positioned against the card so it always
    fills the full card height regardless of content length.
@@ -1854,7 +1821,6 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 /* Text column: single-column, reserves right space for the panel */
 .dossier--panel .dossier__main {
   display: block;
-  position: relative;   /* positioning context for the spine in the right gutter */
   padding-right: 250px; /* panel width (230px) + 20px gap */
   padding-bottom: 3rem;
 }
