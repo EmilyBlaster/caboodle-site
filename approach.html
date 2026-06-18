@@ -131,14 +131,35 @@
       '.controls .meta { display: none !important; }',
     ].join('\n');
 
+    function hideFigCaption(doc) {
+      /* The diagram draws its own "fig. N ..." caption inside the canvas at a
+         JS-computed position, so target it by TEXT, not CSS position (the arc and
+         ladder sit it differently). approach.html prints its own caption below. */
+      var els = doc.querySelectorAll('.arc-embed-canvas *');
+      for (var i = 0; i < els.length; i++) {
+        var el = els[i];
+        if (el.children.length === 0 && /^fig\.\s*\d/i.test((el.textContent || '').trim())) {
+          el.style.setProperty('display', 'none', 'important');
+        }
+      }
+    }
     function inject(doc) {
       if (!doc || !doc.body) return false;
       if (!doc.querySelector('.embed-shell')) return false; /* bundle not rendered yet */
-      if (doc.getElementById('cd-arc-inject')) return true; /* already injected */
+      hideFigCaption(doc);
+      if (doc.getElementById('cd-arc-inject')) return true; /* style already injected */
       var s = doc.createElement('style');
       s.id = 'cd-arc-inject';
       s.textContent = CSS;
       (doc.head || doc.documentElement).appendChild(s);
+      /* Re-hide if the animation re-draws the caption (debounced). */
+      try {
+        var t = null;
+        new MutationObserver(function () {
+          if (t) return;
+          t = setTimeout(function () { t = null; hideFigCaption(doc); }, 150);
+        }).observe(doc.body, { childList: true, subtree: true });
+      } catch (e) {}
       return true;
     }
 
@@ -239,14 +260,35 @@
       '[style*="bottom: 60px"] { display: none !important; }',
     ].join('\n');
 
+    function hideFigCaption(doc) {
+      /* The diagram draws its own "fig. N ..." caption inside the canvas at a
+         JS-computed position, so target it by TEXT, not CSS position (the arc and
+         ladder sit it differently). approach.html prints its own caption below. */
+      var els = doc.querySelectorAll('.arc-embed-canvas *');
+      for (var i = 0; i < els.length; i++) {
+        var el = els[i];
+        if (el.children.length === 0 && /^fig\.\s*\d/i.test((el.textContent || '').trim())) {
+          el.style.setProperty('display', 'none', 'important');
+        }
+      }
+    }
     function inject(doc) {
       if (!doc || !doc.body) return false;
       if (!doc.querySelector('.embed-shell')) return false;
+      hideFigCaption(doc);
       if (doc.getElementById('cd-ladder-inject')) return true;
       var s = doc.createElement('style');
       s.id = 'cd-ladder-inject';
       s.textContent = CSS;
       (doc.head || doc.documentElement).appendChild(s);
+      /* Re-hide if the animation re-draws the caption (debounced). */
+      try {
+        var t = null;
+        new MutationObserver(function () {
+          if (t) return;
+          t = setTimeout(function () { t = null; hideFigCaption(doc); }, 150);
+        }).observe(doc.body, { childList: true, subtree: true });
+      } catch (e) {}
       return true;
     }
 
