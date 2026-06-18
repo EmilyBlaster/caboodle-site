@@ -2372,7 +2372,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 
 .labs-stage__viewport {
   position: relative;
-  height: clamp(400px, 65vh, 560px);
+  height: clamp(360px, 52vh, 460px);
   overflow: hidden;
   background: var(--paper);
   opacity: 0;

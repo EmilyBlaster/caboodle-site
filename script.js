@@ -616,6 +616,19 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
       /* Defeat scroll-behavior:smooth in the lab page's own CSS so every
          scrollTo below jumps instantly. Inline style beats external CSS. */
       iframe.contentDocument.documentElement.style.scrollBehavior = 'auto';
+      /* Hide the lab page's own scrollbar inside the preview (same-origin),
+         so the stage window reads clean instead of showing a scroll track. */
+      (function () {
+        var d = iframe.contentDocument;
+        if (d && d.head && !d.getElementById('cd-noscroll')) {
+          var st = d.createElement('style');
+          st.id = 'cd-noscroll';
+          st.textContent =
+            'html{scrollbar-width:none;-ms-overflow-style:none}' +
+            'html::-webkit-scrollbar,body::-webkit-scrollbar{width:0!important;height:0!important;display:none!important}';
+          d.head.appendChild(st);
+        }
+      })();
       /* Measure at the FINAL render width so the offset matches what the user
          sees (phones use a much narrower width than the 1440 design width). */
       iframe.style.width  = frameW() + 'px';
