@@ -1828,35 +1828,74 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 .dossier--panel::after { display: none; } /* panel IS the color */
 
 /* Text column: single-column, reserves right space for the panel */
-.dossier--panel .dossier__main {
-  display: block;
-  position: relative; /* anchors the case cover in the reserved gutter */
-  padding-right: 250px; /* panel width (230px) + 20px gap */
-  padding-bottom: 3rem;
+/* ——— Work page: tighter catalog rows ———————————————————————————————
+   The homepage is the showcase; the work page is the scannable index.
+   dossierCovers() wraps each panel's text in .dossier__rowtext and prepends a
+   uniform cover thumbnail, turning the card into a compact catalog row. The
+   :has() guard means no-JS falls back to the stacked panel below. */
+.dossier--panel:has(> .dossier__cover) {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  align-items: center;
+  column-gap: 2.25rem;
+  background: transparent;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--rule);
+  box-shadow: none;
+}
+.dossier--panel:has(> .dossier__cover):last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.dossier--panel:has(> .dossier__cover):hover {
+  background: rgba(40, 40, 40, 0.02);
 }
 
-/* Case cover — a framed glimpse of the actual deliverable, pinned into the
-   reserved gutter. The homepage shows the live page; the work page shows the
-   work itself. Injected by dossierCovers() in script.js. */
-.dossier--panel .dossier__cover {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-  width: 230px;
+/* Uniform cover thumbnail (overrides the absolute v1 cover) */
+.dossier--panel > .dossier__cover {
+  position: static;
+  top: auto;
+  right: auto;
+  transform: none;
+  width: 200px;
   aspect-ratio: 16 / 10;
   object-fit: cover;
   object-position: center top;
-  border-radius: 9px;
-  border: 1px solid rgba(40, 40, 40, 0.12);
-  box-shadow: 0 1px 2px rgba(40, 40, 40, 0.05), 0 14px 30px -14px rgba(40, 40, 40, 0.3);
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  box-shadow: none;
   background: var(--paper);
-  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.45s ease;
+  transition: transform 0.4s var(--ease);
 }
-.dossier--panel:hover .dossier__cover,
-.dossier--panel:focus-visible .dossier__cover {
-  transform: translateY(-50%) translateY(-3px);
-  box-shadow: 0 2px 4px rgba(40, 40, 40, 0.06), 0 20px 38px -14px rgba(40, 40, 40, 0.36);
+.dossier--panel:has(> .dossier__cover):hover > .dossier__cover {
+  transform: translateY(-3px);
+}
+
+/* Text column — compact, scannable */
+.dossier__rowtext { min-width: 0; }
+.dossier--panel:has(> .dossier__cover) .dossier__tab {
+  padding-right: 0;
+  margin-bottom: 0.55rem;
+}
+.dossier--panel:has(> .dossier__cover) .dossier__meta {
+  padding-right: 0;
+  margin-bottom: 0.5rem;
+}
+.dossier--panel:has(> .dossier__cover) .dossier__main {
+  display: block;
+  position: static;
+  padding: 0;
+}
+.dossier--panel:has(> .dossier__cover) .dossier__text { display: block; }
+.dossier--panel:has(> .dossier__cover) .dossier__h {
+  font-size: clamp(1.3rem, 1.9vw, 1.7rem);
+  line-height: 1.1;
+  margin: 0;
+  max-width: 32ch;
+}
+/* Index = scannable: drop the paragraph and the button affordance */
+.dossier--panel:has(> .dossier__cover) .dossier__p,
+.dossier--panel:has(> .dossier__cover) .dossier__cta {
+  display: none;
 }
 
 /* Stat panel: absolute, always full card height, flush right */
@@ -1899,15 +1938,15 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
     padding-right: 0;
     padding-bottom: 0;
   }
-  /* No gutter on narrow screens — the cover flows full-width under the text */
-  .dossier--panel .dossier__cover {
-    position: static;
-    transform: none;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    margin-top: 1.5rem;
+  /* Catalog rows shrink to a small-thumbnail list item */
+  .dossier--panel:has(> .dossier__cover) {
+    grid-template-columns: 116px 1fr;
+    column-gap: 1.25rem;
+    padding: 1.25rem 0;
   }
-  .dossier--panel:hover .dossier__cover { transform: none; }
+  .dossier--panel > .dossier__cover { width: 116px; }
+  .dossier--panel:has(> .dossier__cover) .dossier__h { font-size: 1.1rem; }
+  .dossier--panel:has(> .dossier__cover):hover > .dossier__cover { transform: none; }
   .dossier--panel .dossier__stat {
     position: static;
     width: auto;

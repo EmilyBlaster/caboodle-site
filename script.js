@@ -1554,17 +1554,25 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
   var cards = document.querySelectorAll('.dossier--panel');
   if (!cards.length) return;
   cards.forEach(function (card) {
-    var main = card.querySelector('.dossier__main');
-    if (!main || main.querySelector('.dossier__cover')) return;
+    if (card.querySelector('.dossier__cover')) return;
     var href = card.getAttribute('href') || '';
     var key = Object.keys(COVERS).find(function (k) { return href.indexOf(k) !== -1; });
     if (!key) return;
+    /* Wrap the card's text (tab / meta / main) so the cover can sit beside it
+       as a catalog row. The :has(> .dossier__cover) CSS only engages once this
+       runs, so no-JS gracefully falls back to the stacked panel. */
+    if (!card.querySelector('.dossier__rowtext')) {
+      var wrap = document.createElement('div');
+      wrap.className = 'dossier__rowtext';
+      while (card.firstChild) { wrap.appendChild(card.firstChild); }
+      card.appendChild(wrap);
+    }
     var img = document.createElement('img');
     img.className = 'dossier__cover';
     img.src = 'assets/work-covers/' + COVERS[key][0];
     img.alt = COVERS[key][1];
     img.loading = 'lazy';
     img.decoding = 'async';
-    main.appendChild(img);
+    card.insertBefore(img, card.firstChild);
   });
 })();
