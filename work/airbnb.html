@@ -52,20 +52,25 @@
   display: grid;
   /* 5fr text column (was 4fr) so the card heading fits on one line
      per break instead of widowing its last word. */
-  grid-template-columns: 5fr 7fr;
-  min-height: 700px;
+  /* Full-width window: the Greenroom app needs desktop width to render
+     its own nav without an internal horizontal scrollbar. */
+  grid-template-columns: 1fr;
+  min-height: 0;
   border-radius: 10px;
   overflow: hidden;
   background: var(--ink);
   box-shadow: 0 2px 20px rgba(0,0,0,0.10);
 }
 .abspot__text {
-  padding: clamp(3rem, 6vw, 6rem) clamp(2rem, 5vw, 5rem);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1.25rem;
+  padding: clamp(2.25rem, 4vw, 3.25rem) clamp(2rem, 5vw, 4.5rem);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: end;
+  column-gap: clamp(2rem, 4vw, 4rem);
+  row-gap: 1.1rem;
 }
+.abspot__text .abspot__kicker { grid-column: 1 / -1; }
+.abspot__text .abspot__cta { align-self: end; }
 .abspot__kicker {
   font-family: var(--mono);
   font-size: 0.68rem;
@@ -193,7 +198,7 @@
   flex: 1;
   border: none;
   display: block;
-  min-height: 680px;
+  min-height: 760px;
 }
 .abspot__mobilecard { display: none; }
 
@@ -258,6 +263,7 @@
 @media (max-width: 900px) {
   .abspot__inner { grid-template-columns: 1fr; min-height: 0; }
   .abspot__iframe { min-height: 360px; }
+  .abspot__text { grid-template-columns: 1fr; row-gap: 1.25rem; }
 }
 /* On phones the embedded app is unusable (desktop layout, scaled
    tiny). Swap for a tappable card that opens it full screen. */
@@ -1204,6 +1210,67 @@
 </section>
 
 <!-- AI101 walkthrough: interactive re-creation of one performance task -->
+<!-- Spotlight: Greenroom lab, embedded live -->
+<section class="abspot" data-log="002b — spotlight · greenroom lab, live">
+  <header class="abspot__head">
+    <span class="abspot__head-kicker">the public lab · built in parallel</span>
+    <h3 class="abspot__head-h">
+      the work stays internal.<br />
+      <em>the proof doesn't.</em>
+    </h3>
+    <p class="abspot__head-p">
+      AI101 and the manager skill live inside Airbnb. Greenroom is
+      the lab I built in parallel so the thinking has a public
+      address: a working development copilot with real RAG, a real
+      eval harness, and a documented path to production. Embedded
+      below, running live.
+    </p>
+  </header>
+  <div class="abspot__inner">
+    <div class="abspot__text">
+      <span class="abspot__kicker">spotlight · greenroom</span>
+      <h3 class="abspot__h">
+        greenroom.<br />
+        <em>running live.</em>
+      </h3>
+      <p class="abspot__p">
+        Ask it a real talent-development question. Watch it
+        retrieve, cite its sources, refuse the ones out of scope,
+        and follow up. Performance over content. Behavior change
+        over checkbox completion.
+      </p>
+      <a class="abspot__cta" href="../labs/greenroom.html">
+        read the full lab writeup →
+      </a>
+    </div>
+    <div class="abspot__window">
+      <div class="abspot__chrome">
+        <span class="abspot__dot" style="background:#EC008C"></span>
+        <span class="abspot__dot" style="background:#96E650"></span>
+        <span class="abspot__dot" style="background:#4a4a5a"></span>
+        <span class="abspot__chrome-title">greenroom-strand.netlify.app</span>
+        <a class="abspot__expand" href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener">open full screen ↗</a>
+      </div>
+      <iframe
+        src="https://greenroom-strand.netlify.app"
+        class="abspot__iframe"
+        loading="lazy"
+        scrolling="no"
+        title="Greenroom: live AI development copilot prototype"
+      ></iframe>
+      <a class="abspot__mobilecard" href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener" aria-label="Open the live Greenroom lab full-screen">
+        <span class="abspot__chip">live lab</span>
+        <span class="abspot__mobilecard-h">greenroom, live.</span>
+        <span class="abspot__mobilecard-p">Best experienced full screen on tablet or desktop. Tap to open the working prototype in a new tab.</span>
+        <span class="abspot__mobilecard-cta">
+          open the live lab
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section class="aiwt" data-log="002a — inside a module · interactive walkthrough">
   <div class="aiwt__inner">
     <header class="aiwt__head">
@@ -1435,67 +1502,6 @@
       porchlight's five prep points are stand-ins for the internal
       decision practices
     </p>
-  </div>
-</section>
-
-<!-- Spotlight: Greenroom lab, embedded live -->
-<section class="abspot" data-log="002b — spotlight · greenroom lab, live">
-  <header class="abspot__head">
-    <span class="abspot__head-kicker">the public lab · built in parallel</span>
-    <h3 class="abspot__head-h">
-      the work stays internal.<br />
-      <em>the proof doesn't.</em>
-    </h3>
-    <p class="abspot__head-p">
-      AI101 and the manager skill live inside Airbnb. Greenroom is
-      the lab I built in parallel so the thinking has a public
-      address: a working development copilot with real RAG, a real
-      eval harness, and a documented path to production. Embedded
-      below, running live.
-    </p>
-  </header>
-  <div class="abspot__inner">
-    <div class="abspot__text">
-      <span class="abspot__kicker">spotlight · greenroom</span>
-      <h3 class="abspot__h">
-        greenroom.<br />
-        <em>running live.</em>
-      </h3>
-      <p class="abspot__p">
-        Ask it a real talent-development question. Watch it
-        retrieve, cite its sources, refuse the ones out of scope,
-        and follow up. Performance over content. Behavior change
-        over checkbox completion.
-      </p>
-      <a class="abspot__cta" href="../labs/greenroom.html">
-        read the full lab writeup →
-      </a>
-    </div>
-    <div class="abspot__window">
-      <div class="abspot__chrome">
-        <span class="abspot__dot" style="background:#EC008C"></span>
-        <span class="abspot__dot" style="background:#96E650"></span>
-        <span class="abspot__dot" style="background:#4a4a5a"></span>
-        <span class="abspot__chrome-title">greenroom-strand.netlify.app</span>
-        <a class="abspot__expand" href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener">open full screen ↗</a>
-      </div>
-      <iframe
-        src="https://greenroom-strand.netlify.app"
-        class="abspot__iframe"
-        loading="lazy"
-        scrolling="no"
-        title="Greenroom: live AI development copilot prototype"
-      ></iframe>
-      <a class="abspot__mobilecard" href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener" aria-label="Open the live Greenroom lab full-screen">
-        <span class="abspot__chip">live lab</span>
-        <span class="abspot__mobilecard-h">greenroom, live.</span>
-        <span class="abspot__mobilecard-p">Best experienced full screen on tablet or desktop. Tap to open the working prototype in a new tab.</span>
-        <span class="abspot__mobilecard-cta">
-          open the live lab
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
-        </span>
-      </a>
-    </div>
   </div>
 </section>
 
