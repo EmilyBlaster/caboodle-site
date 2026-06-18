@@ -1576,3 +1576,19 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     card.insertBefore(img, card.firstChild);
   });
 })();
+
+/* ==========================================================================
+   Greenroom embed — only load it when the case study is viewed directly
+   work/airbnb.html embeds the live, cross-origin Greenroom app. When this
+   page is rendered inside a homepage preview, that nested app is pure dead
+   weight: the preview starts below the Greenroom section and never shows it,
+   yet loading a third-party app makes the preview slow and flaky. So only
+   wire up its src at the top level; in a preview it stays unloaded.
+   ========================================================================== */
+(function greenroomEmbed() {
+  var gr = document.querySelector('.abspot__iframe');
+  if (!gr || !gr.dataset.src) return;
+  var inPreview = true;
+  try { inPreview = window.self !== window.top; } catch (e) { inPreview = true; }
+  if (!inPreview) gr.src = gr.dataset.src;
+})();
