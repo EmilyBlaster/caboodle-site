@@ -1943,21 +1943,20 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
     padding-right: 0;
     padding-bottom: 0;
   }
-  /* Catalog rows shrink to a small-thumbnail list item */
+  /* On phones the side-by-side row is too cramped — stack it into an
+     image-card: full-width cover on top, text below. */
   .dossier--panel:has(> .dossier__cover) {
-    grid-template-columns: 116px 1fr;
-    column-gap: 1.25rem;
-    padding: 1.25rem 0;
+    grid-template-columns: 1fr;
+    align-items: start;
+    row-gap: 1.1rem;
+    padding: 1.6rem 0;
   }
-  .dossier--panel > .dossier__cover { width: 116px; }
-  .dossier--panel:has(> .dossier__cover) .dossier__h { font-size: 1.1rem; }
+  .dossier--panel > .dossier__cover {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+  }
+  .dossier--panel:has(> .dossier__cover) .dossier__h { font-size: 1.4rem; }
   .dossier--panel:has(> .dossier__cover):hover > .dossier__cover { transform: none; }
-  /* Stack the tab on narrow rows so the mono code doesn't break mid-token */
-  .dossier--panel:has(> .dossier__cover) .dossier__tab {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
   .dossier--panel .dossier__stat {
     position: static;
     width: auto;
