@@ -7282,7 +7282,8 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   pointer-events: auto;
   padding: 0.65rem 1.1rem 0.65rem 0.9rem;
   background: #111113;
-  color: var(--lime);
+  /* Dormant: quiet. Muted label, no lime, no glow ring. Present, not pushy. */
+  color: rgba(242, 239, 232, 0.62);
   border: none;
   border-radius: var(--r-pill);
   font-family: var(--mono);
@@ -7291,20 +7292,24 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   text-transform: uppercase;
   cursor: pointer;
   box-shadow:
-    0 0 0 1px rgba(150, 230, 80, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
     0 4px 18px rgba(0, 0, 0, 0.35),
     0 1px 4px rgba(0, 0, 0, 0.2);
-  transition: transform 0.22s ease, box-shadow 0.22s ease, outline 0.22s ease;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, color 0.22s ease;
 }
-.guide-btn:hover {
+/* Reach for it and it comes alive: brand lime returns, ring lights, it lifts. */
+.guide-btn:hover,
+.guide-btn:focus-visible {
+  color: var(--lime);
   transform: translateY(-2px);
   box-shadow:
     0 0 0 1px rgba(150, 230, 80, 0.4),
     0 8px 28px rgba(0, 0, 0, 0.4),
     0 2px 6px rgba(0, 0, 0, 0.2);
 }
-/* Open state: lime outline ring signals the panel is active */
+/* Open state: lime returns + outline ring signals the panel is active */
 .guide-btn.is-open {
+  color: var(--lime);
   box-shadow:
     0 0 0 2px var(--lime),
     0 4px 18px rgba(0, 0, 0, 0.35);
