@@ -387,6 +387,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 .hero__stamp {
   position: absolute;
   top: 1.75rem; right: 0;
+  z-index: 5; /* above the lifting headline curtains so the bar passes behind it */
   display: inline-flex; align-items: center; gap: 0.9rem;
   padding: 0.45rem 0.95rem;
   border: 1px solid var(--ink);
@@ -406,6 +407,8 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 
 .hero__meta {
   padding-top: 0.25rem;
+  position: relative;
+  z-index: 5; /* keep the eyebrow above the lifting curtains too */
 }
 .hero__eyebrow {
   font-family: var(--mono);
