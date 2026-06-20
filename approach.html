@@ -224,6 +224,28 @@
       '.note { display: none !important; }',
     ].join('\n');
 
+    function rescale() {
+      var win = iframe.contentWindow;
+      if (!win) return;
+      try { win.dispatchEvent(new Event('resize')); } catch (e) {}
+    }
+
+    // The figure scales its fixed 1920x1080 stage to fit the frame, but only
+    // measures on mount + resize. Things change the frame AFTER it mounts: our
+    // padding strip (above) widens it ~100px, and the iframe's aspect-ratio box
+    // plus the figure's own inlined webfonts settle a beat later. The figure never
+    // re-measures on its own, so on a cold first view it locks in a too-small scale
+    // and the columns/connectors don't line up until a manual refresh. Nudge it to
+    // re-measure once everything has settled (immediately, next frame, and after
+    // its fonts load).
+    function scheduleRescales(doc) {
+      rescale();
+      requestAnimationFrame(rescale);
+      setTimeout(rescale, 300);
+      setTimeout(rescale, 800);
+      try { if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(rescale); } catch (e) {}
+    }
+
     function inject(doc) {
       if (!doc || !doc.body) return false;
       if (!doc.querySelector('.embed-shell')) return false;
@@ -232,6 +254,7 @@
       s.id = 'cd-ladder-inject';
       s.textContent = CSS;
       (doc.head || doc.documentElement).appendChild(s);
+      scheduleRescales(doc);
       return true;
     }
 
