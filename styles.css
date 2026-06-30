@@ -5005,7 +5005,10 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   font-family: var(--display);
   font-weight: 800;
   font-size: clamp(2.5rem, 6.5vw, 5.25rem);
-  line-height: 0.95;
+  /* 1.05, not 0.95: at display size this headline wraps to extra lines on
+     narrower viewports, and a tighter leading collides the descenders
+     (program / lead / design) with the ascenders on the line below. */
+  line-height: 1.05;
   letter-spacing: -0.03em;
   color: var(--ink);
   text-transform: lowercase;
