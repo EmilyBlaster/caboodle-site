@@ -5005,10 +5005,11 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   font-family: var(--display);
   font-weight: 800;
   font-size: clamp(2.5rem, 6.5vw, 5.25rem);
-  /* 1.05, not 0.95: at display size this headline wraps to extra lines on
-     narrower viewports, and a tighter leading collides the descenders
-     (program / lead / design) with the ascenders on the line below. */
-  line-height: 1.05;
+  /* 1.2: at this display size Bauhaus Bool's deep descenders (program / lead /
+     design) graze the tall ascenders on the line below (behavioral's b/h/l/d).
+     1.05 only left ~4px of leading; 1.2 gives ~17px so the lines read clearly
+     separate instead of running together. */
+  line-height: 1.2;
   letter-spacing: -0.03em;
   color: var(--ink);
   text-transform: lowercase;
