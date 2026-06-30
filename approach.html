@@ -124,6 +124,26 @@
       '.controls .meta { display: none !important; }',
     ].join('\n');
 
+    function rescale() {
+      var win = iframe.contentWindow;
+      if (!win) return;
+      try { win.dispatchEvent(new Event('resize')); } catch (e) {}
+    }
+
+    // The arc scales its fixed 1920x1080 stage to fit the frame but only measures
+    // on mount + resize. Our padding strip above widens the frame ~110px, and the
+    // iframe's aspect-ratio box + the figure's inlined webfonts settle a beat later;
+    // the figure never re-measures, so on a cold first view it can lock in a
+    // too-small scale and sit shrunk in the corner until a manual refresh. Nudge it
+    // to re-measure once everything has settled. (Same fix as the ladder figure.)
+    function scheduleRescales(doc) {
+      rescale();
+      requestAnimationFrame(rescale);
+      setTimeout(rescale, 300);
+      setTimeout(rescale, 800);
+      try { if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(rescale); } catch (e) {}
+    }
+
     function inject(doc) {
       if (!doc || !doc.body) return false;
       if (!doc.querySelector('.embed-shell')) return false; /* bundle not rendered yet */
@@ -132,6 +152,7 @@
       s.id = 'cd-arc-inject';
       s.textContent = CSS;
       (doc.head || doc.documentElement).appendChild(s);
+      scheduleRescales(doc);
       return true;
     }
 
