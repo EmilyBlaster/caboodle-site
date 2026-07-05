@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-404B8P6ZLK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-404B8P6ZLK');
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>reading the rainforest · scroll experiment · caboodle design</title>
+<meta name="description" content="Reading the Rainforest: a parallax scrollytelling experiment. Three layers, canopy to floor, in one continuous scroll driven by a single input, how far down the page you are. Built in plain HTML, CSS, and JavaScript." />
+
+<!-- Open Graph / social preview -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="caboodle design" />
+<meta property="og:title" content="reading the rainforest · a scroll experiment" />
+<meta property="og:description" content="What if a learner didn't click through a lesson, but fell through it? Three layers of rainforest in one continuous scroll." />
+<meta property="og:url" content="https://caboodledesign.info/labs/reading-the-rainforest.html" />
+<meta property="og:image" content="https://caboodledesign.info/labs/reading-the-rainforest-live/full-descent.webp" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css?v=20260618o" />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+
+<style>
+/* ==========================================================================
+   Lab pages — shared base styles (mirrors labs/greenroom.html)
+   ========================================================================== */
+.labero {
+  background: var(--ink);
+  color: var(--white);
+  padding: clamp(6rem, 12vw, 9rem) var(--pad-x) clamp(4rem, 8vw, 6rem);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--dark-2);
+}
+.labero__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lime);
+  text-decoration: none;
+  margin-bottom: 2.5rem;
+  transition: gap 0.3s var(--ease), opacity 0.3s var(--ease);
+  opacity: 0.85;
+}
+.labero__back:hover { gap: 0.8rem; opacity: 1; }
+.labero__stamp {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 2rem;
+}
+.labero__stamp b { color: var(--lime); font-weight: 500; }
+.labero__watermark {
+  font-family: var(--display);
+  font-size: clamp(8rem, 20vw, 16rem);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  color: rgba(255,255,255,0.04);
+  position: absolute;
+  right: var(--pad-x);
+  bottom: -0.1em;
+  pointer-events: none;
+  user-select: none;
+}
+.labero__inner { max-width: var(--maxw); margin: 0 auto; position: relative; }
+.labero__h {
+  font-family: var(--display);
+  font-size: clamp(2.75rem, 6vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--white);
+  text-transform: lowercase;
+  max-width: 18ch;
+  margin: 0 0 1.25rem;
+}
+.labero__h em { color: var(--lime); font-style: normal; }
+.labero__lede {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.6;
+  color: rgba(255,255,255,0.6);
+  max-width: 52ch;
+  margin-bottom: 2rem;
+  text-wrap: pretty;
+}
+.labero__lede--lead {
+  text-wrap: balance;
+  color: rgba(255,255,255,0.92);
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: lowercase;
+  font-size: clamp(1.15rem, 2vw, 1.6rem);
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin-bottom: 1.25rem;
+}
+.labero__tags {
+  list-style: none;
+  padding: 0; margin: 2rem 0 0;
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+}
+.labero__tags li {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3em 0.65em;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.4);
+}
+
+/* Hero CTA row */
+.labero__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.85rem 1.5rem; }
+.labero__demo {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.85rem 1.4rem;
+  background: var(--lime);
+  color: var(--ink);
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: var(--r-pill);
+  text-decoration: none;
+  transition: transform 0.4s var(--ease), background 0.4s var(--ease);
+}
+.labero__demo:hover { background: var(--white); }
+.labero__demo svg { transition: transform 0.4s var(--ease); }
+.labero__demo:hover svg { transform: translate(2px, -2px); }
+.labero__code {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lime);
+  text-decoration: none;
+  transition: gap 0.3s var(--ease);
+}
+.labero__code:hover { gap: 0.85rem; }
+
+/* Section base */
+.lab-s {
+  padding: clamp(3.5rem, 7vw, 5.5rem) var(--pad-x);
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+}
+.lab-s--alt { background: var(--paper-2); }
+.lab-s__inner { max-width: var(--maxw); margin: 0 auto; }
+.lab-s__kicker {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--magenta);
+  display: block;
+  margin-bottom: 0.75rem;
+}
+.lab-s__h {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  line-height: 1.05;
+  margin: 0 0 0.75rem;
+}
+.lab-s__h em { font-style: italic; }
+.lab-s__p {
+  max-width: 62ch;
+  line-height: 1.65;
+  color: var(--ink-2);
+  margin: 0 0 2.5rem;
+}
+
+/* Feature grid */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1px;
+  border: 1px solid var(--rule);
+  margin-bottom: 1rem;
+  background: var(--rule);
+}
+.feature {
+  padding: 1.75rem;
+  background: var(--paper);
+  position: relative;
+  transition: background 0.3s var(--ease);
+}
+.feature:hover { background: var(--white); }
+.feature__num {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 3rem;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  color: rgba(150, 230, 80, 0.18);
+  margin-bottom: 0.75rem;
+}
+.feature__h {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-transform: lowercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+}
+.feature__p {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+/* Thesis callout */
+.thesis {
+  border-left: 3px solid var(--magenta);
+  padding: 1.5rem 2rem;
+  background: var(--paper-2);
+  margin-bottom: 0;
+}
+.thesis p {
+  font-family: var(--display);
+  font-size: clamp(1rem, 1.8vw, 1.35rem);
+  font-weight: 700;
+  text-transform: lowercase;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  color: var(--ink);
+  margin: 0;
+}
+.thesis p em { font-style: italic; color: var(--magenta); }
+
+/* Tools */
+.tool-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+.tool-pill {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3em 0.65em;
+  border: 1px solid var(--rule);
+  color: var(--ink-2);
+  background: var(--paper);
+}
+
+/* ==========================================================================
+   Live scroll embed — the experience runs INSIDE the frame and is scrollable
+   in place (unlike the greenroom poster-and-open pattern). Framed like a
+   browser window. The heavy experience loads only when this page is the
+   top-level document, so the homepage labs-preview never loads it nested.
+   ========================================================================== */
+.demo-frame {
+  border: 1px solid var(--rule);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: #06100b;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+  margin-bottom: 1rem;
+}
+.demo-frame__chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem;
+  background: var(--ink);
+}
+.demo-frame__dots { display: flex; gap: 0.4rem; flex-shrink: 0; }
+.demo-frame__dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.18); }
+.demo-frame__dots span:nth-child(1) { background: var(--magenta); }
+.demo-frame__dots span:nth-child(2) { background: var(--lime); }
+.demo-frame__url {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.demo-frame__expand {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lime);
+  text-decoration: none;
+  transition: opacity 0.3s var(--ease);
+}
+.demo-frame__expand:hover { opacity: 0.7; }
+.demo-frame__viewport {
+  position: relative;
+  height: 85vh;
+  min-height: 560px;
+  background: #06100b;
+}
+@media (max-width: 640px) { .demo-frame__viewport { height: 80vh; min-height: 460px; } }
+/* the still descent image, shown until the live experience fades in over it,
+   and shown on its own when this page is embedded in the homepage preview */
+.demo-frame__placeholder {
+  position: absolute; inset: 0;
+  overflow: hidden;
+}
+.demo-frame__placeholder img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+.demo-frame__viewport iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  border: 0;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+.demo-frame__viewport iframe.is-loaded { opacity: 1; }
+.demo-frame__hint {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+.demo-frame__hint svg { color: var(--magenta); }
+
+/* Full-descent stills — two strips shown as a matched, centered pair.
+   Equal rendered height so their tops AND bottoms align (no dangling gap),
+   and centered in the section so the whitespace reads as intentional. */
+.rf-figure-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+.rf-figure {
+  margin: 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: #06100b;
+  flex: 0 1 auto;
+}
+.rf-figure img { display: block; width: auto; height: clamp(440px, 78vh, 820px); }
+@media (max-width: 640px) {
+  .rf-figure { flex-basis: 100%; }
+  .rf-figure img { width: 100%; height: auto; }
+}
+.rf-figure figcaption {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding: 0.9rem 1.1rem;
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="nav__mark" href="../index.html">
+    <svg class="cd-logo" viewBox="0 0 260 56" xmlns="http://www.w3.org/2000/svg" aria-label="caboodle design" role="img">
+      <path class="cd-logo__mark" fill-rule="evenodd"
+        d="M 5 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0 M 33 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0"/>
+      <text class="cd-logo__word" x="95" y="26" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">caboodle</text>
+      <text class="cd-logo__word" x="95" y="50" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">design</text>
+    </svg>
+  </a>
+  <nav class="nav__links">
+    <a href="../approach.html">approach</a>
+    <a href="../work.html">work</a>
+    <a href="../labs.html">labs</a>
+    <a href="../about.html">about emily</a>
+    <a href="../contact.html" class="nav__cta">let's talk</a>
+  </nav>
+</header>
+
+<!-- 1 — Hook -->
+<section class="labero">
+  <div class="labero__inner">
+    <a class="labero__back" href="../labs.html">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      <span>back to labs</span>
+    </a>
+    <div class="labero__stamp">
+      <span>labs</span>
+      <b>experiment</b>
+      <span>parallax + scrollytelling</span>
+      <span>2026</span>
+    </div>
+    <h1 class="labero__h">reading the rainforest<em>.</em></h1>
+    <p class="labero__lede labero__lede--lead">
+      What if a learner didn't click through a lesson, but fell through it?
+    </p>
+    <p class="labero__lede">
+      Three layers of rainforest, canopy to floor, stacked into one continuous scroll. You start in the bright crown and sink to the dark floor. The whole scene runs on a single input: how far down the page you are. Scroll it below, or open it full screen.
+    </p>
+    <div class="labero__cta">
+      <a class="labero__demo" href="#descend">
+        <span>scroll the descent</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 5v14m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+      <a class="labero__code" href="reading-the-rainforest-live/" target="_blank" rel="noopener">
+        <span>open full screen</span>
+        <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+    </div>
+    <ul class="labero__tags">
+      <li>parallax</li>
+      <li>scrollytelling</li>
+      <li>html / css / js</li>
+      <li>scroll-driven</li>
+      <li>custom art</li>
+      <li>no framework</li>
+      <li>experiment</li>
+    </ul>
+  </div>
+  <span class="labero__watermark" aria-hidden="true">001</span>
+</section>
+
+<!-- Live scroll embed -->
+<section class="lab-s lab-s--alt" id="descend">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">the experiment</span>
+    <h2 class="lab-s__h">descend by <em>scroll.</em></h2>
+    <p class="lab-s__p">
+      The actual piece, running live. Scroll inside the frame to fall from the canopy to the forest floor, or open it full screen for the whole descent.
+    </p>
+    <div class="demo-frame">
+      <div class="demo-frame__chrome">
+        <div class="demo-frame__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+        <span class="demo-frame__url">reading the rainforest · the full descent</span>
+        <a class="demo-frame__expand" href="reading-the-rainforest-live/" target="_blank" rel="noopener">open full screen ↗</a>
+      </div>
+      <div class="demo-frame__viewport">
+        <div class="demo-frame__placeholder" aria-hidden="true">
+          <img src="reading-the-rainforest-live/full-descent.webp" alt="" />
+        </div>
+        <iframe data-src="reading-the-rainforest-live/" title="Reading the Rainforest, live parallax experience" loading="lazy"></iframe>
+      </div>
+    </div>
+    <p class="demo-frame__hint">
+      <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M12 5v14m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      scroll inside the frame to descend
+    </p>
+  </div>
+</section>
+
+<!-- 2 — The question -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">the question</span>
+    <h2 class="lab-s__h">what if you <em>fell</em> through a lesson?</h2>
+    <p class="lab-s__p">
+      So much digital learning treats scroll as a way to get from one box to the next. But scroll is motion, and motion carries feeling. This started as a question: what if your position on the page was the whole experience, not just the way you advanced through it?
+    </p>
+    <div class="thesis">
+      <p>scroll is motion. motion carries feeling. this is me poking at what that means for how people <em>move through, and remember,</em> an experience.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 — How it works -->
+<section class="lab-s lab-s--alt">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">how it works</span>
+    <h2 class="lab-s__h">one number runs <em>the whole scene.</em></h2>
+    <p class="lab-s__p">
+      No timeline. No play button. A scroll listener turns your position on the page into a single number, and that number becomes the clock for the entire scene.
+    </p>
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="feature__num">01</div>
+        <h3 class="feature__h">one input</h3>
+        <p class="feature__p">How far you have scrolled becomes one value. Every leaf, animal, and layer reads from it. That is the entire engine.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">02</div>
+        <h3 class="feature__h">depth by speed</h3>
+        <p class="feature__p">Each cutout shifts by that value times its own depth. Far layers barely move, near ones rush past. The difference is what your eye reads as depth.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">03</div>
+        <h3 class="feature__h">the curtain lifts</h3>
+        <p class="feature__p">Reach the bottom of a layer and its banner lifts away like a curtain. The next layer is already waiting underneath.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">04</div>
+        <h3 class="feature__h">plain web</h3>
+        <p class="feature__p">Built from HTML, CSS, and a little JavaScript. No video, no game engine, no framework. Just parallax and scroll, doing math every frame.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 — The full descent -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">the full descent</span>
+    <h2 class="lab-s__h">canopy to <em>floor.</em></h2>
+    <p class="lab-s__p">
+      Three layers in one scroll, seen at a glance. The live frame shows one window at a time. These are the whole fall, laid flat: the layers on the left, and the complete scroll with the field notes between them on the right. Every leaf and animal is custom art, made for this piece. Nothing stock.
+    </p>
+    <div class="rf-figure-row">
+      <figure class="rf-figure">
+        <img src="reading-the-rainforest-live/full-descent.webp" alt="The three scene layers: the bright canopy, the shadowed understory, and the dark forest floor." loading="lazy" />
+        <figcaption>the three layers</figcaption>
+      </figure>
+      <figure class="rf-figure">
+        <img src="reading-the-rainforest-live/full-descent-detail.webp" alt="The complete scroll, including the field-journal species notes that sit between each layer." loading="lazy" />
+        <figcaption>the full scroll</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 5 — Why it matters -->
+<section class="lab-s lab-s--alt">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">why i keep coming back to it</span>
+    <h2 class="lab-s__h">motion is a <em>learning tool.</em></h2>
+    <p class="lab-s__p">
+      I keep returning to this because most learning design wastes scroll. It moves you between boxes. But the way something moves is part of what you take away from it. If descending through a rainforest feels different from clicking next, that difference is a design lever. This is me testing what it could do for how people move through, and remember, an experience. Still an experiment.
+    </p>
+    <div class="tool-list">
+      <span class="tool-pill">html</span>
+      <span class="tool-pill">css</span>
+      <span class="tool-pill">javascript</span>
+      <span class="tool-pill">parallax</span>
+      <span class="tool-pill">scroll-driven</span>
+      <span class="tool-pill">claude code</span>
+    </div>
+  </div>
+</section>
+
+<!-- Closing -->
+<section class="closing" id="next">
+  <div class="closing__card">
+    <div class="closing__stamp" aria-hidden="true">
+      <svg class="cd-stamp-mark" viewBox="0 0 90 60" aria-hidden="true">
+        <path class="cd-stamp-mark__fill" fill-rule="evenodd"
+          d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>
+      </svg>
+      <small>experiment</small>
+      <small>in progress</small>
+    </div>
+    <div class="closing__body">
+      <span class="closing__kicker">see it run</span>
+      <h2 class="closing__h">
+        take the <em>descent.</em>
+      </h2>
+      <p class="closing__p">
+        Scroll it in place above, or open it full screen and fall from the canopy to the forest floor.
+      </p>
+      <a class="closing__cta" href="reading-the-rainforest-live/" target="_blank" rel="noopener">
+        <span>open full screen</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+      <a class="closing__email" href="../labs.html">back to the bench →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot__row">
+    <span class="foot__mark">caboodle design</span>
+    <span class="foot__tag">strategy, media, and behavioral science — it's the whole caboodle</span>
+  </div>
+  <div class="foot__cols">
+    <div>
+      <h4>navigation</h4>
+      <ul>
+        <li><a href="../approach.html">approach</a></li>
+        <li><a href="../work.html">work</a></li>
+        <li><a href="../labs.html">labs</a></li>
+        <li><a href="../about.html">about emily</a></li>
+        <li><a href="../field-notes.html">field notes</a></li>
+        <li><a href="../resources.html">free resources</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>get in touch</h4>
+      <ul>
+        <li><a href="../contact.html">let's talk</a></li>
+        <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
+        <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot__row foot__row--small">
+    <span>&copy; 2026 caboodle design</span>
+    <span class="foot__credit">built by emily green in claude code</span>
+    <span class="foot__location">grand rapids, mi</span>
+  </div>
+</footer>
+
+<!-- Load the live experience only when this page is top-level, so the homepage
+     labs-preview (which embeds this page in an iframe) never loads the heavy
+     scene nested. The still descent image stands in until the live frame
+     fades in over it. -->
+<script>
+(function () {
+  var f = document.querySelector('.demo-frame__viewport iframe');
+  if (!f || !f.dataset.src) return;
+  if (window.self !== window.top) return; /* nested in homepage preview — keep the still */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        f.addEventListener('load', function () { f.classList.add('is-loaded'); });
+        f.src = f.dataset.src;
+        io.disconnect();
+      }
+    });
+  }, { rootMargin: '500px 0px' });
+  io.observe(f.parentElement);
+})();
+</script>
+
+<script src="../script.js?v=20260618o" defer></script>
+</body>
+</html>

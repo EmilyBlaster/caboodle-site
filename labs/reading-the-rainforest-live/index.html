@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading the Rainforest — The Full Descent</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Libre+Caslon+Display&family=Outfit:wght@400;500;600;700&family=Cormorant+Garamond:ital@1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   READING THE RAINFOREST — all three layers merged into ONE continuous scroll.
+   Shared engine structure is global; each layer's specifics are scoped under
+   .canopy / .understory / .floor (on the .stage). One engine runs per .stage.
+   ═══════════════════════════════════════════════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{ --cream:#EFE4C8; --gold:#F2D175; }
+html{ color-scheme:dark; }
+body{ font-family:'Outfit',sans-serif; background:#06100b; color:var(--cream); }
+/* keep the scrollbar dark + on-theme so it doesn't cut a pale strip through the scene */
+*{ scrollbar-width:thin; scrollbar-color:rgba(242,209,117,.3) #06100b; }
+::-webkit-scrollbar{ width:9px; height:9px; }
+::-webkit-scrollbar-track{ background:#06100b; }
+::-webkit-scrollbar-thumb{ background:rgba(242,209,117,.28); border-radius:8px; border:2px solid #06100b; }
+::-webkit-scrollbar-thumb:hover{ background:rgba(242,209,117,.45); }
+.intro{ height:46vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; }
+.intro .k{ font-family:'JetBrains Mono',monospace; font-size:.72rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); }
+.intro p{ font-family:'Cormorant Garamond',serif; font-style:italic; color:#bcd0bf; font-size:1.2rem; }
+
+/* ---------- shared engine structure ---------- */
+.stage{ height:560vh; position:relative; }
+.stagestick{ position:sticky; top:0; height:100vh; overflow:hidden; }
+.band{ position:absolute; inset:0; overflow:hidden; background:var(--band); z-index:2; will-change:transform;
+  /* feather the bottom edge so the lift into the descent has no hard seam */
+  -webkit-mask-image:linear-gradient(to bottom,#000 92%,transparent 100%); mask-image:linear-gradient(to bottom,#000 92%,transparent 100%); }
+img{ position:absolute; pointer-events:none; }
+.plane{ position:absolute; inset:0; will-change:transform; pointer-events:none; }
+.p-far{ z-index:1; transform:scale(1.18); } .p-mid{ z-index:2; transform:scale(1.10); } .p-fg{ z-index:3; transform:scale(1); } .p-near{ z-index:4; transform:scale(1.15); } .p-beetle{ z-index:2; }
+.title{ position:absolute; top:38%; transform:translateY(-50%); z-index:7; max-width:min(42%, 460px); }
+.title .eyebrow{ font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:#ffe9a8; font-weight:700; }
+.title h1{ font-family:'Archivo'; font-weight:900; text-transform:uppercase; font-size:clamp(2rem,5vw,4rem); line-height:.9; letter-spacing:-0.03em; margin:10px 0 4px; }
+.title h1 em{ font-family:'Libre Caslon Display',serif; font-style:italic; text-transform:none; color:var(--gold); font-weight:400; }
+.title .sub{ font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--gold); font-size:1.4rem; }
+.title .copy{ font-size:clamp(.98rem,1.4vw,1.12rem); line-height:1.6; color:#fdf6e3; font-weight:500; text-shadow:0 1px 3px rgba(7,6,4,1), 0 2px 18px rgba(7,6,4,1); max-width:100%; margin-top:14px; text-wrap:pretty; }
+.title .copy .drop{ font-family:'Libre Caslon Display',serif; font-size:2.6em; float:left; line-height:.7; padding:6px 9px 0 0; color:var(--gold); }
+.cue{ position:absolute; left:50%; bottom:9%; transform:translateX(-50%); z-index:7; font-family:'JetBrains Mono',monospace; font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:#cbb; opacity:.8; }
+
+/* ---------- descent (shared) ---------- */
+.dscene{ position:absolute; inset:0; overflow:hidden; opacity:1; z-index:1;
+  /* feather the descent's bottom edge too, so its foliage dissolves into the next layer instead of a hard clip */
+  -webkit-mask-image:linear-gradient(to bottom,#000 74%,transparent 98%); mask-image:linear-gradient(to bottom,#000 74%,transparent 98%); }
+.spread{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; padding:6vh 6vw; z-index:7; perspective:1100px; }
+.spread .dhead{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(1.5rem,3.4vw,2.5rem); color:var(--gold); text-align:center; max-width:700px; margin-bottom:3.5vh; opacity:0; will-change:opacity,transform; text-wrap:balance; }
+.tab{ position:relative; display:flex; align-items:center; gap:38px; width:min(572px,90%); padding:18px 8px;
+  opacity:0; will-change:opacity,transform; transform-origin:center bottom; border-bottom:1px solid rgba(242,209,117,.14); }
+.tab:last-of-type{ border-bottom:none; }
+.tab .num{ position:absolute; top:12px; right:16px; font-family:'JetBrains Mono',monospace; font-size:.66rem; letter-spacing:.12em; color:rgba(242,209,117,.42); }
+.tab .portrait{ flex:0 0 132px; height:132px; border-radius:10px; overflow:hidden; position:relative; background:#0e0d0a; box-shadow:inset 0 0 0 1px rgba(255,246,220,.05); }
+.tab .portrait img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(1.22) contrast(1.05) saturate(1.05); }
+.tab .t{ font-family:'JetBrains Mono',monospace; font-size:.66rem; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); }
+.tab .lat{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:.98rem; color:rgba(238,228,200,.6); margin-top:3px; }
+.tab .d{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.24rem; line-height:1.34; color:#f4ecda; margin-top:9px; text-wrap:pretty; }
+.dfill,.dfill2{ position:absolute; height:auto; z-index:2; transform-origin:50% 100%; }
+.dintro{ position:absolute; inset:0; z-index:8; display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center; pointer-events:none; }
+.dintro .dk{ font-family:'JetBrains Mono',monospace; font-size:.72rem; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); }
+.dintro p{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(1.3rem,2.6vw,1.7rem); }
+.brush{ will-change:transform; } .door{ will-change:transform; }
+@keyframes dsway{ 0%,100%{transform:rotate(-0.7deg)} 50%{transform:rotate(0.7deg)} }
+.outro{ height:40vh; display:flex; align-items:center; justify-content:center; color:#6a7a6c; font-family:'JetBrains Mono',monospace; font-size:.8rem; letter-spacing:.1em; }
+
+/* ══════════════════════ CANOPY (layer one) ══════════════════════ */
+.canopy{ --band: radial-gradient(120% 90% at 50% 0%, #3AA88F 0%, #1F6E5B 40%, #134438 80%, #0D2C22 100%); }
+.canopy .band::after{ content:''; position:absolute; inset:0; z-index:6; pointer-events:none;
+  box-shadow:inset 0 0 150px 44px rgba(6,16,11,.5);
+  background:
+    linear-gradient(to top, rgba(6,16,11,.97) 0%, rgba(6,16,11,.82) 8%, rgba(6,16,11,.42) 20%, rgba(6,16,11,.12) 33%, rgba(6,16,11,0) 50%),
+    linear-gradient(to right, rgba(6,16,11,.3) 0%, rgba(6,16,11,0) 6%, rgba(6,16,11,0) 94%, rgba(6,16,11,.3) 100%); }
+.canopy .title{ left:7%; }
+.canopy .sun{ position:absolute; top:-10%; left:34%; width:42%; height:46%; background:radial-gradient(closest-side at 50% 40%, rgba(255,246,205,.5) 0%, rgba(255,240,190,0) 72%); }
+.canopy .s-wideback{ top:-11%; left:-8%; width:124%; filter:brightness(.66) blur(3px); transform:scaleX(-1);
+  -webkit-mask-image:linear-gradient(to bottom,#000 26%,transparent 56%); mask-image:linear-gradient(to bottom,#000 26%,transparent 56%); }
+.canopy .s-widetop{ top:-6%; left:-3%; width:107%; filter:brightness(.98);
+  -webkit-mask-image:linear-gradient(to bottom,#000 52%,transparent 96%); mask-image:linear-gradient(to bottom,#000 52%,transparent 96%); }
+.canopy .s-bottomback{ bottom:4%; right:-8%; width:88%; filter:brightness(.6) blur(2px); -webkit-mask-image:linear-gradient(to bottom, #000 60%, transparent 100%); mask-image:linear-gradient(to bottom, #000 60%, transparent 100%); }
+.canopy .s-bottomcorner{ bottom:-8%; right:-12%; width:74%; filter:brightness(.72); -webkit-mask-image:linear-gradient(to bottom, #000 60%, transparent 100%); mask-image:linear-gradient(to bottom, #000 60%, transparent 100%); }
+.canopy .s-bottomfront{ bottom:3%; left:-2%; width:104%; filter:brightness(.9); -webkit-mask-image:linear-gradient(to bottom, #000 60%, transparent 100%); mask-image:linear-gradient(to bottom, #000 60%, transparent 100%); }
+.canopy .flower{ position:absolute; bottom:8%; left:42%; width:24%; filter:brightness(1.12) drop-shadow(8px 12px 10px rgba(0,0,0,.45));
+  -webkit-mask-image:radial-gradient(74% 84% at 55% 47%, #000 50%, transparent 86%); mask-image:radial-gradient(74% 84% at 55% 47%, #000 50%, transparent 86%); }
+.canopy .c-vine{ position:absolute; left:-10.9%; top:-1.6%; width:63.2%; z-index:2; filter:brightness(.82) saturate(.92); } /* leaf covering the mossy-branch seam */
+.canopy .monkey{ position:absolute; bottom:-3.6%; right:4.9%; width:41%; transform:scaleX(-1);
+  filter:brightness(1.3) saturate(1.06) drop-shadow(0 0 34px rgba(255,236,175,.5)) drop-shadow(0 10px 10px rgba(0,0,0,.5)) drop-shadow(0 36px 32px rgba(0,0,0,.5)); }
+.canopy .harpy{ position:absolute; top:3.8%; left:74.2%; width:12.1%; filter:brightness(1.28) saturate(1.05) drop-shadow(0 8px 12px rgba(0,0,0,.6)); }
+.canopy .macaw{ position:absolute; top:5.2%; left:48.8%; width:10.2%; filter:brightness(.86) saturate(1.0) drop-shadow(0 6px 8px rgba(0,0,0,.45)); }
+.canopy .s-near{ bottom:-10%; left:-12%; width:46%; filter:brightness(.4) blur(2px); transform:scaleX(-1);
+  -webkit-mask-image:radial-gradient(closest-side at 40% 45%, #000 52%, transparent 88%); mask-image:radial-gradient(closest-side at 40% 45%, #000 52%, transparent 88%); }
+.canopy .halo{ position:absolute; z-index:5; right:4%; top:20%; width:34%; height:48%; pointer-events:none; border-radius:50%;
+  background:radial-gradient(circle, rgba(255,236,175,.4) 0%, rgba(255,236,175,.15) 42%, rgba(255,236,175,0) 70%);
+  animation:halopulse 6s ease-in-out infinite; will-change:opacity; }
+@keyframes halopulse{ 0%,100%{ opacity:.42; } 50%{ opacity:.82; } }
+.canopy .text-shade{ position:absolute; z-index:5; left:-4%; top:50%; transform:translateY(-50%); width:54%; height:92%; pointer-events:none;
+  background:radial-gradient(70% 56% at 28% 50%, rgba(6,16,11,.92) 0%, rgba(6,16,11,.66) 42%, rgba(6,16,11,0) 80%); }
+.canopy .motes{ position:absolute; inset:0; z-index:5; pointer-events:none; overflow:hidden; }
+.canopy .mote{ position:absolute; border-radius:50%; opacity:0; will-change:transform,opacity;
+  background:radial-gradient(circle, rgba(255,246,214,.95) 0%, rgba(255,246,214,0) 70%); animation:drift linear infinite; }
+@keyframes drift{ 0%{ transform:translate(0,24px) scale(.7); opacity:0; } 18%{ opacity:.8; } 82%{ opacity:.4; } 100%{ transform:translate(16px,-104px) scale(1.1); opacity:0; } }
+.canopy .dscene{ background:
+    linear-gradient(to bottom, #07140c 0%, #07140c 10%, rgba(7,20,12,0) 32%),
+    linear-gradient(to top, #060d09 0%, rgba(6,13,9,0) 20%),
+    radial-gradient(120% 135% at 50% 70%, #123a2c 0%, #0c2a20 48%, #06100b 100%); }
+.canopy .dintro{ justify-content:flex-start; padding-top:17vh; } .canopy .dintro p{ color:#bcd0bf; }
+.canopy .brush{ position:absolute; top:-12%; width:58%; height:auto; z-index:3; filter:brightness(.9); }
+.canopy .brush-l{ left:-20%; transform-origin:0% 20%; } .canopy .brush-r{ right:-20%; transform-origin:100% 20%; }
+.canopy .door{ position:absolute; height:auto; z-index:6; }
+.canopy .door-l{ left:-16%; bottom:-10%; width:96%; transform-origin:16% 92%; }
+.canopy .door-r{ right:-14%; bottom:-19%; width:78%; transform-origin:84% 92%; }
+.canopy .dfill{ bottom:-10%; left:-5%; width:112%; filter:brightness(.55);
+  -webkit-mask-image:linear-gradient(to top,#000 14%,transparent 58%); mask-image:linear-gradient(to top,#000 14%,transparent 58%); }
+.canopy .dfill2{ bottom:-8%; right:-8%; width:66%; filter:brightness(.42) blur(1px); transform:scaleX(-1);
+  -webkit-mask-image:linear-gradient(to top,#000 12%,transparent 50%); mask-image:linear-gradient(to top,#000 12%,transparent 50%); }
+
+/* ══════════════════════ UNDERSTORY (layer two) ══════════════════════ */
+.understory{ --band: radial-gradient(120% 92% at 50% 0%, #501845 0%, #3a1230 24%, #240c20 50%, #160916 74%, #0c0612 92%, #08040e 100%); }
+.understory .band::after{ content:''; position:absolute; inset:0; z-index:6; pointer-events:none;
+  box-shadow:inset 0 0 160px 56px rgba(10,5,12,.62);
+  background:
+    linear-gradient(to bottom, rgba(6,16,11,.97) 0%, rgba(6,16,11,.42) 18%, rgba(6,16,11,0) 44%, rgba(7,4,12,.55) 74%, rgba(7,4,12,1) 100%),
+    linear-gradient(to right, rgba(10,5,12,.85) 0%, rgba(10,5,12,0) 8%, rgba(10,5,12,0) 92%, rgba(10,5,12,.85) 100%); }
+.understory .title{ right:7%; }
+.understory .vines{ top:-2%; left:0; width:100%; filter:brightness(.8); -webkit-mask-image:linear-gradient(to bottom,#000 54%,transparent 94%); mask-image:linear-gradient(to bottom,#000 54%,transparent 94%); }
+.understory .vines2{ top:-3%; left:-20%; width:82%; transform:scaleX(-1); filter:brightness(.58);
+  -webkit-mask-image:linear-gradient(to bottom,#000 46%,transparent 86%), linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%); -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to bottom,#000 46%,transparent 86%), linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%); mask-composite:intersect; }
+.understory .wide-back{ bottom:-2%; left:-4%; width:108%; filter:brightness(.78); transform:scaleX(-1); }
+.understory .wide-fill{ bottom:-2%; left:22%; width:74%; transform:scaleX(-1); filter:brightness(.74); -webkit-mask-image:radial-gradient(125% 115% at 58% 100%, #000 50%, transparent 90%); mask-image:radial-gradient(125% 115% at 58% 100%, #000 50%, transparent 90%); }
+.understory .wide-mid{ bottom:0; left:0; width:100%; filter:brightness(1.04); -webkit-mask-image:linear-gradient(to top,#000 66%,transparent 100%); mask-image:linear-gradient(to top,#000 66%,transparent 100%); }
+.understory .wide-mid2{ bottom:-3%; left:-14%; width:82%; transform:scaleX(-1); filter:brightness(.9); -webkit-mask-image:radial-gradient(120% 115% at 40% 100%, #000 52%, transparent 90%); mask-image:radial-gradient(120% 115% at 40% 100%, #000 52%, transparent 90%); }
+.understory .wide-right{ top:-8%; right:-10%; width:80%; transform:scaleX(-1); filter:brightness(.82); -webkit-mask-image:radial-gradient(120% 120% at 70% 42%, #000 46%, transparent 84%); mask-image:radial-gradient(120% 120% at 70% 42%, #000 46%, transparent 84%); }
+.understory .bottom-back{ bottom:3%; left:-8%; width:90%; filter:brightness(.7); }
+.understory .boa-light{ position:absolute; top:0%; right:1%; width:26%; height:30%; background:radial-gradient(closest-side at 50% 48%, rgba(255,240,200,.5) 0%, rgba(255,238,190,0) 62%); }
+.understory .boa{ position:absolute; top:2%; right:1%; width:25%; transform:scaleX(-1); -webkit-mask-image:linear-gradient(to bottom,#000 64%,transparent 86%); mask-image:linear-gradient(to bottom,#000 64%,transparent 86%); filter:brightness(2.0) contrast(1.14) saturate(1.18) drop-shadow(0 2px 10px rgba(0,0,0,.5)); }
+.understory .orchid{ position:absolute; bottom:3%; left:5%; width:14%; filter:brightness(1.1) drop-shadow(8px 12px 10px rgba(0,0,0,.45)); }
+.understory .bottom-front{ bottom:0; left:-2%; width:104%; filter:brightness(1.06); }
+.understory .jaguar{ position:absolute; bottom:12%; left:-11%; width:54%; transform:scaleX(-1); filter:brightness(1.28) saturate(1.12) drop-shadow(0 0 26px rgba(255,238,190,.45)) drop-shadow(0 18px 18px rgba(0,0,0,.5)); }
+.understory .frog{ position:absolute; bottom:11%; left:3%; width:7%; filter:brightness(1.22) contrast(1.04) saturate(1.05) drop-shadow(0 0 9px rgba(255,238,190,.32)) drop-shadow(0 5px 5px rgba(0,0,0,.5)); }
+.understory .near-frond{ top:-12%; left:-16%; width:52%; filter:brightness(.38) blur(2px); transform:scaleX(-1); -webkit-mask-image:radial-gradient(closest-side at 35% 45%, #000 50%, transparent 86%); mask-image:radial-gradient(closest-side at 35% 45%, #000 50%, transparent 86%); }
+.understory .dscene{ background:
+    linear-gradient(to bottom, #07040c 0%, #07040c 10%, rgba(7,4,12,0) 32%),
+    linear-gradient(to top, #060309 0%, rgba(6,3,9,0) 20%),
+    radial-gradient(120% 135% at 50% 70%, #1c0b18 0%, #100711 48%, #060308 100%); }
+.understory .dintro{ justify-content:flex-start; padding-top:17vh; } .understory .dintro p{ color:#cbb8c4; }
+.understory .brush{ position:absolute; top:-9%; height:120%; width:auto; z-index:3;
+  -webkit-mask-image:linear-gradient(to bottom, transparent 0%, #000 16%, #000 80%, transparent 100%); mask-image:linear-gradient(to bottom, transparent 0%, #000 16%, #000 80%, transparent 100%); }
+.understory .brush-l{ left:-3%; transform-origin:0% 46%; } .understory .brush-r{ right:-3%; transform-origin:100% 46%; }
+.understory .door{ position:absolute; bottom:-14%; width:84%; height:auto; z-index:6; }
+.understory .door-l{ left:-12%; transform-origin:16% 92%; } .understory .door-r{ right:-12%; transform-origin:84% 92%; }
+.understory .dfill{ bottom:-10%; left:-5%; width:112%; filter:brightness(.62);
+  -webkit-mask-image:linear-gradient(to top,#000 32%,transparent 84%); mask-image:linear-gradient(to top,#000 32%,transparent 84%); }
+.understory .dfill2{ bottom:-8%; right:-8%; width:70%; filter:brightness(.46) blur(1px); transform:scaleX(-1);
+  -webkit-mask-image:linear-gradient(to top,#000 28%,transparent 78%); mask-image:linear-gradient(to top,#000 28%,transparent 78%); }
+
+/* ══════════════════════ FLOOR (layer three) ══════════════════════ */
+.floor{ --band: radial-gradient(120% 92% at 50% 0%, #5a3d16 0%, #3e2a10 24%, #28200c 50%, #1a1408 74%, #0f0a05 92%, #070502 100%); }
+.floor .band::after{ content:''; position:absolute; inset:0; z-index:6; pointer-events:none;
+  box-shadow:inset 0 0 170px 60px rgba(7,4,3,.7);
+  background:
+    /* top clears faster (matches understory) so the floor foliage scrolls in sooner — no long dead-black at the seam */
+    linear-gradient(to bottom, rgba(6,16,11,.97) 0%, rgba(6,16,11,.42) 16%, rgba(6,16,11,0) 40%, rgba(7,4,3,.6) 74%, rgba(7,4,3,1) 100%),
+    linear-gradient(to right, rgba(7,4,3,.85) 0%, rgba(7,4,3,0) 8%, rgba(7,4,3,0) 92%, rgba(7,4,3,.85) 100%); }
+.floor .title{ left:7%; }
+.floor .f-canopy{ top:-5%; left:-3%; width:106%; filter:brightness(.46); transform:scaleX(-1);
+  -webkit-mask-image:linear-gradient(to bottom,#000 28%,transparent 58%); mask-image:linear-gradient(to bottom,#000 28%,transparent 58%); }
+.floor .f-wideback{ bottom:-2%; left:-6%; width:112%; filter:brightness(.4); transform:scaleX(-1);
+  -webkit-mask-image:linear-gradient(to top,#000 64%,transparent 100%); mask-image:linear-gradient(to top,#000 64%,transparent 100%); }
+.floor .f-foliage{ bottom:-2%; left:-3%; width:106%; filter:brightness(.82) saturate(1.04);
+  -webkit-mask-image:linear-gradient(to top,#000 70%,transparent 100%); mask-image:linear-gradient(to top,#000 70%,transparent 100%); }
+.floor .f-foliage2{ bottom:-3%; right:-12%; left:auto; width:84%; transform:scaleX(-1); filter:brightness(.5);
+  -webkit-mask-image:radial-gradient(120% 115% at 60% 100%, #000 52%, transparent 92%); mask-image:radial-gradient(120% 115% at 60% 100%, #000 52%, transparent 92%); }
+.floor .f-bottomback{ bottom:2%; right:-8%; left:auto; width:92%; filter:brightness(.46); }
+.floor .f-mushrooms{ position:absolute; bottom:-9.1%; left:36.6%; width:38.8%; filter:brightness(1.34) saturate(1.08) drop-shadow(0 10px 9px rgba(0,0,0,.7)); }
+.floor .f-bottom{ bottom:0; left:-2%; width:104%; filter:brightness(.88) saturate(1.04); }
+.floor .f-beetle{ position:absolute; bottom:65.0%; right:29.3%; width:7.8%; filter:brightness(1.72) contrast(1.1) saturate(1.16) drop-shadow(0 0 30px rgba(255,226,150,.6)) drop-shadow(0 6px 5px rgba(0,0,0,.72)) drop-shadow(0 14px 12px rgba(0,0,0,.5)); }
+.floor .f-near{ bottom:-8%; left:-14%; width:48%; filter:brightness(.3); transform:scaleX(-1);
+  -webkit-mask-image:radial-gradient(closest-side at 40% 55%, #000 50%, transparent 86%); mask-image:radial-gradient(closest-side at 40% 55%, #000 50%, transparent 86%); }
+.floor .f-agouti{ position:absolute; bottom:31.5%; left:41.1%; width:30%; transform:scaleX(-1); filter:brightness(1.4) contrast(1.06) saturate(1.08) drop-shadow(0 0 18px rgba(255,224,150,.28)) drop-shadow(0 10px 12px rgba(0,0,0,.6)); }
+.floor .shaft{ position:absolute; z-index:5; top:-10%; left:44%; width:36%; height:108%; pointer-events:none;
+  transform:rotate(9deg); transform-origin:top center; mix-blend-mode:screen;
+  background:linear-gradient(to bottom, rgba(255,232,168,.30) 0%, rgba(255,226,156,.12) 46%, rgba(255,226,156,0) 80%); }
+.floor .shaft-pool{ position:absolute; z-index:5; bottom:8%; right:6%; width:46%; height:38%; pointer-events:none;
+  mix-blend-mode:screen; background:radial-gradient(closest-side at 50% 60%, rgba(255,228,160,.22) 0%, rgba(255,224,150,.08) 50%, rgba(255,224,150,0) 80%); }
+.floor .beetle-light{ position:absolute; z-index:5; bottom:2%; right:18%; width:30%; height:26%; pointer-events:none;
+  mix-blend-mode:screen; background:radial-gradient(closest-side at 52% 46%, rgba(255,228,150,.5) 0%, rgba(255,222,140,.16) 52%, rgba(255,222,140,0) 80%); }
+.floor .scrim{ position:absolute; z-index:5; left:0; top:0; width:50%; height:100%; pointer-events:none;
+  background:linear-gradient(to right, rgba(8,5,3,.74) 0%, rgba(8,5,3,.4) 52%, rgba(8,5,3,0) 100%); }
+.floor .text-shade{ position:absolute; z-index:5; left:-4%; top:42%; transform:translateY(-50%); width:52%; height:72%; pointer-events:none;
+  background:radial-gradient(68% 54% at 28% 50%, rgba(8,5,3,.9) 0%, rgba(8,5,3,.52) 42%, rgba(8,5,3,0) 80%); }
+.floor .corner-shade{ position:absolute; z-index:4; right:0; bottom:0; width:48%; height:44%; pointer-events:none;
+  background:radial-gradient(120% 120% at 100% 100%, rgba(7,4,3,.55) 0%, rgba(7,4,3,.3) 38%, rgba(7,4,3,0) 74%); }
+/* dust motes drifting in the shaft of light (like the canopy sparkles, warm) */
+.floor .motes{ position:absolute; inset:0; z-index:5; pointer-events:none; overflow:hidden; }
+.floor .mote{ position:absolute; border-radius:50%; opacity:0; will-change:transform,opacity; mix-blend-mode:screen;
+  background:radial-gradient(circle, rgba(255,238,196,.95) 0%, rgba(255,238,196,0) 70%); animation:drift linear infinite; }
+.floor .dscene{ background:
+    linear-gradient(to bottom, #0a0703 0%, #0a0703 10%, rgba(10,7,3,0) 32%),
+    linear-gradient(to top, #050301 0%, rgba(5,3,1,0) 22%),
+    radial-gradient(120% 135% at 50% 62%, #241803 0%, #15100a 46%, #060402 100%); }
+.floor .dintro{ justify-content:flex-start; padding-top:17vh; } .floor .dintro p{ color:#cbb8c4; }
+.floor .brush{ display:none; }
+.floor .door{ position:absolute; bottom:-8%; width:56%; height:auto; z-index:6;
+  filter:brightness(.92) sepia(.9) saturate(1.7) hue-rotate(-8deg); }
+.floor .door-l{ left:-14%; transform-origin:12% 94%; } .floor .door-r{ right:-14%; transform-origin:88% 94%; }
+.floor .dfill{ bottom:-10%; left:-5%; width:112%; filter:brightness(.55);
+  -webkit-mask-image:linear-gradient(to top,#000 32%,transparent 84%); mask-image:linear-gradient(to top,#000 32%,transparent 84%); }
+.floor .dfill2{ bottom:-8%; right:-8%; width:70%; filter:brightness(.40) blur(1px); transform:scaleX(-1);
+  -webkit-mask-image:linear-gradient(to top,#000 28%,transparent 78%); mask-image:linear-gradient(to top,#000 28%,transparent 78%); }
+
+@media (prefers-reduced-motion: reduce){
+  .dfill,.dfill2{ animation:none; }
+  .canopy .mote{ animation:none; opacity:0; } .canopy .halo{ animation:none; opacity:.5; }
+  .floor .mote{ animation:none; opacity:0; }
+}
+</style></head>
+<body>
+<div class="intro"><div class="k">Reading the Rainforest</div><p>scroll &mdash; the forest reveals itself</p></div>
+
+<!-- ═══════════ LAYER ONE — CANOPY ═══════════ -->
+<div class="stage canopy" data-windows="[[0.46,0.64],[0.58,0.76],[0.70,0.88]]">
+  <div class="stagestick">
+    <div class="band">
+      <div class="plane p-far" data-depth="-60" data-scale="1.18">
+        <div class="sun"></div>
+        <img class="s-wideback" src="Canopy/scene/wide-back.webp" alt="">
+      </div>
+      <div class="plane p-mid" data-depth="-22" data-scale="1.10">
+        <img class="s-widetop" src="Canopy/scene/wide-top.webp" alt="">
+        <img class="macaw" src="Canopy/scene/macaw.webp" alt="">
+        <img class="harpy" src="Canopy/scene/harpy.webp" alt="">
+        <img class="s-bottomback" src="Canopy/scene/bottom-back.webp" alt="">
+      </div>
+      <div class="plane p-fg" data-depth="38" data-scale="1">
+        <img class="s-bottomcorner" src="Canopy/scene/bottom-corner.webp" alt="">
+        <img class="s-bottomfront" src="Canopy/scene/bottom-front.webp" alt="">
+        <img class="flower" src="Canopy/scene/flower.webp" alt="">
+        <img class="c-vine" src="Canopy/door/76.webp" alt="">
+        <img class="monkey" src="Canopy/scene/monkey.webp" alt="">
+      </div>
+      <div class="plane p-near" data-depth="56" data-scale="1.15"><img class="s-near" src="Canopy/scene/wide-top.webp" alt=""></div>
+      <div class="text-shade"></div>
+      <div class="halo"></div>
+      <div class="motes">
+        <span class="mote" style="left:42%;top:14%;width:6px;height:6px;animation-duration:10s;animation-delay:0s"></span>
+        <span class="mote" style="left:56%;top:9%;width:5px;height:5px;animation-duration:12s;animation-delay:3s"></span>
+        <span class="mote" style="left:64%;top:28%;width:7px;height:7px;animation-duration:9s;animation-delay:1.5s"></span>
+        <span class="mote" style="left:74%;top:18%;width:5px;height:5px;animation-duration:11s;animation-delay:2.5s"></span>
+        <span class="mote" style="left:83%;top:36%;width:6px;height:6px;animation-duration:10s;animation-delay:6s"></span>
+        <span class="mote" style="left:50%;top:44%;width:4px;height:4px;animation-duration:13s;animation-delay:5s"></span>
+        <span class="mote" style="left:88%;top:12%;width:4px;height:4px;animation-duration:14s;animation-delay:1s"></span>
+      </div>
+      <div class="title">
+        <div class="eyebrow">Layer One &middot; The Bright Crown</div>
+        <h1>The <em>Canopy</em></h1>
+        <div class="sub">where the light lands first</div>
+        <p class="copy"><span class="drop">U</span>p here the forest is loud and bright. Spider monkeys swing hand over hand, macaws flash red and blue, and nearly every meal the jungle offers starts in these branches. The canopy catches the sun, the rain, and the fruit before anything else gets a turn.</p>
+      </div>
+      <div class="cue">keep scrolling &darr;</div>
+    </div>
+    <div class="dscene">
+    <img class="dfill2" src="Canopy/scene/bottom-back.webp" alt="">
+    <img class="dfill" src="Canopy/scene/bottom-front.webp" alt="">
+    <div class="dintro"><p>who lives in the light</p></div>
+    <div class="spread">
+      <div class="dhead">In the canopy, everything reaches for the light.</div>
+      <div class="tab" data-tab="monkey"><div class="portrait"><img src="Canopy/scene/monkey-portrait.webp?v=2" style="object-fit:cover; object-position:50% 42%; filter:brightness(1.4) contrast(1.05) saturate(1.06)"></div><div class="body"><div class="t">Spider monkey</div><div class="lat">Ateles geoffroyi</div><div class="d">Reads the branches like a map. Swings hand over hand, tail as a fifth limb.</div></div><div class="num">01</div></div>
+      <div class="tab" data-tab="macaw"><div class="portrait"><img src="Canopy/scene/macaw-portrait.webp?v=2" style="object-fit:cover; object-position:50% 42%; filter:brightness(1.18) contrast(1.05) saturate(1.05)"></div><div class="body"><div class="t">Scarlet macaw</div><div class="lat">Ara macao</div><div class="d">Flashes red and blue across the crown. Cracks nuts the others can’t open.</div></div><div class="num">02</div></div>
+      <div class="tab" data-tab="harpy"><div class="portrait"><img src="Canopy/door/HarpyEagle.webp" style="object-fit:cover; object-position:50% 22%; filter:brightness(1.3) contrast(1.05) saturate(1.05)"></div><div class="body"><div class="t">Harpy eagle</div><div class="lat">Harpia harpyja</div><div class="d">The crown’s apex hunter. Drops through the leaves and takes monkeys whole.</div></div><div class="num">03</div></div>
+    </div>
+    <img class="brush brush-l" src="Canopy/door/69.webp" alt="">
+    <img class="brush brush-r" src="Canopy/door/72.webp" alt="">
+    <img class="door door-l" src="Canopy/door/76.webp" alt="">
+    <img class="door door-r" src="Canopy/door/77.webp" alt="">
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ LAYER TWO — UNDERSTORY ═══════════ -->
+<div class="stage understory" data-windows="[[0.46,0.64],[0.58,0.76],[0.70,0.88]]">
+  <div class="stagestick">
+    <div class="band">
+      <div class="plane p-far" data-depth="-60" data-scale="1.18">
+        <img class="vines" src="Understory/understory-vines.webp" alt=""><img class="vines2" src="Understory/understory-vines.webp" alt="">
+        <img class="wide-back" src="Understory/understory-foliage.webp" alt=""><img class="wide-fill" src="Understory/understory-foliage.webp" alt="">
+      </div>
+      <div class="plane p-mid" data-depth="-22" data-scale="1.10">
+        <img class="wide-mid" src="Understory/understory-foliage.webp" alt=""><img class="wide-mid2" src="Understory/understory-foliage.webp" alt="">
+        <img class="bottom-back" src="Understory/understory-bottom.webp" alt=""><div class="boa-light"></div><img class="boa" src="Understory/big-boa.webp" alt="">
+      </div>
+      <div class="plane p-fg" data-depth="38" data-scale="1">
+        <img class="orchid" src="Understory/orchid.webp" alt=""><img class="bottom-front" src="Understory/understory-bottom.webp" alt="">
+        <img class="jaguar" src="Understory/jaguar.webp" alt=""><img class="frog" src="Understory/tree-frog.webp" alt="">
+      </div>
+      <div class="plane p-near" data-depth="56" data-scale="1.15"><img class="near-frond" src="Understory/understory-foliage.webp" alt=""></div>
+      <div class="title">
+        <div class="eyebrow">Layer Two &middot; The Middle Dark</div>
+        <h1>The <em>Understory</em></h1>
+        <div class="sub">where patience hunts</div>
+        <p class="copy"><span class="drop">B</span>elow the bright crown the light goes soft and broken. Here, things wait. A jaguar folds along a branch, a boa knots into the shade, and a frog holds dead still.</p>
+      </div>
+      <div class="cue">keep scrolling &darr;</div>
+    </div>
+    <div class="dscene">
+    <img class="dfill2" src="Understory/understory-foliage.webp" alt="">
+    <img class="dfill" src="Understory/understory-bottom.webp" alt="">
+    <div class="dintro"><p>what waits below the leaves</p></div>
+    <div class="spread">
+      <div class="dhead">In the understory, patience is the whole strategy.</div>
+      <div class="tab" data-tab="jaguar"><div class="portrait"><img src="Understory/jaguar.webp" style="object-position:28% 42%; filter:brightness(1.36) contrast(1.06) saturate(1.06)"></div><div class="body"><div class="t">Jaguar</div><div class="lat">Panthera onca</div><div class="d">Doesn’t chase. Drapes on a branch for hours. Ambush, not pursuit.</div></div><div class="num">01</div></div>
+      <div class="tab" data-tab="boa"><div class="portrait"><img src="Understory/big-boa.webp" style="object-position:62% 42%; filter:brightness(1.7) contrast(1.14) saturate(1.12)"></div><div class="body"><div class="t">Emerald boa</div><div class="lat">Corallus caninus</div><div class="d">Knots into the shade. Strikes once, from stillness.</div></div><div class="num">02</div></div>
+      <div class="tab" data-tab="frog"><div class="portrait"><img src="Understory/tree-frog.webp" style="object-position:50% 40%; filter:brightness(1.06) contrast(1.03)"></div><div class="body"><div class="t">Red-eyed frog</div><div class="lat">Agalychnis callidryas</div><div class="d">Holds dead still. Survives by not moving.</div></div><div class="num">03</div></div>
+    </div>
+    <img class="brush brush-l" src="Understory/brush-edge-l.webp" alt="">
+    <img class="brush brush-r" src="Understory/brush-edge-r.webp" alt="">
+    <img class="door door-l" src="Understory/banana-door-l.webp" alt="">
+    <img class="door door-r" src="Understory/banana-door-r.webp" alt="">
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ LAYER THREE — FLOOR ═══════════ -->
+<div class="stage floor" data-windows="[[0.42,0.60],[0.56,0.74],[0.70,0.88]]">
+  <div class="stagestick">
+    <div class="band">
+      <div class="plane p-far" data-depth="-60" data-scale="1.18">
+        <img class="f-canopy" src="Floor/floor-foliage.webp" alt=""><img class="f-wideback" src="Floor/floor-foliage.webp" alt="">
+      </div>
+      <div class="plane p-mid" data-depth="-22" data-scale="1.10">
+        <img class="f-foliage" src="Floor/floor-foliage.webp" alt=""><img class="f-foliage2" src="Floor/floor-bottom.webp" alt="">
+        <img class="f-bottomback" src="Floor/floor-bottom.webp" alt="">
+      </div>
+      <div class="plane p-beetle" data-depth="-30" data-scale="1">
+        <img class="f-beetle" src="Floor/beetle.webp" alt="">
+      </div>
+      <div class="plane p-fg" data-depth="38" data-scale="1">
+        <img class="f-bottom" src="Floor/floor-bottom.webp" alt="">
+        <img class="f-agouti" src="Floor/Agouti.webp" alt="">
+        <img class="f-mushrooms" src="Floor/mushrooms.webp" alt="">
+      </div>
+      <div class="plane p-near" data-depth="56" data-scale="1.15"><img class="f-near" src="Floor/floor-foliage.webp" alt=""></div>
+      <div class="shaft"></div><div class="shaft-pool"></div><div class="beetle-light"></div>
+      <div class="motes">
+        <span class="mote" style="left:50%;top:20%;width:5px;height:5px;animation-duration:12s;animation-delay:0s"></span>
+        <span class="mote" style="left:58%;top:32%;width:6px;height:6px;animation-duration:14s;animation-delay:2s"></span>
+        <span class="mote" style="left:64%;top:16%;width:4px;height:4px;animation-duration:11s;animation-delay:4s"></span>
+        <span class="mote" style="left:55%;top:48%;width:5px;height:5px;animation-duration:13s;animation-delay:1.5s"></span>
+        <span class="mote" style="left:69%;top:40%;width:6px;height:6px;animation-duration:15s;animation-delay:3s"></span>
+        <span class="mote" style="left:61%;top:60%;width:4px;height:4px;animation-duration:12s;animation-delay:5s"></span>
+        <span class="mote" style="left:52%;top:70%;width:5px;height:5px;animation-duration:14s;animation-delay:2.5s"></span>
+        <span class="mote" style="left:72%;top:26%;width:4px;height:4px;animation-duration:13s;animation-delay:6s"></span>
+      </div>
+      <div class="scrim"></div><div class="text-shade"></div><div class="corner-shade"></div>
+      <div class="title">
+        <div class="eyebrow">Layer Three &middot; The Dark Floor</div>
+        <h1>The <em>Floor</em></h1>
+        <div class="sub">where everything returns</div>
+        <p class="copy"><span class="drop">A</span>ll the way down, the light is almost gone. One shaft finds the floor. A beetle plows the litter, an agouti buries the seeds it forgets, and mushrooms turn the dead back into soil. Down here, nothing is wasted.</p>
+      </div>
+      <div class="cue">keep scrolling &darr;</div>
+    </div>
+    <div class="dscene">
+    <img class="dfill2" src="Floor/floor-foliage.webp" alt="">
+    <img class="dfill" src="Floor/floor-bottom.webp" alt="">
+    <div class="dintro"><p>what waits in the dark</p></div>
+    <div class="spread">
+      <div class="dhead">On the forest floor, everything returns.</div>
+      <div class="tab" data-tab="beetle"><div class="portrait"><img src="Floor/beetle-portrait.webp" style="object-fit:cover; object-position:50% 42%; filter:brightness(1.5) contrast(1.08) saturate(1.06)"></div><div class="body"><div class="t">Rhinoceros beetle</div><div class="lat">Dynastinae</div><div class="d">A recycler in armor. Plows the fallen litter and helps the floor break it down.</div></div><div class="num">01</div></div>
+      <div class="tab" data-tab="mushrooms"><div class="portrait"><img src="Floor/mushrooms-portrait.webp" style="object-fit:cover; object-position:50% 42%; filter:brightness(1.2) contrast(1.05) saturate(1.05)"></div><div class="body"><div class="t">Mushrooms</div><div class="lat">Fungi</div><div class="d">The forest’s undertakers. They turn the fallen back into soil.</div></div><div class="num">02</div></div>
+      <div class="tab" data-tab="agouti"><div class="portrait"><img src="Floor/agouti-portrait.webp" style="object-fit:cover; object-position:50% 42%; filter:brightness(1.34) contrast(1.06) saturate(1.05)"></div><div class="body"><div class="t">Agouti</div><div class="lat">Dasyprocta</div><div class="d">The seed-burier. Cracks nuts no one else can, and plants the next tree by forgetting where it stashed lunch.</div></div><div class="num">03</div></div>
+    </div>
+    <img class="brush brush-l" src="Floor/brush-l.webp" alt="">
+    <img class="brush brush-r" src="Floor/brush-r.webp" alt="">
+    <img class="door door-l" src="Floor/door-l.webp" alt="">
+    <img class="door door-r" src="Floor/door-r.webp" alt="">
+    </div>
+  </div>
+</div>
+<div class="outro">[ the descent ends ]</div>
+
+<script>
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v)), seg=(p,a,b)=>clamp((p-a)/(b-a),0,1), ease=t=>t*t*(3-2*t);
+
+/* one pinned stage per layer: painting parallax -> lift -> descent reveal, on that layer's own scroll progress */
+function initLayer(stage){
+  const planes=[...stage.querySelectorAll('.plane')];
+  const band=stage.querySelector('.band');
+  const bL=stage.querySelector('.brush-l'), bR=stage.querySelector('.brush-r');
+  const dL=stage.querySelector('.door-l'), dR=stage.querySelector('.door-r');
+  const dhead=stage.querySelector('.dhead'), tabs=[...stage.querySelectorAll('.tab')], dintro=stage.querySelector('.dintro');
+  const windows=JSON.parse(stage.dataset.windows);
+  return function tick(){
+    const r=stage.getBoundingClientRect(); const p=clamp((-r.top)/(stage.offsetHeight-innerHeight),0,1);
+    const pp=clamp(p/0.34,0,1);
+    planes.forEach(pl=>pl.style.transform='scale('+pl.dataset.scale+') translateY('+(pp*parseFloat(pl.dataset.depth))+'px)');
+    band.style.transform='translateY('+(-seg(p,0.34,0.56)*112)+'vh)';
+    const dp=seg(p,0.52,1.0);
+    dintro.style.opacity=Math.min(seg(dp,0.0,0.06), 1-seg(dp,0.20,0.32)).toFixed(3);
+    const dk=ease(seg(dp,0.22,0.54));
+    dL.style.transform='translateX('+(-dk*44)+'%) rotate('+(-dk*34)+'deg)';
+    dR.style.transform='translateX('+( dk*44)+'%) rotate('+( dk*34)+'deg)';
+    const k=ease(seg(dp,0.28,0.62));
+    bL.style.transform='translateX('+(-k*42)+'%) rotate('+(-k*13)+'deg)';
+    bR.style.transform='translateX('+( k*42)+'%) rotate('+( k*13)+'deg)';
+    const h=ease(seg(dp,0.36,0.52)); dhead.style.opacity=h; dhead.style.transform='translateY('+((1-h)*16)+'px)';
+    tabs.forEach((t,i)=>{ const [a,b]=windows[i]; const kk=ease(seg(dp,a,b));
+      t.style.opacity=kk; t.style.transform='translateY('+((1-kk)*34)+'px) rotateX('+(-(1-kk)*80)+'deg) scale('+(0.95+0.05*kk)+')'; });
+  };
+}
+const ticks=[...document.querySelectorAll('.stage')].map(initLayer);
+const run=()=>ticks.forEach(t=>t());
+addEventListener('scroll',()=>requestAnimationFrame(run),{passive:true}); addEventListener('resize',run); addEventListener('load',run); run();
+</script>
+</body></html>
