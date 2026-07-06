@@ -45,9 +45,114 @@
 <link rel="prefetch" href="work/gitlab.html" />
 <link rel="prefetch" href="work/tmobile.html" />
 <link rel="prefetch" href="work/trust20.html" />
+
+<!-- Field-reel intro gate — runs before first paint so the overlay only
+     exists when it should: first visit this session, motion allowed,
+     JS working. Add ?reel to the URL to force a replay. -->
+<script>
+(function () {
+  try {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var seen = sessionStorage.getItem('cd-reel-played');
+    var force = /[?&]reel/.test(location.search);
+    if (!reduce && (!seen || force)) document.documentElement.classList.add('reel-live');
+  } catch (e) {}
+})();
+</script>
+<style>
+/* ---------- field-reel intro (homepage only) -----------------------------
+   Class names are cdintro-* because styles.css still carries the old,
+   inert .reel section styles. Without the html.reel-live gate class the
+   overlay does not exist at all (no-JS, reduced motion, repeat visit). */
+.cdintro { display: none; }
+html.reel-live .cdintro {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  overflow: hidden;
+  background: #04121f;
+  will-change: transform;
+}
+.cdintro.lift { animation: cdintroLift 0.7s cubic-bezier(0.76, 0, 0.24, 1) forwards; }
+@keyframes cdintroLift { to { transform: translateY(-103%); } }
+body.intro-done .cdintro { display: none !important; }
+.cdintro video {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  /* hidden until it has real frames — the ink cover reads as intentional
+     while the mp4 loads, never a half-painted flash */
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.cdintro.video-ready video { opacity: 1; }
+.cdintro__scrim {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 18vh;
+  background: linear-gradient(to top, rgba(4, 18, 31, 0.72), transparent);
+  pointer-events: none;
+}
+.cdintro__plate {
+  position: absolute;
+  top: 26px; left: clamp(20px, 4vw, 48px);
+  z-index: 2;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: rgba(242, 239, 232, 0.75);
+  text-shadow: 0 1px 6px rgba(4, 18, 31, 0.8);
+}
+.cdintro__plate b { font-weight: 500; color: #f2efe8; }
+.cdintro__label {
+  position: absolute;
+  bottom: 30px; left: clamp(20px, 4vw, 48px);
+  z-index: 2;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: #f2efe8;
+}
+.cdintro__label i { font-style: normal; color: #96E650; }
+.cdintro__enter {
+  position: absolute;
+  right: 22px; bottom: 24px;
+  z-index: 2;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: #f2efe8;
+  background: rgba(4, 18, 31, 0.35);
+  border: 1px solid rgba(242, 239, 232, 0.5);
+  padding: 9px 16px;
+  cursor: pointer;
+}
+.cdintro__enter:hover { border-color: #96E650; color: #96E650; }
+/* hold the hero + trustband entrance until the page-turn clears; the
+   stock animations then play from the top with their original stagger */
+@media (prefers-reduced-motion: no-preference) {
+  html.reel-live body:not(.intro-done) .hero__stamp,
+  html.reel-live body:not(.intro-done) .hero__eyebrow,
+  html.reel-live body:not(.intro-done) .hero__line-inner,
+  html.reel-live body:not(.intro-done) .hero__line::after,
+  html.reel-live body:not(.intro-done) .hero__lede,
+  html.reel-live body:not(.intro-done) .hero__scroll,
+  html.reel-live body:not(.intro-done) .trustband__inner { animation-play-state: paused !important; }
+}
+</style>
 </head>
 <body>
 
+<!-- Field-reel intro — plays once per session, then the page turns into
+     the hero. Remove this block plus the gate <script>/<style> in <head>
+     and the runtime script at the bottom to retire the intro. -->
+<div class="cdintro" id="cdintro" aria-hidden="true">
+  <video id="cdintroVideo" data-src="assets/demos/field-reel-intro.mp4" data-src-mobile="assets/demos/field-reel-intro-mobile.mp4" poster="assets/field-reel-poster.jpg" muted playsinline preload="none"></video>
+  <span class="cdintro__scrim"></span>
+  <span class="cdintro__plate"><b>caboodle design</b> · field studies 2011–2026</span>
+  <span class="cdintro__label"><i>◉</i> the field reel</span>
+  <button class="cdintro__enter" id="cdintroEnter" type="button">enter site →</button>
+</div>
 
 <!-- Nav — matches live site structure -->
 <header class="nav">
@@ -834,5 +939,76 @@
 </div>
 
 <script src="script.js?v=20260618o" defer></script>
+
+<script>
+/* ============================================================
+   FIELD-REEL INTRO RUNTIME — the gate in <head> decides IF the
+   intro exists; this decides how it plays: the 13.2s cut runs
+   over the ink cover, the page turns as the end card finishes
+   (or on "enter site →"), and the hero curtain reveal resumes
+   from the top. Repeat visits this session skip straight in.
+   ============================================================ */
+(function () {
+  if (!document.documentElement.classList.contains('reel-live')) {
+    document.body.classList.add('intro-done');
+    return;
+  }
+
+  var intro = document.getElementById('cdintro');
+  var video = document.getElementById('cdintroVideo');
+  var lifted = false;
+
+  /* src assigned only when the intro actually runs, so skipped
+     visits never download the mp4 */
+  if (window.innerWidth < 700) {
+    video.poster = 'assets/field-reel-mobile-poster.jpg';
+    video.src = video.dataset.srcMobile;
+  } else {
+    video.src = video.dataset.src;
+  }
+
+  function reelReady() { intro.classList.add('video-ready'); }
+  if (video.readyState >= 2) reelReady();
+  else video.addEventListener('loadeddata', reelReady, { once: true });
+
+  function finish() {
+    document.body.classList.add('intro-done');
+    video.pause();
+    try { sessionStorage.setItem('cd-reel-played', '1'); } catch (e) {}
+  }
+  function lift() {
+    if (lifted) return;
+    lifted = true;
+    intro.classList.add('lift');
+    /* belt and braces if the animationend event is ever missed */
+    setTimeout(finish, 1100);
+  }
+
+  intro.addEventListener('animationend', function (e) {
+    if (e.target === intro && e.animationName === 'cdintroLift') finish();
+  });
+  document.getElementById('cdintroEnter').addEventListener('click', lift);
+
+  function run() {
+    video.play().catch(function () {});
+    /* the page turns as the reel lands on its end card */
+    video.addEventListener('ended', lift, { once: true });
+    /* if the video stalls or never fires ended, leave anyway */
+    setTimeout(lift, 15000);
+  }
+
+  /* hidden tabs never fire frames: hold until she actually arrives */
+  if (document.visibilityState === 'visible') {
+    run();
+  } else {
+    document.addEventListener('visibilitychange', function onVis() {
+      if (document.visibilityState === 'visible') {
+        document.removeEventListener('visibilitychange', onVis);
+        run();
+      }
+    });
+  }
+})();
+</script>
 </body>
 </html>
