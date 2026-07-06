@@ -69,12 +69,21 @@ html.reel-live .cdintro {
   display: block;
   position: fixed;
   inset: 0;
-  z-index: 90;
+  /* above everything, including the field-guide chip (z-index 200) —
+     a takeover intro owns the whole viewport until it lifts */
+  z-index: 500;
   overflow: hidden;
   background: #04121f;
   will-change: transform;
 }
 .cdintro.lift { animation: cdintroLift 0.7s cubic-bezier(0.76, 0, 0.24, 1) forwards; }
+/* the chrome (dark scrim band, label, plate, button) fades as the page
+   turns, so the lift carries only the washing end card — no dark edge */
+.cdintro__scrim, .cdintro__plate, .cdintro__label, .cdintro__enter { transition: opacity 0.3s ease; }
+.cdintro.lift .cdintro__scrim,
+.cdintro.lift .cdintro__plate,
+.cdintro.lift .cdintro__label,
+.cdintro.lift .cdintro__enter { opacity: 0; }
 @keyframes cdintroLift { to { transform: translateY(-103%); } }
 body.intro-done .cdintro { display: none !important; }
 .cdintro video {
@@ -147,7 +156,7 @@ body.intro-done .cdintro { display: none !important; }
      the hero. Remove this block plus the gate <script>/<style> in <head>
      and the runtime script at the bottom to retire the intro. -->
 <div class="cdintro" id="cdintro" aria-hidden="true">
-  <video id="cdintroVideo" data-src="assets/demos/field-reel-intro.mp4?v=20260705c" data-src-mobile="assets/demos/field-reel-intro-mobile.mp4?v=20260705c" poster="assets/field-reel-poster.jpg" muted playsinline preload="none"></video>
+  <video id="cdintroVideo" data-src="assets/demos/field-reel-intro.mp4?v=20260705d" data-src-mobile="assets/demos/field-reel-intro-mobile.mp4?v=20260705d" poster="assets/field-reel-poster.jpg" muted playsinline preload="none"></video>
   <span class="cdintro__scrim"></span>
   <span class="cdintro__plate"><b>caboodle design</b> · field studies 2011–2026</span>
   <span class="cdintro__label"><i>◉</i> the field reel</span>
