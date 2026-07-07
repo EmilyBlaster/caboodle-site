@@ -102,6 +102,20 @@ body.intro-done .cdintro { display: none !important; }
 }
 /* the page behind the intro shouldn't scroll while the reel plays */
 html.reel-live body:not(.intro-done) { overflow: hidden; }
+/* real iPhones rasterize the headline glyphs a few px higher in the
+   curtain clip window than desktop engines (the "ai" tops were getting
+   shaved on device, unreproducible in Chrome or desktop WebKit). Swap
+   the clip mechanism: clip-path with a negative top inset extends the
+   window 0.15em further above the border box with ZERO layout effect —
+   padding/margins stay exactly as styles.css ships them. */
+.hero__line { overflow: visible; clip-path: inset(-0.15em 0 0 0); }
+/* the taller window can see the lifted bar's bottom edge at -102% —
+   park the bars further above it (base state + keyframes, index only) */
+.hero__line::after { transform: translateY(-130%); }
+@keyframes barLift {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-130%); }
+}
 .cdintro__scrim {
   position: absolute;
   left: 0; right: 0; bottom: 0;
