@@ -144,16 +144,24 @@ html.reel-live body:not(.intro-done) { overflow: hidden; }
   cursor: pointer;
 }
 .cdintro__enter:hover { border-color: #96E650; color: #96E650; }
-/* hold the hero + trustband entrance until the page-turn clears; the
-   stock animations then play from the top with their original stagger */
+/* hold the hero + trustband entrance until the page-turn clears. NOT via
+   animation-play-state pause/resume — iOS Safari drops fills when resuming
+   an animation paused in its delay phase (left "ai rollouts" clipped on
+   iPhones). Instead: no animation at all until body.intro-done exists,
+   then the stock declarations apply fresh and START from the top with
+   their original stagger. Fresh starts have no resume path to break. */
 @media (prefers-reduced-motion: no-preference) {
   html.reel-live body:not(.intro-done) .hero__stamp,
   html.reel-live body:not(.intro-done) .hero__eyebrow,
   html.reel-live body:not(.intro-done) .hero__line-inner,
-  html.reel-live body:not(.intro-done) .hero__line::after,
   html.reel-live body:not(.intro-done) .hero__lede,
   html.reel-live body:not(.intro-done) .hero__scroll,
-  html.reel-live body:not(.intro-done) .trustband__inner { animation-play-state: paused !important; }
+  html.reel-live body:not(.intro-done) .trustband__inner {
+    animation: none !important;
+    opacity: 0;
+  }
+  /* bars: animation none = base state, already lifted out of the window */
+  html.reel-live body:not(.intro-done) .hero__line::after { animation: none !important; }
 }
 </style>
 </head>
