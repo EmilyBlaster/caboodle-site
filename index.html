@@ -116,6 +116,23 @@ html.reel-live body:not(.intro-done) { overflow: hidden; }
   from { transform: translateY(0); }
   to   { transform: translateY(-130%); }
 }
+/* reel path: iOS Safari unreliably RESTARTS pseudo-element animations on
+   class change — on device the curtain bars never re-covered, so the ink
+   text played its clipped rise naked ("cut off at first, then okay").
+   Dependable version: bars are TRANSITION-driven (transitions always fire
+   on class change) and the ink sits at rest behind them. Nothing clipped
+   is ever visible, whether or not anything restarts. Non-reel visits keep
+   the stock animation choreography. */
+html.reel-live .hero__line-inner { animation: none !important; }
+html.reel-live .hero__line::after {
+  animation: none !important;
+  transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+html.reel-live .hero__line:nth-child(1)::after { transition-delay: 0.15s; }
+html.reel-live .hero__line:nth-child(2)::after { transition-delay: 0.45s; }
+html.reel-live .hero__line:nth-child(3)::after { transition-delay: 0.75s; }
+/* before the page turns: bars snapped into covering position, no motion */
+html.reel-live body:not(.intro-done) .hero__line::after { transform: translateY(0); transition: none; }
 .cdintro__scrim {
   position: absolute;
   left: 0; right: 0; bottom: 0;
