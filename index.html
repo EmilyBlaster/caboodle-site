@@ -95,6 +95,13 @@ body.intro-done .cdintro { display: none !important; }
   transition: opacity 0.5s ease;
 }
 .cdintro.video-ready video { opacity: 1; }
+/* phones get the 4:5 vertical cut IN FULL — contained on the ink cover,
+   never cover-cropped (cover was slicing ~40% off the frame's sides) */
+@media (max-width: 699px) {
+  .cdintro video { object-fit: contain; }
+}
+/* the page behind the intro shouldn't scroll while the reel plays */
+html.reel-live body:not(.intro-done) { overflow: hidden; }
 .cdintro__scrim {
   position: absolute;
   left: 0; right: 0; bottom: 0;
