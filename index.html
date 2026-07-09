@@ -195,6 +195,198 @@ html.reel-live body:not(.intro-done) .hero__line::after { transform: translateY(
   html.reel-live body:not(.intro-done) .hero__line::after { animation: none !important; }
 }
 </style>
+<style>
+/* ---------- the bench (homepage hands-on specimens) ----------------------
+   One stage, three operable specimens on a tab switcher: the AI copilot
+   leads, then the 3D trainer, then the behavioral experiment. Only one
+   is powered at a time. Fixed compositions contain-fit (no scrollbars);
+   living apps get browser chrome + both-axis scrollbar clipping. */
+.bench {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 9vh clamp(20px, 7vw, 110px) 11vh;
+}
+.bench__kicker {
+  font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--lime);
+  display: block;
+  margin-bottom: 2.5vh;
+}
+.bench__h {
+  font-family: var(--display, 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif);
+  font-weight: 700;
+  font-size: clamp(1.9rem, 3.8vw, 3.1rem);
+  line-height: 1.1;
+  margin: 0 0 2vh;
+  max-width: 20ch;
+}
+.bench__h em { font-style: normal; color: var(--lime); }
+.bench__lede {
+  font-size: 17px;
+  line-height: 1.6;
+  color: rgba(242, 239, 232, 0.75);
+  max-width: 54ch;
+  margin-bottom: 4vh;
+}
+.bench__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+  max-width: 1060px;
+}
+.bench-tab {
+  font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(242, 239, 232, 0.75);
+  background: none;
+  border: 1px solid rgba(242, 239, 232, 0.3);
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+}
+.bench-tab:hover { border-color: var(--lime); color: var(--paper); }
+.bench-tab.is-on { border-color: var(--lime); color: var(--ink); background: var(--lime); }
+.bench-spec {
+  position: relative;
+  background: #fbf9f4;
+  padding: 10px 10px 0;
+  box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.55);
+  max-width: 1060px;
+  margin: 0;
+}
+.bench-spec__stage {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9.6;
+  background: #e9e5da;
+  overflow: hidden;
+}
+.bench-spec__stage iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.bench-spec__stage iframe.iframe--fit { inset: auto; transform-origin: top left; }
+.bench-spec__chrome {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 34px;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  background: var(--ink);
+  z-index: 2;
+}
+.bench-spec.is-live.has-chrome .bench-spec__chrome { display: flex; }
+.bench-spec.is-live.has-chrome iframe {
+  top: 34px;
+  height: calc(100% - 34px + 18px);
+  width: calc(100% + 18px);
+}
+.bench-spec__chrome i { width: 8px; height: 8px; border-radius: 50%; background: rgba(242, 239, 232, 0.3); }
+.bench-spec__chrome i:first-child { background: var(--lime); }
+.bench-spec__chrome span {
+  margin-left: 6px;
+  font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(242, 239, 232, 0.75);
+  background: rgba(242, 239, 232, 0.08);
+  padding: 4px 12px;
+}
+.bench-spec__chrome .chrome-hint {
+  margin-left: auto;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(242, 239, 232, 0.5);
+  background: none;
+  padding: 0;
+}
+.bench-spec__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  filter: grayscale(0.85) brightness(0.92);
+  transition: filter 0.5s ease;
+}
+.bench-spec:hover .bench-spec__poster { filter: grayscale(0.35) brightness(0.97); }
+.bench-spec__run {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: rgba(40, 40, 40, 0.28);
+  border: 0;
+  cursor: pointer;
+  transition: background 0.4s ease;
+}
+.bench-spec__run:hover { background: rgba(40, 40, 40, 0.16); }
+.bench-spec__run b {
+  font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--lime);
+  padding: 14px 26px;
+}
+.bench-spec__run span {
+  font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(242, 239, 232, 0.95);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+.bench-spec.is-live .bench-spec__run, .bench-spec.is-live .bench-spec__poster { display: none; }
+.bench-spec__caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 6px;
+  font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: var(--ink-2);
+}
+.bench-spec__caption i { font-style: normal; color: var(--magenta); }
+.bench__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+  gap: clamp(26px, 5vw, 70px);
+  align-items: start;
+}
+.bench__notes { display: flex; flex-direction: column; gap: 30px; padding-top: 2vh; }
+.bench-note {
+  font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  line-height: 1.75;
+  color: rgba(242, 239, 232, 0.85);
+  border-top: 1px solid rgba(242, 239, 232, 0.18);
+  padding-top: 12px;
+}
+.bench-note b { font-weight: 500; display: block; letter-spacing: 0.14em; margin-bottom: 2px; }
+.bench-note:nth-child(1) b { color: var(--lime); }
+.bench-note:nth-child(2) b { color: #4F8BB9; }
+.bench-note:nth-child(3) b { color: var(--magenta); }
+@media (max-width: 900px) {
+  .bench__grid { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
 
@@ -253,7 +445,7 @@ html.reel-live body:not(.intro-done) .hero__line::after { transform: translateY(
         systems for Fortune 500s. Now leading AI programs the same way.
         The&nbsp;whole&nbsp;caboodle.
       </p>
-      <a href="#work" class="hero__scroll">
+      <a href="#bench" class="hero__scroll">
         <span>see my work</span>
         <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 4v14m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
       </a>
@@ -282,6 +474,40 @@ html.reel-live body:not(.intro-done) .hero__line::after { transform: translateY(
 </section>
 
 <!-- (static proof strip removed — the field reel above is its motion replacement) -->
+
+<!-- The bench: three real pieces, operable in place. AI copilot leads
+     (it is the positioning), then the 3D trainer, then the behavioral
+     experiment. Only one specimen is powered at a time. -->
+<section class="bench" id="bench">
+  <span class="bench__kicker">the bench · run the work live</span>
+  <h2 class="bench__h">don't read about the work. <em>run it.</em></h2>
+  <p class="bench__lede">
+    Three real pieces, powered on in place: a working AI copilot,
+    an interactive 3D trainer, a behavioral experiment. Not videos,
+    not screenshots. Pick one and put your hands on it.
+  </p>
+
+  <div class="bench__tabs" id="benchTabs" role="tablist" aria-label="Choose a specimen"></div>
+
+  <div class="bench__grid">
+    <figure class="bench-spec" id="benchSpec">
+      <span class="bench-spec__stage" id="benchStage">
+        <span class="bench-spec__chrome" aria-hidden="true"><i></i><i></i><i></i><span id="benchChromeUrl"></span><span class="chrome-hint">scroll to explore ↓</span></span>
+        <img class="bench-spec__poster" id="benchPoster" src="" alt="" />
+        <button class="bench-spec__run" id="benchRun" type="button">
+          <b>run specimen →</b>
+          <span id="benchRunSub"></span>
+        </button>
+      </span>
+      <figcaption class="bench-spec__caption">
+        <span id="benchCaption"></span>
+        <span><i>◉ live</i> when powered</span>
+      </figcaption>
+    </figure>
+
+    <aside class="bench__notes" id="benchNotes" aria-label="Field notes on this specimen"></aside>
+  </div>
+</section>
 
 <!-- Work: real case studies as dossiers
      (testimonial section moved to about.html as a consolidated grid) -->
@@ -1063,6 +1289,144 @@ html.reel-live body:not(.intro-done) .hero__line::after { transform: translateY(
       }
     });
   }
+})();
+</script>
+
+<script>
+/* ============================================================
+   THE BENCH — one stage, three specimens. AI leads because AI
+   is the positioning; craft and behavior follow. Only one
+   specimen is ever powered; switching powers down the last.
+   Same-origin specimens get their scrollbars hidden by style
+   injection; cross-origin apps clip theirs outside the stage.
+   ============================================================ */
+(function () {
+  const SPECIMENS = [
+    {
+      id: 'greenroom',
+      tab: '001 · ai copilot',
+      caption: 'specimen 001 · greenroom · a working ai development copilot — rag, citations, evals',
+      poster: 'assets/greenroom-poster.png',
+      src: 'https://greenroom-strand.netlify.app',
+      chrome: 'greenroom-strand.netlify.app',
+      runSub: 'live app · real model calls · loads in place',
+      notes: [
+        ['what it is', 'a working AI copilot for a talent team: ask in plain words, get a grounded answer with citations and a next step'],
+        ['why it matters', 'this is the ai-rollout thesis running live: retrieval, guardrails and a visible eval layer, not a slide about them'],
+        ['the point', 'ai adoption isn’t pitched here. it’s shipped, and you’re using it']
+      ]
+    },
+    {
+      id: 'extinguisher',
+      tab: '002 · 3d trainer',
+      caption: 'specimen 002 · 3d inspection trainer · built for a global supplier program',
+      poster: 'assets/demos/fire-extinguisher-3d.png',
+      src: 'assets/3d/fire-extinguisher.html',
+      runSub: 'interactive 3d training · loads in place',
+      notes: [
+        ['what it is', 'a browser-native 3d trainer: orbit the extinguisher, open the numbered inspection points, learn by handling'],
+        ['why it matters', 'people practice on the thing itself, not on bullet points about the thing'],
+        ['the point', 'every engagement ships working material like this: modules people actually use on the job']
+      ]
+    },
+    {
+      id: 'skipwatch',
+      tab: '003 · skip or watch?',
+      caption: 'specimen 003 · skip or watch? · the hook experiment from people’s professors',
+      poster: 'assets/pp-skip-or-watch.png',
+      src: 'assets/pp-hook-interactive.html',
+      fit: { w: 1200, h: 540 },
+      runSub: 'behavioral experiment · loads in place',
+      notes: [
+        ['what it is', 'a live experiment in attention: see how one caption change flips viewers from skipping to watching'],
+        ['why it matters', 'behavior change starts in the first three seconds, and it’s testable'],
+        ['the point', 'the science under every module: observe the behavior, change the design, measure again']
+      ]
+    }
+  ];
+
+  const tabsEl = document.getElementById('benchTabs');
+  const spec = document.getElementById('benchSpec');
+  const stage = document.getElementById('benchStage');
+  const poster = document.getElementById('benchPoster');
+  const runBtn = document.getElementById('benchRun');
+  const runSub = document.getElementById('benchRunSub');
+  const captionEl = document.getElementById('benchCaption');
+  const notesEl = document.getElementById('benchNotes');
+  let current = null;
+
+  function powerDown() {
+    const f = stage.querySelector('iframe');
+    if (f) f.remove();
+    spec.classList.remove('is-live');
+    spec.classList.remove('has-chrome');
+  }
+
+  function select(s) {
+    current = s;
+    powerDown();
+    poster.src = s.poster;
+    runSub.textContent = s.runSub;
+    captionEl.textContent = s.caption;
+    runBtn.setAttribute('aria-label', 'Power on: ' + s.caption);
+    notesEl.innerHTML = s.notes.map(function (n) {
+      return '<p class="bench-note"><b>' + n[0] + '</b>' + n[1] + '</p>';
+    }).join('');
+    tabsEl.querySelectorAll('.bench-tab').forEach(function (t) {
+      t.classList.toggle('is-on', t.dataset.id === s.id);
+    });
+  }
+
+  SPECIMENS.forEach(function (s) {
+    const b = document.createElement('button');
+    b.className = 'bench-tab';
+    b.type = 'button';
+    b.dataset.id = s.id;
+    b.textContent = s.tab;
+    b.addEventListener('click', function () { select(s); });
+    tabsEl.appendChild(b);
+  });
+  select(SPECIMENS[0]);
+
+  function layoutFit() {
+    const f = stage.querySelector('iframe.iframe--fit');
+    if (!f || !current || !current.fit) return;
+    const w = current.fit.w, h = current.fit.h;
+    const s = Math.min(stage.clientWidth / w, stage.clientHeight / h);
+    f.style.width = w + 'px';
+    f.style.height = h + 'px';
+    f.style.transform = 'scale(' + s + ')';
+    f.style.left = (stage.clientWidth - w * s) / 2 + 'px';
+    f.style.top = (stage.clientHeight - h * s) / 2 + 'px';
+  }
+  addEventListener('resize', layoutFit);
+
+  runBtn.addEventListener('click', function () {
+    const frame = document.createElement('iframe');
+    frame.src = current.src;
+    frame.title = current.caption;
+    if (current.fit) {
+      frame.className = 'iframe--fit';
+      frame.setAttribute('scrolling', 'no');
+    }
+    if (!/^https?:/.test(current.src)) {
+      frame.addEventListener('load', function () {
+        try {
+          const doc = frame.contentDocument;
+          const st = doc.createElement('style');
+          st.textContent = '*{scrollbar-width:none!important;-ms-overflow-style:none!important}*::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}';
+          doc.head.appendChild(st);
+        } catch (e) {}
+      });
+    }
+    stage.appendChild(frame);
+    spec.classList.add('is-live');
+    if (current.chrome) {
+      document.getElementById('benchChromeUrl').textContent = current.chrome;
+      spec.classList.add('has-chrome');
+    }
+    layoutFit();
+  });
 })();
 </script>
 </body>
