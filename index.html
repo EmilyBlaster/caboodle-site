@@ -386,6 +386,10 @@ html.reel-live body:not(.intro-done) .hero__line::after { transform: translateY(
 @media (max-width: 900px) {
   .bench__grid { grid-template-columns: 1fr; }
 }
+/* phones: a taller stage so inline apps have room to breathe */
+@media (max-width: 700px) {
+  .bench-spec__stage { aspect-ratio: 4 / 5; }
+}
 </style>
 </head>
 <body>
@@ -480,11 +484,11 @@ html.reel-live body:not(.intro-done) .hero__line::after { transform: translateY(
      experiment. Only one specimen is powered at a time. -->
 <section class="bench" id="bench">
   <span class="bench__kicker">the bench · run the work live</span>
-  <h2 class="bench__h">don't read about the work. <em>run it.</em></h2>
+  <h2 class="bench__h">don't read about the work, <em>run it.</em></h2>
   <p class="bench__lede">
     Three real pieces, powered on in place: a working AI copilot,
-    an interactive 3D trainer, a behavioral experiment. Not videos,
-    not screenshots. Pick one and put your hands on it.
+    an interactive 3D trainer, a behavioral experiment. Pick one
+    and put your hands on it.
   </p>
 
   <div class="bench__tabs" id="benchTabs" role="tablist" aria-label="Choose a specimen"></div>
@@ -1312,8 +1316,8 @@ html.reel-live body:not(.intro-done) .hero__line::after { transform: translateY(
       runSub: 'live app · real model calls · loads in place',
       notes: [
         ['what it is', 'a working AI copilot for a talent team: ask in plain words, get a grounded answer with citations and a next step'],
-        ['why it matters', 'this is the ai-rollout thesis running live: retrieval, guardrails and a visible eval layer, not a slide about them'],
-        ['the point', 'ai adoption isn’t pitched here. it’s shipped, and you’re using it']
+        ['why it matters', 'this is the ai-rollout thesis running live: retrieval, guardrails and a visible eval layer you can inspect'],
+        ['the point', 'ai adoption is shipped here, and you’re using it']
       ]
     },
     {
@@ -1325,7 +1329,7 @@ html.reel-live body:not(.intro-done) .hero__line::after { transform: translateY(
       runSub: 'interactive 3d training · loads in place',
       notes: [
         ['what it is', 'a browser-native 3d trainer: orbit the extinguisher, open the numbered inspection points, learn by handling'],
-        ['why it matters', 'people practice on the thing itself, not on bullet points about the thing'],
+        ['why it matters', 'people practice on the thing itself instead of reading bullet points about it'],
         ['the point', 'every engagement ships working material like this: modules people actually use on the job']
       ]
     },
@@ -1402,6 +1406,12 @@ html.reel-live body:not(.intro-done) .hero__line::after { transform: translateY(
   addEventListener('resize', layoutFit);
 
   runBtn.addEventListener('click', function () {
+    /* fixed-width compositions are unreadable at phone scale — open
+       them full screen instead, where pinch and native zoom work */
+    if (current.fit && window.innerWidth < 700) {
+      window.open(current.src, '_blank', 'noopener');
+      return;
+    }
     const frame = document.createElement('iframe');
     frame.src = current.src;
     frame.title = current.caption;
