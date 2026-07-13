@@ -1,96 +1,81 @@
 <!doctype html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-404B8P6ZLK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-404B8P6ZLK');
+</script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>LAB-008 · the poster · caboodle labs</title>
+<meta name="description" content="LAB-008: the Bauhaus poster homepage, field-tested and preserved. Seven interlocking planes, one per client engagement." />
+
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css?v=20260618o" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+
 
 <style>
 /* ============================================================
-   CONCEPT 01B — "THE POSTER"
+   THE POSTER — the caboodle homepage.
    ------------------------------------------------------------
-   Standalone throwaway demo (sibling of specimen-demo.html so
-   the two directions can be compared side by side).
+   A full-bleed Bauhaus poster of interlocking planes with
+   diagonal cuts, divided into EXACTLY seven pieces, one per
+   engagement: the whole caboodle, literally. Tonal pairs stack
+   in columns (blues, magentas, limes) around the lime spine
+   (the featured engagement); the ink corner is the capstone.
 
-   Per Emily's reference: a full-bleed Bauhaus poster of
-   interlocking flat planes with diagonal cuts — no white
-   ground, no filler. The poster is divided into EXACTLY seven
-   pieces, one per project: the whole caboodle, literally.
-   Tonal pairs stack in columns (blues, magentas), the lime
-   spine is the featured engagement, the ink corner is the
-   capstone. Hover a plane: its textile pattern floods in and
-   the annotation card names it. Click: the plane floods the
-   screen and the case reads left to right.
+   Hover a plane: its textile pattern floods in and the
+   annotation card names it. Click: the plane floods the screen
+   and the case reads LEFT TO RIGHT (title → observation →
+   field note → door into the full case file).
 
-   Motion: pieces breathe ±2px so the seams flex; the whole
-   poster leans slightly toward the cursor; entrance slides the
-   pieces together like the poster being printed.
+   The poster recuts itself in portrait: the same seven planes
+   transpose, the spine becomes the middle band.
+
+   Sits on the site's warm paper (styles.css tokens); real nav;
+   the previous homepage lives in git history.
    ============================================================ */
 
-@font-face {
-  font-family: 'Bauhaus Bool';
-  src: url('../fonts/BauhausBoolDisplay-Bold.woff') format('woff');
-  font-weight: 700; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Bauhaus Bool';
-  src: url('../fonts/BauhausBoolDisplay-ExtraBold.woff') format('woff');
-  font-weight: 800; font-style: normal; font-display: swap;
-}
-
 :root {
-  --lime: #96E650; --lime-2: #B6EE85;
-  --blue: #03599B; --blue-2: #4F8BB9;
-  --magenta: #EC008C; --magenta-2: #F24DAF;
-  --ink: #282828; --mid: #686868;
+  --lime-2: #B6EE85;
+  --blue-2: #4F8BB9;
+  --magenta-2: #F24DAF;
+  --mid: #686868;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { height: 100%; }
 body {
-  background: #fff;
+  background: var(--paper);
   color: var(--ink);
-  font-family: 'DM Sans', sans-serif;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-/* ---------- chrome (lives in the poster's margins) ------------------ */
-.brand {
-  position: fixed; top: 26px; left: 4vw; z-index: 20;
-  font-family: 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif;
-  font-weight: 700; font-size: 1.05rem;
-}
-.nav {
-  position: fixed; top: 28px; right: 4vw; z-index: 20;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.68rem; letter-spacing: 0.08em; color: var(--mid);
-}
-.nav span { margin-left: 22px; cursor: pointer; transition: color 0.3s var(--ease-out); }
-.nav span:hover { color: var(--ink); }
+/* ---------- footer lines (the page doesn't scroll) ------------------ */
 .caption {
-  position: fixed; bottom: 24px; left: 4vw; z-index: 20;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  position: fixed; bottom: 22px; left: 4vw; z-index: 20;
+  font-family: var(--mono);
   font-size: 0.66rem; letter-spacing: 0.08em; color: var(--mid);
 }
-.concepts {
-  position: fixed; bottom: 24px; right: 4vw; z-index: 20;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.62rem; letter-spacing: 0.08em; color: #b5b5b5;
+.copyright {
+  position: fixed; bottom: 22px; right: 4vw; z-index: 20;
+  font-family: var(--mono);
+  font-size: 0.66rem; letter-spacing: 0.08em; color: var(--mid);
 }
-.concepts a { color: inherit; text-decoration: none; }
-.concepts a:hover, .concepts a.here { color: var(--ink); }
 
 /* ---------- the poster ---------------------------------------------- */
 .poster {
   position: fixed;
-  inset: 9vh 4vw;
+  inset: max(10vh, 92px) 4vw 8vh;
   will-change: transform;
 }
 
@@ -100,17 +85,12 @@ body {
   will-change: transform;
   transition: transform 0.9s var(--ease-out);
 }
-/* entrance: pieces slide in and the poster assembles */
 .piece--from-top { transform: translateY(-110%); }
 .piece--from-bottom { transform: translateY(110%); }
 body.in .piece { transform: translateY(0); }
 
-/* the plane itself carries the clip; children are clipped with it */
-.plane {
-  position: absolute; inset: 0;
-}
+.plane { position: absolute; inset: 0; }
 
-/* pattern flood, clipped inside the plane's polygon */
 .fill {
   position: absolute; inset: -10%;
   border-radius: 50%;
@@ -124,16 +104,33 @@ body.in .piece { transform: translateY(0); }
 }
 @keyframes patDrift { to { background-position: 96px 64px; } }
 
-/* catalog index pinned at each plane's anchor */
 .idx {
   position: absolute; z-index: 2;
   transform: translate(-50%, -50%);
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.6rem; letter-spacing: 0.06em;
+  font-family: var(--mono);
+  font-size: 0.72rem; letter-spacing: 0.06em;
   pointer-events: none;
+  text-align: center;
+  white-space: nowrap;
+}
+/* the plane wears its client's name — the catalog number is the
+   footnote, not the headline */
+.idx b {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: clamp(1rem, 2.6vw, 1.35rem);
+  letter-spacing: 0;
+  margin-bottom: 3px;
 }
 
-/* annotation card at the anchor, naming the project */
+/* keyboard focus mirrors hover: pattern floods, card appears (via JS) */
+.piece:focus-visible { outline: none; }
+.piece:focus-visible .fill, .piece.is-focused .fill {
+  transform: scale(1.6);
+  animation: patDrift 8s linear infinite;
+}
+
 .tag {
   position: absolute; z-index: 25;
   white-space: nowrap;
@@ -154,40 +151,50 @@ body.in .piece { transform: translateY(0); }
 .tag b {
   display: block;
   font-family: 'DM Sans', sans-serif;
-  font-weight: 600; font-size: 0.9rem; line-height: 1.1;
+  font-weight: 600; font-size: 1.05rem; line-height: 1.1;
   margin-bottom: 4px;
 }
 .tag span {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.62rem; letter-spacing: 0.09em; color: var(--mid);
+  font-family: var(--mono);
+  font-size: 0.74rem; letter-spacing: 0.09em; color: var(--mid);
 }
-.piece:hover .tag { opacity: 1; transform: translate(-50%, calc(-100% - 18px)); }
 
-/* the poster's printed label: a proper lockup like the reference —
-   kicker, short rule, title on two balanced lines */
+/* the poster's printed label: kicker, short lime rule, title on two
+   balanced lines */
 .plate {
   position: absolute; left: 4.5%; bottom: 7%; z-index: 3;
+  max-width: 19%;              /* cage: the blue-2 plane is 25% wide */
   color: #fff; pointer-events: none;
+  /* the placard waits for the planes to land, then fades in */
+  opacity: 0;
+  transition: opacity 0.7s var(--ease-out) 1.6s;
 }
+body.in .plate { opacity: 1; }
 .plate__kicker {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: var(--mono);
   font-size: 0.64rem; letter-spacing: 0.15em;
   margin-bottom: 11px; opacity: 0.85;
 }
 .plate__rule {
   width: 36px; height: 2px;
-  background: var(--lime);   /* the logo pairing: lime on blue */
+  background: var(--lime);
   margin-bottom: 13px;
 }
-.plate--ink .plate__rule { background: var(--ink); }
 .plate__line {
-  font-family: 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif;
+  font-family: var(--display, 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif);
   font-weight: 700;
-  font-size: clamp(1.05rem, 1.8vw, 1.6rem);
+  font-size: clamp(0.95rem, 1.25vw, 1.3rem);
   line-height: 1.12;
   letter-spacing: 0.005em;
 }
+.plate__hint {
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 0.68rem; letter-spacing: 0.08em;
+  opacity: 0.8;
+}
 .plate--ink { color: var(--ink); }
+.plate--ink .plate__rule { background: var(--ink); }
 
 /* ---------- the door: case study, read left to right ---------------- */
 .case {
@@ -204,14 +211,14 @@ body.in .piece { transform: translateY(0); }
   padding: 0 clamp(24px, 7vw, 110px);
 }
 .case__kicker {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.68rem; letter-spacing: 0.12em;
+  font-family: var(--mono);
+  font-size: 0.8rem; letter-spacing: 0.12em;
   margin-bottom: 3vh;
   opacity: 0; transform: translateY(14px);
   transition: opacity 0.5s var(--ease-out) 0.45s, transform 0.5s var(--ease-out) 0.45s;
 }
 .case__title {
-  font-family: 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif;
+  font-family: var(--display, 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif);
   font-weight: 800;
   font-size: clamp(5rem, 19vw, 20rem);
   line-height: 0.9; letter-spacing: -0.015em;
@@ -223,11 +230,9 @@ body.in .piece { transform: translateY(0); }
 .case.open .case__kicker, .case.open .case__title { opacity: 1; transform: none; }
 .case__obs { max-width: 22em; font-size: clamp(1.4rem, 2.6vw, 2.4rem); line-height: 1.35; font-weight: 500; }
 
-/* the evidence panel: the field note as a pull quote, numbers woven
-   into prose rather than staged as a stat billboard */
 .case__evLabel {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.68rem; letter-spacing: 0.14em; opacity: 0.75;
+  font-family: var(--mono);
+  font-size: 0.8rem; letter-spacing: 0.14em; opacity: 0.85;
   margin-bottom: 3vh;
 }
 .case__evidence {
@@ -236,7 +241,7 @@ body.in .piece { transform: translateY(0); }
   line-height: 1.22; font-weight: 600;
 }
 .case__cta {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: var(--mono);
   font-size: clamp(0.9rem, 1.4vw, 1.15rem); letter-spacing: 0.1em;
   color: inherit; text-decoration: none;
   border-bottom: 2px solid currentColor; padding-bottom: 6px;
@@ -245,13 +250,13 @@ body.in .piece { transform: translateY(0); }
 .case__cta:hover { opacity: 0.7; }
 .case__ctaHint {
   margin-top: 2.5vh;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.66rem; letter-spacing: 0.08em; opacity: 0.6;
+  font-family: var(--mono);
+  font-size: 0.74rem; letter-spacing: 0.08em; opacity: 0.7;
 }
 .case__close {
   position: absolute; top: 30px; right: 40px; z-index: 5;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.72rem; letter-spacing: 0.1em;
+  font-family: var(--mono);
+  font-size: 0.8rem; letter-spacing: 0.1em;
   cursor: pointer; background: none; border: none; color: inherit;
   padding: 10px; opacity: 0;
   transition: opacity 0.4s var(--ease-out) 0.8s;
@@ -261,8 +266,8 @@ body.in .piece { transform: translateY(0); }
 .case__scrollHint {
   position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
   z-index: 5;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.66rem; letter-spacing: 0.12em;
+  font-family: var(--mono);
+  font-size: 0.74rem; letter-spacing: 0.12em;
   opacity: 0; transition: opacity 0.4s var(--ease-out) 0.9s;
 }
 .case.open .case__scrollHint { opacity: 0.65; }
@@ -276,16 +281,6 @@ body.in .piece { transform: translateY(0); }
 .case__dots i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: 0.3; transition: opacity 0.3s; }
 .case__dots i.on { opacity: 1; }
 
-@media (max-width: 640px) {
-  .brand { left: 4vw; }
-  .nav { top: 58px; left: 4vw; right: auto; }
-  .nav span { margin-left: 0; margin-right: 18px; }
-  .poster { inset: 13vh 4vw 11vh; }
-  .caption { bottom: 48px; }
-  /* keep the plate inside its light plane; past the diagonal is ink */
-  .plate__line { max-width: 11em; }
-}
-
 .case--on-lime    { background: var(--lime);      color: var(--ink);  }
 .case--on-blue    { background: var(--blue);      color: #fff;        }
 .case--on-magenta { background: var(--magenta);   color: #fff;        }
@@ -293,17 +288,67 @@ body.in .piece { transform: translateY(0); }
 .case--on-blue2   { background: var(--blue-2);    color: #fff;        }
 .case--on-magenta2{ background: var(--magenta-2); color: #fff;        }
 .case--on-ink     { background: var(--ink);       color: var(--lime); }
+
+@media (max-width: 640px) {
+  .poster { inset: max(12vh, 96px) 4vw 22vh; }
+  .caption { display: none; }
+  /* portrait: the plate leaves the artwork and sits beneath the
+     poster on the cream, like a museum placard under a print */
+  .plate {
+    top: calc(100% + 16px); bottom: auto;
+    left: 0; right: auto;
+  }
+  .plate__kicker { font-size: 0.6rem; margin-bottom: 7px; }
+  .plate__rule { width: 30px; margin-bottom: 9px; }
+  .plate__line { font-size: 1rem; line-height: 1.18; max-width: 16em; }
+  /* on cream the rule keeps its lime accent even in ink mode */
+  .plate--ink .plate__rule { background: var(--lime); }
+}
+
+/* ---------- reduced motion: the poster holds still -------------------
+   Planes appear in place (no slide), seams don't breathe, patterns
+   fade in without drifting, the case cross-fades instead of flooding.
+   Everything stays fully operable. */
+@media (prefers-reduced-motion: reduce) {
+  .piece { transition: none; }
+  .piece--from-top, .piece--from-bottom { transform: none; }
+  .plate { transition-delay: 0.1s; }
+  .fill { transition: opacity 0.3s ease; transform: scale(1.6); opacity: 0; }
+  .piece:hover .fill, .piece:focus-visible .fill, .piece.is-focused .fill {
+    opacity: 1;
+    animation: none;
+  }
+  .case { transition: opacity 0.3s ease; clip-path: none !important; opacity: 0; }
+  .case.open { opacity: 1; }
+  .tag { transition: opacity 0.3s ease; }
+}
 </style>
 </head>
 <body>
 
-<div class="brand">caboodle design</div>
-<nav class="nav"><span><a href="../labs.html" style="color:inherit;text-decoration:none;">← back to the labs</a></span></nav>
+<!-- Nav (site-standard; hamburger injected below, mirroring script.js) -->
+<header class="nav">
+  <a class="nav__mark" href="../index.html">
+    <svg class="cd-logo" viewBox="0 0 260 56" xmlns="http://www.w3.org/2000/svg" aria-label="caboodle design" role="img">
+      <path class="cd-logo__mark" fill-rule="evenodd"
+        d="M 5 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0 M 33 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0"/>
+      <text class="cd-logo__word" x="95" y="26" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">caboodle</text>
+      <text class="cd-logo__word" x="95" y="50" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">design</text>
+    </svg>
+  </a>
+  <nav class="nav__links">
+    <a href="../approach.html">approach</a>
+    <a href="../work.html">work</a>
+    <a href="../labs.html">labs</a>
+    <a href="../about.html">about emily</a>
+    <a href="../contact.html" class="nav__cta">let's talk</a>
+  </nav>
+</header>
 
 <div class="poster" id="poster"></div>
 
-<div class="caption">the whole caboodle · seven planes, seven case files</div>
-<div class="concepts">LAB-008 · homepage candidate, field-tested and preserved</div>
+<div class="caption">LAB-008 · a homepage, field-tested · seven planes, seven case files</div>
+<div class="copyright">© 2026 caboodle design</div>
 
 <!-- the door -->
 <div class="case" id="case">
@@ -332,10 +377,9 @@ body.in .piece { transform: translateY(0); }
 <script>
 /* ============================================================
    SEVEN PLANES = SEVEN CASE FILES = THE WHOLE POSTER
-   Columns are tonal pairs split by diagonal cuts; the lime
-   spine is the featured engagement; the ink corner is the
-   capstone. poly: clip-path. cx/cy: anchor for index + card.
-   dark: light index/label text on dark planes.
+   poly: landscape clip-path. polyP: portrait (transposed).
+   cx/cy (and cxP/cyP): anchor for index + annotation card.
+   dark: light index text on dark planes.
    ============================================================ */
 const SPECIMENS = [
   {
@@ -359,7 +403,7 @@ const SPECIMENS = [
     fill: { img: 'radial-gradient(circle, #96E650 2.2px, transparent 2.8px)', size: '15px 15px' },
     href: '../work/intuit.html',
     role: 'career growth',
-    kicker: 'SPECIMEN 002 / ENG-INTUIT / CAREER GROWTH',
+    kicker: 'SPECIMEN 002 / ENG-INT001 / CAREER GROWTH',
     title: 'intuit',
     obs: 'AI-powered career growth for 10,000+ employees. AI recommendations integrated with structured learning paths, helping people navigate their own development.',
     evidence: 'Ten thousand people can see their own path now. Growth sticks when the path is visible.'
@@ -372,7 +416,7 @@ const SPECIMENS = [
     fill: { img: 'repeating-radial-gradient(circle at 30% 70%, #ffffff 0 3px, transparent 3px 13px)' },
     href: '../work/apple.html',
     role: 'supplier code of conduct',
-    kicker: 'SPECIMEN 003 / ENG-APPLE / SUPPLIER CODE OF CONDUCT',
+    kicker: 'SPECIMEN 003 / ENG-APPLE001 / SUPPLIER CODE OF CONDUCT',
     title: 'apple',
     obs: 'Supplier training across 251 companies and 31 countries. Ethical standards, environmental compliance, and innovation requirements, built to translate, measure, and scale.',
     evidence: '251 companies, 31 countries, one standard that survived translation.'
@@ -385,7 +429,7 @@ const SPECIMENS = [
     fill: { img: 'repeating-conic-gradient(#03599B 0% 25%, transparent 0% 50%)', size: '14px 14px' },
     href: '../work/gitlab.html',
     role: 'works council compliance',
-    kicker: 'SPECIMEN 004 / ENG-GITLAB / WORKS COUNCIL · NL DE FR',
+    kicker: 'SPECIMEN 004 / ENG-GL001 / WORKS COUNCIL · NL DE FR',
     title: 'gitlab',
     obs: 'Works council training for the Netherlands, Germany, and France, delivered in two months. Interactive decision tools and contact guides, embedded straight into the LMS.',
     evidence: 'Three countries in two months, localized rather than translated, living inside the LMS.'
@@ -394,11 +438,11 @@ const SPECIMENS = [
     id: 'tmobile', theme: 'case--on-lime2', color: 'var(--lime-2)',
     poly: 'polygon(75% 0%, 100% 0%, 100% 65%, 75% 40%)',
     polyP: 'polygon(0% 75%, 0% 100%, 65% 100%, 40% 75%)',
-    cx: 87.5, cy: 22, cxP: 17, cyP: 80, entrance: 'top', depth: 0.9, phase: 4.2,
+    cx: 87.5, cy: 22, cxP: 22, cyP: 86, entrance: 'top', depth: 0.9, phase: 4.2,
     fill: { img: 'repeating-linear-gradient(90deg, #282828 0 4px, transparent 4px 13px)' },
     href: '../work/tmobile.html',
     role: 'legal affairs',
-    kicker: 'SPECIMEN 005 / ENG-TMOBILE / LEGAL AFFAIRS',
+    kicker: 'SPECIMEN 005 / ENG-TM001 / LEGAL AFFAIRS',
     title: 't-mobile',
     obs: 'Legal compliance training for corporate teams. Regulatory requirements translated into branching simulations people actually practice, not policies they scroll past.',
     evidence: 'Legal inquiries fell 40% after launch, because people finally got to practice the rules.'
@@ -411,7 +455,7 @@ const SPECIMENS = [
     fill: { img: 'radial-gradient(circle, #EC008C 2.4px, transparent 3px)', size: '12px 12px' },
     href: '../work/trust20.html',
     role: 'alcohol server training',
-    kicker: 'SPECIMEN 006 / ENG-TRUST20 / GORDON FOOD SERVICES',
+    kicker: 'SPECIMEN 006 / ENG-TRUST001 / GORDON FOOD SERVICES',
     title: 'trust20',
     obs: 'Accredited alcohol server training for Gordon Food Services. Scenario-based, meeting multi-state accreditation requirements, shipped in five weeks.',
     evidence: 'Multi-state accreditation in five weeks, built on scenarios instead of statutes.'
@@ -423,8 +467,8 @@ const SPECIMENS = [
     cx: 87.5, cy: 78, cxP: 78, cyP: 87.5, entrance: 'bottom', depth: 0.65, phase: 0.7, dark: true, longTitle: true,
     fill: { img: 'repeating-linear-gradient(45deg, #96E650 0 4px, transparent 4px 13px)' },
     href: '../work/peoples-professors.html',
-    role: 'capstone',
-    kicker: 'SPECIMEN 007 / PROJ-PP001 / SELF-INITIATED CAPSTONE',
+    role: 'capstone', shortName: "people's professors",
+    kicker: 'SPECIMEN 007 / ENG-PP001 / SELF-INITIATED CAPSTONE',
     title: "the people's professors",
     obs: 'A thesis about TikTok and learning design. So I built the proof. Graphic design and custom code delivering a one-of-a-kind learning experience.',
     evidence: 'A thesis is a claim. This one shipped its own proof.'
@@ -453,28 +497,35 @@ const nodes = SPECIMENS.map((s, i) => {
   const num = 's.' + String(i + 1).padStart(3, '0');
   const idx = document.createElement('span');
   idx.className = 'idx';
-  idx.style.left = s.cx + '%';
-  idx.style.top = s.cy + '%';
-  idx.style.color = s.dark ? 'rgba(255,255,255,0.8)' : 'rgba(40,40,40,0.6)';
-  idx.textContent = num;
+  idx.style.color = s.dark ? 'rgba(255,255,255,0.92)' : 'rgba(40,40,40,0.8)';
+  const nameEl = document.createElement('b');
+  nameEl.textContent = s.shortName || s.title;
+  idx.appendChild(nameEl);
+  idx.appendChild(document.createTextNode(num));
   plane.appendChild(idx);
 
   piece.appendChild(plane);
+
+  /* keyboard-operable: each plane is a real control */
+  piece.setAttribute('role', 'button');
+  piece.setAttribute('tabindex', '0');
+  piece.setAttribute('aria-label', s.title + ' — specimen ' + num + ', open case study');
   piece.addEventListener('click', () => openCase(s));
+  piece.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCase(s); }
+  });
+
   poster.appendChild(piece);
 
   return { el: piece, s, idx };
 });
 
-/* annotation cards live OUTSIDE the clipped pieces so they never get
-   cut by the polygon; hover state is driven per piece */
+/* annotation cards live at poster level so the polygons never clip them */
 nodes.forEach((n, i) => {
   const s = n.s;
   const num = 's.' + String(i + 1).padStart(3, '0');
   const tag = document.createElement('div');
   tag.className = 'tag';
-  tag.style.left = s.cx + '%';
-  tag.style.top = s.cy + '%';
   const nameEl = document.createElement('b');
   nameEl.textContent = s.title;
   const metaEl = document.createElement('span');
@@ -483,17 +534,24 @@ nodes.forEach((n, i) => {
   tag.appendChild(metaEl);
   poster.appendChild(tag);
   n.tag = tag;
-  n.el.addEventListener('mouseenter', () => {
+  const showTag = () => {
     tag.style.opacity = 1;
     tag.style.transform = 'translate(-50%, calc(-100% - 18px))';
-  });
-  n.el.addEventListener('mouseleave', () => { tag.style.opacity = 0; tag.style.transform = ''; });
+    n.el.classList.add('is-focused');
+  };
+  const hideTag = () => {
+    tag.style.opacity = 0;
+    tag.style.transform = '';
+    n.el.classList.remove('is-focused');
+  };
+  n.el.addEventListener('mouseenter', showTag);
+  n.el.addEventListener('mouseleave', hideTag);
+  /* keyboard focus gets the same annotation as hover */
+  n.el.addEventListener('focus', showTag);
+  n.el.addEventListener('blur', hideTag);
 });
 
-/* ---------- orientation: the poster recuts itself -------------------
-   Landscape: tonal-pair columns around the vertical lime spine.
-   Portrait: the same seven planes transposed — the spine becomes a
-   horizontal band, the pairs stack above and below. */
+/* orientation: the poster recuts itself between landscape and portrait */
 function isPortrait() { return innerHeight > innerWidth * 1.05; }
 function anchorOf(s) {
   return isPortrait() ? { cx: s.cxP, cy: s.cyP } : { cx: s.cx, cy: s.cy };
@@ -508,19 +566,17 @@ function applyLayout() {
     n.tag.style.left = a.cx + '%';
     n.tag.style.top = a.cy + '%';
   }
-  /* portrait's lower-left plane is light lime; the plate flips to ink */
   plate.classList.toggle('plate--ink', p);
 }
 let rzT;
 window.addEventListener('resize', () => { clearTimeout(rzT); rzT = setTimeout(applyLayout, 150); });
-/* resize events don't always fire in embedded webviews; the media
-   query change is a second, independent trigger */
 matchMedia('(orientation: portrait)').addEventListener('change', applyLayout);
 
-/* the printed plate, reference-style, on the lower-left plane */
+/* the printed plate */
 const plate = document.createElement('div');
 plate.className = 'plate';
-plate.innerHTML = '<div class="plate__kicker">FIELD COLLECTION / 2026</div><div class="plate__rule"></div><div class="plate__line">behavior change<br>over checkbox training</div>';
+const tapWord = matchMedia('(pointer: coarse)').matches ? 'tap' : 'click';
+plate.innerHTML = '<div class="plate__kicker">FIELD COLLECTION / 2026</div><div class="plate__rule"></div><div class="plate__line">behavior change<br>over checkbox training</div><div class="plate__hint">seven client engagements · ' + tapWord + ' any plane to open its case file</div>';
 poster.appendChild(plate);
 
 applyLayout();
@@ -534,12 +590,13 @@ window.addEventListener('pointermove', (e) => {
   mx = (e.clientX / innerWidth) * 2 - 1;
   my = (e.clientY / innerHeight) * 2 - 1;
 });
+const REDUCED_MOTION = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let lastDrift = 0, entranceDone = false;
 setTimeout(() => { entranceDone = true; nodes.forEach(n => { n.el.style.transition = 'none'; }); }, 1900);
 
 function driftTick(t) {
   lastDrift = t;
-  if (!entranceDone) return;
+  if (!entranceDone || REDUCED_MOTION) return;
   const time = t / 1000;
   poster.style.transform = `translate(${(mx * 8).toFixed(2)}px, ${(my * 6).toFixed(2)}px)`;
   for (const n of nodes) {
@@ -562,7 +619,11 @@ const scrollHint = document.getElementById('caseScrollHint');
 const PANELS = 4;
 let lastTheme = '';
 let caseOpen = false;
+let lastOpener = null;
 let targetX = 0, curX = 0, lastStep = 0;
+caseEl.setAttribute('role', 'dialog');
+caseEl.setAttribute('aria-modal', 'true');
+caseEl.setAttribute('aria-label', 'case study');
 
 function openCase(s) {
   const pr = poster.getBoundingClientRect();
@@ -595,13 +656,18 @@ function openCase(s) {
   const R = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy));
   caseEl.style.clipPath = `circle(${R * 1.05}px at ${cx}px ${cy}px)`;
   caseOpen = true;
+  lastOpener = document.activeElement;
+  setTimeout(() => document.getElementById('caseClose').focus({ preventScroll: true }), 900);
 }
 
 function closeCase() {
   const m = /at ([\d.]+)px ([\d.]+)px/.exec(caseEl.style.clipPath) || [0, innerWidth / 2, innerHeight / 2];
   caseEl.style.clipPath = `circle(0px at ${m[1]}px ${m[2]}px)`;
   caseOpen = false;
-  setTimeout(() => caseEl.classList.remove('open'), 850);
+  setTimeout(() => {
+    caseEl.classList.remove('open');
+    if (lastOpener && lastOpener.focus) lastOpener.focus({ preventScroll: true });
+  }, 850);
 }
 document.getElementById('caseClose').addEventListener('click', closeCase);
 window.addEventListener('keydown', (e) => {
@@ -617,6 +683,35 @@ window.addEventListener('wheel', (e) => {
   if (targetX > 40) scrollHint.classList.add('gone');
 }, { passive: false });
 
+/* touch: swipe drives the strip directly, then snaps to a panel */
+let tsX = 0, touchFrom = 0, touching = false;
+window.addEventListener('touchstart', (e) => {
+  if (!caseOpen) return;
+  touching = true;
+  tsX = e.touches[0].clientX;
+  touchFrom = curX;
+}, { passive: true });
+window.addEventListener('touchmove', (e) => {
+  if (!caseOpen || !touching) return;
+  const dx = e.touches[0].clientX - tsX;
+  targetX = Math.max(0, Math.min(touchFrom - dx, (PANELS - 1) * innerWidth));
+  if (targetX > 40) scrollHint.classList.add('gone');
+}, { passive: true });
+window.addEventListener('touchend', () => {
+  if (!caseOpen || !touching) return;
+  touching = false;
+  const dragged = targetX - touchFrom;
+  let panel = Math.round(touchFrom / innerWidth);
+  if (dragged > innerWidth * 0.12) panel += 1;
+  else if (dragged < -innerWidth * 0.12) panel -= 1;
+  targetX = Math.max(0, Math.min(panel, PANELS - 1)) * innerWidth;
+});
+
+/* touch devices read "swipe", mouse devices read "scroll" */
+if (matchMedia('(pointer: coarse)').matches) {
+  scrollHint.textContent = 'swipe to read →';
+}
+
 function setDots(panel) {
   for (let i = 0; i < dots.length; i++) dots[i].classList.toggle('on', i === panel);
 }
@@ -630,6 +725,39 @@ function step(now) {
 function caseLoop(now) { step(now); requestAnimationFrame(caseLoop); }
 requestAnimationFrame(caseLoop);
 setInterval(() => { if (performance.now() - lastStep > 45) step(performance.now()); }, 50);
+
+/* ---------- mobile nav toggle (mirrors script.js's injector) --------- */
+(function () {
+  const nav = document.querySelector('.nav');
+  if (nav && !nav.querySelector('.nav__toggle')) {
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'nav__toggle';
+    toggle.setAttribute('aria-label', 'Open menu');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.innerHTML = '<span></span>';
+    nav.appendChild(toggle);
+    const linksPanel = nav.querySelector('.nav__links');
+    if (linksPanel && !linksPanel.id) linksPanel.id = 'nav-links';
+    if (linksPanel) toggle.setAttribute('aria-controls', linksPanel.id);
+    const closeNav = () => {
+      nav.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open menu');
+    };
+    toggle.addEventListener('click', () => {
+      const open = nav.classList.contains('is-open');
+      if (open) closeNav();
+      else {
+        nav.classList.add('is-open');
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.setAttribute('aria-label', 'Close menu');
+      }
+    });
+    if (linksPanel) linksPanel.addEventListener('click', (e) => { if (e.target.closest('a')) closeNav(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && nav.classList.contains('is-open')) closeNav(); });
+  }
+})();
 </script>
 </body>
 </html>
