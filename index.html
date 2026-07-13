@@ -131,8 +131,20 @@ body.in .piece { transform: translateY(0); }
   position: absolute; z-index: 2;
   transform: translate(-50%, -50%);
   font-family: var(--mono);
-  font-size: 0.78rem; letter-spacing: 0.06em;
+  font-size: 0.72rem; letter-spacing: 0.06em;
   pointer-events: none;
+  text-align: center;
+  white-space: nowrap;
+}
+/* the plane wears its client's name — the catalog number is the
+   footnote, not the headline */
+.idx b {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: clamp(1rem, 2.6vw, 1.35rem);
+  letter-spacing: 0;
+  margin-bottom: 3px;
 }
 
 /* keyboard focus mirrors hover: pattern floods, card appears (via JS) */
@@ -196,6 +208,12 @@ body.in .plate { opacity: 1; }
   font-size: clamp(1.05rem, 1.8vw, 1.6rem);
   line-height: 1.12;
   letter-spacing: 0.005em;
+}
+.plate__hint {
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 0.68rem; letter-spacing: 0.08em;
+  opacity: 0.8;
 }
 .plate--ink { color: var(--ink); }
 .plate--ink .plate__rule { background: var(--ink); }
@@ -442,7 +460,7 @@ const SPECIMENS = [
     id: 'tmobile', theme: 'case--on-lime2', color: 'var(--lime-2)',
     poly: 'polygon(75% 0%, 100% 0%, 100% 65%, 75% 40%)',
     polyP: 'polygon(0% 75%, 0% 100%, 65% 100%, 40% 75%)',
-    cx: 87.5, cy: 22, cxP: 17, cyP: 80, entrance: 'top', depth: 0.9, phase: 4.2,
+    cx: 87.5, cy: 22, cxP: 22, cyP: 86, entrance: 'top', depth: 0.9, phase: 4.2,
     fill: { img: 'repeating-linear-gradient(90deg, #282828 0 4px, transparent 4px 13px)' },
     href: 'work/tmobile.html',
     role: 'legal affairs',
@@ -471,7 +489,7 @@ const SPECIMENS = [
     cx: 87.5, cy: 78, cxP: 78, cyP: 87.5, entrance: 'bottom', depth: 0.65, phase: 0.7, dark: true, longTitle: true,
     fill: { img: 'repeating-linear-gradient(45deg, #96E650 0 4px, transparent 4px 13px)' },
     href: 'work/peoples-professors.html',
-    role: 'capstone',
+    role: 'capstone', shortName: "people's professors",
     kicker: 'SPECIMEN 007 / ENG-PP001 / SELF-INITIATED CAPSTONE',
     title: "the people's professors",
     obs: 'A thesis about TikTok and learning design. So I built the proof. Graphic design and custom code delivering a one-of-a-kind learning experience.',
@@ -502,7 +520,10 @@ const nodes = SPECIMENS.map((s, i) => {
   const idx = document.createElement('span');
   idx.className = 'idx';
   idx.style.color = s.dark ? 'rgba(255,255,255,0.92)' : 'rgba(40,40,40,0.8)';
-  idx.textContent = num;
+  const nameEl = document.createElement('b');
+  nameEl.textContent = s.shortName || s.title;
+  idx.appendChild(nameEl);
+  idx.appendChild(document.createTextNode(num));
   plane.appendChild(idx);
 
   piece.appendChild(plane);
@@ -576,7 +597,8 @@ matchMedia('(orientation: portrait)').addEventListener('change', applyLayout);
 /* the printed plate */
 const plate = document.createElement('div');
 plate.className = 'plate';
-plate.innerHTML = '<div class="plate__kicker">FIELD COLLECTION / 2026</div><div class="plate__rule"></div><div class="plate__line">behavior change<br>over checkbox training</div>';
+const tapWord = matchMedia('(pointer: coarse)').matches ? 'tap' : 'click';
+plate.innerHTML = '<div class="plate__kicker">FIELD COLLECTION / 2026</div><div class="plate__rule"></div><div class="plate__line">behavior change<br>over checkbox training</div><div class="plate__hint">seven client engagements · ' + tapWord + ' any plane to open its case file</div>';
 poster.appendChild(plate);
 
 applyLayout();
