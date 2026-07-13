@@ -290,14 +290,19 @@ body.in .piece { transform: translateY(0); }
 .case--on-ink     { background: var(--ink);       color: var(--lime); }
 
 @media (max-width: 640px) {
-  .poster { inset: max(12vh, 96px) 4vw 9vh; }
+  .poster { inset: max(12vh, 96px) 4vw 22vh; }
   .caption { display: none; }
-  /* the portrait bottom band is only a quarter of the poster tall;
-     the plate compresses so it never crosses the seam above it */
-  .plate { bottom: 4.5%; }
-  .plate__kicker { font-size: 0.56rem; margin-bottom: 6px; }
-  .plate__rule { width: 28px; margin-bottom: 8px; }
-  .plate__line { font-size: 0.92rem; line-height: 1.14; max-width: 10em; }
+  /* portrait: the plate leaves the artwork and sits beneath the
+     poster on the cream, like a museum placard under a print */
+  .plate {
+    top: calc(100% + 16px); bottom: auto;
+    left: 0; right: auto;
+  }
+  .plate__kicker { font-size: 0.6rem; margin-bottom: 7px; }
+  .plate__rule { width: 30px; margin-bottom: 9px; }
+  .plate__line { font-size: 1rem; line-height: 1.18; max-width: 16em; }
+  /* on cream the rule keeps its lime accent even in ink mode */
+  .plate--ink .plate__rule { background: var(--lime); }
 }
 
 /* ---------- reduced motion: the poster holds still -------------------
