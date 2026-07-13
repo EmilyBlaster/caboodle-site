@@ -175,7 +175,11 @@ body.in .piece { transform: translateY(0); }
 .plate {
   position: absolute; left: 4.5%; bottom: 7%; z-index: 3;
   color: #fff; pointer-events: none;
+  /* the placard waits for the planes to land, then fades in */
+  opacity: 0;
+  transition: opacity 0.7s var(--ease-out) 1.6s;
 }
+body.in .plate { opacity: 1; }
 .plate__kicker {
   font-family: var(--mono);
   font-size: 0.64rem; letter-spacing: 0.15em;
@@ -312,6 +316,7 @@ body.in .piece { transform: translateY(0); }
 @media (prefers-reduced-motion: reduce) {
   .piece { transition: none; }
   .piece--from-top, .piece--from-bottom { transform: none; }
+  .plate { transition-delay: 0.1s; }
   .fill { transition: opacity 0.3s ease; transform: scale(1.6); opacity: 0; }
   .piece:hover .fill, .piece:focus-visible .fill, .piece.is-focused .fill {
     opacity: 1;
@@ -677,6 +682,35 @@ window.addEventListener('wheel', (e) => {
   targetX = Math.max(0, Math.min(targetX + e.deltaY + e.deltaX, (PANELS - 1) * innerWidth));
   if (targetX > 40) scrollHint.classList.add('gone');
 }, { passive: false });
+
+/* touch: swipe drives the strip directly, then snaps to a panel */
+let tsX = 0, touchFrom = 0, touching = false;
+window.addEventListener('touchstart', (e) => {
+  if (!caseOpen) return;
+  touching = true;
+  tsX = e.touches[0].clientX;
+  touchFrom = curX;
+}, { passive: true });
+window.addEventListener('touchmove', (e) => {
+  if (!caseOpen || !touching) return;
+  const dx = e.touches[0].clientX - tsX;
+  targetX = Math.max(0, Math.min(touchFrom - dx, (PANELS - 1) * innerWidth));
+  if (targetX > 40) scrollHint.classList.add('gone');
+}, { passive: true });
+window.addEventListener('touchend', () => {
+  if (!caseOpen || !touching) return;
+  touching = false;
+  const dragged = targetX - touchFrom;
+  let panel = Math.round(touchFrom / innerWidth);
+  if (dragged > innerWidth * 0.12) panel += 1;
+  else if (dragged < -innerWidth * 0.12) panel -= 1;
+  targetX = Math.max(0, Math.min(panel, PANELS - 1)) * innerWidth;
+});
+
+/* touch devices read "swipe", mouse devices read "scroll" */
+if (matchMedia('(pointer: coarse)').matches) {
+  scrollHint.textContent = 'swipe to read →';
+}
 
 function setDots(panel) {
   for (let i = 0; i < dots.length; i++) dots[i].classList.toggle('on', i === panel);
