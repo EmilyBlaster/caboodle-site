@@ -12,13 +12,13 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>approach · caboodle design</title>
-<meta name="description" content="How every caboodle design engagement unfolds. Action Mapping for design. Kirkpatrick for measurement. Five phases, one outcome." />
+<meta name="description" content="One thought, revised in front of you: behavior change over checkbox training. How every caboodle design engagement thinks." />
 
 <!-- Open Graph / social preview -->
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="caboodle design" />
 <meta property="og:title" content="approach · caboodle design" />
-<meta property="og:description" content="I observe before I design. Action Mapping for design. Kirkpatrick for measurement. Five phases, one outcome." />
+<meta property="og:description" content="One thought, revised in front of you: behavior change over checkbox training." />
 <meta property="og:url" content="https://caboodledesign.info/approach.html" />
 <meta property="og:image" content="https://caboodledesign.info/assets/og/og-approach.png" />
 <meta property="og:image:width" content="1200" />
@@ -31,12 +31,197 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css?v=20260618o" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<style>
+/* ============================================================
+   THE APPROACH — "THE ONE SENTENCE"
+   ------------------------------------------------------------
+   The approach page: one thought, revised in front of you.
+   Five drafts: stance, method, proof, point, door.
+
+   The homepage is a single giant sentence, and scrolling
+   rewrites it. Five drafts, each one a section: stance,
+   method, proof, point, door. Words roll out and roll in with
+   a stagger; the accent phrase inks itself in as you scroll
+   through the zone; the last two drafts flood the page lime,
+   then deep blue. The whole site is one thought being revised.
+
+   Physics: scroll-velocity spring (the sentence leans and lags
+   against your scroll like it has mass), staggered word
+   springs, scrubbed color fills tied to scroll position.
+   ============================================================ */
+
+
+:root {
+  --lime: #96E650;
+  --blue: #03599B;
+  --magenta: #EC008C;
+  --ink: #282828;
+  --mid: #686868;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  transition: background 0.7s var(--ease-out), color 0.7s var(--ease-out);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* the family hairline: the approach wears magenta */
+.approach-edge {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 4px; background: var(--magenta);
+  z-index: 2000; pointer-events: none;
+}
+
+/* when a dark draft floods the page, the chrome flips light */
+body.flooded .nav__links a:not(.nav__cta) { color: #fff; }
+body.flooded .copyright, body.flooded .hint { color: rgba(255,255,255,0.8); }
+
+/* scroll runway — the page's only job is to be tall */
+#track { height: 850vh; }
+
+/* ---------- chrome ------------------------------------------------ */
+.brand {
+  position: fixed; top: 34px; left: 40px; z-index: 20;
+  font-family: 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif;
+  font-weight: 700; font-size: 1.05rem;
+}
+.concepts {
+  position: fixed; top: 36px; right: 40px; z-index: 20;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.62rem; letter-spacing: 0.08em; opacity: 0.55;
+}
+.concepts a { color: inherit; text-decoration: none; }
+.concepts a:hover, .concepts a.here { opacity: 1; text-decoration: underline; }
+
+/* draft rail, field-journal chrome */
+.rail {
+  position: fixed; left: 40px; top: 50%; transform: translateY(-50%);
+  z-index: 20;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.76rem; letter-spacing: 0.1em;
+  display: grid; gap: 14px;
+}
+.rail div { opacity: 0.35; transition: opacity 0.4s var(--ease-out); display: flex; gap: 10px; align-items: center; }
+.rail div::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor; opacity: 0.35; transition: all 0.4s var(--ease-out);
+}
+.rail div.on { opacity: 1; }
+.rail div.on::before { background: var(--accent, var(--lime)); opacity: 1; }
+
+.hint {
+  position: fixed; bottom: 34px; left: 50%; transform: translateX(-50%);
+  z-index: 20;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.76rem; letter-spacing: 0.12em; opacity: 0.6;
+  transition: opacity 0.5s var(--ease-out);
+}
+.hint.gone { opacity: 0; }
+
+.copyright {
+  position: fixed; bottom: 34px; right: 40px; z-index: 20;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.66rem; letter-spacing: 0.08em; opacity: 0.55;
+}
+
+/* ---------- the sentence ------------------------------------------- */
+.stage {
+  position: fixed; inset: 0; z-index: 10;
+  display: flex; align-items: center;
+  padding: 0 clamp(24px, 9vw, 140px) 0 clamp(24px, 12vw, 200px);
+  pointer-events: none;
+  will-change: transform;
+}
+.sentence {
+  font-family: 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.4rem, 7.6vw, 7.6rem);
+  /* Bool's ink runs past its em box top AND bottom — 1.04 let the
+     lines collide; 1.16 gives them air */
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+  max-width: 14em;
+}
+
+/* Words are clipped ONLY while rolling between drafts. At rest there
+   is no clip at all, so no engine quirk can ever shear a glyph while
+   anyone is reading. During the roll the sleeve is a polygon() with
+   vertices outside the box — honored cross-browser, unlike negative
+   inset(), which Chrome clamps to the border box (the tittle bug). */
+.w {
+  display: inline-block; vertical-align: bottom;
+}
+.sentence.rolling .w {
+  clip-path: polygon(-10% -60%, 110% -60%, 110% 145%, -10% 145%);
+}
+.w i {
+  display: inline-block; font-style: normal;
+  transform: translateY(0);
+  transition: transform 0.55s var(--ease-out), opacity 0.55s var(--ease-out);
+}
+.w.out i  { transform: translateY(-230%); opacity: 0; }
+.w.pre i  { transform: translateY(235%);  opacity: 0; transition: none; }
+
+/* reduced motion: words cross-fade in place, the sentence never leans */
+@media (prefers-reduced-motion: reduce) {
+  .w i { transition: opacity 0.3s ease; }
+  .w.out i { transform: none; opacity: 0; }
+  .w.pre i { transform: none; opacity: 0; }
+  .stage { transform: none !important; }
+}
+
+/* accent phrase inks itself in as you scroll the zone — gradient
+   fill scrubbed by JS via background-position.
+   THE i-DOT BUG LIVED HERE: background-clip:text paints letters
+   with their background, and backgrounds stop at the box edge —
+   Bool's tittles rise past it, so their tops got no paint. The
+   padding (pulled back by margin, no layout shift) extends the
+   paint box past the ink. */
+.w.acc i {
+  padding: 0.2em 0.06em;
+  margin: -0.2em -0.06em;
+  background: linear-gradient(90deg, var(--acc-color) 50%, currentColor 50%);
+  background-size: 220% 100%;
+  background-position: 100% 0;   /* all ink until the scroll says otherwise */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* the door: links that appear with the final draft */
+.door {
+  position: fixed; z-index: 20;
+  left: clamp(24px, 9vw, 140px); bottom: 16vh;
+  display: flex; gap: 28px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem; letter-spacing: 0.1em;
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+  pointer-events: none;
+}
+.door.on { opacity: 1; transform: none; pointer-events: auto; }
+.door a { color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+.door a:hover { opacity: 0.7; }
+
+@media (max-width: 1000px) {
+  .rail { display: none; }
+  .stage { padding-left: clamp(24px, 9vw, 140px); }
+}
+@media (max-width: 720px) {
+  .brand { left: 20px; }
+  .concepts { right: 20px; }
+}
+</style>
 </head>
 <body>
 
-<!-- Field log -->
+<div class="approach-edge" aria-hidden="true"></div>
 
-<!-- Nav -->
+<!-- Nav (site-standard; hamburger injected below, mirroring script.js) -->
 <header class="nav">
   <a class="nav__mark" href="index.html">
     <svg class="cd-logo" viewBox="0 0 260 56" xmlns="http://www.w3.org/2000/svg" aria-label="caboodle design" role="img">
@@ -55,464 +240,241 @@
   </nav>
 </header>
 
-<!-- Hero -->
-<section class="apphero" data-log="001 — subject enters methodology">
-  <div class="apphero__stamp">
-    <span>methodology</span>
-    <span>action mapping · kirkpatrick</span>
-  </div>
+<nav class="rail" id="rail"></nav>
 
-  <span class="apphero__kicker">approach</span>
-  <h1 class="apphero__h">
-    I observe<br />
-    before I <em>design.</em>
-  </h1>
-  <p class="apphero__lede">
-    Most AI rollouts fail because they're built on assumptions
-    about how people work. I study what people actually do, then
-    design the program around them, not the tool.
-  </p>
-</section>
+<div class="stage" id="stage">
+  <h1 class="sentence" id="sentence"></h1>
+</div>
 
-<!-- INFOGRAPHIC 01 — Five-Phase Engagement Arc -->
-<section class="phases" data-log="002 — five-phase arc">
-  <header class="phases__head">
-    <span class="phases__kicker">how every engagement unfolds</span>
-    <h2 class="phases__title">
-      five phases.<br />
-      <em>one outcome.</em>
-    </h2>
-    <p class="phases__dek">
-      The same arc runs through every project. What changes is the
-      depth of each phase depending on the scale of the behavior
-      we're trying to move.
-    </p>
-  </header>
+<div class="door" id="door">
+  <a href="work.html">the work →</a>
+  <a href="contact.html">let's talk</a>
+  <a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a>
+</div>
 
-  <!-- Editorial SVG diagram -->
-  <figure class="phases__figure" aria-label="The engagement arc" style="padding:0; border:none; background:transparent;">
-    <iframe id="arcFrame" data-src="/engagement-arc.html?v=20260617b"
-            scrolling="no"
-            title="The engagement arc: Caboodle methodology"
-            style="width:100%; aspect-ratio: 1920/1080; border:0; display:block; overflow:hidden; background:#f2efe8;"></iframe>
-    <img class="fig__static"
-         src="/assets/arc-static.jpg"
-         alt="The engagement arc: five phases, discover, analyze, design, build, measure, each laddering to the next."
-         width="1456" height="816" />
-  </figure>
+<div class="hint" id="hint">scroll to revise ↓</div>
+<div class="copyright">© 2026 caboodle design</div>
 
-  <script>
-  /* ── Engagement arc iframe: strip inner padding, overlay replay button ── */
-  (function () {
-    var iframe = document.getElementById('arcFrame');
-    if (!iframe) return;
-
-    var CSS = [
-      /* Remove body whitespace so arc fills the full iframe width */
-      'html, body { padding: 0 !important; margin: 0 !important; overflow: hidden !important; }',
-      'body { align-items: stretch !important; justify-content: flex-start !important; }',
-      /* Embed shell: full width, position:relative so controls can overlay */
-      '.embed-shell { position: relative !important; max-width: 100% !important; gap: 0 !important; }',
-      /* Remove height cap so arc scales naturally */
-      '.arc-embed { max-height: none !important; }',
-      /* Hide the note text — approach.html has its own caption */
-      '.note { display: none !important; }',
-      /* Overlay the controls in the bottom-right corner */
-      '.controls { position: absolute !important; bottom: 16px !important; right: 20px !important;',
-      '  z-index: 10 !important; justify-content: flex-end !important; }',
-      /* Hide fig/time meta, keep only the replay button */
-      '.controls .meta { display: none !important; }',
-    ].join('\n');
-
-    function rescale() {
-      var win = iframe.contentWindow;
-      if (!win) return;
-      try { win.dispatchEvent(new Event('resize')); } catch (e) {}
-    }
-
-    // The arc scales its fixed 1920x1080 stage to fit the frame but only measures
-    // on mount + resize. Our padding strip above widens the frame ~110px, and the
-    // iframe's aspect-ratio box + the figure's inlined webfonts settle a beat later;
-    // the figure never re-measures, so on a cold first view it can lock in a
-    // too-small scale and sit shrunk in the corner until a manual refresh. Nudge it
-    // to re-measure once everything has settled. (Same fix as the ladder figure.)
-    function scheduleRescales(doc) {
-      rescale();
-      requestAnimationFrame(rescale);
-      setTimeout(rescale, 300);
-      setTimeout(rescale, 800);
-      try { if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(rescale); } catch (e) {}
-    }
-
-    function inject(doc) {
-      if (!doc || !doc.body) return false;
-      if (!doc.querySelector('.embed-shell')) return false; /* bundle not rendered yet */
-      if (doc.getElementById('cd-arc-inject')) return true; /* already injected */
-      var s = doc.createElement('style');
-      s.id = 'cd-arc-inject';
-      s.textContent = CSS;
-      (doc.head || doc.documentElement).appendChild(s);
-      scheduleRescales(doc);
-      return true;
-    }
-
-    function poll() {
-      var attempts = 0;
-      var timer = setInterval(function () {
-        try {
-          if (inject(iframe.contentDocument)) { clearInterval(timer); return; }
-        } catch (e) {}
-        if (++attempts > 60) clearInterval(timer); /* give up after ~6s */
-      }, 100);
-    }
-
-    /* Start polling after the iframe's initial load fires */
-    iframe.addEventListener('load', poll);
-    /* Also try immediately in case it's already loaded (e.g. back/forward cache) */
-    try { if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') poll(); } catch (e) {}
-  })();
-  </script>
-
-  <!-- Plain-text version for depth -->
-  <dl class="phases__list">
-    <div>
-      <dt><span>01</span> discover</dt>
-      <dd>Stakeholder research, contextual inquiry, artifact analysis. What is the real business problem, who is the real audience, what do they actually do today?</dd>
-    </div>
-    <div>
-      <dt><span>02</span> analyze</dt>
-      <dd>Map the critical actions required to move the outcome. Separate what people need to do from what they need to know. Cut the rest.</dd>
-    </div>
-    <div>
-      <dt><span>03</span> design</dt>
-      <dd>Practice-first experiences, not slide decks. Every activity maps back to a decision the learner has to make on the job.</dd>
-    </div>
-    <div>
-      <dt><span>04</span> build</dt>
-      <dd>Develop and iterate with rapid prototyping. Custom HTML, Rise, Storyline, video, 3D, whatever the behavior and the audience demand.</dd>
-    </div>
-    <div>
-      <dt><span>05</span> measure</dt>
-      <dd>Kirkpatrick-Phillips from the start. Instrument the behavior change before launch, not after.</dd>
-    </div>
-  </dl>
-</section>
-
-<!-- INFOGRAPHIC 02 — Action Mapping × Kirkpatrick Ladder -->
-<section class="ladder" data-log="003 — action mapping × kirkpatrick ladder">
-  <header class="ladder__head">
-    <span class="ladder__kicker">design meets measurement</span>
-    <h2 class="ladder__title">
-      design with <em>action mapping.</em><br />
-      measure with <em>kirkpatrick.</em>
-    </h2>
-    <p class="ladder__dek">
-      Cathy Moore's Action Mapping and Don Kirkpatrick's four levels
-      are usually taught separately. They fit together as a single
-      ladder, rung for rung. Read from the top.
-    </p>
-  </header>
-
-  <!-- fig-02-ladder.html: animated 1920×1080 canvas, plays on scroll-into-view.
-       background:#e8e3d8 on the iframe matches the animation's own bg so the
-       warm paper colour shows consistently during load and throughout playback. -->
-  <!-- Restore the figure's original CSS framing (padding + border + paper bg)
-       so the animation sits in the same lighter box as the old static SVG. -->
-  <figure class="ladder__figure" aria-label="Action Mapping × Kirkpatrick ladder">
-    <iframe id="ladderFrame" data-src="/fig-02-ladder.html?v=20260617b"
-            scrolling="no"
-            aria-hidden="true"
-            style="width:100%; aspect-ratio: 1920/1080; border:0; display:block; background:#f2efe8;"></iframe>
-    <img class="fig__static"
-         src="/assets/ladder-static.jpg"
-         alt="Action Mapping × Kirkpatrick ladder: four rungs pairing business goal with results, critical actions with behavior, practice activities with learning, and essential info with reaction."
-         width="1456" height="816" />
-  </figure>
-
-  <script>
-  /* ── Ladder iframe: strip inner body padding so animation fills full width ── */
-  (function () {
-    var iframe = document.getElementById('ladderFrame');
-    if (!iframe) return;
-
-    var CSS = [
-      /* Remove body whitespace so animation fills the figure box */
-      'html, body { padding: 0 !important; margin: 0 !important; overflow: hidden !important; }',
-      'body { align-items: stretch !important; justify-content: flex-start !important; }',
-      '.embed-shell { max-width: 100% !important; }',
-      '.arc-embed { max-height: none !important; }',
-      /* Hide the note text */
-      '.note { display: none !important; }',
-    ].join('\n');
-
-    function rescale() {
-      var win = iframe.contentWindow;
-      if (!win) return;
-      try { win.dispatchEvent(new Event('resize')); } catch (e) {}
-    }
-
-    // The figure scales its fixed 1920x1080 stage to fit the frame, but only
-    // measures on mount + resize. Things change the frame AFTER it mounts: our
-    // padding strip (above) widens it ~100px, and the iframe's aspect-ratio box
-    // plus the figure's own inlined webfonts settle a beat later. The figure never
-    // re-measures on its own, so on a cold first view it locks in a too-small scale
-    // and the columns/connectors don't line up until a manual refresh. Nudge it to
-    // re-measure once everything has settled (immediately, next frame, and after
-    // its fonts load).
-    function scheduleRescales(doc) {
-      rescale();
-      requestAnimationFrame(rescale);
-      setTimeout(rescale, 300);
-      setTimeout(rescale, 800);
-      try { if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(rescale); } catch (e) {}
-    }
-
-    function inject(doc) {
-      if (!doc || !doc.body) return false;
-      if (!doc.querySelector('.embed-shell')) return false;
-      if (doc.getElementById('cd-ladder-inject')) return true;
-      var s = doc.createElement('style');
-      s.id = 'cd-ladder-inject';
-      s.textContent = CSS;
-      (doc.head || doc.documentElement).appendChild(s);
-      scheduleRescales(doc);
-      return true;
-    }
-
-    function poll() {
-      var attempts = 0;
-      var timer = setInterval(function () {
-        try {
-          if (inject(iframe.contentDocument)) { clearInterval(timer); return; }
-        } catch (e) {}
-        if (++attempts > 60) clearInterval(timer); /* give up after ~6s */
-      }, 100);
-    }
-
-    iframe.addEventListener('load', poll);
-    try { if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') poll(); } catch (e) {}
-  })();
-  </script>
-
-  <!-- Mobile-only: stacked card pairs so the AM ↔ KP relationship is
-       readable without sideways scrolling. Hidden at desktop widths. -->
-  <ol class="ladder__list" aria-label="Action Mapping mapped against Kirkpatrick">
-    <li class="ladder__rung">
-      <div class="ladder__card ladder__card--am">
-        <span class="ladder__lvl">01 · action mapping</span>
-        <strong>business goal</strong>
-        <span class="ladder__q">what outcome must change?</span>
-      </div>
-      <span class="ladder__verb">proves</span>
-      <div class="ladder__card ladder__card--kp">
-        <span class="ladder__lvl">L4 · kirkpatrick</span>
-        <strong>results</strong>
-        <span class="ladder__q">did it matter?</span>
-      </div>
-    </li>
-    <li class="ladder__rung">
-      <div class="ladder__card ladder__card--am">
-        <span class="ladder__lvl">02 · action mapping</span>
-        <strong>critical actions</strong>
-        <span class="ladder__q">what must people do differently?</span>
-      </div>
-      <span class="ladder__verb">tracks</span>
-      <div class="ladder__card ladder__card--kp">
-        <span class="ladder__lvl">L3 · kirkpatrick</span>
-        <strong>behavior</strong>
-        <span class="ladder__q">are they doing it?</span>
-      </div>
-    </li>
-    <li class="ladder__rung">
-      <div class="ladder__card ladder__card--am">
-        <span class="ladder__lvl">03 · action mapping</span>
-        <strong>practice activities</strong>
-        <span class="ladder__q">how do they rehearse it?</span>
-      </div>
-      <span class="ladder__verb">reveals</span>
-      <div class="ladder__card ladder__card--kp">
-        <span class="ladder__lvl">L2 · kirkpatrick</span>
-        <strong>learning</strong>
-        <span class="ladder__q">did they learn it?</span>
-      </div>
-    </li>
-    <li class="ladder__rung">
-      <div class="ladder__card ladder__card--am">
-        <span class="ladder__lvl">04 · action mapping</span>
-        <strong>essential info</strong>
-        <span class="ladder__q">what's the minimum to act?</span>
-      </div>
-      <span class="ladder__verb">drives</span>
-      <div class="ladder__card ladder__card--kp">
-        <span class="ladder__lvl">L1 · kirkpatrick</span>
-        <strong>reaction</strong>
-        <span class="ladder__q">did they like it?</span>
-      </div>
-    </li>
-    <li class="ladder__axis"><span>more rigor</span><span>less fluff</span></li>
-  </ol>
-</section>
-
-<!-- Client-proof strip -->
-<section class="proofs" data-log="004 — each rung has a client proof">
-  <header class="proofs__head">
-    <span class="proofs__kicker">each rung has a client proof</span>
-    <h2 class="proofs__title">
-      every row. <em>a real number.</em>
-    </h2>
-  </header>
-  <ol class="proofs__list">
-    <li>
-      <span class="proofs__lv">01 · L4 · results</span>
-      <strong>Apple</strong>
-      <span class="proofs__stat">95<i>%</i></span>
-      <p>Completion across 251 suppliers in 31 countries. The business goal lined up with the learning goal and the measure.</p>
-    </li>
-    <li>
-      <span class="proofs__lv">02 · L3 · behavior</span>
-      <strong>Intuit</strong>
-      <span class="proofs__stat">3<i>x</i></span>
-      <p>Increase in internal mobility applications. Five manager behaviors predicted mobility. The training rehearsed only those.</p>
-    </li>
-    <li>
-      <span class="proofs__lv">03 · L2 · learning</span>
-      <strong>T-Mobile</strong>
-      <span class="proofs__stat">100<i>%</i></span>
-      <p>Completion on Legal Affairs compliance. Real scenarios in branching simulations. It felt relevant, so it got finished.</p>
-    </li>
-    <li>
-      <span class="proofs__lv">04 · L1 · reaction</span>
-      <strong>PPFA / Bayer</strong>
-      <span class="proofs__stat">180<i>M</i></span>
-      <p>Women reached. Complex medical guidance distilled into the minimum essential information patients needed to act.</p>
-    </li>
-  </ol>
-</section>
-
-<!-- Dark pull-quote · thesis line -->
-<section class="quote" data-log="005 — thesis line">
-  <div class="quote__inner">
-    <span class="quote__kicker">the thesis line</span>
-    <blockquote class="quote__body">
-      most training measures <em>completion.</em><br />
-      I measure <em>change.</em>
-    </blockquote>
-    <span class="quote__attr">caboodle design · the approach</span>
-  </div>
-</section>
-
-<!-- References -->
-<section class="refs" data-log="006 — methodology references">
-  <header class="refs__head">
-    <span class="refs__kicker">methodology references</span>
-    <h2 class="refs__title">the shoulders this <em>stands on.</em></h2>
-  </header>
-  <ul class="refs__list">
-    <li>
-      <span class="refs__num">01</span>
-      <h4>action mapping</h4>
-      <p><strong>Cathy Moore.</strong> A visual approach to designing training that starts with a business goal and maps backward through the specific actions learners must take. <em>Map It: The hands-on guide to strategic training design</em> (2017).</p>
-    </li>
-    <li>
-      <span class="refs__num">02</span>
-      <h4>the kirkpatrick model</h4>
-      <p><strong>Donald Kirkpatrick.</strong> Four levels of training evaluation: Reaction, Learning, Behavior, Results. <em>Evaluating Training Programs: The Four Levels</em> (1994); extended by Jim &amp; Wendy Kirkpatrick (2016).</p>
-    </li>
-    <li>
-      <span class="refs__num">03</span>
-      <h4>kirkpatrick-phillips</h4>
-      <p><strong>Jack Phillips.</strong> Adds Level 5: ROI. Used sparingly and only when the engagement warrants it. <em>Handbook of Training Evaluation and Measurement Methods</em> (1997).</p>
-    </li>
-  </ul>
-</section>
-
-<!-- Closing card -->
-<section class="closing" id="contact" data-log="007 — end of methodology · chain to work">
-  <div class="closing__card">
-    <div class="closing__stamp" aria-hidden="true">
-      <svg class="cd-stamp-mark" viewBox="0 0 90 60" aria-hidden="true">
-        <path class="cd-stamp-mark__fill" fill-rule="evenodd"
-          d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>
-      </svg>
-      <small>end of methodology</small>
-      <small>next: the work</small>
-    </div>
-    <div class="closing__body">
-      <span class="closing__kicker">next field note</span>
-      <h2 class="closing__h">
-        see the approach<br />
-        <em>in the field.</em>
-      </h2>
-      <p class="closing__p">
-        The client case studies show this methodology applied at
-        scale. Apple, GitLab, Intuit, T-Mobile, Trust20.
-      </p>
-      <a class="closing__cta" href="work.html">
-        <span>go to the work</span>
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-      </a>
-      <span class="closing__email">hello@caboodledesign.info</span>
-    </div>
-  </div>
-</section>
-
-<footer class="foot">
-  <div class="foot__row">
-    <span class="foot__mark">caboodle design</span>
-    <span class="foot__tag">strategy, media, and behavioral science — it's the whole caboodle</span>
-  </div>
-  <div class="foot__cols">
-    <div>
-      <h4>navigation</h4>
-      <ul>
-        <li><a href="approach.html">approach</a></li>
-        <li><a href="work.html">work</a></li>
-        <li><a href="labs.html">labs</a></li>
-        <li><a href="about.html">about emily</a></li>
-        <li><a href="field-notes.html">field notes</a></li>
-        <li><a href="resources.html">free resources</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>get in touch</h4>
-      <ul>
-        <li><a href="contact.html">let's talk</a></li>
-        <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
-        <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="foot__row foot__row--small">
-    <span>&copy; 2026 caboodle design</span>
-    <span class="foot__credit">built by emily green in claude code</span>
-    <span class="foot__location">grand rapids, mi</span>
-  </div>
-</footer>
-
-<script src="script.js?v=20260618o" defer></script>
+<div id="track"></div>
 
 <script>
-/* ── Scroll-triggered iframe loading ────────────────────────────────────────
-   The animated figures (arc + ladder) are 1920×1080 React bundles that start
-   playing the moment they mount. To keep the animation in sync with the
-   viewer, we don't set src until the iframe is about to enter the viewport.
-   rootMargin '200px' gives ~200px of pre-load runway so the bundle is ready
-   by the time the user actually sees it.
-────────────────────────────────────────────────────────────────────────── */
+/* ============================================================
+   THE DRAFTS
+   Five rewrites of one thought. `acc` marks the accent phrase
+   that inks itself in as the zone scrolls; bg/fg flood the page
+   for the last two drafts.
+   ============================================================ */
+const DRAFTS = [
+  {
+    label: '01 / STANCE',
+    words: [
+      { t: 'behavior', acc: true }, { t: 'change', acc: true },
+      { t: 'over' }, { t: 'checkbox' }, { t: 'training.' },
+    ],
+    accColor: '#96E650', bg: '#f2efe8', fg: '#282828',
+  },
+  {
+    label: '02 / METHOD',
+    words: [
+      { t: 'we' }, { t: 'study' }, { t: 'how' }, { t: 'humans' },
+      { t: 'actually', acc: true }, { t: 'change.', acc: true },
+    ],
+    accColor: '#EC008C', bg: '#f2efe8', fg: '#282828',
+  },
+  {
+    label: '03 / PROOF',
+    words: [
+      { t: 'asked', acc: true }, { t: 'back', acc: true }, { t: 'by' },
+      { t: 'apple,' }, { t: 'airbnb,' }, { t: 'gitlab,' },
+      { t: 'intuit,' }, { t: 'j&j,' }, { t: 'and' }, { t: 't-mobile.' },
+    ],
+    accColor: '#03599B', bg: '#f2efe8', fg: '#282828',
+  },
+  {
+    label: '04 / POINT',
+    words: [
+      { t: 'the' }, { t: 'thinking', acc: true }, { t: 'is' },
+      { t: 'the' }, { t: 'job.' },
+    ],
+    accColor: '#282828', bg: '#96E650', fg: '#282828',
+  },
+  {
+    label: '05 / DOOR',
+    words: [ { t: 'see' }, { t: 'the' }, { t: 'work.', acc: true } ],
+    accColor: '#96E650', bg: '#03599B', fg: '#ffffff', dark: true,
+  },
+];
+
+const sentence = document.getElementById('sentence');
+const stage = document.getElementById('stage');
+const rail = document.getElementById('rail');
+const door = document.getElementById('door');
+const hint = document.getElementById('hint');
+
+DRAFTS.forEach((d, i) => {
+  const el = document.createElement('div');
+  el.textContent = d.label;
+  el.dataset.i = i;
+  rail.appendChild(el);
+});
+
+/* ---------- word swap machine -------------------------------------- */
+let current = -1;        // draft on stage
+let animating = false;
+let queued = null;       // last zone requested while animating
+
+function renderDraft(i) {
+  const d = DRAFTS[i];
+  sentence.innerHTML = '';
+  d.words.forEach((w, wi) => {
+    const sleeve = document.createElement('span');
+    sleeve.className = 'w pre' + (w.acc ? ' acc' : '');
+    if (w.acc) sleeve.style.setProperty('--acc-color', d.accColor);
+    const core = document.createElement('i');
+    core.textContent = w.t;
+    core.style.transitionDelay = (wi * 38) + 'ms';
+    sleeve.appendChild(core);
+    sentence.appendChild(sleeve);
+    sentence.appendChild(document.createTextNode(' '));
+  });
+  // roll the new words up into place. rAF is the smooth path; the
+  // timeout is a fallback for browsers that suspend rAF (releasing
+  // twice is harmless)
+  const release = () => sentence.querySelectorAll('.w').forEach((s) => s.classList.remove('pre'));
+  requestAnimationFrame(() => requestAnimationFrame(release));
+  setTimeout(release, 90);
+
+  // when the last incoming word lands, the clip comes off immediately
+  // (event-driven; the goTo timers are only the fallback)
+  const cores = sentence.querySelectorAll('.w i');
+  if (cores.length) {
+    cores[cores.length - 1].addEventListener('transitionend', () => {
+      if (!animating) sentence.classList.remove('rolling');
+    }, { once: true });
+  }
+}
+
+function goTo(i) {
+  if (i === current) return;
+  if (animating) { queued = i; return; }
+  animating = true;
+  sentence.classList.add('rolling');
+  const from = current;
+  current = i;
+
+  // page flood + rail
+  document.body.style.background = DRAFTS[i].bg;
+  document.body.style.color = DRAFTS[i].fg;
+  document.body.classList.toggle('flooded', !!DRAFTS[i].dark);
+  rail.querySelectorAll('div').forEach((el, ri) => {
+    el.classList.toggle('on', ri === i);
+    el.style.setProperty('--accent', DRAFTS[i].accColor);
+  });
+  door.classList.toggle('on', i === DRAFTS.length - 1);
+
+  if (from === -1) {
+    renderDraft(i);
+    animating = false;
+    setTimeout(() => { if (!animating) sentence.classList.remove('rolling'); }, 900);
+    return;
+  }
+  // roll old words out, staggered, then bring the new draft in
+  const sleeves = sentence.querySelectorAll('.w');
+  sleeves.forEach((s, wi) => {
+    s.querySelector('i').style.transitionDelay = (wi * 26) + 'ms';
+    s.classList.add('out');
+  });
+  setTimeout(() => {
+    renderDraft(i);
+    setTimeout(() => {
+      animating = false;
+      if (queued !== null && queued !== current) { const q = queued; queued = null; goTo(q); }
+      else {
+        queued = null;
+        /* incoming words finish their roll, then the clip comes off */
+        setTimeout(() => { if (!animating) sentence.classList.remove('rolling'); }, 750);
+      }
+    }, 80);
+  }, 380 + sleeves.length * 26);
+}
+
+/* ---------- scroll physics ------------------------------------------ */
+/* zone math: which draft, and how deep into it (0..1) */
+function zoneAt(y) {
+  const span = (document.getElementById('track').offsetHeight - innerHeight) / DRAFTS.length;
+  const i = Math.min(DRAFTS.length - 1, Math.floor(y / span));
+  const local = Math.min(1, (y - i * span) / span);
+  return { i, local };
+}
+
+/* velocity spring: the sentence has mass. It lags and leans against
+   the scroll, then settles with the same expo ease as everything else */
+const REDUCED_MOTION = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let vel = 0, sprung = 0, lastY = scrollY, lastFrame = 0;
+
+function frame() {
+  lastFrame = performance.now();
+  const y = scrollY;
+  vel = y - lastY;
+  lastY = y;
+  sprung += (vel - sprung) * 0.085;
+
+  if (!REDUCED_MOTION) {
+    const lean = Math.max(-4, Math.min(4, sprung * 0.045));
+    const lag = Math.max(-30, Math.min(30, sprung * 0.55));
+    stage.style.transform = `translateY(${(-lag).toFixed(2)}px) skewY(${(-lean).toFixed(3)}deg)`;
+  }
+
+  const { i, local } = zoneAt(y);
+  goTo(i);
+
+  // ink the accent phrase in across the first 60% of the zone
+  const fill = Math.min(1, local / 0.6);
+  sentence.querySelectorAll('.w.acc i').forEach((core) => {
+    core.style.backgroundPosition = `${(100 - fill * 100).toFixed(1)}% 0`;
+  });
+
+  if (y > 40) hint.classList.add('gone');
+}
+function loop() {
+  frame();
+  requestAnimationFrame(loop);
+}
+
+document.fonts.ready.then(() => {
+  goTo(0);
+  requestAnimationFrame(loop);
+  /* watchdog: some embedded browsers suspend rAF; keep the scroll
+     machine alive at ~20fps if no frame has landed recently */
+  setInterval(() => {
+    if (performance.now() - lastFrame > 45) frame();
+  }, 50);
+});
+
+/* ---------- mobile nav toggle (mirrors script.js's injector) --------- */
 (function () {
-  var iframes = document.querySelectorAll('iframe[data-src]');
-  if (!iframes.length) return;
-
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (!entry.isIntersecting) return;
-      var el = entry.target;
-      el.src = el.dataset.src;
-      io.unobserve(el);
+  const nav = document.querySelector('.nav');
+  if (nav && !nav.querySelector('.nav__toggle')) {
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'nav__toggle';
+    toggle.setAttribute('aria-label', 'Open menu');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.innerHTML = '<span></span>';
+    nav.appendChild(toggle);
+    const linksPanel = nav.querySelector('.nav__links');
+    if (linksPanel && !linksPanel.id) linksPanel.id = 'nav-links';
+    if (linksPanel) toggle.setAttribute('aria-controls', linksPanel.id);
+    const closeNav = () => {
+      nav.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+    };
+    toggle.addEventListener('click', () => {
+      nav.classList.contains('is-open') ? closeNav() : (nav.classList.add('is-open'), toggle.setAttribute('aria-expanded', 'true'));
     });
-  }, { rootMargin: '0px 0px 200px 0px', threshold: 0 });
-
-  iframes.forEach(function (el) { io.observe(el); });
+    if (linksPanel) linksPanel.addEventListener('click', (e) => { if (e.target.closest('a')) closeNav(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && nav.classList.contains('is-open')) closeNav(); });
+  }
 })();
 </script>
 </body>
