@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LAB-008 · the poster · caboodle labs</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+
+<style>
+/* ============================================================
+   CONCEPT 01B — "THE POSTER"
+   ------------------------------------------------------------
+   Standalone throwaway demo (sibling of specimen-demo.html so
+   the two directions can be compared side by side).
+
+   Per Emily's reference: a full-bleed Bauhaus poster of
+   interlocking flat planes with diagonal cuts — no white
+   ground, no filler. The poster is divided into EXACTLY seven
+   pieces, one per project: the whole caboodle, literally.
+   Tonal pairs stack in columns (blues, magentas), the lime
+   spine is the featured engagement, the ink corner is the
+   capstone. Hover a plane: its textile pattern floods in and
+   the annotation card names it. Click: the plane floods the
+   screen and the case reads left to right.
+
+   Motion: pieces breathe ±2px so the seams flex; the whole
+   poster leans slightly toward the cursor; entrance slides the
+   pieces together like the poster being printed.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Bauhaus Bool';
+  src: url('../fonts/BauhausBoolDisplay-Bold.woff') format('woff');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Bauhaus Bool';
+  src: url('../fonts/BauhausBoolDisplay-ExtraBold.woff') format('woff');
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+
+:root {
+  --lime: #96E650; --lime-2: #B6EE85;
+  --blue: #03599B; --blue-2: #4F8BB9;
+  --magenta: #EC008C; --magenta-2: #F24DAF;
+  --ink: #282828; --mid: #686868;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  background: #fff;
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- chrome (lives in the poster's margins) ------------------ */
+.brand {
+  position: fixed; top: 26px; left: 4vw; z-index: 20;
+  font-family: 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif;
+  font-weight: 700; font-size: 1.05rem;
+}
+.nav {
+  position: fixed; top: 28px; right: 4vw; z-index: 20;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.68rem; letter-spacing: 0.08em; color: var(--mid);
+}
+.nav span { margin-left: 22px; cursor: pointer; transition: color 0.3s var(--ease-out); }
+.nav span:hover { color: var(--ink); }
+.caption {
+  position: fixed; bottom: 24px; left: 4vw; z-index: 20;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.66rem; letter-spacing: 0.08em; color: var(--mid);
+}
+.concepts {
+  position: fixed; bottom: 24px; right: 4vw; z-index: 20;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.62rem; letter-spacing: 0.08em; color: #b5b5b5;
+}
+.concepts a { color: inherit; text-decoration: none; }
+.concepts a:hover, .concepts a.here { color: var(--ink); }
+
+/* ---------- the poster ---------------------------------------------- */
+.poster {
+  position: fixed;
+  inset: 9vh 4vw;
+  will-change: transform;
+}
+
+.piece {
+  position: absolute; inset: 0;
+  cursor: pointer;
+  will-change: transform;
+  transition: transform 0.9s var(--ease-out);
+}
+/* entrance: pieces slide in and the poster assembles */
+.piece--from-top { transform: translateY(-110%); }
+.piece--from-bottom { transform: translateY(110%); }
+body.in .piece { transform: translateY(0); }
+
+/* the plane itself carries the clip; children are clipped with it */
+.plane {
+  position: absolute; inset: 0;
+}
+
+/* pattern flood, clipped inside the plane's polygon */
+.fill {
+  position: absolute; inset: -10%;
+  border-radius: 50%;
+  transform: scale(0);
+  transform-origin: 30% 70%;
+  transition: transform 0.55s var(--ease-out);
+}
+.piece:hover .fill {
+  transform: scale(1.6);
+  animation: patDrift 8s linear infinite;
+}
+@keyframes patDrift { to { background-position: 96px 64px; } }
+
+/* catalog index pinned at each plane's anchor */
+.idx {
+  position: absolute; z-index: 2;
+  transform: translate(-50%, -50%);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.6rem; letter-spacing: 0.06em;
+  pointer-events: none;
+}
+
+/* annotation card at the anchor, naming the project */
+.tag {
+  position: absolute; z-index: 25;
+  white-space: nowrap;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid rgba(40, 40, 40, 0.14);
+  padding: 9px 13px;
+  opacity: 0;
+  transform: translate(-50%, calc(-100% - 18px)) translateY(8px);
+  transition: opacity 0.35s var(--ease-out), transform 0.35s var(--ease-out);
+  pointer-events: none;
+}
+.tag::after {
+  content: '';
+  position: absolute; top: 100%; left: 50%;
+  width: 1px; height: 13px; background: var(--ink);
+}
+.tag b {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600; font-size: 0.9rem; line-height: 1.1;
+  margin-bottom: 4px;
+}
+.tag span {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.62rem; letter-spacing: 0.09em; color: var(--mid);
+}
+.piece:hover .tag { opacity: 1; transform: translate(-50%, calc(-100% - 18px)); }
+
+/* the poster's printed label: a proper lockup like the reference —
+   kicker, short rule, title on two balanced lines */
+.plate {
+  position: absolute; left: 4.5%; bottom: 7%; z-index: 3;
+  color: #fff; pointer-events: none;
+}
+.plate__kicker {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.64rem; letter-spacing: 0.15em;
+  margin-bottom: 11px; opacity: 0.85;
+}
+.plate__rule {
+  width: 36px; height: 2px;
+  background: var(--lime);   /* the logo pairing: lime on blue */
+  margin-bottom: 13px;
+}
+.plate--ink .plate__rule { background: var(--ink); }
+.plate__line {
+  font-family: 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.05rem, 1.8vw, 1.6rem);
+  line-height: 1.12;
+  letter-spacing: 0.005em;
+}
+.plate--ink { color: var(--ink); }
+
+/* ---------- the door: case study, read left to right ---------------- */
+.case {
+  position: fixed; inset: 0; z-index: 40;
+  clip-path: circle(0px at 50% 50%);
+  transition: clip-path 0.85s cubic-bezier(0.76, 0, 0.24, 1);
+  visibility: hidden;
+}
+.case.open { visibility: visible; }
+.case__track { position: absolute; inset: 0; display: flex; will-change: transform; }
+.panel {
+  min-width: 100%; height: 100%;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 0 clamp(24px, 7vw, 110px);
+}
+.case__kicker {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.68rem; letter-spacing: 0.12em;
+  margin-bottom: 3vh;
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.5s var(--ease-out) 0.45s, transform 0.5s var(--ease-out) 0.45s;
+}
+.case__title {
+  font-family: 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif;
+  font-weight: 800;
+  font-size: clamp(5rem, 19vw, 20rem);
+  line-height: 0.9; letter-spacing: -0.015em;
+  white-space: nowrap; margin-left: -0.05em;
+  opacity: 0; transform: translateY(0.2em);
+  transition: opacity 0.7s var(--ease-out) 0.55s, transform 0.7s var(--ease-out) 0.55s;
+}
+.case__title--long { white-space: normal; font-size: clamp(2.6rem, 9vw, 9rem); line-height: 0.98; }
+.case.open .case__kicker, .case.open .case__title { opacity: 1; transform: none; }
+.case__obs { max-width: 22em; font-size: clamp(1.4rem, 2.6vw, 2.4rem); line-height: 1.35; font-weight: 500; }
+
+/* the evidence panel: the field note as a pull quote, numbers woven
+   into prose rather than staged as a stat billboard */
+.case__evLabel {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.68rem; letter-spacing: 0.14em; opacity: 0.75;
+  margin-bottom: 3vh;
+}
+.case__evidence {
+  max-width: 16em;
+  font-size: clamp(1.9rem, 3.6vw, 3.4rem);
+  line-height: 1.22; font-weight: 600;
+}
+.case__cta {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: clamp(0.9rem, 1.4vw, 1.15rem); letter-spacing: 0.1em;
+  color: inherit; text-decoration: none;
+  border-bottom: 2px solid currentColor; padding-bottom: 6px;
+  width: fit-content;
+}
+.case__cta:hover { opacity: 0.7; }
+.case__ctaHint {
+  margin-top: 2.5vh;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.66rem; letter-spacing: 0.08em; opacity: 0.6;
+}
+.case__close {
+  position: absolute; top: 30px; right: 40px; z-index: 5;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem; letter-spacing: 0.1em;
+  cursor: pointer; background: none; border: none; color: inherit;
+  padding: 10px; opacity: 0;
+  transition: opacity 0.4s var(--ease-out) 0.8s;
+}
+.case.open .case__close { opacity: 1; }
+.case__close:hover { text-decoration: underline; }
+.case__scrollHint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  z-index: 5;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.66rem; letter-spacing: 0.12em;
+  opacity: 0; transition: opacity 0.4s var(--ease-out) 0.9s;
+}
+.case.open .case__scrollHint { opacity: 0.65; }
+.case__scrollHint.gone { opacity: 0 !important; }
+.case__dots {
+  position: absolute; bottom: 30px; right: 44px; z-index: 5;
+  display: flex; gap: 8px;
+  opacity: 0; transition: opacity 0.4s var(--ease-out) 0.9s;
+}
+.case.open .case__dots { opacity: 1; }
+.case__dots i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: 0.3; transition: opacity 0.3s; }
+.case__dots i.on { opacity: 1; }
+
+@media (max-width: 640px) {
+  .brand { left: 4vw; }
+  .nav { top: 58px; left: 4vw; right: auto; }
+  .nav span { margin-left: 0; margin-right: 18px; }
+  .poster { inset: 13vh 4vw 11vh; }
+  .caption { bottom: 48px; }
+  /* keep the plate inside its light plane; past the diagonal is ink */
+  .plate__line { max-width: 11em; }
+}
+
+.case--on-lime    { background: var(--lime);      color: var(--ink);  }
+.case--on-blue    { background: var(--blue);      color: #fff;        }
+.case--on-magenta { background: var(--magenta);   color: #fff;        }
+.case--on-lime2   { background: var(--lime-2);    color: var(--ink);  }
+.case--on-blue2   { background: var(--blue-2);    color: #fff;        }
+.case--on-magenta2{ background: var(--magenta-2); color: #fff;        }
+.case--on-ink     { background: var(--ink);       color: var(--lime); }
+</style>
+</head>
+<body>
+
+<div class="brand">caboodle design</div>
+<nav class="nav"><span><a href="../labs.html" style="color:inherit;text-decoration:none;">← back to the labs</a></span></nav>
+
+<div class="poster" id="poster"></div>
+
+<div class="caption">the whole caboodle · seven planes, seven case files</div>
+<div class="concepts">LAB-008 · homepage candidate, field-tested and preserved</div>
+
+<!-- the door -->
+<div class="case" id="case">
+  <div class="case__track" id="caseTrack">
+    <section class="panel">
+      <div class="case__kicker" id="caseKicker"></div>
+      <h1 class="case__title" id="caseTitle"></h1>
+    </section>
+    <section class="panel">
+      <p class="case__obs" id="caseObs"></p>
+    </section>
+    <section class="panel">
+      <p class="case__evLabel">FIELD NOTE</p>
+      <p class="case__evidence" id="caseEvidence"></p>
+    </section>
+    <section class="panel">
+      <a class="case__cta" id="caseCta" href="#">open the full case file →</a>
+      <p class="case__ctaHint">or close to return to the poster</p>
+    </section>
+  </div>
+  <button class="case__close" id="caseClose">close ✕</button>
+  <div class="case__scrollHint" id="caseScrollHint">scroll to read →</div>
+  <div class="case__dots" id="caseDots"><i class="on"></i><i></i><i></i><i></i></div>
+</div>
+
+<script>
+/* ============================================================
+   SEVEN PLANES = SEVEN CASE FILES = THE WHOLE POSTER
+   Columns are tonal pairs split by diagonal cuts; the lime
+   spine is the featured engagement; the ink corner is the
+   capstone. poly: clip-path. cx/cy: anchor for index + card.
+   dark: light index/label text on dark planes.
+   ============================================================ */
+const SPECIMENS = [
+  {
+    id: 'airbnb', theme: 'case--on-lime', color: 'var(--lime)',
+    poly: 'polygon(25% 0%, 50% 0%, 50% 100%, 25% 100%)',
+    polyP: 'polygon(0% 25%, 100% 25%, 100% 50%, 0% 50%)',
+    cx: 37.5, cy: 46, cxP: 46, cyP: 37.5, entrance: 'top', depth: 0.5, phase: 0,
+    fill: { img: 'repeating-linear-gradient(45deg, #282828 0 5px, transparent 5px 16px)' },
+    href: '../work/airbnb.html',
+    role: 'ai101 program',
+    kicker: 'SPECIMEN 001 / ENG-AIRBNB / AI ENABLEMENT · 2026',
+    title: 'airbnb',
+    obs: 'AI enablement at Fortune 500 scale. Five performance-task modules for AI101, built around how humans actually adopt AI tools, not how training assumes they should.',
+    evidence: 'The 100% reported knowledge gain was never the goal. It was the evidence.'
+  },
+  {
+    id: 'intuit', theme: 'case--on-blue', color: 'var(--blue)',
+    poly: 'polygon(0% 0%, 25% 0%, 25% 40%, 0% 65%)',
+    polyP: 'polygon(0% 0%, 0% 25%, 40% 25%, 65% 0%)',
+    cx: 12.5, cy: 22, cxP: 22, cyP: 12.5, entrance: 'top', depth: 0.8, phase: 1.3, dark: true,
+    fill: { img: 'radial-gradient(circle, #96E650 2.2px, transparent 2.8px)', size: '15px 15px' },
+    href: '../work/intuit.html',
+    role: 'career growth',
+    kicker: 'SPECIMEN 002 / ENG-INTUIT / CAREER GROWTH',
+    title: 'intuit',
+    obs: 'AI-powered career growth for 10,000+ employees. AI recommendations integrated with structured learning paths, helping people navigate their own development.',
+    evidence: 'Ten thousand people can see their own path now. Growth sticks when the path is visible.'
+  },
+  {
+    id: 'apple', theme: 'case--on-magenta', color: 'var(--magenta)',
+    poly: 'polygon(50% 0%, 75% 0%, 75% 45%, 50% 70%)',
+    polyP: 'polygon(0% 50%, 0% 75%, 45% 75%, 70% 50%)',
+    cx: 62.5, cy: 25, cxP: 25, cyP: 62.5, entrance: 'top', depth: 0.7, phase: 2.1, dark: true,
+    fill: { img: 'repeating-radial-gradient(circle at 30% 70%, #ffffff 0 3px, transparent 3px 13px)' },
+    href: '../work/apple.html',
+    role: 'supplier code of conduct',
+    kicker: 'SPECIMEN 003 / ENG-APPLE / SUPPLIER CODE OF CONDUCT',
+    title: 'apple',
+    obs: 'Supplier training across 251 companies and 31 countries. Ethical standards, environmental compliance, and innovation requirements, built to translate, measure, and scale.',
+    evidence: '251 companies, 31 countries, one standard that survived translation.'
+  },
+  {
+    id: 'gitlab', theme: 'case--on-blue2', color: 'var(--blue-2)',
+    poly: 'polygon(0% 65%, 25% 40%, 25% 100%, 0% 100%)',
+    polyP: 'polygon(65% 0%, 40% 25%, 100% 25%, 100% 0%)',
+    cx: 16, cy: 60, cxP: 78, cyP: 12.5, entrance: 'bottom', depth: 0.6, phase: 3.4, dark: true,
+    fill: { img: 'repeating-conic-gradient(#03599B 0% 25%, transparent 0% 50%)', size: '14px 14px' },
+    href: '../work/gitlab.html',
+    role: 'works council compliance',
+    kicker: 'SPECIMEN 004 / ENG-GITLAB / WORKS COUNCIL · NL DE FR',
+    title: 'gitlab',
+    obs: 'Works council training for the Netherlands, Germany, and France, delivered in two months. Interactive decision tools and contact guides, embedded straight into the LMS.',
+    evidence: 'Three countries in two months, localized rather than translated, living inside the LMS.'
+  },
+  {
+    id: 'tmobile', theme: 'case--on-lime2', color: 'var(--lime-2)',
+    poly: 'polygon(75% 0%, 100% 0%, 100% 65%, 75% 40%)',
+    polyP: 'polygon(0% 75%, 0% 100%, 65% 100%, 40% 75%)',
+    cx: 87.5, cy: 22, cxP: 17, cyP: 80, entrance: 'top', depth: 0.9, phase: 4.2,
+    fill: { img: 'repeating-linear-gradient(90deg, #282828 0 4px, transparent 4px 13px)' },
+    href: '../work/tmobile.html',
+    role: 'legal affairs',
+    kicker: 'SPECIMEN 005 / ENG-TMOBILE / LEGAL AFFAIRS',
+    title: 't-mobile',
+    obs: 'Legal compliance training for corporate teams. Regulatory requirements translated into branching simulations people actually practice, not policies they scroll past.',
+    evidence: 'Legal inquiries fell 40% after launch, because people finally got to practice the rules.'
+  },
+  {
+    id: 'trust20', theme: 'case--on-magenta2', color: 'var(--magenta-2)',
+    poly: 'polygon(50% 70%, 75% 45%, 75% 100%, 50% 100%)',
+    polyP: 'polygon(70% 50%, 45% 75%, 100% 75%, 100% 50%)',
+    cx: 62.5, cy: 82, cxP: 82, cyP: 62.5, entrance: 'bottom', depth: 0.75, phase: 5.0, dark: true,
+    fill: { img: 'radial-gradient(circle, #EC008C 2.4px, transparent 3px)', size: '12px 12px' },
+    href: '../work/trust20.html',
+    role: 'alcohol server training',
+    kicker: 'SPECIMEN 006 / ENG-TRUST20 / GORDON FOOD SERVICES',
+    title: 'trust20',
+    obs: 'Accredited alcohol server training for Gordon Food Services. Scenario-based, meeting multi-state accreditation requirements, shipped in five weeks.',
+    evidence: 'Multi-state accreditation in five weeks, built on scenarios instead of statutes.'
+  },
+  {
+    id: 'pp', theme: 'case--on-ink', color: 'var(--ink)',
+    poly: 'polygon(75% 40%, 100% 65%, 100% 100%, 75% 100%)',
+    polyP: 'polygon(40% 75%, 65% 100%, 100% 100%, 100% 75%)',
+    cx: 87.5, cy: 78, cxP: 78, cyP: 87.5, entrance: 'bottom', depth: 0.65, phase: 0.7, dark: true, longTitle: true,
+    fill: { img: 'repeating-linear-gradient(45deg, #96E650 0 4px, transparent 4px 13px)' },
+    href: '../work/peoples-professors.html',
+    role: 'capstone',
+    kicker: 'SPECIMEN 007 / PROJ-PP001 / SELF-INITIATED CAPSTONE',
+    title: "the people's professors",
+    obs: 'A thesis about TikTok and learning design. So I built the proof. Graphic design and custom code delivering a one-of-a-kind learning experience.',
+    evidence: 'A thesis is a claim. This one shipped its own proof.'
+  },
+];
+
+/* ---------- build the poster ---------------------------------------- */
+const poster = document.getElementById('poster');
+
+const nodes = SPECIMENS.map((s, i) => {
+  const piece = document.createElement('div');
+  piece.className = 'piece piece--from-' + s.entrance;
+  piece.style.transitionDelay = (i * 90) + 'ms';
+  piece.style.clipPath = s.poly;
+
+  const plane = document.createElement('div');
+  plane.className = 'plane';
+  plane.style.background = s.color;
+
+  const fill = document.createElement('div');
+  fill.className = 'fill';
+  fill.style.backgroundImage = s.fill.img;
+  if (s.fill.size) fill.style.backgroundSize = s.fill.size;
+  plane.appendChild(fill);
+
+  const num = 's.' + String(i + 1).padStart(3, '0');
+  const idx = document.createElement('span');
+  idx.className = 'idx';
+  idx.style.left = s.cx + '%';
+  idx.style.top = s.cy + '%';
+  idx.style.color = s.dark ? 'rgba(255,255,255,0.8)' : 'rgba(40,40,40,0.6)';
+  idx.textContent = num;
+  plane.appendChild(idx);
+
+  piece.appendChild(plane);
+  piece.addEventListener('click', () => openCase(s));
+  poster.appendChild(piece);
+
+  return { el: piece, s, idx };
+});
+
+/* annotation cards live OUTSIDE the clipped pieces so they never get
+   cut by the polygon; hover state is driven per piece */
+nodes.forEach((n, i) => {
+  const s = n.s;
+  const num = 's.' + String(i + 1).padStart(3, '0');
+  const tag = document.createElement('div');
+  tag.className = 'tag';
+  tag.style.left = s.cx + '%';
+  tag.style.top = s.cy + '%';
+  const nameEl = document.createElement('b');
+  nameEl.textContent = s.title;
+  const metaEl = document.createElement('span');
+  metaEl.textContent = num + ' · ' + s.role;
+  tag.appendChild(nameEl);
+  tag.appendChild(metaEl);
+  poster.appendChild(tag);
+  n.tag = tag;
+  n.el.addEventListener('mouseenter', () => {
+    tag.style.opacity = 1;
+    tag.style.transform = 'translate(-50%, calc(-100% - 18px))';
+  });
+  n.el.addEventListener('mouseleave', () => { tag.style.opacity = 0; tag.style.transform = ''; });
+});
+
+/* ---------- orientation: the poster recuts itself -------------------
+   Landscape: tonal-pair columns around the vertical lime spine.
+   Portrait: the same seven planes transposed — the spine becomes a
+   horizontal band, the pairs stack above and below. */
+function isPortrait() { return innerHeight > innerWidth * 1.05; }
+function anchorOf(s) {
+  return isPortrait() ? { cx: s.cxP, cy: s.cyP } : { cx: s.cx, cy: s.cy };
+}
+function applyLayout() {
+  const p = isPortrait();
+  for (const n of nodes) {
+    n.el.style.clipPath = p ? n.s.polyP : n.s.poly;
+    const a = anchorOf(n.s);
+    n.idx.style.left = a.cx + '%';
+    n.idx.style.top = a.cy + '%';
+    n.tag.style.left = a.cx + '%';
+    n.tag.style.top = a.cy + '%';
+  }
+  /* portrait's lower-left plane is light lime; the plate flips to ink */
+  plate.classList.toggle('plate--ink', p);
+}
+let rzT;
+window.addEventListener('resize', () => { clearTimeout(rzT); rzT = setTimeout(applyLayout, 150); });
+/* resize events don't always fire in embedded webviews; the media
+   query change is a second, independent trigger */
+matchMedia('(orientation: portrait)').addEventListener('change', applyLayout);
+
+/* the printed plate, reference-style, on the lower-left plane */
+const plate = document.createElement('div');
+plate.className = 'plate';
+plate.innerHTML = '<div class="plate__kicker">FIELD COLLECTION / 2026</div><div class="plate__rule"></div><div class="plate__line">behavior change<br>over checkbox training</div>';
+poster.appendChild(plate);
+
+applyLayout();
+
+requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('in')));
+setTimeout(() => document.body.classList.add('in'), 150);   /* rAF-suspension fallback */
+
+/* ---------- breathing seams + cursor lean ---------------------------- */
+let mx = 0, my = 0;
+window.addEventListener('pointermove', (e) => {
+  mx = (e.clientX / innerWidth) * 2 - 1;
+  my = (e.clientY / innerHeight) * 2 - 1;
+});
+let lastDrift = 0, entranceDone = false;
+setTimeout(() => { entranceDone = true; nodes.forEach(n => { n.el.style.transition = 'none'; }); }, 1900);
+
+function driftTick(t) {
+  lastDrift = t;
+  if (!entranceDone) return;
+  const time = t / 1000;
+  poster.style.transform = `translate(${(mx * 8).toFixed(2)}px, ${(my * 6).toFixed(2)}px)`;
+  for (const n of nodes) {
+    const dx = Math.sin(time * 0.5 + n.s.phase) * 2 * n.s.depth;
+    const dy = Math.cos(time * 0.4 + n.s.phase * 1.6) * 2 * n.s.depth;
+    n.el.style.transform = `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px)`;
+  }
+}
+function driftLoop(t) { driftTick(t); requestAnimationFrame(driftLoop); }
+requestAnimationFrame(driftLoop);
+setInterval(() => { if (performance.now() - lastDrift > 45) driftTick(performance.now()); }, 50);
+
+/* ============================================================
+   THE DOOR — case study, read left to right (film strip)
+   ============================================================ */
+const caseEl = document.getElementById('case');
+const track = document.getElementById('caseTrack');
+const dots = document.getElementById('caseDots').children;
+const scrollHint = document.getElementById('caseScrollHint');
+const PANELS = 4;
+let lastTheme = '';
+let caseOpen = false;
+let targetX = 0, curX = 0, lastStep = 0;
+
+function openCase(s) {
+  const pr = poster.getBoundingClientRect();
+  const a = anchorOf(s);
+  const cx = pr.left + pr.width * a.cx / 100;
+  const cy = pr.top + pr.height * a.cy / 100;
+
+  document.getElementById('caseKicker').textContent = s.kicker;
+  const titleEl = document.getElementById('caseTitle');
+  titleEl.textContent = s.title;
+  titleEl.classList.toggle('case__title--long', !!s.longTitle);
+  document.getElementById('caseObs').textContent = s.obs;
+  document.getElementById('caseEvidence').textContent = s.evidence;
+  document.getElementById('caseCta').href = s.href;
+
+  if (lastTheme) caseEl.classList.remove(lastTheme);
+  lastTheme = s.theme;
+  caseEl.classList.add(s.theme);
+
+  targetX = 0; curX = 0;
+  track.style.transform = 'translateX(0)';
+  scrollHint.classList.remove('gone');
+  setDots(0);
+
+  caseEl.style.transition = 'none';
+  caseEl.style.clipPath = `circle(0px at ${cx}px ${cy}px)`;
+  caseEl.classList.add('open');
+  caseEl.getBoundingClientRect();
+  caseEl.style.transition = '';
+  const R = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy));
+  caseEl.style.clipPath = `circle(${R * 1.05}px at ${cx}px ${cy}px)`;
+  caseOpen = true;
+}
+
+function closeCase() {
+  const m = /at ([\d.]+)px ([\d.]+)px/.exec(caseEl.style.clipPath) || [0, innerWidth / 2, innerHeight / 2];
+  caseEl.style.clipPath = `circle(0px at ${m[1]}px ${m[2]}px)`;
+  caseOpen = false;
+  setTimeout(() => caseEl.classList.remove('open'), 850);
+}
+document.getElementById('caseClose').addEventListener('click', closeCase);
+window.addEventListener('keydown', (e) => {
+  if (!caseOpen) return;
+  if (e.key === 'Escape') closeCase();
+  if (e.key === 'ArrowRight') targetX = Math.min(targetX + innerWidth, (PANELS - 1) * innerWidth);
+  if (e.key === 'ArrowLeft') targetX = Math.max(targetX - innerWidth, 0);
+});
+window.addEventListener('wheel', (e) => {
+  if (!caseOpen) return;
+  e.preventDefault();
+  targetX = Math.max(0, Math.min(targetX + e.deltaY + e.deltaX, (PANELS - 1) * innerWidth));
+  if (targetX > 40) scrollHint.classList.add('gone');
+}, { passive: false });
+
+function setDots(panel) {
+  for (let i = 0; i < dots.length; i++) dots[i].classList.toggle('on', i === panel);
+}
+function step(now) {
+  lastStep = now;
+  curX += (targetX - curX) * 0.09;
+  if (Math.abs(targetX - curX) < 0.3) curX = targetX;
+  track.style.transform = `translateX(${(-curX).toFixed(2)}px)`;
+  setDots(Math.round(curX / innerWidth));
+}
+function caseLoop(now) { step(now); requestAnimationFrame(caseLoop); }
+requestAnimationFrame(caseLoop);
+setInterval(() => { if (performance.now() - lastStep > 45) step(performance.now()); }, 50);
+</script>
+</body>
+</html>
