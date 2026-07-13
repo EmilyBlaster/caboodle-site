@@ -18,8 +18,19 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css?v=20260618o" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<style>
+/* The family hairline: every page in the system wears its badge —
+   the conversation wears deep blue. */
+.family-edge {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 4px; background: var(--blue);
+  z-index: 2000; pointer-events: none;
+}
+</style>
 </head>
 <body>
+
+<div class="family-edge" aria-hidden="true"></div>
 
 <!-- Nav -->
 <header class="nav">
