@@ -129,7 +129,7 @@ body.flooded .copyright, body.flooded .hint { color: rgba(255,255,255,0.8); }
 }
 
 /* ---------- the sentence ------------------------------------------- */
-.stage {
+.ap-stage {
   position: fixed; inset: 0; z-index: 10;
   display: flex; align-items: center;
   padding: 0 clamp(24px, 9vw, 140px) 0 clamp(24px, 12vw, 200px);
@@ -171,7 +171,7 @@ body.flooded .copyright, body.flooded .hint { color: rgba(255,255,255,0.8); }
   .w i { transition: opacity 0.3s ease; }
   .w.out i { transform: none; opacity: 0; }
   .w.pre i { transform: none; opacity: 0; }
-  .stage { transform: none !important; }
+  .ap-stage { transform: none !important; }
 }
 
 /* accent phrase inks itself in as you scroll the zone — gradient
@@ -209,7 +209,7 @@ body.flooded .copyright, body.flooded .hint { color: rgba(255,255,255,0.8); }
 
 @media (max-width: 1000px) {
   .rail { display: none; }
-  .stage { padding-left: clamp(24px, 9vw, 140px); }
+  .ap-stage { padding-left: clamp(24px, 9vw, 140px); }
 }
 @media (max-width: 720px) {
   .brand { left: 20px; }
@@ -242,7 +242,7 @@ body.flooded .copyright, body.flooded .hint { color: rgba(255,255,255,0.8); }
 
 <nav class="rail" id="rail"></nav>
 
-<div class="stage" id="stage">
+<div class="ap-stage" id="stage">
   <h1 class="sentence" id="sentence"></h1>
 </div>
 
