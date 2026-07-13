@@ -969,8 +969,32 @@
   .appwt__progress-bar { max-width: none; width: 100%; }
 }
 </style>
+<style>
+/* Specimen accents: a hairline of this case file's color along the
+   top edge, and the dossier stamp filled to match — quiet
+   continuity with the poster. */
+.specimen-edge {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 4px; background: #EC008C; z-index: 2000;
+  pointer-events: none;
+}
+.casehero__stamp {
+  background: #EC008C;
+  border-color: #EC008C;
+  color: #ffffff;
+}
+.casehero__stamp b { color: inherit; }
+/* the hero's ambient glow takes this specimen's color */
+.casehero {
+  background:
+    radial-gradient(120% 80% at 80% 20%, rgba(236,0,140,0.08), transparent 60%),
+    var(--paper);
+}
+</style>
 </head>
 <body>
+
+<div class="specimen-edge" aria-hidden="true"></div>
 
 <!-- Field log -->
 
@@ -1001,7 +1025,7 @@
   </a>
 
   <div class="casehero__stamp">
-    <span>case study</span>
+    <span>specimen s.003</span>
     <b>ENG-APPLE001</b>
     <span>global supplier network · 2024</span>
   </div>

@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>404 · page not in the collection · caboodle design</title>
+<meta name="robots" content="noindex" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+
+<!-- matter.js vendored locally; absolute path because 404.html serves at any URL depth -->
+<script src="/assets/vendor/matter.min.js"></script>
+
+<style>
+/* ============================================================
+   CONCEPT 03 — "THE FIDGET BENCH"
+   ------------------------------------------------------------
+   Standalone throwaway demo. Nothing on the live site is
+   touched. Delete this file and everything is as it was.
+
+   THE 404 PAGE. The story: you wandered off the map and
+   knocked the specimen drawer over. Bauhaus shapes in brand
+   colors with real weight tumble in, stack, and rest ON the
+   words (each word is a solid body). Grab them, toss them,
+   click empty space to add one. Natalie's fidget energy,
+   Bauhaus geometry instead of blobs. One lime specimen has a
+   sleepy face. It blinks. That's the whole joke.
+
+   Physics: matter.js rigid bodies, mouse constraint drag,
+   restitution bounce, zero-g drift mode, shake impulse.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Bauhaus Bool';
+  src: url('/fonts/BauhausBoolDisplay-Medium.woff') format('woff');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Bauhaus Bool';
+  src: url('/fonts/BauhausBoolDisplay-Bold.woff') format('woff');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Bauhaus Bool';
+  src: url('/fonts/BauhausBoolDisplay-ExtraBold.woff') format('woff');
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+
+:root {
+  --lime: #96E650;
+  --blue: #03599B;
+  --magenta: #EC008C;
+  --ink: #282828;
+  --mid: #686868;
+  --paper: #FBFBF9;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  /* field-journal graph paper, very faint */
+  background:
+    repeating-linear-gradient(0deg,  transparent 0 47px, rgba(40,40,40,0.05) 47px 48px),
+    repeating-linear-gradient(90deg, transparent 0 47px, rgba(40,40,40,0.05) 47px 48px),
+    var(--paper);
+}
+
+/* ---------- chrome ------------------------------------------------ */
+.brand {
+  position: fixed; top: 34px; left: 40px; z-index: 20;
+  font-family: 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif;
+  font-weight: 700; font-size: 1.05rem;
+}
+.controls {
+  position: fixed; top: 34px; right: 40px; z-index: 20;
+  display: flex; gap: 14px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.66rem; letter-spacing: 0.08em;
+}
+.controls button {
+  font: inherit; color: var(--mid);
+  background: none; border: 1px solid rgba(40,40,40,0.22);
+  border-radius: 999px; padding: 7px 14px;
+  cursor: pointer;
+  transition: color 0.3s var(--ease-out), border-color 0.3s var(--ease-out), background 0.3s var(--ease-out);
+}
+.controls button:hover { color: var(--ink); border-color: var(--ink); }
+.controls button.on { color: var(--ink); background: var(--lime); border-color: var(--lime); }
+
+.caption {
+  position: fixed; bottom: 34px; left: 40px; z-index: 20;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.66rem; letter-spacing: 0.08em; color: var(--mid);
+}
+.concepts {
+  position: fixed; bottom: 34px; right: 40px; z-index: 20;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.62rem; letter-spacing: 0.08em; color: #b5b5b5;
+}
+.concepts a { color: inherit; text-decoration: none; }
+.concepts a:hover, .concepts a.here { color: var(--ink); }
+
+/* ---------- headline (words become solid bodies) ------------------- */
+.stage {
+  position: fixed; inset: 0;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 22vh;
+  pointer-events: none;   /* the canvas underneath takes the input */
+  z-index: 5;
+}
+h1 {
+  font-family: 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.6rem, 9vw, 8.5rem);
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+  text-align: center;
+  max-width: 92vw;
+}
+h1 .w { display: inline-block; }
+.errcode {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem; letter-spacing: 0.14em; color: var(--mid);
+  text-align: center; margin-bottom: 26px;
+}
+.stage__inner { display: grid; justify-items: center; }
+.home {
+  margin-top: 34px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.74rem; letter-spacing: 0.1em; color: var(--ink);
+  text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 3px;
+  pointer-events: auto;   /* the stage swallows input; the link takes it back */
+}
+.home:hover { opacity: 0.65; }
+
+canvas { position: fixed; inset: 0; z-index: 10; display: block; }
+</style>
+</head>
+<body>
+
+<div class="brand">caboodle design</div>
+
+<div class="controls">
+  <button id="btnShake">shake</button>
+  <button id="btnZeroG">zero-g</button>
+</div>
+
+<div class="stage">
+  <div class="stage__inner">
+    <div class="errcode">ERROR 404 / PAGE NOT IN THE COLLECTION</div>
+    <h1 id="headline"><span class="w">you</span> <span class="w">knocked</span> <span class="w">over</span> <span class="w">the</span> <span class="w">caboodle.</span></h1>
+    <a class="home" href="/">back to base →</a>
+  </div>
+</div>
+
+<div class="caption">nothing lives at this address · tidy up if you want: drag, toss, click to add</div>
+
+<canvas id="world"></canvas>
+
+<script>
+/* ============================================================
+   THE BENCH
+   matter.js drives the truth; a custom canvas renderer draws
+   it in flat brand color (default matter render can't do the
+   face or the specimen labels).
+   ============================================================ */
+const { Engine, Bodies, Body, Composite, Mouse, MouseConstraint, Events, Common } = Matter;
+
+const COLORS = ['#96E650', '#03599B', '#EC008C', '#B6EE85', '#4F8BB9', '#F24DAF', '#282828'];
+const engine = Engine.create();
+engine.gravity.y = 1;
+
+const canvas = document.getElementById('world');
+const ctx = canvas.getContext('2d');
+let W = innerWidth, H = innerHeight, DPR = Math.min(devicePixelRatio || 1, 2);
+
+function sizeCanvas() {
+  W = innerWidth; H = innerHeight;
+  canvas.width = W * DPR; canvas.height = H * DPR;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+sizeCanvas();
+
+/* ---------- static geometry: walls + the headline ------------------ */
+let statics = [];
+function buildStatics() {
+  Composite.remove(engine.world, statics);
+  statics = [
+    // floor + walls (ceiling stays open so shapes can rain in)
+    Bodies.rectangle(W / 2, H + 60, W + 400, 120, { isStatic: true }),
+    Bodies.rectangle(-60, H / 2, 120, H * 4, { isStatic: true }),
+    Bodies.rectangle(W + 60, H / 2, 120, H * 4, { isStatic: true }),
+  ];
+  // each word of the headline is a solid shelf the shapes can land on
+  document.querySelectorAll('#headline .w').forEach((el) => {
+    const r = el.getBoundingClientRect();
+    if (r.width > 0) {
+      statics.push(Bodies.rectangle(
+        r.left + r.width / 2, r.top + r.height / 2 + r.height * 0.08,
+        r.width, r.height * 0.62,
+        { isStatic: true, label: 'word' }
+      ));
+    }
+  });
+  Composite.add(engine.world, statics);
+}
+
+/* ---------- the caboodle -------------------------------------------- */
+const shapes = [];
+let faceBody = null;
+
+function addShape(x, y, big) {
+  const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+  const kind = Math.random();
+  const r = (big ? 34 : 20) + Math.random() * (big ? 40 : 22);
+  const opts = {
+    restitution: 0.55,
+    friction: 0.15,
+    frictionAir: 0.012,
+    density: 0.0012,
+  };
+  let body;
+  if (kind < 0.55) {
+    body = Bodies.circle(x, y, r, opts);
+    body.renderKind = 'circle';
+  } else if (kind < 0.8) {
+    body = Bodies.rectangle(x, y, r * 1.7, r * 1.7, { ...opts, chamfer: { radius: r * 0.38 } });
+    body.renderKind = 'poly';
+  } else {
+    body = Bodies.polygon(x, y, 3, r * 1.25, { ...opts, chamfer: { radius: r * 0.22 } });
+    body.renderKind = 'poly';
+  }
+  body.renderColor = color;
+  Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.12);
+  Composite.add(engine.world, body);
+  shapes.push(body);
+
+  // the first big lime circle gets the sleepy face
+  if (!faceBody && body.renderKind === 'circle' && color === '#96E650' && r > 40) faceBody = body;
+
+  // keep the bench from silting up
+  if (shapes.length > 46) {
+    const old = shapes.shift();
+    if (old === faceBody) faceBody = null;
+    Composite.remove(engine.world, old);
+  }
+  return body;
+}
+
+/* opening rain: the whole caboodle tumbles in, staggered */
+function rain() {
+  let i = 0;
+  const n = 16;
+  const drop = setInterval(() => {
+    const x = W * (0.15 + Math.random() * 0.7);
+    addShape(x, -80 - Math.random() * 200, i < 5); // first few are big
+    if (++i >= n) clearInterval(drop);
+  }, 130);
+  // guarantee one face-sized lime circle
+  setTimeout(() => {
+    if (!faceBody) {
+      const b = Bodies.circle(W * 0.5, -120, 52, { restitution: 0.55, friction: 0.15, frictionAir: 0.012, density: 0.0012 });
+      b.renderKind = 'circle'; b.renderColor = '#96E650';
+      Composite.add(engine.world, b); shapes.push(b); faceBody = b;
+    }
+  }, n * 130 + 50);
+}
+
+/* ---------- input: drag bodies, click space to add ------------------ */
+const mouse = Mouse.create(canvas);
+/* the canvas buffer is DPR-scaled; matter reads raw buffer pixels,
+   so rescale or every grab lands 2x away from the cursor */
+Mouse.setScale(mouse, { x: 1 / DPR, y: 1 / DPR });
+const mc = MouseConstraint.create(engine, {
+  mouse,
+  constraint: { stiffness: 0.12, damping: 0.08, render: { visible: false } },
+});
+Composite.add(engine.world, mc);
+// matter hijacks wheel events through Mouse; give scrolling back
+mouse.element.removeEventListener('wheel', mouse.mousewheel);
+
+Events.on(mc, 'mousedown', () => {
+  if (!mc.body) {
+    const p = mouse.position;
+    const b = addShape(p.x, p.y, false);
+    // little pop so it feels spawned, not placed
+    Body.applyForce(b, b.position, { x: (Math.random() - 0.5) * 0.01, y: -0.014 });
+  }
+});
+
+/* ---------- toys: shake + zero-g ------------------------------------ */
+document.getElementById('btnShake').addEventListener('click', () => {
+  for (const b of shapes) {
+    Body.applyForce(b, b.position, {
+      x: (Math.random() - 0.5) * 0.06 * b.mass,
+      y: -Math.random() * 0.05 * b.mass,
+    });
+  }
+});
+
+let zeroG = false;
+document.getElementById('btnZeroG').addEventListener('click', (e) => {
+  zeroG = !zeroG;
+  e.target.classList.toggle('on', zeroG);
+  engine.gravity.y = zeroG ? 0 : 1;
+  for (const b of shapes) {
+    b.frictionAir = zeroG ? 0.02 : 0.012;
+    if (zeroG) {
+      // gentle push off the floor so everything starts drifting
+      Body.setVelocity(b, { x: (Math.random() - 0.5) * 3, y: -Math.random() * 4 - 1 });
+    }
+  }
+});
+
+/* ---------- renderer ------------------------------------------------ */
+let blinkT = 0;
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  for (const b of shapes) {
+    ctx.fillStyle = b.renderColor;
+    if (b.renderKind === 'circle') {
+      ctx.beginPath();
+      ctx.arc(b.position.x, b.position.y, b.circleRadius, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // chamfered rects + triangles come out of their own vertices
+      ctx.beginPath();
+      const v = b.vertices;
+      ctx.moveTo(v[0].x, v[0].y);
+      for (let i = 1; i < v.length; i++) ctx.lineTo(v[i].x, v[i].y);
+      ctx.closePath();
+      ctx.fill();
+    }
+  }
+
+  /* the sleepy specimen — two eyes and a small mouth, riding the
+     body's rotation, blinking every few seconds */
+  if (faceBody) {
+    const b = faceBody;
+    const t = performance.now() / 1000;
+    const blink = (t % 4.2) < 0.16 ? 0.12 : 1;   // brief blink
+    ctx.save();
+    ctx.translate(b.position.x, b.position.y);
+    ctx.rotate(b.angle);
+    ctx.fillStyle = '#282828';
+    const r = b.circleRadius;
+    ctx.save(); ctx.translate(-r * 0.3, -r * 0.1); ctx.scale(1, blink);
+    ctx.beginPath(); ctx.arc(0, 0, r * 0.075, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    ctx.save(); ctx.translate(r * 0.3, -r * 0.1); ctx.scale(1, blink);
+    ctx.beginPath(); ctx.arc(0, 0, r * 0.075, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    ctx.lineWidth = Math.max(2, r * 0.045); ctx.strokeStyle = '#282828'; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.arc(0, r * 0.22, r * 0.16, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+    ctx.restore();
+  }
+
+  /* specimen labels on the first three shapes, field-journal style */
+  ctx.font = '10px "JetBrains Mono", monospace';
+  ctx.fillStyle = 'rgba(40,40,40,0.55)';
+  ctx.textAlign = 'center';
+  for (let i = 0; i < Math.min(3, shapes.length); i++) {
+    const b = shapes[i];
+    const off = (b.circleRadius || 40) + 14;
+    ctx.fillText('s.00' + (i + 1), b.position.x, b.position.y + off);
+  }
+}
+
+/* ---------- main loop ------------------------------------------------ */
+let last = performance.now();
+function tick(now) {
+  const dt = Math.min(now - last, 33);
+  last = now;
+  Engine.update(engine, dt);
+
+  // anything flung past the walls comes back as fresh rain
+  for (let i = shapes.length - 1; i >= 0; i--) {
+    const p = shapes[i].position;
+    if (p.y > H + 400 || p.x < -400 || p.x > W + 400) {
+      Body.setPosition(shapes[i], { x: W * (0.2 + Math.random() * 0.6), y: -120 });
+      Body.setVelocity(shapes[i], { x: 0, y: 0 });
+    }
+  }
+
+  draw();
+}
+function loop(now) {
+  tick(now);
+  requestAnimationFrame(loop);
+}
+
+/* boot once the display font is real, so word bodies match what you see */
+document.fonts.ready.then(() => {
+  buildStatics();
+  rain();
+  requestAnimationFrame(loop);
+  /* watchdog: some embedded browsers suspend rAF; keep physics
+     alive at ~20fps if no frame has landed recently */
+  setInterval(() => {
+    const now = performance.now();
+    if (now - last > 45) tick(now);
+  }, 50);
+});
+
+let resizeT;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeT);
+  resizeT = setTimeout(() => { sizeCanvas(); buildStatics(); }, 150);
+});
+</script>
+</body>
+</html>

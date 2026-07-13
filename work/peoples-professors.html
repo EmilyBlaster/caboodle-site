@@ -174,8 +174,32 @@
 }
 </style>
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<style>
+/* Specimen accents: a hairline of this case file's color along the
+   top edge, and the dossier stamp filled to match — quiet
+   continuity with the poster. */
+.specimen-edge {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 4px; background: #282828; z-index: 2000;
+  pointer-events: none;
+}
+.casehero__stamp {
+  background: #282828;
+  border-color: #282828;
+  color: #96E650;
+}
+.casehero__stamp b { color: inherit; }
+/* the hero's ambient glow takes this specimen's color */
+.casehero {
+  background:
+    radial-gradient(120% 80% at 80% 20%, rgba(150,230,80,0.10), transparent 60%),
+    var(--paper);
+}
+</style>
 </head>
 <body>
+
+<div class="specimen-edge" aria-hidden="true"></div>
 
 <!-- Field log -->
 
@@ -206,7 +230,7 @@
   </a>
 
   <div class="casehero__stamp">
-    <span>case study</span>
+    <span>specimen s.007</span>
     <b>ENG-PP001</b>
     <span>self-initiated research · 2026</span>
   </div>

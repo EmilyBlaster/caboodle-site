@@ -31,8 +31,32 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="../styles.css?v=20260618o" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<style>
+/* Specimen accents: a hairline of this case file's color along the
+   top edge, and the dossier stamp filled to match — quiet
+   continuity with the poster. */
+.specimen-edge {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 4px; background: #B6EE85; z-index: 2000;
+  pointer-events: none;
+}
+.casehero__stamp {
+  background: #B6EE85;
+  border-color: #B6EE85;
+  color: #282828;
+}
+.casehero__stamp b { color: inherit; }
+/* the hero's ambient glow takes this specimen's color */
+.casehero {
+  background:
+    radial-gradient(120% 80% at 80% 20%, rgba(182,238,133,0.16), transparent 60%),
+    var(--paper);
+}
+</style>
 </head>
 <body>
+
+<div class="specimen-edge" aria-hidden="true"></div>
 
 <!-- Field log -->
 
@@ -63,7 +87,7 @@
   </a>
 
   <div class="casehero__stamp">
-    <span>case study</span>
+    <span>specimen s.005</span>
     <b>ENG-TM001</b>
     <span>legal affairs compliance · 2024</span>
   </div>
