@@ -39,6 +39,21 @@
   height: 4px; background: var(--ink);
   z-index: 2000; pointer-events: none;
 }
+
+/* Field photographs: one exhibit figure per experiment. Framed like
+   the site's cards; the caption is the specimen label. */
+.experiment__fig { margin: 1.6rem 0 1.8rem; max-width: 560px; }
+.experiment__fig img {
+  display: block; width: 100%; height: auto;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+.experiment__fig figcaption {
+  margin-top: 0.55rem;
+  font-family: var(--mono);
+  font-size: 0.66rem; letter-spacing: 0.08em;
+  color: var(--ink-2, #686868);
+}
 </style>
 </head>
 <body>
@@ -145,6 +160,10 @@
           <li>scroll-driven</li>
           <li>claude code</li>
         </ul>
+        <figure class="experiment__fig">
+          <img src="assets/labs/figs/reading-the-rainforest.webp" alt="the canopy layer, mid-descent" width="960" height="600" loading="lazy" />
+          <figcaption>fig. 001 · the canopy layer, mid-descent</figcaption>
+        </figure>
         <a class="experiment__cta" href="labs/reading-the-rainforest.html">
           <span>scroll it</span>
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
@@ -180,6 +199,10 @@
           <li>vibe coding</li>
           <li>workflow design</li>
         </ul>
+        <figure class="experiment__fig">
+          <img src="assets/labs/figs/stakeholder-review.webp" alt="the problem, color-coded by reviewer" width="960" height="600" loading="lazy" />
+          <figcaption>fig. 002 · the problem, color-coded by reviewer</figcaption>
+        </figure>
         <a class="experiment__cta" href="labs/stakeholder-review.html">
           <span>view experiment</span>
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
@@ -216,6 +239,10 @@
           <li>self-report signal</li>
           <li>multi-turn coaching</li>
         </ul>
+        <figure class="experiment__fig">
+          <img src="assets/labs/figs/emotion-feedback.webp" alt="one slider from distressed to confident" width="960" height="600" loading="lazy" />
+          <figcaption>fig. 003 · one slider from distressed to confident</figcaption>
+        </figure>
         <a class="experiment__cta" href="labs/emotion-feedback.html">
           <span>try it</span>
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
@@ -255,6 +282,10 @@
           <li>google calendar</li>
           <li>netlify</li>
         </ul>
+        <figure class="experiment__fig">
+          <img src="assets/labs/figs/content-ops-dashboard.webp" alt="four workflows, zero manual triggers" width="960" height="600" loading="lazy" />
+          <figcaption>fig. 004 · four workflows, zero manual triggers</figcaption>
+        </figure>
         <a class="experiment__cta" href="labs/content-ops-dashboard.html">
           <span>view experiment</span>
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
@@ -290,6 +321,10 @@
           <li>canva</li>
           <li>react</li>
         </ul>
+        <figure class="experiment__fig">
+          <img src="assets/labs/figs/video-automation.webp" alt="seven slides, no hands" width="960" height="600" loading="lazy" />
+          <figcaption>fig. 005 · seven slides, no hands</figcaption>
+        </figure>
         <a class="experiment__cta" href="labs/video-automation.html">
           <span>view experiment</span>
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
@@ -324,6 +359,10 @@
           <li>behavioral nudges</li>
           <li>context routing</li>
         </ul>
+        <figure class="experiment__fig">
+          <img src="assets/labs/figs/microlearning.webp" alt="the moment picker and the phone" width="960" height="600" loading="lazy" />
+          <figcaption>fig. 006 · the moment picker and the phone</figcaption>
+        </figure>
         <a class="experiment__cta" href="labs/microlearning.html">
           <span>try it</span>
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
@@ -362,6 +401,10 @@
           <li>agentic routing</li>
           <li>eval harness</li>
         </ul>
+        <figure class="experiment__fig">
+          <img src="assets/labs/figs/greenroom.webp" alt="greenroom live, cited and scored" width="960" height="600" loading="lazy" />
+          <figcaption>fig. 007 · greenroom live, cited and scored</figcaption>
+        </figure>
         <a class="experiment__cta" href="labs/greenroom.html">
           <span>view experiment</span>
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
@@ -400,6 +443,10 @@
           <li>orientation recut</li>
           <li>zero libraries</li>
         </ul>
+        <figure class="experiment__fig">
+          <img src="assets/labs/figs/the-poster.webp" alt="the poster, all seven planes" width="960" height="600" loading="lazy" />
+          <figcaption>fig. 008 · the poster, all seven planes</figcaption>
+        </figure>
         <a class="experiment__cta" href="labs/the-poster.html">
           <span>view experiment</span>
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
