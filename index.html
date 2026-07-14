@@ -54,12 +54,15 @@
    window 0.15em further above the border box with ZERO layout effect —
    padding/margins stay exactly as styles.css ships them. */
 .hero__line { overflow: visible; clip-path: inset(-0.15em 0 0 0); }
-/* the taller window can see the lifted bar's bottom edge at -102% —
-   park the bars further above it (base state + keyframes, index only) */
-.hero__line::after { transform: translateY(-130%); }
+/* the bars SHRINK upward instead of sliding up and out. Same visual
+   (the bottom edge sweeps up, uncovering the ink), but the bar never
+   leaves its own box — Safari lets animating layers escape a parent's
+   clip mid-flight, which sent the lime bar sailing over the FIELD
+   NOTE stamp. Nothing to clip means nothing to escape. */
+.hero__line::after { transform: scaleY(0); transform-origin: top; }
 @keyframes barLift {
-  from { transform: translateY(0); }
-  to   { transform: translateY(-130%); }
+  from { transform: scaleY(1); }
+  to   { transform: scaleY(0); }
 }
 </style>
 <style>
