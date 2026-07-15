@@ -10,7 +10,7 @@ colors:
   magenta-lift: "#F24DAF"
   blue-lift: "#6FA3CC"
   graphite-ink: "#282828"
-  ash-gray: "#686868"
+  ash-gray: "#5c5c5c"
   hairline: "#d6d3cc"
   warm-ash-paper: "#f2efe8"
   paper-shadow: "#e8e3d8"
@@ -116,7 +116,7 @@ A warm-neutral paper system carrying three high-signal brand colors used sparing
 - **Warm Ash Paper** (#f2efe8): The page ground. Never #fff. Carries a faint grain via a fixed multiply-blend noise layer.
 - **Paper Shadow** (#e8e3d8): The recessed panel tone, for stat blocks, lab cards, and inset surfaces one step below the page.
 - **Graphite Ink** (#282828): Primary text, dark section grounds, and the resting fill of pill buttons. Not pure black.
-- **Ash Gray** (#686868): Secondary text, captions, metadata, placeholders.
+- **Ash Gray** (#5c5c5c): Secondary text, captions, metadata, placeholders. Deepened from #686868 to clear WCAG AA on paper and tinted panels.
 - **Hairline** (#d6d3cc): 1px rules, input borders, dashed dividers.
 - **Night Ground** (#141414): The deepest section grounds (the bench and dark editorial blocks).
 
