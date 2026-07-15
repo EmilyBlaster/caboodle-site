@@ -32,7 +32,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=20260618o" />
+<link rel="stylesheet" href="styles.css?v=20260715a" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
 <!-- Prefetch case study HTML on browser idle so the dossier preview
@@ -114,6 +114,9 @@
   color: rgba(242, 239, 232, 0.75);
   background: none;
   border: 1px solid rgba(242, 239, 232, 0.3);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   padding: 10px 16px;
   cursor: pointer;
   transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
@@ -232,7 +235,7 @@
   letter-spacing: 0.1em;
   color: var(--ink-2);
 }
-.bench-spec__caption i { font-style: normal; color: var(--magenta); }
+.bench-spec__caption i { font-style: normal; color: var(--magenta-ink); }
 .bench__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
@@ -251,8 +254,8 @@
 }
 .bench-note b { font-weight: 500; display: block; letter-spacing: 0.14em; margin-bottom: 2px; }
 .bench-note:nth-child(1) b { color: var(--lime); }
-.bench-note:nth-child(2) b { color: #4F8BB9; }
-.bench-note:nth-child(3) b { color: var(--magenta); }
+.bench-note:nth-child(2) b { color: var(--blue-lift); }
+.bench-note:nth-child(3) b { color: var(--magenta-lift); }
 @media (max-width: 900px) {
   .bench__grid { grid-template-columns: 1fr; }
 }
@@ -357,7 +360,7 @@
     <figure class="bench-spec" id="benchSpec">
       <span class="bench-spec__stage" id="benchStage">
         <span class="bench-spec__chrome" aria-hidden="true"><i></i><i></i><i></i><span id="benchChromeUrl"></span><span class="chrome-hint">scroll to explore ↓</span></span>
-        <img class="bench-spec__poster" id="benchPoster" src="" alt="" />
+        <img class="bench-spec__poster" id="benchPoster" src="" alt="" loading="lazy" decoding="async" />
         <button class="bench-spec__run" id="benchRun" type="button">
           <b>run specimen →</b>
           <span id="benchRunSub"></span>
@@ -722,13 +725,13 @@
     <article class="matrix__row">
       <div class="matrix__cell matrix__cell--am">
         <span class="matrix__lv">01</span>
-        <h4>business goal</h4>
+        <h3>business goal</h3>
         <p>What outcome must change?</p>
       </div>
       <div class="matrix__link">proves</div>
       <div class="matrix__cell matrix__cell--kp">
         <span class="matrix__lv">L4</span>
-        <h4>results</h4>
+        <h3>results</h3>
         <p>Did it matter?</p>
       </div>
       <aside class="matrix__proof">
@@ -742,13 +745,13 @@
     <article class="matrix__row">
       <div class="matrix__cell matrix__cell--am">
         <span class="matrix__lv">02</span>
-        <h4>critical actions</h4>
+        <h3>critical actions</h3>
         <p>What must people do differently?</p>
       </div>
       <div class="matrix__link">tracks</div>
       <div class="matrix__cell matrix__cell--kp">
         <span class="matrix__lv">L3</span>
-        <h4>behavior</h4>
+        <h3>behavior</h3>
         <p>Are they doing it?</p>
       </div>
       <aside class="matrix__proof">
@@ -762,13 +765,13 @@
     <article class="matrix__row">
       <div class="matrix__cell matrix__cell--am">
         <span class="matrix__lv">03</span>
-        <h4>practice activities</h4>
+        <h3>practice activities</h3>
         <p>How do they rehearse it?</p>
       </div>
       <div class="matrix__link">reveals</div>
       <div class="matrix__cell matrix__cell--kp">
         <span class="matrix__lv">L2</span>
-        <h4>learning</h4>
+        <h3>learning</h3>
         <p>Did they learn it?</p>
       </div>
       <aside class="matrix__proof">
@@ -782,13 +785,13 @@
     <article class="matrix__row">
       <div class="matrix__cell matrix__cell--am">
         <span class="matrix__lv">04</span>
-        <h4>essential info</h4>
+        <h3>essential info</h3>
         <p>What's the minimum to act?</p>
       </div>
       <div class="matrix__link">drives</div>
       <div class="matrix__cell matrix__cell--kp">
         <span class="matrix__lv">L1</span>
-        <h4>reaction</h4>
+        <h3>reaction</h3>
         <p>Did they like it?</p>
       </div>
       <aside class="matrix__proof">
@@ -944,7 +947,7 @@
   <div class="about__grid">
     <div class="about__portrait">
       <div class="about__disc">
-        <img src="assets/EmilyGreenPortrait.png" alt="Emily Green, founder of caboodle design" />
+        <img src="assets/EmilyGreenPortrait.png" alt="Emily Green, founder of caboodle design" loading="lazy" decoding="async" />
       </div>
       <span class="about__portraitcap">subject · emily green · founder</span>
     </div>
@@ -1028,7 +1031,7 @@
   </div>
   <div class="foot__cols">
     <div>
-      <h4>navigation</h4>
+      <h3>navigation</h3>
       <ul>
         <li><a href="approach.html">approach</a></li>
         <li><a href="work.html">work</a></li>
@@ -1039,7 +1042,7 @@
       </ul>
     </div>
     <div>
-      <h4>get in touch</h4>
+      <h3>get in touch</h3>
       <ul>
         <li><a href="contact.html">let's talk</a></li>
         <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
@@ -1102,8 +1105,9 @@
     {
       id: 'greenroom',
       tab: '001 · ai copilot',
-      caption: 'specimen 001 · greenroom · a working ai development copilot — rag, citations, evals',
+      caption: 'specimen 001 · greenroom · a working ai development copilot: rag, citations, evals',
       poster: 'assets/greenroom-poster.png',
+      alt: 'Greenroom AI copilot interface: a grounded answer with inline citations and a visible eval panel',
       src: 'https://greenroom-strand.netlify.app',
       chrome: 'greenroom-strand.netlify.app',
       runSub: 'live app · real model calls · loads in place',
@@ -1118,6 +1122,7 @@
       tab: '002 · 3d trainer',
       caption: 'specimen 002 · 3d inspection trainer · built for a global supplier program',
       poster: 'assets/demos/fire-extinguisher-3d.png',
+      alt: 'Browser-native 3D fire-extinguisher inspection trainer with numbered inspection points',
       src: 'assets/3d/fire-extinguisher.html',
       runSub: 'interactive 3d training · loads in place',
       notes: [
@@ -1131,6 +1136,7 @@
       tab: '003 · skip or watch?',
       caption: 'specimen 003 · skip or watch? · the hook experiment from people’s professors',
       poster: 'assets/pp-skip-or-watch.png',
+      alt: 'Skip or watch? attention experiment from People’s Professors, showing how a caption change flips viewers from skipping to watching',
       src: 'assets/pp-hook-interactive.html',
       fit: { w: 1200, h: 540 },
       runSub: 'behavioral experiment · loads in place',
@@ -1163,6 +1169,7 @@
     current = s;
     powerDown();
     poster.src = s.poster;
+    poster.alt = s.alt || '';
     runSub.textContent = s.runSub;
     captionEl.textContent = s.caption;
     runBtn.setAttribute('aria-label', 'Power on: ' + s.caption);

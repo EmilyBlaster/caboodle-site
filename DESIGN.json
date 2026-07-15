@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-15T00:00:00Z",
+  "title": "Design System: caboodle design",
+  "extensions": {
+    "colorMeta": {
+      "signal-lime": {
+        "role": "primary",
+        "displayName": "Signal Lime",
+        "canonical": "#96E650",
+        "tonalRamp": ["#26401a", "#3d6626", "#568f33", "#6fb841", "#96E650", "#b6ee85", "#d5f5b9", "#effbe5"]
+      },
+      "field-blue": {
+        "role": "secondary",
+        "displayName": "Field Blue",
+        "canonical": "#03599B",
+        "tonalRamp": ["#021f38", "#023057", "#024378", "#03599B", "#4f8bb9", "#7dabcf", "#9abdd7", "#d9e6f0"]
+      },
+      "editorial-magenta": {
+        "role": "tertiary",
+        "displayName": "Editorial Magenta",
+        "canonical": "#EC008C",
+        "tonalRamp": ["#4d0030", "#730046", "#9c005e", "#bc006b", "#EC008C", "#f24daf", "#f799d1", "#fcd9ee"]
+      },
+      "graphite-ink": {
+        "role": "neutral",
+        "displayName": "Graphite Ink",
+        "canonical": "#282828",
+        "tonalRamp": ["#141414", "#1e1e1e", "#282828", "#3e3e3e", "#686868", "#9a9a9a", "#c9c6bf", "#e8e3d8"]
+      },
+      "warm-ash-paper": {
+        "role": "neutral",
+        "displayName": "Warm Ash Paper",
+        "canonical": "#f2efe8",
+        "tonalRamp": ["#282828", "#4a463d", "#6f6a5d", "#a39d8c", "#d6d3cc", "#e8e3d8", "#f2efe8", "#fbf9f4"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headlines only. Bauhaus Bool, lowercase, oversized, revealed by a lime curtain bar." },
+      "label": { "displayName": "Label / Field Stamp", "purpose": "JetBrains Mono chrome: kickers, call numbers, captions, timestamps. Small only." }
+    },
+    "shadows": [
+      { "name": "resting-lift", "value": "0 1px 3px rgba(0,0,0,.05), 0 10px 30px -16px rgba(40,40,40,.35)", "purpose": "Dossier cards and panels at rest." },
+      { "name": "hover-lift", "value": "0 1px 3px rgba(0,0,0,.05), 0 26px 50px -22px rgba(40,40,40,.45)", "purpose": "Card raised on hover, paired with a small translateY." },
+      { "name": "bench-stage", "value": "0 30px 70px -20px rgba(0,0,0,0.55)", "purpose": "Live specimen frame lifted off the dark bench ground." },
+      { "name": "tinted-glow", "value": "0 40px 60px -30px rgba(3,89,155,0.45)", "purpose": "Occasional brand-tinted throw under a hero surface." }
+    ],
+    "motion": [
+      { "name": "house-ease", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Default easing for all state transitions and reveals (ease-out-expo family)." },
+      { "name": "t-micro", "value": "0.2s", "purpose": "Hovers, taps." },
+      { "name": "t-ui", "value": "0.4s", "purpose": "UI state: nav, panels, button color flips." },
+      { "name": "t-reveal", "value": "0.6s", "purpose": "Entrances and scroll reveals." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "640px" },
+      { "name": "stack", "value": "900px" },
+      { "name": "desktop", "value": "960px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The house pill CTA. Graphite at rest, flips to lime on hover.",
+      "html": "<button class=\"ds-btn-primary\">start a conversation <svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M4 12h15M13 6l6 6-6 6\"/></svg></button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 0.6rem; background: #282828; color: #f2efe8; font-family: 'DM Sans', system-ui, sans-serif; font-weight: 600; font-size: 0.95rem; padding: 0.85rem 1.4rem; border: none; border-radius: 999px; cursor: pointer; transition: background 0.4s cubic-bezier(0.16,1,0.3,1), color 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary svg { transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:hover { background: #96E650; color: #282828; } .ds-btn-primary:hover svg { transform: translateX(4px); } .ds-btn-primary:focus-visible { outline: 2px solid #EC008C; outline-offset: 2px; }"
+    },
+    {
+      "name": "Field Kicker",
+      "kind": "chip",
+      "refersTo": "label",
+      "description": "The mono field-note stamp: section kickers, call numbers, captions. Small only.",
+      "html": "<span class=\"ds-kicker\">the bench &middot; run the work live</span>",
+      "css": ".ds-kicker { display: inline-block; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #96E650; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Square-cornered field on paper; focus shifts border to magenta and lifts to white.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"or type a question...\" />",
+      "css": ".ds-input { font-family: 'DM Sans', system-ui, sans-serif; font-size: 1rem; color: #282828; background: #f2efe8; border: 1px solid #d6d3cc; border-radius: 0; padding: 0.75rem 0.9rem; width: 100%; transition: border-color 0.3s cubic-bezier(0.16,1,0.3,1), background 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-input::placeholder { color: #686868; opacity: 0.7; } .ds-input:focus { outline: none; border-color: #EC008C; background: #ffffff; }"
+    },
+    {
+      "name": "Dossier Card",
+      "kind": "card",
+      "refersTo": "button-primary",
+      "description": "A filed engagement: call number, metadata, lowercase Bauhaus title. Lifts on hover.",
+      "html": "<a class=\"ds-dossier\"><span class=\"ds-dossier__code\">ENG-INTUIT</span><span class=\"ds-dossier__meta\">intuit &middot; career growth</span><h3 class=\"ds-dossier__title\">ai-powered career growth for 10k+ employees.</h3><span class=\"ds-dossier__cta\">open case file &rarr;</span></a>",
+      "css": ".ds-dossier { display: block; text-decoration: none; background: #f2efe8; border: 1px solid #d6d3cc; border-radius: 10px 10px 3px 10px; padding: 1.6rem; box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 10px 30px -16px rgba(40,40,40,.35); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s cubic-bezier(0.16,1,0.3,1); } .ds-dossier:hover { transform: translateY(-4px); box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 26px 50px -22px rgba(40,40,40,.45); } .ds-dossier__code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: #bc006b; } .ds-dossier__meta { display: block; margin-top: 0.75rem; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: #686868; } .ds-dossier__title { margin: 0.4rem 0 1rem; font-family: 'Bauhaus Bool', Futura, 'Century Gothic', sans-serif; font-weight: 700; font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.05; text-transform: lowercase; letter-spacing: -0.02em; color: #282828; } .ds-dossier__cta { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: #bc006b; }"
+    },
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "label",
+      "description": "Lowercase link with a left-anchored underline that wipes in on hover.",
+      "html": "<a class=\"ds-nav-link\">approach</a>",
+      "css": ".ds-nav-link { position: relative; font-family: 'DM Sans', system-ui, sans-serif; font-weight: 500; font-size: 1rem; color: #282828; text-decoration: none; cursor: pointer; padding-bottom: 2px; } .ds-nav-link::after { content: ''; position: absolute; left: 0; right: 100%; bottom: 0; height: 1px; background: #282828; transition: right 0.4s cubic-bezier(0.16,1,0.3,1); } .ds-nav-link:hover::after { right: 0; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Field Journal",
+    "overview": "This is the field journal of a learning designer who studies how humans actually change before she designs anything. The page is warm paper, not a screen. Bauhaus Bool sets the display, lowercase and enormous; JetBrains Mono sets the chrome, the field-note stamps and call numbers that prove the work was observed and catalogued. Color is used with discipline: paper and graphite carry the page, and the three brand colors arrive as signal on small percentages of any surface. It rejects generic L&D voice, the AI-hype register, SaaS-cream portfolios, and the hero-metric template.",
+    "keyCharacteristics": [
+      "Warm paper ground with tactile grain, never stark white",
+      "Bauhaus display, lowercase, oversized; JetBrains Mono for all small chrome",
+      "Work catalogued under call numbers, not laid out as cards",
+      "Three brand colors as signal, disciplined to small surface percentages",
+      "Direct, credibility-forward, slightly edgy; no filler, no jargon"
+    ],
+    "rules": [
+      { "name": "The Paper Rule", "body": "The page ground is Warm Ash Paper (#f2efe8), never #fff and never pure #000. Every neutral is tinted warm. Pure white appears only as an input's focused state.", "section": "colors" },
+      { "name": "The Small-Magenta Rule", "body": "Bright Editorial Magenta (#EC008C) is for display and true accents only, ~24px and up. Smaller magenta uses Magenta Ink (#BC006B) on light or Magenta Lift (#F24DAF) on dark.", "section": "colors" },
+      { "name": "The Signal Rule", "body": "Lime, blue, and magenta are signal, not surface. On any screen they occupy a small percentage; paper and graphite do the structural work.", "section": "colors" },
+      { "name": "The Mono-Chrome Rule", "body": "JetBrains Mono is only small editorial chrome: kickers, stamps, codes, captions. Forbidden for display and body copy.", "section": "typography" },
+      { "name": "The Lowercase Rule", "body": "The display face and the brand wordmark are always lowercase.", "section": "typography" },
+      { "name": "The Long-Throw Rule", "body": "Shadows are long, soft, and low-opacity with negative spread. Surfaces are flat at rest and lift only on hover or focus.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do ground every page in Warm Ash Paper (#f2efe8) with the grain layer. Tint every neutral warm.",
+      "Do keep JetBrains Mono to small chrome: kickers, stamps, call numbers, captions.",
+      "Do set the display lowercase and oversized, and let a lime curtain bar reveal it.",
+      "Do file work under call numbers with mono metadata.",
+      "Do use Magenta Ink (#BC006B) / Magenta Lift (#F24DAF) for small magenta text; reserve bright #EC008C for display.",
+      "Do lift surfaces with long, soft, negative-spread shadows, only on hover or focus."
+    ],
+    "donts": [
+      "Don't write 'passionate about learning' energy, or any generic L&D filler.",
+      "Don't use the AI-hype voice: bare-category headlines, aspirational reinvention frames, or trademarked-framework theater.",
+      "Don't ship a SaaS-cream portfolio, or the hero-metric template.",
+      "Don't build identical card grids of icon + heading + text.",
+      "Don't use gradient text or glassmorphism.",
+      "Don't use a border-left or border-right greater than 1px as a colored accent stripe.",
+      "Don't use an em dash anywhere except the official tagline.",
+      "Don't use pure #fff as a page ground or pure #000 for text."
+    ]
+  }
+}
