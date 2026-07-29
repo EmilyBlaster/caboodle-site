@@ -43,38 +43,6 @@
     var(--lime) 0 33.4%, var(--blue) 33.4% 66.7%, var(--magenta) 66.7% 100%);
 }
 
-/* Subject footage: the field reel, retired from the front door and
-   filed as a primary source. Click to play, never autoplay. */
-.footage { padding: clamp(2rem, 4vw, 3.5rem) var(--pad-x); }
-.footage__inner {
-  max-width: var(--maxw); margin: 0 auto;
-  background: var(--ink);
-  border-radius: 10px; overflow: hidden;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.10);
-}
-.footage__head {
-  display: flex; align-items: baseline; justify-content: space-between;
-  gap: 2rem;
-  padding: 1.6rem clamp(1.5rem, 3vw, 2.5rem) 1.3rem;
-}
-.footage__kicker {
-  font-family: var(--mono);
-  font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--lime); white-space: nowrap;
-}
-.footage__note {
-  font-size: 0.95rem; line-height: 1.55;
-  color: rgba(255, 255, 255, 0.78);
-  max-width: 36em; margin: 0;
-}
-.footage__frame video {
-  display: block; width: 100%; height: auto;
-  background: #04121f;
-}
-@media (max-width: 700px) {
-  .footage__head { flex-direction: column; gap: 0.6rem; }
-  .footage__kicker { white-space: normal; }
-}
 </style>
 </head>
 <body>
@@ -203,26 +171,10 @@
   </div>
 </section>
 
-<!-- Subject footage · the field reel, filed as a primary source -->
-<section class="footage" data-log="003b — subject footage · the field reel">
-  <div class="footage__inner">
-    <div class="footage__head">
-      <span class="footage__kicker">subject footage / the field reel · 34s</span>
-      <p class="footage__note">
-        Shot from the work itself: modules, motion, and interactives
-        from the collection, cut to thirty-four seconds. Field
-        conditions, not a highlight show.
-      </p>
-    </div>
-    <div class="footage__frame">
-      <video controls preload="metadata" playsinline poster="assets/field-reel-cover.jpg">
-        <source src="assets/field-reel.mp4" type="video/mp4" />
-        Your browser does not support embedded video.
-        <a href="assets/field-reel.mp4">Download the field reel</a>.
-      </video>
-    </div>
-  </div>
-</section>
+<!-- Field reel removed from the about flow (passive proof on a site whose
+     signature is operable proof; it sat directly above the availability
+     conversion surface). The mp4 + cover stay in assets/ for reuse as
+     evidence clips inside case files. -->
 
 <!-- Availability — dual-audience surface -->
 <section class="availability" id="availability" data-log="004 — currently open to">
