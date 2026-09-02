@@ -29,7 +29,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../styles.css?v=20260902d" />
+<link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
+<link rel="stylesheet" href="../styles.css?v=20260903a" />
 
 <style>
 /* ==========================================================================
@@ -321,7 +323,7 @@
         A course that proves<br />
         its own thesis.
       </h2>
-      <img src="../assets/pp-algorithm.png" alt="The Algorithm, AI chatbot character" style="float:right;width:88px;margin:0 0 1rem 1.5rem;transform:rotate(4deg);" />
+      <img loading="lazy" decoding="async" src="../assets/pp-algorithm.webp" alt="The Algorithm, AI chatbot character" style="float:right;width:88px;margin:0 0 1rem 1.5rem;transform:rotate(4deg);" width="1181" height="1181" />
       <p>
         Built in Articulate Rise with custom HTML, CSS, and
         JavaScript layered in. Delivered via Mighty. Five
@@ -344,7 +346,7 @@
 <!-- Creator editorial image break -->
 <section class="ppvisual" data-log="003b — the creator">
   <div class="ppvisual__inner">
-    <img src="../assets/pp-creator.jpg" alt="TikTok content creator, the people's professors" class="ppvisual__img" />
+    <img loading="lazy" decoding="async" src="../assets/pp-creator.webp" alt="TikTok content creator, the people's professors" class="ppvisual__img" width="1024" height="1536" />
     <div class="ppvisual__caption">
       <span>the algorithm rewards</span>
       <span>good teaching.</span>
@@ -397,7 +399,7 @@
 
   <!-- Sticker strip -->
   <div class="ppstickers">
-    <img src="../assets/pp-stickers.gif" alt="Sticker collection system: earn one strategy sticker per module completed" />
+    <img loading="lazy" decoding="async" src="../assets/pp-stickers.webp" alt="Sticker collection system: earn one strategy sticker per module completed" width="700" height="500" />
     <p>earn one sticker per strategy mastered · collect all five</p>
   </div>
 </section>
@@ -628,7 +630,7 @@
   </div>
 </footer>
 
-<script src="../script.js?v=20260902a" defer></script>
+<script src="../script.js?v=20260903a" defer></script>
 
 <style>
 /* Line-height: 0.95 causes glyph overlap between 'g'/'y' descenders in

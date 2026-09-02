@@ -29,7 +29,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=20260902d" />
+<link rel="preload" as="font" type="font/woff2" href="fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
+<link rel="stylesheet" href="styles.css?v=20260903a" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <style>
 /* Subject-file accents: the collector is specimen zero of her own
@@ -96,7 +98,7 @@
   <div class="aboutpage__grid">
     <div class="aboutpage__portrait">
       <div class="aboutpage__disc">
-        <img src="assets/EmilyGreenPortrait.png" alt="Emily Green, founder of caboodle design" />
+        <img fetchpriority="high" src="assets/EmilyGreenPortrait.webp" alt="Emily Green, founder of caboodle design" width="800" height="800" />
       </div>
       <span class="aboutpage__portraitcap">subject · emily green · grand rapids, mi</span>
     </div>
@@ -613,6 +615,6 @@
   </div>
 </footer>
 
-<script src="script.js?v=20260902a" defer></script>
+<script src="script.js?v=20260903a" defer></script>
 </body>
 </html>
