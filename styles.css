@@ -454,6 +454,22 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   color: var(--ink);
   text-transform: lowercase;
 }
+/* Fit the fold. Above phone widths the display size is also capped by the
+   frame width (so "actually adopt." never wraps to a fourth line, which it
+   did between ~1000 and ~1550px) and by the viewport height (so the lede
+   and the specimen ticket sit above the fold on a laptop). The 7.3em is
+   the measured width of the longest line; 24.5rem is the hero's fixed
+   chrome (padding, eyebrow row, foot) and 4.2 is three lines plus
+   breathing room, measured against the rendered headline box. */
+@media (min-width: 700px) {
+  .hero__headline {
+    font-size: min(
+      clamp(3.75rem, 14vw, 12rem),
+      calc((100vw - 2 * var(--pad-x)) / 7.3),
+      calc((100svh - 24.5rem) / 4.2)
+    );
+  }
+}
 .hero__headline em {
   font-style: italic;
   color: var(--magenta);
