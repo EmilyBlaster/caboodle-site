@@ -683,7 +683,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   transition: color 0.25s var(--ease);
   cursor: default;
 }
-.trustband__list li:hover { color: var(--lime); }
+/* Names are not links, so they do not answer hover. */
 
 /* Six names + the two side labels never share one line: the band's
    inner container caps at --maxw, so the list column tops out near
@@ -1259,8 +1259,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   align-items: start;
 }
 .matrix__row:last-child { border-bottom: 1px solid var(--ink); }
-.matrix__row:hover .matrix__cell--am { background: rgba(3, 89, 155, 0.14); }
-.matrix__row:hover .matrix__cell--kp { background: rgba(236, 0, 140, 0.095); }
+/* Rows are not clickable, so they do not tint on hover. */
 
 .matrix__cell {
   padding: 1rem 1.15rem 1.1rem;
