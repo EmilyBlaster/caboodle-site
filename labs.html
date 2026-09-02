@@ -31,7 +31,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="preload" as="font" type="font/woff2" href="fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
-<link rel="stylesheet" href="styles.css?v=20260903a" />
+<link rel="stylesheet" href="styles.css?v=20260903b" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <style>
 /* The family hairline: every page in the system wears its badge.
@@ -125,9 +125,9 @@
     <span class="experiments__kicker">current experiments · 2026</span>
     <h2 class="experiments__title">the bench.</h2>
     <p class="experiments__dek">
-      Seven prototypes currently in rotation. Each has a live URL,
-      a thesis, and a next-step roadmap. Click through to the
-      working version.
+      Three experiments in the spotlight, five more on the shelf
+      below. Each has a live URL, a thesis, and a next step. Click
+      through to the working version.
     </p>
   </header>
 
@@ -213,168 +213,12 @@
       </div>
     </article>
 
-    <!-- LAB-003 Emotion-Aware -->
-    <article id="lab-003" class="experiment experiment--left" data-log="005 — lab-003 · emotion-aware feedback">
-      <div class="experiment__num" aria-hidden="true">LAB<br />003</div>
-      <div class="experiment__body">
-        <div class="experiment__tab">
-          <span>feedback design · adaptive ux</span>
-          <span>live · prototype</span>
-        </div>
-        <h3 class="experiment__h">emotion-aware feedback system.</h3>
-        <p class="experiment__p">
-          Same scenario. Same learner response. Three completely
-          different coaching outputs depending on emotional state.
-          Submit once, see all three patterns. Submit three times
-          and the system overrides your slider when it detects
-          repeated struggle.
-        </p>
-        <p class="experiment__p experiment__p--alt">
-          <em>Thesis:</em> Grounded in Anthropic's April 2026
-          interpretability research on functional emotion in LLMs.
-          Testing whether acknowledging emotional context before
-          delivering feedback improves receptivity, and what that
-          design pattern looks like in practice.
-        </p>
-        <ul class="experiment__stack">
-          <li>emotion detection</li>
-          <li>adaptive ux</li>
-          <li>self-report signal</li>
-          <li>multi-turn coaching</li>
-        </ul>
-        <figure class="experiment__fig">
-          <img src="assets/labs/figs/emotion-feedback.webp" alt="one slider from distressed to confident" width="960" height="600" loading="lazy" />
-          <figcaption>fig. 003 · one slider from distressed to confident</figcaption>
-        </figure>
-        <a class="experiment__cta" href="labs/emotion-feedback.html">
-          <span>try it</span>
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-        </a>
-      </div>
-    </article>
 
-    <!-- LAB-004 Content Ops -->
-    <article id="lab-004" class="experiment experiment--right" data-log="006 — lab-004 · content ops dashboard">
-      <div class="experiment__num" aria-hidden="true">LAB<br />004</div>
-      <div class="experiment__body">
-        <div class="experiment__tab">
-          <span>systems thinking · workflow automation</span>
-          <span>in production</span>
-        </div>
-        <h3 class="experiment__h">content ops dashboard.</h3>
-        <p class="experiment__p">
-          What happens when you apply instructional systems
-          thinking to your own workflow. The daily brief, Canva
-          carousel automation, a research pipeline scraping
-          Reddit/TikTok/YouTube, and an analytics report, all
-          automated with Claude Code. Powered by one markdown
-          brand guide that every session reads.
-        </p>
-        <p class="experiment__p experiment__p--alt">
-          <em>Thesis:</em> If L&amp;D teams thought about their own
-          operations the way they think about learner operations,
-          what would change? Turns out: a lot.
-        </p>
-        <ul class="experiment__stack">
-          <li>claude code</li>
-          <li>cowork</li>
-          <li>notion</li>
-          <li>canva</li>
-          <li>apify</li>
-          <li>gmail api</li>
-          <li>google calendar</li>
-          <li>netlify</li>
-        </ul>
-        <figure class="experiment__fig">
-          <img src="assets/labs/figs/content-ops-social.webp" alt="the week's social numbers, tallied automatically" width="960" height="532" loading="lazy" />
-          <figcaption>fig. 004 · a week of posts, tallied automatically</figcaption>
-        </figure>
-        <a class="experiment__cta" href="labs/content-ops-dashboard.html">
-          <span>view experiment</span>
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-        </a>
-      </div>
-    </article>
 
-    <!-- LAB-005 Programmatic Video -->
-    <article id="lab-005" class="experiment experiment--left" data-log="007 — lab-005 · programmatic video">
-      <div class="experiment__num" aria-hidden="true">LAB<br />005</div>
-      <div class="experiment__body">
-        <div class="experiment__tab">
-          <span>programmatic media · mcp</span>
-          <span>live · early stage</span>
-        </div>
-        <h3 class="experiment__h">programmatic video &amp; content automation.</h3>
-        <p class="experiment__p">
-          Remotion for version-controlled video templates. Claude
-          Code + MCP for automated Canva carousel generation. From
-          a structured content queue to published assets with no
-          manual design work.
-        </p>
-        <p class="experiment__p experiment__p--alt">
-          <em>Thesis:</em> Exploring whether programmatic video
-          generation and MCP-driven design tools can replace
-          manual asset production for L&amp;D teams building job
-          aids, micro-videos, onboarding, and visual guides.
-        </p>
-        <ul class="experiment__stack">
-          <li>remotion</li>
-          <li>claude code</li>
-          <li>mcp</li>
-          <li>canva</li>
-          <li>react</li>
-        </ul>
-        <figure class="experiment__fig">
-          <img src="assets/labs/figs/video-automation.webp" alt="seven slides, no hands" width="960" height="600" loading="lazy" />
-          <figcaption>fig. 005 · seven slides, no hands</figcaption>
-        </figure>
-        <a class="experiment__cta" href="labs/video-automation.html">
-          <span>view experiment</span>
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-        </a>
-      </div>
-    </article>
 
-    <!-- LAB-006 Microlearning -->
-    <article id="lab-006" class="experiment experiment--right" data-log="008 — lab-006 · context-aware microlearning">
-      <div class="experiment__num" aria-hidden="true">LAB<br />006</div>
-      <div class="experiment__body">
-        <div class="experiment__tab">
-          <span>microlearning · behavioral nudges</span>
-          <span>live · demo</span>
-        </div>
-        <h3 class="experiment__h">context-aware microlearning.</h3>
-        <p class="experiment__p">
-          Pick a moment. Giving difficult feedback. Onboarding
-          someone new. Stuck on a design decision. Prepping for a
-          stakeholder meeting. The phone comes alive with a
-          personalized micro-intervention designed for that exact
-          context.
-        </p>
-        <p class="experiment__p experiment__p--alt">
-          <em>Thesis:</em> The 2026 definition of microlearning is
-          not shorter content. It is content that shows up at the
-          moment of need, adapts to context, and triggers a
-          specific decision or habit.
-        </p>
-        <ul class="experiment__stack">
-          <li>moment-of-need</li>
-          <li>behavioral nudges</li>
-          <li>context routing</li>
-        </ul>
-        <figure class="experiment__fig">
-          <img src="assets/labs/figs/moment-nudge.webp" alt="the moment picker and the phone" width="960" height="518" loading="lazy" />
-          <figcaption>fig. 006 · the moment picker and the phone</figcaption>
-        </figure>
-        <a class="experiment__cta" href="labs/microlearning.html">
-          <span>try it</span>
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-        </a>
-      </div>
-    </article>
 
     <!-- LAB-007 Greenroom -->
-    <article id="lab-007" class="experiment experiment--left" data-log="009 — lab-007 · greenroom">
+    <article id="lab-007" class="experiment experiment--left" data-log="005 — lab-007 · greenroom">
       <div class="experiment__num" aria-hidden="true">LAB<br />007</div>
       <div class="experiment__body">
         <div class="experiment__tab">
@@ -415,53 +259,80 @@
       </div>
     </article>
 
-    <!-- LAB-008 The Poster -->
-    <article id="lab-008" class="experiment experiment--right" data-log="010 — lab-008 · the poster">
-      <div class="experiment__num" aria-hidden="true">LAB<br />008</div>
-      <div class="experiment__body">
-        <div class="experiment__tab">
-          <span>bauhaus systems · homepage field test</span>
-          <span>retired · preserved</span>
-        </div>
-        <h3 class="experiment__h">the poster: a homepage, field-tested.</h3>
-        <p class="experiment__p">
-          Seven interlocking Bauhaus planes, one per client engagement.
-          Hover a plane and its textile pattern floods in; select it and
-          the case study opens as a horizontal exhibit. Built entirely
-          from clip-path polygons and CSS patterns, no libraries, and it
-          recuts its own composition between landscape and portrait.
-        </p>
-        <p class="experiment__p experiment__p--alt">
-          <em>Thesis:</em> a consultancy homepage could be pure geometry.
-          Field testing said no. Visitors evaluating a consultant need
-          the service first and the art second, so the poster was
-          measured, retired after two days in production, and filed
-          here. Behavior change over checkbox training applies to my
-          own website too.
-        </p>
-        <ul class="experiment__stack">
-          <li>clip-path polygons</li>
-          <li>css patterns</li>
-          <li>film-strip exhibits</li>
-          <li>orientation recut</li>
-          <li>zero libraries</li>
-        </ul>
-        <figure class="experiment__fig">
-          <img src="assets/labs/figs/the-poster.webp" alt="the poster, all seven planes" width="960" height="600" loading="lazy" />
-          <figcaption>fig. 008 · the poster, all seven planes</figcaption>
-        </figure>
-        <a class="experiment__cta" href="labs/the-poster.html">
-          <span>view experiment</span>
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-        </a>
-      </div>
-    </article>
 
   </ol>
 </section>
 
 <!-- Dark pull-quote · why labs -->
-<section class="quote" data-log="010 — why labs exist">
+<!-- The shelf: the five smaller experiments, still live, one line each -->
+<section class="shelf" data-log="006 — the shelf · five more">
+  <header class="shelf__head">
+    <span class="shelf__kicker">also on the bench · five more</span>
+    <h2 class="shelf__h">the shelf.</h2>
+    <p class="shelf__dek">
+      Smaller experiments, still live. Each one answers one question.
+    </p>
+  </header>
+  <ol class="shelf__list">
+    <li class="shelf__item">
+      <a class="shelf__link" href="labs/emotion-feedback.html">
+        <span class="shelf__num" aria-hidden="true">lab 003</span>
+        <span class="shelf__body">
+          <b class="shelf__title">emotion-aware feedback system.</b>
+          <span class="shelf__tab">feedback design · adaptive ux · live · prototype</span>
+          <span class="shelf__p">Same scenario, same learner response, three different coaching outputs depending on emotional state.</span>
+        </span>
+        <svg class="shelf__arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+    </li>
+    <li class="shelf__item">
+      <a class="shelf__link" href="labs/content-ops-dashboard.html">
+        <span class="shelf__num" aria-hidden="true">lab 004</span>
+        <span class="shelf__body">
+          <b class="shelf__title">content ops dashboard.</b>
+          <span class="shelf__tab">systems thinking · workflow automation · in production</span>
+          <span class="shelf__p">What happens when you apply instructional systems thinking to your own workflow.</span>
+        </span>
+        <svg class="shelf__arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+    </li>
+    <li class="shelf__item">
+      <a class="shelf__link" href="labs/video-automation.html">
+        <span class="shelf__num" aria-hidden="true">lab 005</span>
+        <span class="shelf__body">
+          <b class="shelf__title">programmatic video &amp; content automation.</b>
+          <span class="shelf__tab">programmatic media · mcp · live · early stage</span>
+          <span class="shelf__p">Remotion for version-controlled video templates. Claude Code + MCP for automated Canva carousel generation.</span>
+        </span>
+        <svg class="shelf__arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+    </li>
+    <li class="shelf__item">
+      <a class="shelf__link" href="labs/microlearning.html">
+        <span class="shelf__num" aria-hidden="true">lab 006</span>
+        <span class="shelf__body">
+          <b class="shelf__title">context-aware microlearning.</b>
+          <span class="shelf__tab">microlearning · behavioral nudges · live · demo</span>
+          <span class="shelf__p">Pick a moment, get the one nudge that fits it. Microlearning that knows where you are in the week.</span>
+        </span>
+        <svg class="shelf__arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+    </li>
+    <li class="shelf__item">
+      <a class="shelf__link" href="labs/the-poster.html">
+        <span class="shelf__num" aria-hidden="true">lab 008</span>
+        <span class="shelf__body">
+          <b class="shelf__title">the poster: a homepage, field-tested.</b>
+          <span class="shelf__tab">bauhaus systems · homepage field test · retired · preserved</span>
+          <span class="shelf__p">Seven interlocking Bauhaus planes, one per client engagement.</span>
+        </span>
+        <svg class="shelf__arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+    </li>
+  </ol>
+</section>
+
+<section class="quote" data-log="007 — why labs exist">
   <div class="quote__inner">
     <span class="quote__kicker">why labs exist</span>
     <blockquote class="quote__body">
@@ -473,7 +344,7 @@
 </section>
 
 <!-- Closing card -->
-<section class="closing" id="contact" data-log="011 — bench closed · chain to field notes">
+<section class="closing" id="contact" data-log="008 — bench closed · chain to field notes">
   <div class="closing__card">
     <div class="closing__stamp" aria-hidden="true">
       <svg class="cd-stamp-mark" viewBox="0 0 90 60" aria-hidden="true">
