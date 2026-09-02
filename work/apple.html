@@ -29,7 +29,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../styles.css?v=20260902d" />
+<link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
+<link rel="stylesheet" href="../styles.css?v=20260903e" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 
 <style>
@@ -1069,8 +1071,8 @@
 }
 .ledger__list span { color: var(--ink); line-height: 1.5; max-width: 60ch; }
 .ledger__list span i { font-style: normal; color: var(--blue); font-weight: 600; }
-.ledger__list a { color: var(--blue); text-underline-offset: 0.15em; }
-.ledger__list a:hover { color: var(--magenta); }
+.ledger__list a { color: var(--blue); text-underline-offset: 0.15em; transition: color var(--t-micro) var(--ease); }
+.ledger__list a:hover, .ledger__list a:focus-visible { color: var(--magenta); }
 @media (max-width: 760px) {
   .ledger__row { grid-template-columns: 1fr; gap: 1rem; }
   .ledger__label { position: static; }
@@ -1239,11 +1241,11 @@
   <header class="buildlog__head">
     <span class="buildlog__kicker">from the build log</span>
     <h3 class="buildlog__h">
-      how it was built.<br />
+      how it was built,<br />
       <em>decision by decision.</em>
     </h3>
     <p class="buildlog__p">
-      The approach page describes the method. This is the method applied: the action map, the delivery calls, what got measured at each level, and the accessibility checklist the build was held to.
+      Here is the method from the approach page applied to one engagement: the action map, the delivery calls, what got measured at each level, and the accessibility checklist the build was held to.
     </p>
     <p class="buildlog__note">client materials stay confidential. this log describes the decisions, not the content.</p>
   </header>
@@ -1329,7 +1331,7 @@
     </div>
     <div class="apspotlight__window">
       <iframe
-        src="../assets/3d/fire-extinguisher.html?v=4"
+        data-src="../assets/3d/fire-extinguisher.html?v=4"
         class="apspotlight__iframe"
         title="Fire extinguisher 3D inspection viewer, Apple supplier compliance training"
       ></iframe>
@@ -1337,7 +1339,7 @@
            iframe, so swap for a preview card that opens full-screen. -->
       <a class="apspotlight__mobilecard" href="../assets/3d/fire-extinguisher.html" target="_blank" rel="noopener" aria-label="Open the 3D fire extinguisher viewer full-screen">
         <span class="apspotlight__mobilecard-img">
-          <img src="../assets/3d/extinguisher-clean.png" alt="" loading="lazy" />
+          <img src="../assets/3d/extinguisher-clean.webp" alt="" loading="lazy" width="900" height="1531" />
         </span>
         <span class="apspotlight__mobilecard-body">
           <span class="apspotlight__chip">3d viewer</span>
@@ -1353,6 +1355,24 @@
   </div>
 </section>
 
+<script>
+/* 3D viewer: load only when the spotlight is near the viewport, and never
+   inside a scaled-down preview iframe (the homepage dossiers). The viewer
+   pulls three.js plus a 5 MB model, so it earns its place on demand. */
+(function () {
+  var frame = document.querySelector('.apspotlight__iframe[data-src]');
+  if (!frame) return;
+  var inPreview = true;
+  try { inPreview = window.self !== window.top; } catch (e) {}
+  if (inPreview) return;
+  var load = function () { if (!frame.src) frame.src = frame.getAttribute('data-src'); };
+  if (!('IntersectionObserver' in window)) { load(); return; }
+  var io = new IntersectionObserver(function (entries) {
+    if (entries.some(function (e) { return e.isIntersecting; })) { load(); io.disconnect(); }
+  }, { rootMargin: '400px 0px' });
+  io.observe(frame);
+})();
+</script>
 <!-- Multilingual delivery callout -->
 <section class="apmulti" data-log="004 — multilingual delivery">
   <div class="apmulti__inner">
@@ -1399,7 +1419,7 @@
       <div class="apmulti__phone" aria-label="Landscape phone mockup, Code of Conduct animation playing on a supplier's device">
         <div class="apmulti__phone-frame">
           <div class="apmulti__phone-screen">
-            <img src="../assets/cs/apple-coc-characters.png" alt="Code of Conduct animation, localized character cast" />
+            <img loading="lazy" decoding="async" src="../assets/cs/apple-coc-characters.webp" alt="Code of Conduct animation, localized character cast" width="1600" height="907" />
             <div class="apmulti__phone-gradient" aria-hidden="true"></div>
             <span class="apmulti__phone-live" aria-hidden="true">8 language modules</span>
             <div class="apmulti__phone-info">
@@ -1502,7 +1522,7 @@
         <h4 class="appwt__panel-h">the supervisor <em>overrides.</em></h4>
 
         <div class="appwt__video">
-          <video id="appwtVideo" playsinline muted preload="metadata" aria-label="Scene: modern electronics factory floor">
+          <video id="appwtVideo" playsinline muted preload="none" poster="../assets/cs/apple-decision-poster.webp" aria-label="Scene: modern electronics factory floor">
             <source src="../assets/cs/apple-decision-video.mp4" type="video/mp4" />
             <track kind="captions" src="../assets/cs/apple-decision-video.vtt" srclang="en" label="English" default />
           </video>
@@ -1633,7 +1653,7 @@
       </p>
     </div>
     <div class="csbreak__doc">
-      <img src="../assets/cs/apple-case-study-hero.jpg" alt="Apple supplier compliance, case study document" class="csbreak__img" loading="lazy" />
+      <img src="../assets/cs/apple-case-study-hero.webp" alt="Apple supplier compliance, case study document" class="csbreak__img" loading="lazy" width="1131" height="1600" />
     </div>
   </div>
 </section>
@@ -1759,7 +1779,7 @@
   </div>
 </footer>
 
-<script src="../script.js?v=20260902a" defer></script>
+<script src="../script.js?v=20260903a" defer></script>
 
 <script>
 /* ==========================================================================

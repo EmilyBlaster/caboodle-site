@@ -29,7 +29,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=20260902d" />
+<link rel="preload" as="font" type="font/woff2" href="fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
+<link rel="stylesheet" href="styles.css?v=20260903e" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <style>
 /* The family hairline: every page in the system wears its badge —
@@ -90,7 +92,7 @@
   transition: background var(--t-ui) var(--ease), color var(--t-ui) var(--ease);
 }
 .rundemo__cta:hover, .rundemo__cta:focus-visible { background: var(--white); }
-.rundemo__cta:focus-visible { outline: 2px solid var(--magenta-lift); outline-offset: 3px; }
+.rundemo__cta:focus-visible { outline: 2px solid var(--magenta); outline-offset: 3px; }
 .rundemo__cta svg { transition: transform var(--t-ui) var(--ease); }
 .rundemo__cta:hover svg { transform: translate(2px, -2px); }
 .rundemo__link {
@@ -109,10 +111,10 @@
   border-radius: 8px; overflow: hidden;
   background: var(--dark-2);
   box-shadow: 0 30px 70px -20px rgba(0,0,0,0.6);
-  transition: transform var(--t-ui) var(--ease);
+  transition: transform var(--t-ui) var(--ease), box-shadow var(--t-ui) var(--ease);
 }
-.rundemo__window:hover { transform: translateY(-4px); }
-.rundemo__window:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+.rundemo__window:hover, .rundemo__window:focus-visible { transform: translateY(-4px); box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 26px 50px -22px rgba(40,40,40,.45); }
+.rundemo__window:focus-visible { outline: 2px solid var(--magenta); outline-offset: 3px; }
 .rundemo__chrome {
   display: flex; align-items: center; gap: 0.75rem;
   padding: 0.55rem 0.8rem;
@@ -367,12 +369,12 @@
   <div class="rundemo__inner">
     <div class="rundemo__text">
       <span class="rundemo__kicker">try it with your own question</span>
-      <h2 class="rundemo__h">greenroom. <em>ask it something real.</em></h2>
+      <h2 class="rundemo__h">ask greenroom <em>something real.</em></h2>
       <p class="rundemo__p">
         A development copilot I scoped, built, and evaluated solo, in parallel to the performance-task modules for Airbnb's AI101 program. Ask it a real talent-development question. Watch it retrieve, cite its sources, refuse the ones out of scope, and hand back a next step you could try on Monday.
       </p>
       <p class="rundemo__p rundemo__p--muted">
-        This is the shape of AI enablement I bring to Fortune 500 work: grounded answers, honest refusals, a behavior instead of a catalog. No signup. Open it and type.
+        This is the shape of AI enablement I bring to Fortune 500 work: grounded answers, honest refusals, a behavior to try instead of a catalog to browse, and no signup between you and it.
       </p>
       <div class="rundemo__ctas">
         <a class="rundemo__cta" href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener">
@@ -464,6 +466,6 @@
   </div>
 </footer>
 
-<script src="script.js?v=20260902a" defer></script>
+<script src="script.js?v=20260903a" defer></script>
 </body>
 </html>

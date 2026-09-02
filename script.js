@@ -465,14 +465,27 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
        ~one screen of the viewport, only unload when it's that far past.
        Without unloading, six full case-study pages stay alive in memory
        and Chrome crashes the tab (renderer OOM, error code 5). */
+    /* The live page loads only once someone hovers or focuses the card on a
+       pointer device. Phones and touch get the poster still. `armed` remembers
+       that intent so the frame can reload after scrolling back into view. */
+    let armed = false;
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    function power () {
+      if (srcSet || !onScreen) return;
+      srcSet = true;
+      frame.src = frame.dataset.src;
+    }
+    if (canHover) {
+      const arm = () => { armed = true; power(); };
+      card.addEventListener('pointerenter', arm);
+      card.addEventListener('focusin', arm);
+    }
+
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         onScreen = e.isIntersecting;
         if (onScreen) {
-          if (!srcSet) {
-            srcSet = true;
-            frame.src = frame.dataset.src;
-          }
+          if (armed) power();
           if (!isPaused) startScroll();
         } else {
           cancelAnimationFrame(raf);
@@ -498,7 +511,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
        previews stay blank until manual refresh. Detect the BFCache
        restore via pageshow.persisted and force a fresh iframe load. */
     window.addEventListener('pageshow', (e) => {
-      if (!e.persisted || !onScreen) return;
+      if (!e.persisted || !onScreen || !armed) return;
       frame.classList.remove('is-visible');
       isPaused = true;
       cancelAnimationFrame(raf);

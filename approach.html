@@ -29,7 +29,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=20260902d" />
+<link rel="preload" as="font" type="font/woff2" href="fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
+<link rel="stylesheet" href="styles.css?v=20260903e" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <style>
 /* The family hairline: the approach wears magenta. */
@@ -90,8 +92,8 @@
   <header class="phases__head">
     <span class="phases__kicker">how every engagement unfolds</span>
     <h2 class="phases__title">
-      five phases.<br />
-      <em>one outcome.</em>
+      five phases<br />
+      <em>toward one outcome.</em>
     </h2>
     <p class="phases__dek">
       The same arc runs through every project. What changes is the
@@ -101,7 +103,7 @@
   </header>
 
   <!-- Editorial SVG diagram -->
-  <figure class="phases__figure" aria-label="The engagement arc" style="padding:0; border:none; background:transparent;">
+  <figure class="phases__figure fig--ondemand" aria-label="The engagement arc" style="padding:0; border:none; background:transparent;">
     <iframe id="arcFrame" data-src="/engagement-arc.html?v=20260617b"
             scrolling="no"
             title="The engagement arc: Caboodle methodology"
@@ -110,6 +112,7 @@
          src="/assets/arc-static.jpg"
          alt="The engagement arc: five phases, discover, analyze, design, build, measure, each laddering to the next."
          width="1456" height="816" />
+    <button class="fig__play" type="button"><i aria-hidden="true"></i>play the animated arc</button>
   </figure>
 
   <script>
@@ -229,7 +232,7 @@
        warm paper colour shows consistently during load and throughout playback. -->
   <!-- Restore the figure's original CSS framing (padding + border + paper bg)
        so the animation sits in the same lighter box as the old static SVG. -->
-  <figure class="ladder__figure" aria-label="Action Mapping × Kirkpatrick ladder">
+  <figure class="ladder__figure fig--ondemand" aria-label="Action Mapping × Kirkpatrick ladder">
     <iframe id="ladderFrame" data-src="/fig-02-ladder.html?v=20260617b"
             scrolling="no"
             aria-hidden="true"
@@ -238,6 +241,7 @@
          src="/assets/ladder-static.jpg"
          alt="Action Mapping × Kirkpatrick ladder: four rungs pairing business goal with results, critical actions with behavior, practice activities with learning, and essential info with reaction."
          width="1456" height="816" />
+    <button class="fig__play" type="button"><i aria-hidden="true"></i>play the animated ladder</button>
   </figure>
 
   <script>
@@ -369,7 +373,7 @@
   <header class="proofs__head">
     <span class="proofs__kicker">each rung has a client proof</span>
     <h2 class="proofs__title">
-      every row. <em>a real number.</em>
+      every row <em>carries a real number.</em>
     </h2>
   </header>
   <ol class="proofs__list">
@@ -502,7 +506,7 @@
   </div>
 </footer>
 
-<script src="script.js?v=20260902a" defer></script>
+<script src="script.js?v=20260903a" defer></script>
 
 <script>
 /* ── Scroll-triggered iframe loading ────────────────────────────────────────
@@ -513,19 +517,18 @@
    by the time the user actually sees it.
 ────────────────────────────────────────────────────────────────────────── */
 (function () {
-  var iframes = document.querySelectorAll('iframe[data-src]');
-  if (!iframes.length) return;
-
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (!entry.isIntersecting) return;
-      var el = entry.target;
-      el.src = el.dataset.src;
-      io.unobserve(el);
+  /* The animated figures are 1.4 MB bundles each. The static render is the
+     default; the animation loads when someone presses play. */
+  document.querySelectorAll('.fig--ondemand').forEach(function (fig) {
+    var btn = fig.querySelector('.fig__play');
+    var frame = fig.querySelector('iframe[data-src]');
+    if (!btn || !frame) return;
+    btn.addEventListener('click', function () {
+      if (!frame.src) frame.src = frame.dataset.src;
+      frame.removeAttribute('aria-hidden');
+      fig.classList.add('is-live');
     });
-  }, { rootMargin: '0px 0px 200px 0px', threshold: 0 });
-
-  iframes.forEach(function (el) { io.observe(el); });
+  });
 })();
 </script>
 </body>

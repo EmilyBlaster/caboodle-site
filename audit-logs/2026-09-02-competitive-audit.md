@@ -92,3 +92,37 @@ They are not a competitor for the consulting buyer. They are a well-built junior
 - [x] LinkedIn added to the "get in touch" footer on every page.
 - Testimonials on about.html were already `<blockquote>` + `<cite>`; the May note was stale.
 - Script cache token bumped to `20260902a`, styles to `20260902b`.
+
+
+---
+
+## Shipped 2026-09-03: the "premium, full stop" pass
+
+Four gaps named the day before, all closed on branch `claude/competitive-site-audit-2it2av`.
+
+### 1. Weight (measured locally, 1440x900, external requests blocked)
+
+| Page | Before (after scroll) | After |
+|---|---|---|
+| index.html | 24.6 MB | 0.8 MB (1.4 MB after hovering one preview) |
+| work/apple.html | 7.9 MB | 1.1 MB |
+| approach.html | 4.4 MB | 0.6 MB |
+| about.html | 1.6 MB | 0.4 MB |
+| work/tmobile.html | ~8 MB | 1.0 MB |
+
+- 28 referenced PNG/JPG over 300 KB converted to WebP at max 1600px (28.5 MB to 2.3 MB), all with width/height and lazy loading.
+- Homepage dossier previews show a 20 KB poster at rest; the live page loads only on hover or focus on pointer devices. Prefetch links removed.
+- Apple decision video 5.9 MB to 0.5 MB (720p), preload none, poster. Apple 3D viewer loads on approach and never inside a preview.
+- Approach figures: static render by default, 1.4 MB animated bundles behind a play button.
+- Bauhaus Bool as WOFF2 with preload. 26 unreferenced assets (28.5 MB) deleted; repo assets folder 83 MB to 26 MB.
+- Not done: splitting styles.css (41 KB gzipped on every page) and self-hosting Google Fonts. Both worth a later pass.
+
+### 2. Too many surfaces
+- labs.html: three featured experiments (rainforest, stakeholder review, greenroom), five more on a one-line-each shelf.
+- Homepage labs grid: three cards plus a "five more" pointer instead of six.
+
+### 3. Commercial layer
+- Homepage "how we'd work together": fractional, scoped project, full-time. Duration and shape, no dollars. **Durations are drafts for Emily to confirm**: "two to three days a week, three to six months" and "eight to sixteen weeks."
+
+### 4. Social proof
+- Apple quote (Liz Medhi-Kashi) in the trust band under the client names.
