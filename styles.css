@@ -7941,6 +7941,50 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   border: 1px solid var(--rule);
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.6s var(--ease), border-color 0.6s var(--ease), box-shadow 0.6s var(--ease), background 0.6s var(--ease);
+}
+.availability__mode > * { position: relative; z-index: 1; }
+/* Brand rule wipes across the top on hover: magenta, lime, blue by path. */
+.availability__mode::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; z-index: 2;
+  background: var(--magenta);
+  transform: scaleX(0); transform-origin: left center;
+  transition: transform 0.55s var(--ease);
+}
+.availability__mode--project::before  { background: var(--lime); }
+.availability__mode--fulltime::before { background: var(--blue); }
+/* The call number surfaces as a watermark, the field-journal way. */
+.availability__mode::after {
+  content: "01"; position: absolute; right: -0.06em; bottom: -0.26em; z-index: 0;
+  font-family: var(--display); font-weight: 800;
+  font-size: clamp(6rem, 9vw, 9.5rem); line-height: 1; letter-spacing: -0.05em;
+  color: var(--ink); opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+  pointer-events: none;
+}
+.availability__mode--project::after  { content: "02"; }
+.availability__mode--fulltime::after { content: "03"; }
+.availability__mode:hover,
+.availability__mode:focus-within {
+  transform: translateY(-4px);
+  border-color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 26px 50px -22px rgba(40,40,40,.45);
+}
+.availability__mode:hover::before,
+.availability__mode:focus-within::before { transform: scaleX(1); }
+.availability__mode:hover::after,
+.availability__mode:focus-within::after { opacity: 0.07; transform: none; }
+.availability__mode:hover .availability__num,
+.availability__mode:focus-within .availability__num { letter-spacing: 0.22em; }
+.availability__mode:hover .availability__cta,
+.availability__mode:focus-within .availability__cta { border-bottom-color: var(--magenta); }
+@media (prefers-reduced-motion: reduce) {
+  .availability__mode, .availability__mode::before, .availability__mode::after, .availability__num { transition: none; }
+  .availability__mode:hover, .availability__mode:focus-within { transform: none; }
 }
 .availability__num {
   font-family: var(--mono);
@@ -7949,6 +7993,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   text-transform: uppercase;
   color: var(--ink-2);
   margin-bottom: 0.5rem;
+  transition: letter-spacing 0.6s var(--ease);
 }
 .availability__mode--fractional .availability__num { color: var(--magenta); }
 .availability__mode--fulltime   .availability__num { color: var(--blue);    }
@@ -7983,7 +8028,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   padding-bottom: 2px;
   transition: opacity 0.3s var(--ease);
 }
-.availability__cta:hover { opacity: 0.65; }
+.availability__cta:hover { opacity: 1; color: var(--magenta-ink); }
 
 /* Homepage variant: three paths, a dek, a footnote. */
 .availability--home {
