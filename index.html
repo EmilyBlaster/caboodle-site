@@ -32,7 +32,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=20260715b" />
+<link rel="stylesheet" href="styles.css?v=20260902d" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
 <!-- Prefetch case study HTML on browser idle so the dossier preview
@@ -264,8 +264,84 @@
   .bench-spec__stage { aspect-ratio: 4 / 5; }
 }
 </style>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://caboodledesign.info/#org",
+   "name": "caboodle design",
+   "url": "https://caboodledesign.info/",
+   "logo": "https://caboodledesign.info/assets/og/og-home.png",
+   "email": "hello@caboodledesign.info",
+   "description": "AI program leadership grounded in behavior science. 15 years of learning systems for Fortune 500s.",
+   "founder": {
+    "@id": "https://caboodledesign.info/#emily"
+   },
+   "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Grand Rapids",
+    "addressRegion": "MI",
+    "addressCountry": "US"
+   },
+   "sameAs": [
+    "https://www.tiktok.com/@caboodledesign",
+    "https://www.linkedin.com/in/emilygreen77/"
+   ]
+  },
+  {
+   "@type": "Person",
+   "@id": "https://caboodledesign.info/#emily",
+   "name": "Emily Green",
+   "jobTitle": "AI Program Lead and Learning Experience Designer",
+   "url": "https://caboodledesign.info/about.html",
+   "worksFor": {
+    "@id": "https://caboodledesign.info/#org"
+   },
+   "email": "hello@caboodledesign.info",
+   "alumniOf": {
+    "@type": "CollegeOrUniversity",
+    "name": "Full Sail University"
+   },
+   "hasCredential": [
+    {
+     "@type": "EducationalOccupationalCredential",
+     "name": "M.S. Instructional Design & Technology"
+    },
+    {
+     "@type": "EducationalOccupationalCredential",
+     "name": "Google UX Design Professional Certificate"
+    }
+   ],
+   "knowsAbout": [
+    "AI program leadership",
+    "behavior change design",
+    "learning systems",
+    "Action Mapping",
+    "Kirkpatrick evaluation",
+    "instructional design"
+   ],
+   "sameAs": [
+    "https://www.linkedin.com/in/emilygreen77/",
+    "https://www.tiktok.com/@caboodledesign"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://caboodledesign.info/#site",
+   "url": "https://caboodledesign.info/",
+   "name": "caboodle design",
+   "publisher": {
+    "@id": "https://caboodledesign.info/#org"
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
+<a class="skip" href="#top">skip to content</a>
 
 
 <!-- Nav — matches live site structure -->
@@ -312,9 +388,19 @@
         systems for Fortune 500s. Now leading AI programs the same way.
         The&nbsp;whole&nbsp;caboodle.
       </p>
-      <a href="#bench" class="hero__scroll">
-        <span>see my work</span>
-        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 4v14m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      <a href="#bench" class="hero__run" aria-label="Run the work live: three specimens powered on, on the bench below">
+        <span class="hero__run-stack" aria-hidden="true">
+          <img src="assets/hero/greenroom-thumb.webp" alt="" width="40" height="40" decoding="async" />
+          <img src="assets/hero/extinguisher-thumb.webp" alt="" width="40" height="40" decoding="async" />
+          <img src="assets/hero/skipwatch-thumb.webp" alt="" width="40" height="40" decoding="async" />
+        </span>
+        <span class="hero__run-text">
+          <b>run the work live</b>
+          <small><i aria-hidden="true"></i>3 specimens powered on &middot; no signup</small>
+        </span>
+        <span class="hero__run-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 5v14m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
       </a>
     </div>
   </div>
@@ -1039,6 +1125,7 @@
         <li><a href="about.html">about emily</a></li>
         <li><a href="field-notes.html">field notes</a></li>
         <li><a href="resources.html">free resources</a></li>
+        <li><a href="design-system.html">design system</a></li>
       </ul>
     </div>
     <div>
@@ -1047,6 +1134,7 @@
         <li><a href="contact.html">let's talk</a></li>
         <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
         <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
+        <li><a href="https://www.linkedin.com/in/emilygreen77/" target="_blank" rel="noopener">linkedin</a></li>
       </ul>
     </div>
   </div>
@@ -1086,7 +1174,7 @@
   </div>
 </div>
 
-<script src="script.js?v=20260618o" defer></script>
+<script src="script.js?v=20260902a" defer></script>
 
 <script>
 

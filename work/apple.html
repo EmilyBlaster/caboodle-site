@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../styles.css?v=20260618o" />
+<link rel="stylesheet" href="../styles.css?v=20260902d" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 
 <style>
@@ -968,6 +968,114 @@
   .appwt__head-bar { flex-direction: column; align-items: flex-start; gap: 1rem; }
   .appwt__progress-bar { max-width: none; width: 100%; }
 }
+
+/* ==========================================================================
+   BUILD LOG — how it was built (ledger, not cards)
+   ========================================================================== */
+.buildlog {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--pad-x) clamp(4rem, 8vw, 7rem);
+}
+.buildlog__head {
+  max-width: 62ch;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+.buildlog__kicker {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding-top: 0.6rem;
+  border-top: 2px solid var(--ink);
+  margin-bottom: 1.25rem;
+}
+.buildlog__h {
+  margin: 0 0 1rem;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.65rem, 3vw, 2.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+.buildlog__h em { font-style: italic; color: var(--magenta); }
+.buildlog__p { margin: 0 0 0.75rem; color: var(--ink); line-height: 1.55; max-width: 58ch; }
+.buildlog__note {
+  margin: 0.5rem 0 0;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+}
+.ledger {
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.ledger__row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.55fr) minmax(0, 1.45fr);
+  gap: clamp(1.25rem, 3vw, 3rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
+  border-bottom: 1px solid var(--rule);
+}
+.ledger__row:last-child { border-bottom: 0; }
+.ledger__label {
+  position: sticky; top: 6rem;
+  align-self: start;
+}
+.ledger__num {
+  display: block;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--blue);
+  margin-bottom: 0.5rem;
+}
+.ledger__row:nth-child(2) .ledger__num { color: var(--magenta); }
+.ledger__row:nth-child(3) .ledger__num { color: var(--lime); -webkit-text-stroke: 1px var(--ink); }
+.ledger__row:nth-child(4) .ledger__num { color: var(--ink); }
+.ledger__title {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.ledger__list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 0.9rem;
+}
+.ledger__list li {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  gap: 0.35rem 1.25rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px dashed var(--rule);
+}
+.ledger__list li:last-child { border-bottom: 0; padding-bottom: 0; }
+.ledger__list b {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding-top: 0.25rem;
+}
+.ledger__list span { color: var(--ink); line-height: 1.5; max-width: 60ch; }
+.ledger__list span i { font-style: normal; color: var(--blue); font-weight: 600; }
+.ledger__list a { color: var(--blue); text-underline-offset: 0.15em; }
+.ledger__list a:hover { color: var(--magenta); }
+@media (max-width: 760px) {
+  .ledger__row { grid-template-columns: 1fr; gap: 1rem; }
+  .ledger__label { position: static; }
+  .ledger__list li { grid-template-columns: 1fr; gap: 0.25rem; }
+}
 </style>
 <style>
 /* Specimen accents: a hairline of this case file's color along the
@@ -993,6 +1101,7 @@
 </style>
 </head>
 <body>
+<a class="skip" href="#main">skip to content</a>
 
 <div class="specimen-edge" aria-hidden="true"></div>
 
@@ -1018,7 +1127,7 @@
 </header>
 
 <!-- Case hero -->
-<section class="casehero" data-log="001 — dossier opened">
+<section id="main" class="casehero" data-log="001 — dossier opened">
   <a class="casehero__back" href="../work.html">
     <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
     <span>back to work</span>
@@ -1039,6 +1148,12 @@
     Apple's global supplier network needed compliance training that worked across 31 countries, varying literacy levels, and factory floors with no computer access. Behavior change at scale, not checkbox completion.
   </p>
 
+  <a class="casehero__try" href="#spotlight">
+    <span class="casehero__try-dot" aria-hidden="true"></span>
+    <span>inspect the 3D fire extinguisher</span>
+    <small>live · 3d viewer</small>
+    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 5v14m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+  </a>
   <ul class="casehero__tags">
     <li>global compliance</li>
     <li>articulate rise 360</li>
@@ -1119,8 +1234,77 @@
   </article>
 </section>
 
+<!-- Build log: how it was built, decision by decision -->
+<section class="buildlog" data-log="002b · from the build log · how it was built">
+  <header class="buildlog__head">
+    <span class="buildlog__kicker">from the build log</span>
+    <h3 class="buildlog__h">
+      how it was built.<br />
+      <em>decision by decision.</em>
+    </h3>
+    <p class="buildlog__p">
+      The approach page describes the method. This is the method applied: the action map, the delivery calls, what got measured at each level, and the accessibility checklist the build was held to.
+    </p>
+    <p class="buildlog__note">client materials stay confidential. this log describes the decisions, not the content.</p>
+  </header>
+
+  <div class="ledger">
+    <div class="ledger__row">
+      <div class="ledger__label">
+        <span class="ledger__num">01</span>
+        <span class="ledger__title">the action map</span>
+      </div>
+      <ul class="ledger__list">
+        <li><b>business goal</b><span><i>95% supplier compliance</i> across 251 companies and 31 countries. Every element in every module traced back to that number, not to seat time.</span></li>
+        <li><b>critical actions</b><span>The on-the-job decisions behind each standard: supplier standards, fire and electrical safety, on-site protocols, and Labor and Human Rights. If a requirement did not change a decision, it did not make the cut.</span></li>
+        <li><b>practice</b><span>Decision moments with feedback inside the Rise modules, and a hands-on pre-use inspection that mirrors the real routine (the <a href="#spotlight">3D fire extinguisher</a> below).</span></li>
+        <li><b>essential info</b><span>The minimum a worker needs in order to act, delivered as a short animation in their own language. Everything else was cut.</span></li>
+      </ul>
+    </div>
+
+    <div class="ledger__row">
+      <div class="ledger__label">
+        <span class="ledger__num">02</span>
+        <span class="ledger__title">delivery decisions</span>
+      </div>
+      <ul class="ledger__list">
+        <li><b>two tracks</b><span>Articulate Rise 360 for supervisors at desks. QR-linked animated Code of Conduct videos for floor workers with no computer, no login, and no app.</span></li>
+        <li><b>eight variants</b><span>Original scripts in eight language variants, produced with four global production teams. Culturally adapted, not translated slide by slide.</span></li>
+        <li><b>media that reads without words</b><span>Custom iconography, technical safety diagrams, and animation characters built so the meaning survives a literacy gap.</span></li>
+      </ul>
+    </div>
+
+    <div class="ledger__row">
+      <div class="ledger__label">
+        <span class="ledger__num">03</span>
+        <span class="ledger__title">the measurement plan</span>
+      </div>
+      <ul class="ledger__list">
+        <li><b>level 4 · results</b><span>Completion across all 251 suppliers, the metric the business goal was written in. <i>95%.</i></span></li>
+        <li><b>level 3 · behavior</b><span>On-site protocols practiced as decisions, and the inspection check rehearsed the way it happens on the floor, so the trained behavior and the audited behavior are the same behavior.</span></li>
+        <li><b>level 2 · learning</b><span>Decision moments with feedback in every module. Wrong choices reveal the consequence, not a score.</span></li>
+        <li><b>level 1 · reaction</b><span>Engagement, measured rather than assumed. <i>85%</i> gain.</span></li>
+      </ul>
+    </div>
+
+    <div class="ledger__row">
+      <div class="ledger__label">
+        <span class="ledger__num">04</span>
+        <span class="ledger__title">accessibility checklist</span>
+      </div>
+      <ul class="ledger__list">
+        <li><b>literacy</b><span>The floor track requires no reading. Animation and native-language voice carry the content.</span></li>
+        <li><b>language</b><span>Eight variants, adapted for culture and context, checked by regional teams.</span></li>
+        <li><b>video</b><span>Captioned, with the essential message carried visually so it lands with the sound off.</span></li>
+        <li><b>the rise track</b><span>Built to WCAG AA: contrast, keyboard operation, and screen-reader labeling on every interaction.</span></li>
+        <li><b>device</b><span>Phone first for the QR track. Scan, watch, apply. Nothing to install.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <!-- Signature spotlight: 3D fire extinguisher inspection -->
-<section class="apspotlight" data-log="003 — signature spotlight · 3d fire extinguisher inspection">
+<section class="apspotlight" id="spotlight" data-log="003 — signature spotlight · 3d fire extinguisher inspection">
   <div class="apspotlight__inner">
     <div class="apspotlight__text">
       <span class="apspotlight__kicker">signature spotlight · fire safety</span>
@@ -1505,6 +1689,8 @@
     <li>custom iconography</li>
     <li>original scripts</li>
   </ul>
+
+  <p class="results__standards"><b>standards</b><span>built to wcag aa</span><span>8 language variants</span><span>client regulatory standards</span></p>
 </section>
 
 <!-- Closing card -->
@@ -1553,6 +1739,7 @@
         <li><a href="../about.html">about emily</a></li>
         <li><a href="../field-notes.html">field notes</a></li>
         <li><a href="../resources.html">free resources</a></li>
+        <li><a href="../design-system.html">design system</a></li>
       </ul>
     </div>
     <div>
@@ -1561,6 +1748,7 @@
         <li><a href="contact.html">let's talk</a></li>
         <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
         <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
+        <li><a href="https://www.linkedin.com/in/emilygreen77/" target="_blank" rel="noopener">linkedin</a></li>
       </ul>
     </div>
   </div>
@@ -1571,7 +1759,7 @@
   </div>
 </footer>
 
-<script src="../script.js?v=20260618o" defer></script>
+<script src="../script.js?v=20260902a" defer></script>
 
 <script>
 /* ==========================================================================
