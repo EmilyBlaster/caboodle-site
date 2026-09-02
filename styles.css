@@ -8209,3 +8209,119 @@ h1, h2, h3,
   .availability__grid { grid-template-columns: 1fr; }
 }
 
+
+
+/* ==========================================================================
+   HOVER + FOCUS CONSISTENCY PASS
+   One vocabulary, declared last so it wins ties:
+   - cards lift 4px on the long-throw shadow at --t-ui
+   - pills flip color at --t-ui and never lift
+   - text links go magenta at --t-micro
+   - every hover state has a focus-visible twin
+   The homepage is allowed extra show; deep pages stay calm.
+   ========================================================================== */
+:root { --lift-shadow: 0 1px 3px rgba(0,0,0,.05), 0 26px 50px -22px rgba(40,40,40,.45); }
+
+/* --- Cards ---------------------------------------------------------------- */
+.dossier {
+  transition: transform var(--t-ui) var(--ease), box-shadow var(--t-ui) var(--ease), border-color var(--t-ui) var(--ease);
+}
+.dossier--link:hover,
+.dossier--link:focus-visible,
+.dossier--withpreview:focus-within {
+  transform: translateY(-4px);
+  box-shadow: var(--lift-shadow);
+}
+.lab, .resource, .demolink, .post {
+  transition: transform var(--t-ui) var(--ease), border-color var(--t-ui) var(--ease), box-shadow var(--t-ui) var(--ease);
+}
+.lab:hover, .lab:focus-visible,
+.resource:hover, .resource:focus-within,
+.demolink:hover, .demolink:focus-visible,
+.post:hover, .post:focus-visible {
+  transform: translateY(-4px);
+  border-color: var(--ink);
+  box-shadow: var(--lift-shadow);
+}
+.lab:focus-visible .lab__cta { letter-spacing: 0.18em; }
+.lab__cta { transition: letter-spacing var(--t-ui) var(--ease); }
+.post:hover::before, .post:focus-visible::before { transform: scale(1.04); }
+/* An article, not a link: it should not pretend to be one. */
+.storyblock, .storyblock:hover { transform: none; border-color: var(--rule); box-shadow: none; }
+.sgstack__card { transition: transform var(--t-ui) var(--ease), box-shadow var(--t-ui) var(--ease); }
+.sgstack__card:hover { box-shadow: var(--lift-shadow); }
+.availability__mode {
+  transition: transform var(--t-ui) var(--ease), border-color var(--t-ui) var(--ease), box-shadow var(--t-ui) var(--ease), background var(--t-ui) var(--ease);
+}
+.availability__num { transition: letter-spacing var(--t-ui) var(--ease); }
+
+/* --- Pills: flip, never lift ---------------------------------------------- */
+.nav__links .nav__cta, .workclose__cta, .closing__cta, .resume__cta, .speaking__cta,
+.experiment__cta, .intake__submit, .thanks__cta, .ppgame__cta, .protocard__cta, .subscribe__form button {
+  transition: background var(--t-ui) var(--ease), color var(--t-ui) var(--ease), gap var(--t-ui) var(--ease), border-color var(--t-ui) var(--ease);
+}
+.workclose__cta svg, .closing__cta svg, .resume__cta svg, .speaking__cta svg, .experiment__cta svg, .ppgame__cta svg, .casehero__back svg {
+  transition: transform var(--t-ui) var(--ease);
+}
+.resume__cta:hover, .intake__submit:hover { transform: none; }
+.nav__links .nav__cta:focus-visible { background: var(--lime); color: var(--ink); }
+.workclose__cta:focus-visible { background: var(--lime); color: var(--ink); }
+.workclose__cta:focus-visible svg { transform: translateX(4px); }
+.closing__cta:focus-visible, .resume__cta:focus-visible { background: var(--paper); }
+.closing__cta:focus-visible svg { transform: translateX(4px); }
+.resume__cta:focus-visible svg { transform: translateY(3px); }
+.speaking__cta:focus-visible, .experiment__cta:focus-visible, .intake__submit:focus-visible, .thanks__cta:focus-visible { background: var(--ink); color: var(--lime); }
+.experiment__cta:focus-visible { gap: 0.85rem; }
+.speaking__cta:focus-visible svg, .experiment__cta:focus-visible svg { transform: translateX(3px); }
+.thanks__cta--alt:focus-visible { background: var(--lime); color: var(--ink); }
+.protocard__cta:hover:not(:disabled), .protocard__cta:focus-visible:not(:disabled) { background: var(--magenta-ink); transform: none; }
+.subscribe__form button:hover, .subscribe__form button:focus-visible { background: var(--paper); color: var(--ink); }
+
+/* --- Text and arrow links ------------------------------------------------- */
+.workclose__resume, .closing__email, .foot__cols a, .intake__foot a, .note__cta, .casehero__back,
+.availability__cta, .shelf__link, .nav__links a:not(.nav__cta) {
+  transition: color var(--t-micro) var(--ease), gap var(--t-micro) var(--ease), opacity var(--t-micro) var(--ease),
+              border-color var(--t-micro) var(--ease), background var(--t-micro) var(--ease), box-shadow var(--t-micro) var(--ease);
+}
+.workclose__resume:focus-visible, .closing__email:focus-visible, .foot__cols a:focus-visible, .intake__foot a:focus-visible,
+.note__cta:focus-visible, .casehero__back:focus-visible, .shelf__link:focus-visible,
+.availability__cta:hover, .availability__cta:focus-visible { color: var(--link-hover); opacity: 1; }
+.casehero__back:focus-visible { gap: 0.8rem; }
+.casehero__back:focus-visible svg { transform: translateX(-3px); }
+.shelf__link:focus-visible { background: var(--paper-2); box-shadow: 0 0 0 0.75rem var(--paper-2); }
+.shelf__link:focus-visible .shelf__arrow { transform: translateX(4px); }
+
+/* --- Nav underline, keyboard too ------------------------------------------ */
+.nav__links a:not(.nav__cta)::after { transition: right var(--t-ui) var(--ease); }
+.nav__links a:not(.nav__cta):focus-visible::after { right: 0; }
+
+/* --- Controls ------------------------------------------------------------- */
+.dfcarousel__arrow, .dfcarousel__dot, .carousel__nav, .carousel__dot {
+  transition: background var(--t-micro) var(--ease), color var(--t-micro) var(--ease), border-color var(--t-micro) var(--ease), transform var(--t-micro) var(--ease);
+}
+.dfcarousel__arrow:hover, .dfcarousel__arrow:focus-visible { background: var(--ink); color: var(--lime); border-color: var(--ink); }
+.carousel__nav:focus-visible { background: var(--ink); color: var(--lime); transform: translateY(-50%) scale(1.05); }
+
+/* --- Form fields ---------------------------------------------------------- */
+.subscribe__form input { transition: border-color var(--t-micro) var(--ease), background var(--t-micro) var(--ease); }
+.subscribe__form input:focus { border-color: var(--magenta); background: var(--white); }
+
+/* --- Field guide widget --------------------------------------------------- */
+.guide-btn { transition: transform var(--t-micro) var(--ease), box-shadow var(--t-micro) var(--ease), color var(--t-micro) var(--ease); }
+.guide-btn:hover, .guide-btn:focus-visible { box-shadow: var(--lift-shadow); }
+.guide-panel { transition: opacity var(--t-ui) var(--ease), transform var(--t-ui) var(--ease); }
+.guide-panel__close, .guide-panel__send { transition: color var(--t-micro) var(--ease); }
+.guide-panel__close:focus-visible { color: var(--lime); }
+.guide-panel__send:focus-visible { color: var(--ink); }
+.guide-chip { transition: background var(--t-micro) var(--ease), border-color var(--t-micro) var(--ease), color var(--t-micro) var(--ease); }
+.guide-chip:focus-visible { background: var(--lime); border-color: var(--lime); color: var(--ink); }
+
+/* --- Logo link finally answers a hover ------------------------------------ */
+.nav__mark { transition: opacity var(--t-micro) var(--ease); }
+.nav__mark:hover, .nav__mark:focus-visible { opacity: 0.72; }
+
+/* --- Reduced motion: no travel anywhere ----------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .dossier--link:hover, .dossier--link:focus-visible, .lab:hover, .lab:focus-visible, .resource:hover, .resource:focus-within,
+  .demolink:hover, .demolink:focus-visible, .post:hover, .post:focus-visible, .guide-btn:hover, .guide-btn:focus-visible { transform: none; }
+}

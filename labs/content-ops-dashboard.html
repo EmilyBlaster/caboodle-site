@@ -19,13 +19,13 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
-<link rel="stylesheet" href="../styles.css?v=20260903c" />
+<link rel="stylesheet" href="../styles.css?v=20260903d" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 
 <style>
 .labero { background: var(--ink); color: var(--white); padding: clamp(6rem,12vw,9rem) var(--pad-x) clamp(4rem,8vw,6rem); position: relative; overflow: hidden; border-bottom: 1px solid var(--dark-2); }
-.labero__back { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); text-decoration: none; margin-bottom: 2.5rem; transition: gap 0.3s var(--ease), opacity 0.3s var(--ease); opacity: 0.85; }
-.labero__back:hover { gap: 0.8rem; opacity: 1; }
+.labero__back { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); text-decoration: none; margin-bottom: 2.5rem; transition: gap 0.3s var(--ease), opacity 0.3s var(--ease), color var(--t-micro) var(--ease); opacity: 0.85; }
+.labero__back:hover, .labero__back:focus-visible { gap: 0.8rem; opacity: 1; color: var(--link-hover); }
 .labero__stamp { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 2rem; }
 .labero__stamp b { color: var(--lime); font-weight: 500; }
 .labero__watermark { font-family: var(--display); font-size: clamp(8rem,20vw,16rem); font-weight: 800; line-height: 0.85; letter-spacing: -0.06em; color: rgba(255,255,255,0.04); position: absolute; right: var(--pad-x); bottom: -0.1em; pointer-events: none; user-select: none; }

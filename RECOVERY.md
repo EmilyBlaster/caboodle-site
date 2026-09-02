@@ -32,7 +32,7 @@ Open the printed localhost URL. Any static file server works (`python3 -m http.s
 
 ## Cache versioning (important)
 
-Browsers and the CDN cache `styles.css` and `script.js` by a `?v=` query string. **When you edit either file, bump that token everywhere, or visitors see stale assets.** Convention: `?v=YYYYMMDD` plus a letter, for example `?v=20260617l`. HTML pages are served fresh and need no token. Current tokens: `styles.css?v=20260903c`, `script.js?v=20260903a`.
+Browsers and the CDN cache `styles.css` and `script.js` by a `?v=` query string. **When you edit either file, bump that token everywhere, or visitors see stale assets.** Convention: `?v=YYYYMMDD` plus a letter, for example `?v=20260617l`. HTML pages are served fresh and need no token. Current tokens: `styles.css?v=20260903d`, `script.js?v=20260903a`.
 
 Bump across every page at once (replace OLD and NEW):
 

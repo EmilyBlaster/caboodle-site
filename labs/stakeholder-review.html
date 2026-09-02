@@ -19,7 +19,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
-<link rel="stylesheet" href="../styles.css?v=20260903c" />
+<link rel="stylesheet" href="../styles.css?v=20260903d" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 
 <style>
@@ -46,10 +46,10 @@
   color: var(--lime);
   text-decoration: none;
   margin-bottom: 2.5rem;
-  transition: gap 0.3s var(--ease), opacity 0.3s var(--ease);
+  transition: gap 0.3s var(--ease), opacity 0.3s var(--ease), color var(--t-micro) var(--ease);
   opacity: 0.85;
 }
-.labero__back:hover { gap: 0.8rem; opacity: 1; }
+.labero__back:hover, .labero__back:focus-visible { gap: 0.8rem; opacity: 1; color: var(--link-hover); }
 .labero__stamp {
   display: flex;
   flex-wrap: wrap;

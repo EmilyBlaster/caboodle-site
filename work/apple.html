@@ -31,7 +31,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
-<link rel="stylesheet" href="../styles.css?v=20260903c" />
+<link rel="stylesheet" href="../styles.css?v=20260903d" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 
 <style>
@@ -1071,8 +1071,8 @@
 }
 .ledger__list span { color: var(--ink); line-height: 1.5; max-width: 60ch; }
 .ledger__list span i { font-style: normal; color: var(--blue); font-weight: 600; }
-.ledger__list a { color: var(--blue); text-underline-offset: 0.15em; }
-.ledger__list a:hover { color: var(--magenta); }
+.ledger__list a { color: var(--blue); text-underline-offset: 0.15em; transition: color var(--t-micro) var(--ease); }
+.ledger__list a:hover, .ledger__list a:focus-visible { color: var(--magenta); }
 @media (max-width: 760px) {
   .ledger__row { grid-template-columns: 1fr; gap: 1rem; }
   .ledger__label { position: static; }

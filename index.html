@@ -34,7 +34,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="preload" as="font" type="font/woff2" href="fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
-<link rel="stylesheet" href="styles.css?v=20260903c" />
+<link rel="stylesheet" href="styles.css?v=20260903d" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
 <!-- Prefetch case study HTML on browser idle so the dossier preview
@@ -114,9 +114,9 @@
   min-height: 44px;
   padding: 10px 16px;
   cursor: pointer;
-  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+  transition: border-color var(--t-micro) var(--ease), color var(--t-micro) var(--ease), background var(--t-micro) var(--ease);
 }
-.bench-tab:hover { border-color: var(--lime); color: var(--paper); }
+.bench-tab:hover, .bench-tab:focus-visible { border-color: var(--lime); color: var(--paper); }
 .bench-tab.is-on { border-color: var(--lime); color: var(--ink); background: var(--lime); }
 .bench-spec {
   position: relative;
@@ -185,7 +185,7 @@
   object-fit: cover;
   object-position: center 25%;
   filter: grayscale(0.85) brightness(0.92);
-  transition: filter 0.5s ease;
+  transition: filter var(--t-ui) var(--ease);
 }
 .bench-spec:hover .bench-spec__poster { filter: grayscale(0.35) brightness(0.97); }
 .bench-spec__run {
@@ -199,9 +199,9 @@
   background: rgba(40, 40, 40, 0.28);
   border: 0;
   cursor: pointer;
-  transition: background 0.4s ease;
+  transition: background var(--t-ui) var(--ease);
 }
-.bench-spec__run:hover { background: rgba(40, 40, 40, 0.16); }
+.bench-spec__run:hover, .bench-spec__run:focus-visible { background: rgba(40, 40, 40, 0.16); }
 .bench-spec__run b {
   font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
   font-size: 13px;

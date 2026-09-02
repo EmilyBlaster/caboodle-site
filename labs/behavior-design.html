@@ -19,13 +19,13 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
-<link rel="stylesheet" href="../styles.css?v=20260903c" />
+<link rel="stylesheet" href="../styles.css?v=20260903d" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 
 <style>
 .labero { background: var(--ink); color: var(--white); padding: clamp(6rem,12vw,9rem) var(--pad-x) clamp(4rem,8vw,6rem); position: relative; overflow: hidden; border-bottom: 1px solid var(--dark-2); }
-.labero__back { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); text-decoration: none; margin-bottom: 2.5rem; transition: gap 0.3s var(--ease), opacity 0.3s var(--ease); opacity: 0.85; }
-.labero__back:hover { gap: 0.8rem; opacity: 1; }
+.labero__back { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); text-decoration: none; margin-bottom: 2.5rem; transition: gap 0.3s var(--ease), opacity 0.3s var(--ease), color var(--t-micro) var(--ease); opacity: 0.85; }
+.labero__back:hover, .labero__back:focus-visible { gap: 0.8rem; opacity: 1; color: var(--link-hover); }
 .labero__stamp { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 2rem; }
 .labero__stamp b { color: var(--lime); font-weight: 500; }
 .labero__watermark { font-family: var(--display); font-size: clamp(8rem,20vw,16rem); font-weight: 800; line-height: 0.85; letter-spacing: -0.06em; color: rgba(255,255,255,0.04); position: absolute; right: var(--pad-x); bottom: -0.1em; pointer-events: none; user-select: none; }
@@ -113,15 +113,15 @@
 .intake-input {
   width: 100%; padding: 0.7rem 0.85rem; border: 1px solid var(--rule);
   font-family: var(--body); font-size: 0.9rem; color: var(--ink); background: var(--paper);
-  transition: border-color 0.2s; box-sizing: border-box;
+  transition: border-color var(--t-micro) var(--ease), background var(--t-micro) var(--ease); box-sizing: border-box;
 }
-.intake-input:focus { outline: none; border-color: var(--blue); }
+.intake-input:focus { border-color: var(--magenta); background: var(--white); }
 .role-btns, .exp-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .role-btn, .exp-btn {
   padding: 0.55em 1em; border: 1px solid var(--rule); background: var(--paper);
-  font-size: 0.85rem; cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s; color: var(--ink-2);
+  font-size: 0.85rem; cursor: pointer; transition: border-color var(--t-micro) var(--ease), background var(--t-micro) var(--ease), color var(--t-micro) var(--ease); color: var(--ink-2);
 }
-.role-btn:hover, .exp-btn:hover { border-color: var(--blue); color: var(--ink); }
+.role-btn:hover, .exp-btn:hover, .role-btn:focus-visible, .exp-btn:focus-visible { border-color: var(--ink); color: var(--ink); }
 .role-btn.active, .exp-btn.active { border-color: var(--blue); background: var(--blue); color: var(--white); }
 
 /* Intro */
@@ -188,9 +188,9 @@
   width: 100%; min-height: 90px; padding: 0.75rem 0.85rem;
   font-family: var(--body); font-size: 0.875rem; line-height: 1.6;
   border: 1px solid var(--rule); background: var(--paper); color: var(--ink);
-  resize: vertical; box-sizing: border-box; transition: border-color 0.2s;
+  resize: vertical; box-sizing: border-box; transition: border-color var(--t-micro) var(--ease), background var(--t-micro) var(--ease);
 }
-.reflection-area:focus { outline: none; border-color: var(--blue); }
+.reflection-area:focus { border-color: var(--magenta); background: var(--white); }
 
 /* Summary */
 .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; }
