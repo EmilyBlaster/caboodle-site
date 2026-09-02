@@ -502,19 +502,98 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   line-height: 1.45;
   margin: 0;
 }
-.hero__scroll {
-  display: inline-flex; align-items: center; gap: 0.55rem;
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  padding: 0.6rem 0.95rem;
-  border: 1px solid var(--ink);
-  transition: background 0.4s var(--ease), color 0.4s var(--ease), transform 0.4s var(--ease);
+/* Specimen ticket: the hero's one CTA. Three live specimens stacked as
+   portholes, a lime pulse, a lime wipe on hover. Points at the bench. */
+.hero__run {
+  position: relative; isolation: isolate;
+  display: inline-flex; align-items: center; gap: 0.9rem;
+  padding: 0.5rem 0.55rem 0.5rem 0.55rem;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--r-pill);
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 10px 30px -16px rgba(40,40,40,.35);
+  transition: color var(--t-ui) var(--ease), box-shadow var(--t-ui) var(--ease), transform var(--t-ui) var(--ease);
 }
-.hero__scroll svg { transition: transform 0.5s var(--ease); }
-.hero__scroll:hover { background: var(--ink); color: var(--lime); }
-.hero__scroll:hover svg { transform: translateY(3px); }
+.hero__run::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: var(--lime);
+  border-radius: inherit;
+  transform: scaleX(0); transform-origin: left center;
+  transition: transform 0.55s var(--ease);
+}
+.hero__run:hover,
+.hero__run:focus-visible {
+  color: var(--ink);
+  transform: translateY(-2px);
+  box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 26px 50px -22px rgba(40,40,40,.45);
+}
+.hero__run:hover::before,
+.hero__run:focus-visible::before { transform: scaleX(1); }
+.hero__run:focus-visible { outline: 2px solid var(--magenta); outline-offset: 3px; }
+
+.hero__run-stack { display: flex; align-items: center; flex: none; padding-left: 0.1rem; }
+.hero__run-stack img {
+  width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+  border: 2px solid var(--ink);
+  background: var(--paper-2);
+  margin-left: -13px;
+  transition: margin var(--t-ui) var(--ease), border-color var(--t-ui) var(--ease), transform var(--t-ui) var(--ease);
+}
+.hero__run-stack img:first-child { margin-left: 0; }
+.hero__run-stack img:nth-child(1) { z-index: 3; }
+.hero__run-stack img:nth-child(2) { z-index: 2; }
+.hero__run-stack img:nth-child(3) { z-index: 1; }
+.hero__run:hover .hero__run-stack img,
+.hero__run:focus-visible .hero__run-stack img { margin-left: -6px; border-color: var(--lime); }
+.hero__run:hover .hero__run-stack img:first-child,
+.hero__run:focus-visible .hero__run-stack img:first-child { margin-left: 0; }
+
+.hero__run-text { display: flex; flex-direction: column; gap: 0.2rem; padding-right: 0.25rem; }
+.hero__run-text b {
+  font-family: var(--body); font-weight: 600; font-size: 0.98rem; line-height: 1; letter-spacing: -0.005em;
+}
+.hero__run-text small {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(242,239,232,0.62);
+  transition: color var(--t-ui) var(--ease);
+}
+.hero__run:hover .hero__run-text small,
+.hero__run:focus-visible .hero__run-text small { color: rgba(40,40,40,0.72); }
+.hero__run-text small i {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--lime); flex: none;
+  box-shadow: 0 0 0 0 rgba(150,230,80,0.55);
+  animation: runPulse 2.2s var(--ease) infinite;
+}
+.hero__run:hover .hero__run-text small i,
+.hero__run:focus-visible .hero__run-text small i { background: var(--ink); animation: none; box-shadow: none; }
+@keyframes runPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(150,230,80,0.55); }
+  70%  { box-shadow: 0 0 0 7px rgba(150,230,80,0); }
+  100% { box-shadow: 0 0 0 0 rgba(150,230,80,0); }
+}
+
+.hero__run-arrow {
+  flex: none; width: 38px; height: 38px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid rgba(242,239,232,0.3);
+  transition: border-color var(--t-ui) var(--ease), background var(--t-ui) var(--ease), color var(--t-ui) var(--ease);
+}
+.hero__run-arrow svg { transition: transform 0.5s var(--ease); }
+.hero__run:hover .hero__run-arrow,
+.hero__run:focus-visible .hero__run-arrow { background: var(--ink); color: var(--lime); border-color: var(--ink); }
+.hero__run:hover .hero__run-arrow svg { transform: translateY(3px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__run-text small i { animation: none; }
+  .hero__run, .hero__run::before, .hero__run-stack img, .hero__run-arrow svg { transition: none; }
+}
+@media (max-width: 420px) {
+  .hero__run { gap: 0.7rem; }
+  .hero__run-stack img { width: 34px; height: 34px; margin-left: -12px; }
+  .hero__run-text small { display: none; }
+}
 
 /* Eyebrow + stamp collision: the AI Program Lead eyebrow runs longer
    than the old "a learning design consultancy" line and collides with
@@ -3149,7 +3228,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   .hero__line:nth-child(3) .hero__line-inner { animation: inkRise 0.72s var(--ease) 1.30s backwards; }
   .hero__line:nth-child(3)::after            { animation: barLift 0.8s cubic-bezier(0.65, 0, 0.35, 1) 1.30s backwards; }
   .hero__lede              { animation: heroEnter 0.7s var(--ease) 1.95s backwards; }
-  .hero__scroll            { animation: heroEnter 0.7s var(--ease) 2.10s backwards; }
+  .hero__run               { animation: heroEnter 0.7s var(--ease) 2.10s backwards; }
   .trustband__inner        { animation: heroEnter 0.7s var(--ease) 2.25s backwards; }
 }
 @keyframes heroEnter {
@@ -3179,7 +3258,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   .hero__line:nth-child(2) .hero__line-inner { animation: heroFade 0.6s ease 0.85s backwards; }
   .hero__line:nth-child(3) .hero__line-inner { animation: heroFade 0.6s ease 1.10s backwards; }
   .hero__lede              { animation: heroFade 0.6s ease 1.45s backwards; }
-  .hero__scroll            { animation: heroFade 0.6s ease 1.60s backwards; }
+  .hero__run               { animation: heroFade 0.6s ease 1.60s backwards; }
   .trustband__inner        { animation: heroFade 0.6s ease 1.75s backwards; }
 }
 @keyframes heroFade {
