@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-404B8P6ZLK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-404B8P6ZLK');
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>design system · caboodle design</title>
+<meta name="description" content="The caboodle design system, published. Every color with its contrast ratio, the type scale, elevation, components, motion, and the accessibility standard the site is built to." />
+
+<!-- Open Graph / social preview -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="caboodle design" />
+<meta property="og:title" content="design system · the field journal, documented" />
+<meta property="og:description" content="Every color with its contrast math, the type scale, elevation, components, motion, and the accessibility standard behind caboodledesign.info." />
+<meta property="og:url" content="https://caboodledesign.info/design-system.html" />
+<meta property="og:image" content="https://caboodledesign.info/assets/og/og-labs.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://caboodledesign.info/assets/og/og-labs.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css?v=20260902a" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+<style>
+/* ==========================================================================
+   DESIGN SYSTEM PAGE: the field journal, documented
+   ========================================================================== */
+.dshero {
+  background: var(--ink);
+  color: var(--white);
+  padding: clamp(6rem, 12vw, 9rem) var(--pad-x) clamp(4rem, 8vw, 6rem);
+  position: relative; overflow: hidden;
+  border-bottom: 1px solid var(--dark-2);
+}
+.dshero__inner { max-width: var(--maxw); margin: 0 auto; position: relative; z-index: 1; }
+.dshero__stamp {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; align-items: baseline;
+  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(242,239,232,0.6); margin-bottom: 2rem;
+}
+.dshero__stamp b { color: var(--lime); font-weight: 500; }
+.dshero__h {
+  margin: 0 0 1.5rem;
+  font-family: var(--display); font-weight: 700;
+  font-size: clamp(2.6rem, 7vw, 6rem); line-height: 0.95; letter-spacing: -0.02em;
+}
+.dshero__h em { font-style: italic; color: var(--magenta-lift); }
+.dshero__lede { max-width: 58ch; font-size: clamp(1.05rem, 1.2vw + 0.7rem, 1.25rem); line-height: 1.5; color: var(--paper); margin: 0 0 2rem; }
+.dshero__toc { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; }
+.dshero__toc a {
+  font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--paper); text-decoration: none;
+  padding: 0.4rem 0.8rem; border: 1px solid rgba(242,239,232,0.3); border-radius: var(--r-pill);
+  transition: border-color var(--t-micro), color var(--t-micro);
+}
+.dshero__toc a:hover { border-color: var(--lime); color: var(--lime); }
+.dshero__watermark {
+  position: absolute; right: -0.05em; bottom: -0.25em;
+  font-family: var(--display); font-weight: 800; font-size: clamp(10rem, 30vw, 26rem);
+  line-height: 1; color: rgba(242,239,232,0.04); pointer-events: none; user-select: none;
+}
+
+.ds { max-width: var(--maxw); margin: 0 auto; padding: clamp(3.5rem, 7vw, 6rem) var(--pad-x); border-bottom: 1px solid var(--rule); }
+.ds--alt { background: var(--paper-2); max-width: none; }
+.ds--alt > .ds__inner { max-width: var(--maxw); margin: 0 auto; }
+.ds--dark { background: var(--dark); color: var(--paper); max-width: none; border-bottom: 0; }
+.ds--dark > .ds__inner { max-width: var(--maxw); margin: 0 auto; }
+.ds__head { display: grid; grid-template-columns: minmax(0, 0.35fr) minmax(0, 1fr); gap: clamp(1.25rem, 3vw, 3rem); margin-bottom: clamp(2rem, 4vw, 3.5rem); align-items: start; }
+.ds__num {
+  font-family: var(--display); font-weight: 800; font-size: clamp(3rem, 7vw, 6.5rem); line-height: 0.9; letter-spacing: -0.05em; color: var(--blue);
+}
+.ds--alt .ds__num { color: var(--magenta); }
+.ds--dark .ds__num { color: var(--lime); }
+.ds__kicker {
+  display: inline-block; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-2); padding-top: 0.6rem; border-top: 2px solid var(--ink); margin-bottom: 1rem;
+}
+.ds--dark .ds__kicker { color: rgba(242,239,232,0.7); border-color: var(--lime); }
+.ds__h { margin: 0 0 1rem; font-family: var(--display); font-weight: 700; font-size: clamp(1.75rem, 3.2vw, 2.75rem); line-height: 1.05; letter-spacing: -0.01em; }
+.ds__h em { font-style: italic; color: var(--magenta); }
+.ds--dark .ds__h em { color: var(--magenta-lift); }
+.ds__p { margin: 0 0 0.9rem; max-width: 62ch; line-height: 1.55; }
+.ds__p--muted { color: var(--ink-2); }
+.ds--dark .ds__p--muted { color: rgba(242,239,232,0.7); }
+
+/* rules (named) */
+.rules { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--ink); }
+.rules li { display: grid; grid-template-columns: minmax(0, 12rem) minmax(0, 1fr); gap: 0.5rem 1.5rem; padding: 1rem 0; border-bottom: 1px dashed var(--rule); }
+.rules b { font-family: var(--mono); font-weight: 500; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; padding-top: 0.3rem; }
+.rules span { line-height: 1.5; max-width: 62ch; }
+.ds--dark .rules { border-top-color: rgba(242,239,232,0.4); }
+.ds--dark .rules li { border-bottom-color: rgba(242,239,232,0.2); }
+
+/* color table */
+.ctab { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.ctab th {
+  text-align: left; font-family: var(--mono); font-weight: 500; font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2);
+  padding: 0 0.75rem 0.75rem 0; border-bottom: 1px solid var(--ink);
+}
+.ctab td { padding: 0.9rem 0.75rem 0.9rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.ctab tr:last-child td { border-bottom: 0; }
+.sw__chip { display: block; width: 2.75rem; height: 2.75rem; border-radius: var(--r-sm); border: 1px solid var(--rule); }
+.nm b { display: block; font-family: var(--display); font-weight: 700; font-size: 1.05rem; line-height: 1.1; }
+.nm code { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em; color: var(--ink-2); }
+.rl { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); padding-top: 1.1rem !important; }
+.ct { white-space: nowrap; }
+.ct__num { display: block; font-family: var(--mono); font-size: 0.78rem; }
+.ct__badge { display: inline-block; margin-top: 0.3rem; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.15rem 0.45rem; border: 1px solid currentColor; border-radius: var(--r-sm); }
+.ct__badge--ok { color: #2f6a12; }
+.ct__badge--warn { color: var(--blue-deep); }
+.ct__badge--bad { color: var(--magenta-ink); }
+.ct__badge--na { color: var(--ink-2); border-style: dashed; }
+.ct--na span { font-family: var(--mono); font-size: 0.66rem; color: var(--ink-2); }
+.ds { color: var(--ink); }
+.ctab .ds { padding: 0.9rem 0 0.9rem 0; border-bottom: 1px solid var(--rule); max-width: none; color: var(--ink-2); font-size: 0.88rem; line-height: 1.45; }
+.ctab-wrap { overflow-x: auto; }
+.ctab-note { margin: 1rem 0 0; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; color: var(--ink-2); }
+
+/* type specimens */
+.spec { display: grid; gap: 0; border-top: 1px solid var(--ink); }
+.spec__row { display: grid; grid-template-columns: minmax(0, 14rem) minmax(0, 1fr); gap: 1rem 2rem; padding: clamp(1.25rem, 2.5vw, 2rem) 0; border-bottom: 1px solid var(--rule); align-items: center; }
+.spec__meta { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); line-height: 1.7; }
+.spec__meta b { display: block; color: var(--ink); font-weight: 500; font-size: 0.72rem; }
+.spec__display { font-family: var(--display); font-weight: 700; font-size: clamp(3.5rem, 13vw, 11rem); line-height: 0.92; letter-spacing: -0.02em; margin: 0; }
+.spec__display em { font-style: italic; color: var(--magenta); }
+.spec__headline { font-family: var(--display); font-weight: 700; font-size: clamp(1.9rem, 3.8vw, 3.1rem); line-height: 1.1; letter-spacing: -0.01em; margin: 0; }
+.spec__title { font-family: var(--display); font-weight: 700; font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.05; letter-spacing: -0.02em; margin: 0; }
+.spec__body { font-family: var(--body); font-size: 1.1rem; line-height: 1.55; margin: 0; max-width: 58ch; }
+.spec__label { font-family: var(--mono); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; margin: 0; color: var(--ink-2); }
+.spec__label b { color: var(--ink); font-weight: 500; }
+
+/* elevation */
+.elev { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); }
+.elev__card { background: var(--paper); border-radius: var(--r-card); padding: 1.5rem; min-height: 11rem; display: flex; flex-direction: column; justify-content: flex-end; gap: 0.35rem; border: 1px solid var(--rule); }
+.elev__card b { font-family: var(--display); font-weight: 700; font-size: 1.1rem; }
+.elev__card code { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.04em; color: var(--ink-2); word-break: break-word; }
+.elev__card small { color: var(--ink-2); font-size: 0.85rem; }
+.elev__card--rest { box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 10px 30px -16px rgba(40,40,40,.35); }
+.elev__card--hover { box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 26px 50px -22px rgba(40,40,40,.45); transform: translateY(-4px); }
+.elev__card--bench { background: var(--dark); color: var(--paper); border-color: transparent; box-shadow: 0 30px 70px -20px rgba(0,0,0,0.55); }
+.elev__card--bench code, .elev__card--bench small { color: rgba(242,239,232,0.7); }
+.elev__card--glow { box-shadow: 0 40px 60px -30px rgba(3,89,155,0.45); }
+
+/* components */
+.comp { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: clamp(1.5rem, 3vw, 3rem); }
+.comp__item { border-top: 1px solid var(--ink); padding-top: 1rem; }
+.comp__item h3 { margin: 0 0 0.25rem; font-family: var(--display); font-weight: 700; font-size: 1.15rem; }
+.comp__item p { margin: 0 0 1rem; color: var(--ink-2); font-size: 0.92rem; line-height: 1.5; }
+.comp__stage { background: var(--paper); border: 1px dashed var(--rule); border-radius: var(--r-card); padding: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+.comp__stage--dark { background: var(--dark); border-color: transparent; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 1.4rem;
+  background: var(--ink); color: var(--paper); border-radius: var(--r-pill);
+  font-family: var(--body); font-weight: 600; text-decoration: none; line-height: 1; border: 0; cursor: pointer;
+  transition: background var(--t-ui) var(--ease), color var(--t-ui) var(--ease);
+}
+.btn-primary:hover, .btn-primary:focus-visible { background: var(--lime); color: var(--ink); }
+.btn-primary:focus-visible { outline: 2px solid var(--magenta); outline-offset: 2px; }
+.btn-primary svg { transition: transform var(--t-ui) var(--ease); }
+.btn-primary:hover svg { transform: translateX(4px); }
+.btn-primary--sm { padding: 0.6rem 1.25rem; font-size: 0.9rem; }
+.btn-primary--lime { background: var(--lime); color: var(--ink); }
+.btn-primary--lime:hover { background: var(--white); }
+.ds-input {
+  font-family: var(--body); font-size: 1rem; padding: 0.75rem 0.9rem; width: 100%; max-width: 22rem;
+  background: var(--paper); color: var(--ink); border: 1px solid var(--rule); border-radius: 0;
+}
+.ds-input::placeholder { color: var(--ink-2); }
+.ds-input:focus { outline: none; border-color: var(--magenta); background: var(--white); }
+.ds-dossier {
+  background: var(--paper); border: 1px solid var(--rule); border-radius: 10px 10px 3px 10px; padding: 1.25rem; width: 100%; max-width: 20rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 10px 30px -16px rgba(40,40,40,.35);
+  transition: transform var(--t-ui) var(--ease), box-shadow var(--t-ui) var(--ease);
+}
+.ds-dossier:hover { transform: translateY(-4px); box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 26px 50px -22px rgba(40,40,40,.45); }
+.ds-dossier__call { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); display: block; margin-bottom: 0.4rem; }
+.ds-dossier__meta { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; color: var(--ink-2); display: block; margin-bottom: 0.6rem; }
+.ds-dossier__h { font-family: var(--display); font-weight: 700; font-size: 1.25rem; line-height: 1.05; letter-spacing: -0.02em; margin: 0; }
+.ds-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; }
+.ds-tags li { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.35rem 0.75rem; border: 1px solid var(--rule); border-radius: var(--r-pill); color: var(--ink-2); }
+.ds-navlink { position: relative; font-family: var(--body); font-weight: 500; color: var(--ink); text-decoration: none; padding-bottom: 0.15rem; }
+.ds-navlink::after { content: ""; position: absolute; left: 0; bottom: 0; height: 1px; width: 0; background: var(--ink); transition: width var(--t-ui) var(--ease); }
+.ds-navlink:hover::after { width: 100%; }
+.ds-stamp { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; }
+.ds-stamp b { color: var(--ink); font-weight: 500; }
+.ds-live { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper); }
+.ds-live i { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 3px rgba(150,230,80,0.25); }
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+/* motion */
+.motion { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1.5rem; }
+.motion__item { border-top: 1px solid rgba(242,239,232,0.4); padding-top: 0.9rem; }
+.motion__item b { display: block; font-family: var(--display); font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem; }
+.motion__item code { display: block; font-family: var(--mono); font-size: 0.68rem; color: var(--lime); margin-bottom: 0.4rem; }
+.motion__item span { font-size: 0.92rem; color: rgba(242,239,232,0.75); line-height: 1.5; }
+
+/* do / don't */
+.dodont { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: clamp(1.5rem, 3vw, 3rem); }
+.dodont ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+.dodont li { padding: 0.8rem 0; border-bottom: 1px dashed var(--rule); line-height: 1.5; display: grid; grid-template-columns: 1.5rem 1fr; gap: 0.5rem; }
+.dodont li::before { font-family: var(--mono); font-size: 0.72rem; padding-top: 0.2rem; }
+.dodont--do li::before { content: "✓"; color: #2f6a12; }
+.dodont--dont li::before { content: "✕"; color: var(--magenta-ink); }
+.dodont h3 { margin: 0 0 0.75rem; font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-2); }
+
+@media (max-width: 760px) {
+  .ds__head { grid-template-columns: 1fr; }
+  .rules li { grid-template-columns: 1fr; gap: 0.25rem; }
+  .spec__row { grid-template-columns: 1fr; }
+  .ctab { min-width: 52rem; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">skip to content</a>
+
+<header class="nav">
+  <a class="nav__mark" href="index.html">
+    <svg class="cd-logo" viewBox="0 0 260 56" xmlns="http://www.w3.org/2000/svg" aria-label="caboodle design" role="img">
+      <path class="cd-logo__mark" fill-rule="evenodd"
+        d="M 5 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0 M 33 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0"/>
+      <text class="cd-logo__word" x="95" y="26" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">caboodle</text>
+      <text class="cd-logo__word" x="95" y="50" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">design</text>
+    </svg>
+  </a>
+  <nav class="nav__links">
+    <a href="approach.html">approach</a>
+    <a href="work.html">work</a>
+    <a href="labs.html">labs</a>
+    <a href="about.html">about emily</a>
+    <a href="contact.html" class="nav__cta">let's talk</a>
+  </nav>
+</header>
+
+<section id="main" class="dshero" data-log="001 · design system opened">
+  <div class="dshero__inner">
+    <div class="dshero__stamp">
+      <span>design system</span>
+      <b>DS-002</b>
+      <span>public reference · 2026</span>
+      <span>contrast math shown</span>
+    </div>
+    <h1 class="dshero__h">the field journal,<br /><em>documented.</em></h1>
+    <p class="dshero__lede">
+      Every color, type size, shadow, and rule on this site, with the contrast ratios worked out in the open. Published because a design system you can't inspect is a mood board, and because the accessibility standard a site claims should be checkable.
+    </p>
+    <ul class="dshero__toc">
+      <li><a href="#north-star">01 north star</a></li>
+      <li><a href="#color">02 color</a></li>
+      <li><a href="#type">03 type</a></li>
+      <li><a href="#elevation">04 elevation</a></li>
+      <li><a href="#components">05 components</a></li>
+      <li><a href="#motion">06 motion</a></li>
+      <li><a href="#accessibility">07 accessibility</a></li>
+      <li><a href="#rules">08 do and don't</a></li>
+    </ul>
+  </div>
+  <span class="dshero__watermark" aria-hidden="true">DS</span>
+</section>
+
+<section class="ds" id="north-star" data-log="002 · north star">
+  <div class="ds__head">
+    <span class="ds__num" aria-hidden="true">01</span>
+    <div>
+      <span class="ds__kicker">creative north star</span>
+      <h2 class="ds__h">the field journal.</h2>
+      <p class="ds__p">
+        This is the field journal of a learning designer who studies how humans actually change before she designs anything. The page is warm paper, not a screen: an off-white ground carrying a faint grain, the way a notebook page carries tooth. On top of it, two voices work in tension. Bauhaus Bool sets the display, lowercase and enormous, the confident hand lettering of someone who has an opinion. JetBrains Mono sets the chrome: field-note stamps, call numbers, specimen labels, timestamps. The mono is the anthropologist's marginalia, the evidence that the work was observed and catalogued, not asserted.
+      </p>
+      <p class="ds__p">
+        Work is filed, not displayed. Engagements carry call numbers. Lab experiments are specimens you power on in place. Color is used with discipline: paper and graphite carry the page, and the three brand colors arrive as signal on small percentages of any surface.
+      </p>
+      <p class="ds__p ds__p--muted">
+        It rejects its neighbors on purpose. Not generic L&amp;D. Not the AI-hype voice. Not the SaaS-cream portfolio. Not the hero-metric template. The proof is the work and the client list, framed as field evidence.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="ds ds--alt" id="color" data-log="003 · color · contrast math">
+  <div class="ds__inner">
+    <div class="ds__head">
+      <span class="ds__num" aria-hidden="true">02</span>
+      <div>
+        <span class="ds__kicker">color</span>
+        <h2 class="ds__h">three signals. <em>one paper.</em></h2>
+        <p class="ds__p">
+          A warm-neutral paper system carrying three high-signal brand colors, used sparingly, on a graphite-and-lime backbone. Ratios below are WCAG contrast against the page ground and against graphite ink. AA means 4.5:1 or better for text at any size, AA large means 3:1 or better and is only allowed at 24px and up, or for non-text elements.
+        </p>
+      </div>
+    </div>
+    <div class="ctab-wrap">
+    <table class="ctab">
+      <thead>
+        <tr><th scope="col"><span class="sr-only">swatch</span></th><th scope="col">token</th><th scope="col">role</th><th scope="col">on paper</th><th scope="col">on ink</th><th scope="col">where it lives</th></tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td class="sw"><span class="sw__chip" style="background:#96E650"></span></td>
+        <td class="nm"><b>signal lime</b><code>#96e650</code></td>
+        <td class="rl">primary</td>
+        <td class="ct"><span class="ct__num">1.3:1</span><span class="ct__badge ct__badge--bad">fail</span></td>
+        <td class="ct"><span class="ct__num">9.6:1</span><span class="ct__badge ct__badge--ok">aaa</span></td>
+        <td class="ds">Confirmation and payoff. Button hover, logo accent, the live-specimen dot, the hero curtain bar. Never carries small text on paper.</td>
+      </tr>
+      <tr>
+        <td class="sw"><span class="sw__chip" style="background:#03599B"></span></td>
+        <td class="nm"><b>field blue</b><code>#03599b</code></td>
+        <td class="rl">secondary</td>
+        <td class="ct"><span class="ct__num">6.3:1</span><span class="ct__badge ct__badge--ok">aa</span></td>
+        <td class="ct"><span class="ct__num">2.0:1</span><span class="ct__badge ct__badge--bad">fail</span></td>
+        <td class="ds">The credibility color. Italic emphasis, Action Mapping rungs, methodology labels, the wordmark.</td>
+      </tr>
+      <tr>
+        <td class="sw"><span class="sw__chip" style="background:#024378"></span></td>
+        <td class="nm"><b>field blue deep</b><code>#024378</code></td>
+        <td class="rl">secondary · pressed</td>
+        <td class="ct"><span class="ct__num">8.8:1</span><span class="ct__badge ct__badge--ok">aaa</span></td>
+        <td class="ct"><span class="ct__num">1.5:1</span><span class="ct__badge ct__badge--bad">fail</span></td>
+        <td class="ds">Hover and pressed state for field blue.</td>
+      </tr>
+      <tr>
+        <td class="sw"><span class="sw__chip" style="background:#EC008C"></span></td>
+        <td class="nm"><b>editorial magenta</b><code>#ec008c</code></td>
+        <td class="rl">tertiary · display only</td>
+        <td class="ct"><span class="ct__num">3.7:1</span><span class="ct__badge ct__badge--warn">aa large</span></td>
+        <td class="ct"><span class="ct__num">3.5:1</span><span class="ct__badge ct__badge--warn">aa large</span></td>
+        <td class="ds">Links on hover, focus rings, the italic display payoff. Display sizes (24px and up) and true accents only.</td>
+      </tr>
+      <tr>
+        <td class="sw"><span class="sw__chip" style="background:#BC006B"></span></td>
+        <td class="nm"><b>magenta ink</b><code>#bc006b</code></td>
+        <td class="rl">tertiary · small text on light</td>
+        <td class="ct"><span class="ct__num">5.5:1</span><span class="ct__badge ct__badge--ok">aa</span></td>
+        <td class="ct"><span class="ct__num">2.4:1</span><span class="ct__badge ct__badge--bad">fail</span></td>
+        <td class="ds">Small magenta text on paper: kickers, captions, labels.</td>
+      </tr>
+      <tr>
+        <td class="sw"><span class="sw__chip" style="background:#F24DAF"></span></td>
+        <td class="nm"><b>magenta lift</b><code>#f24daf</code></td>
+        <td class="rl">tertiary · small text on dark</td>
+        <td class="ct"><span class="ct__num">2.8:1</span><span class="ct__badge ct__badge--bad">fail</span></td>
+        <td class="ct"><span class="ct__num">4.5:1</span><span class="ct__badge ct__badge--ok">aa</span></td>
+        <td class="ds">Small magenta text on the dark bench panels.</td>
+      </tr>
+      <tr>
+        <td class="sw"><span class="sw__chip" style="background:#6FA3CC"></span></td>
+        <td class="nm"><b>blue lift</b><code>#6fa3cc</code></td>
+        <td class="rl">secondary · small text on dark</td>
+        <td class="ct"><span class="ct__num">2.3:1</span><span class="ct__badge ct__badge--bad">fail</span></td>
+        <td class="ct"><span class="ct__num">5.5:1</span><span class="ct__badge ct__badge--ok">aa</span></td>
+        <td class="ds">Small blue labels on the dark bench panels.</td>
+      </tr>
+      <tr>
+        <td class="sw"><span class="sw__chip" style="background:#282828"></span></td>
+        <td class="nm"><b>graphite ink</b><code>#282828</code></td>
+        <td class="rl">neutral · text</td>
+        <td class="ct"><span class="ct__num">12.8:1</span><span class="ct__badge ct__badge--ok">aaa</span></td>
+        <td class="ct ct--na"><span>same</span></td>
+        <td class="ds">Primary text, dark section grounds, resting fill of pill buttons. Not pure black.</td>
+      </tr>
+      <tr>
+        <td class="sw"><span class="sw__chip" style="background:#5c5c5c"></span></td>
+        <td class="nm"><b>ash gray</b><code>#5c5c5c</code></td>
+        <td class="rl">neutral · secondary text</td>
+        <td class="ct"><span class="ct__num">5.8:1</span><span class="ct__badge ct__badge--ok">aa</span></td>
+        <td class="ct"><span class="ct__num">2.2:1</span><span class="ct__badge ct__badge--bad">fail</span></td>
+        <td class="ds">Captions, metadata, placeholders. Deepened from #686868 to clear AA on paper.</td>
+      </tr>
+      <tr>
+        <td class="sw"><span class="sw__chip" style="background:#d6d3cc"></span></td>
+        <td class="nm"><b>hairline</b><code>#d6d3cc</code></td>
+        <td class="rl">neutral · rules</td>
+        <td class="ct"><span class="ct__num">1.3:1</span><span class="ct__badge ct__badge--na">non-text</span></td>
+        <td class="ct"><span class="ct__num">9.9:1</span><span class="ct__badge ct__badge--ok">aaa</span></td>
+        <td class="ds">1px rules, input borders, dashed dividers. Decorative, not text.</td>
+      </tr>
+      <tr>
+        <td class="sw"><span class="sw__chip" style="background:#f2efe8"></span></td>
+        <td class="nm"><b>warm ash paper</b><code>#f2efe8</code></td>
+        <td class="rl">neutral · ground</td>
+        <td class="ct ct--na"><span>same</span></td>
+        <td class="ct"><span class="ct__num">12.8:1</span><span class="ct__badge ct__badge--ok">aaa</span></td>
+        <td class="ds">The page. Never #fff. Carries a faint multiply grain.</td>
+      </tr>
+      <tr>
+        <td class="sw"><span class="sw__chip" style="background:#e8e3d8"></span></td>
+        <td class="nm"><b>paper shadow</b><code>#e8e3d8</code></td>
+        <td class="rl">neutral · recessed</td>
+        <td class="ct"><span class="ct__num">1.1:1</span><span class="ct__badge ct__badge--na">non-text</span></td>
+        <td class="ct"><span class="ct__num">11.5:1</span><span class="ct__badge ct__badge--ok">aaa</span></td>
+        <td class="ds">Stat blocks, lab cards, inset surfaces one step below the page.</td>
+      </tr>
+      <tr>
+        <td class="sw"><span class="sw__chip" style="background:#141414"></span></td>
+        <td class="nm"><b>night ground</b><code>#141414</code></td>
+        <td class="rl">neutral · deep ground</td>
+        <td class="ct"><span class="ct__num">16.0:1</span><span class="ct__badge ct__badge--ok">aaa</span></td>
+        <td class="ct"><span class="ct__num">1.2:1</span><span class="ct__badge ct__badge--na">non-text</span></td>
+        <td class="ds">The bench and the darkest editorial blocks.</td>
+      </tr>
+      <tr>
+        <td class="sw"><span class="sw__chip" style="background:#ffffff"></span></td>
+        <td class="nm"><b>white</b><code>#ffffff</code></td>
+        <td class="rl">neutral · lifted</td>
+        <td class="ct"><span class="ct__num">1.1:1</span><span class="ct__badge ct__badge--na">non-text</span></td>
+        <td class="ct"><span class="ct__num">14.7:1</span><span class="ct__badge ct__badge--ok">aaa</span></td>
+        <td class="ds">Only a focused input. A surface deliberately brighter than the page.</td>
+      </tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="ctab-note">ratios computed from the sRGB relative luminance formula in WCAG 2.2. paper ground #f2efe8 · ink #282828.</p>
+
+    <ul class="rules">
+      <li><b>the paper rule</b><span>The page ground is warm ash paper, never #fff and never pure #000. Every neutral is tinted warm. Pure white appears only as a focused input, a surface deliberately brighter than the page.</span></li>
+      <li><b>the small-magenta rule</b><span>Bright editorial magenta clears only 3.7:1 on paper, so it is display and true accents only, at 24px and up. Any magenta text below that uses magenta ink (5.5:1 on paper) or magenta lift (5.7:1 on night ground).</span></li>
+      <li><b>the lime rule</b><span>Signal lime clears 9.6:1 on ink and only 1.3:1 on paper. It carries text only on dark grounds. On paper it is a dot, a bar, a fill behind graphite text, never a word.</span></li>
+      <li><b>the signal rule</b><span>Lime, blue, and magenta are signal, not surface. On any given screen they occupy a small percentage. Rarity is what makes the lime land.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="ds" id="type" data-log="004 · typography · specimens">
+  <div class="ds__head">
+    <span class="ds__num" aria-hidden="true">03</span>
+    <div>
+      <span class="ds__kicker">typography</span>
+      <h2 class="ds__h">big statements, <em>quiet argument,</em> precise stamps.</h2>
+      <p class="ds__p">
+        A geometric, almost cartoonishly confident display face against a clean humanist sans, with a technical monospace doing all the marginalia. Bauhaus Bool is loaded locally from a .woff. DM Sans and JetBrains Mono come from Google Fonts with system fallbacks.
+      </p>
+    </div>
+  </div>
+  <div class="spec">
+    <div class="spec__row">
+      <div class="spec__meta"><b>display</b>bauhaus bool 700<br />clamp(3.5rem, 13vw, 11rem)<br />line 0.92 · track -0.02em<br />lowercase · hero only</div>
+      <p class="spec__display">adopt<em>.</em></p>
+    </div>
+    <div class="spec__row">
+      <div class="spec__meta"><b>headline</b>bauhaus bool 700<br />clamp(1.9rem, 3.8vw, 3.1rem)<br />line 1.1 · track -0.01em<br />section titles</div>
+      <p class="spec__headline">engagements. filed and catalogued.</p>
+    </div>
+    <div class="spec__row">
+      <div class="spec__meta"><b>title</b>bauhaus bool 700<br />clamp(1.25rem, 2vw, 1.65rem)<br />line 1.05 · track -0.02em<br />dossier and specimen names</div>
+      <p class="spec__title">inline stakeholder review system.</p>
+    </div>
+    <div class="spec__row">
+      <div class="spec__meta"><b>body</b>dm sans 400 to 600<br />1.1rem · line 1.55<br />54 to 75ch measure<br />text-wrap: pretty</div>
+      <p class="spec__body">Most training measures completion. I measure change. Before I design anything, I watch what people actually do at work, then map every element back to a decision that matters.</p>
+    </div>
+    <div class="spec__row">
+      <div class="spec__meta"><b>label · field stamp</b>jetbrains mono 500<br />0.68rem · track 0.14em<br />uppercase · small only<br />kickers, call numbers, captions</div>
+      <p class="spec__label">specimen s.003 · <b>ENG-APPLE001</b> · global supplier network · 2024</p>
+    </div>
+  </div>
+  <ul class="rules">
+    <li><b>the mono-chrome rule</b><span>JetBrains Mono is only ever small editorial chrome. It is forbidden for display and body copy. It carries the field-journal voice and loses it the moment it gets large.</span></li>
+    <li><b>the lowercase rule</b><span>The display face and the wordmark are always lowercase. "caboodle design." "ai rollouts that humans actually adopt." Lowercase is the house voice, not a bug.</span></li>
+  </ul>
+</section>
+
+<section class="ds ds--alt" id="elevation" data-log="005 · elevation · long throw">
+  <div class="ds__inner">
+    <div class="ds__head">
+      <span class="ds__num" aria-hidden="true">04</span>
+      <div>
+        <span class="ds__kicker">elevation</span>
+        <h2 class="ds__h">flat paper. <em>long, soft lift.</em></h2>
+        <p class="ds__p">
+          Surfaces are flat at rest and lift in response to hover or focus, never decoratively. Shadows are large in blur, negative in spread, low in alpha, so a lifted card reads as a physical object on paper catching diffuse light. Depth is also carried tonally: paper shadow recesses a panel without any shadow at all.
+        </p>
+      </div>
+    </div>
+    <div class="elev">
+      <div class="elev__card elev__card--rest"><b>resting lift</b><code>0 1px 3px rgba(0,0,0,.05), 0 10px 30px -16px rgba(40,40,40,.35)</code><small>dossier cards and panels at rest</small></div>
+      <div class="elev__card elev__card--hover"><b>hover lift</b><code>0 1px 3px rgba(0,0,0,.05), 0 26px 50px -22px rgba(40,40,40,.45)</code><small>the same card raised, with a 4px translate</small></div>
+      <div class="elev__card elev__card--bench"><b>bench stage</b><code>0 30px 70px -20px rgba(0,0,0,.55)</code><small>the live specimen frame lifted off the dark bench</small></div>
+      <div class="elev__card elev__card--glow"><b>tinted glow</b><code>0 40px 60px -30px rgba(3,89,155,.45)</code><small>occasional brand-tinted throw under a hero surface</small></div>
+    </div>
+    <ul class="rules">
+      <li><b>the long-throw rule</b><span>If a shadow looks tight, dark, or small-blur, it is wrong. No 2014-app drop shadows anywhere.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="ds" id="components" data-log="006 · components · operable">
+  <div class="ds__head">
+    <span class="ds__num" aria-hidden="true">05</span>
+    <div>
+      <span class="ds__kicker">components</span>
+      <h2 class="ds__h">live, <em>not pictured.</em></h2>
+      <p class="ds__p">Every component below is the real CSS, operable on this page. Hover, tab through, type in the field.</p>
+    </div>
+  </div>
+  <div class="comp">
+    <div class="comp__item">
+      <h3>button, primary</h3>
+      <p>Full pill. Graphite fill, paper text, DM Sans 600. Hover and focus flip to lime over 0.4s on the house ease; the arrow slides 4px. Keyboard focus adds a 2px magenta ring at 2px offset.</p>
+      <div class="comp__stage">
+        <a class="btn-primary" href="contact.html">start a conversation <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></a>
+        <a class="btn-primary btn-primary--sm" href="contact.html">let's talk</a>
+      </div>
+    </div>
+    <div class="comp__item">
+      <h3>button, on dark</h3>
+      <p>On the bench and dark panels the pill inverts to lime with graphite text, and hover lifts to white. Small lime text is allowed here because the ground is ink.</p>
+      <div class="comp__stage comp__stage--dark">
+        <a class="btn-primary btn-primary--lime" href="labs.html">open the live demo</a>
+        <span class="ds-live"><i aria-hidden="true"></i>is live</span>
+      </div>
+    </div>
+    <div class="comp__item">
+      <h3>input</h3>
+      <p>1px hairline border, square corners, paper ground, ash-gray placeholder. Focus shifts the border to magenta and lifts the ground to white. No glow.</p>
+      <div class="comp__stage">
+        <label class="sr-only" for="ds-demo-input">the shape of your problem</label>
+        <input class="ds-input" id="ds-demo-input" type="text" placeholder="the shape of your problem" />
+      </div>
+    </div>
+    <div class="comp__item">
+      <h3>dossier card</h3>
+      <p>10px corners, with the signature dog-ear variant (10px 10px 3px 10px) reading as a filed folder tab. Leads with a mono call number, a metadata line, then a lowercase title. Work is catalogued, not captioned.</p>
+      <div class="comp__stage">
+        <a class="ds-dossier" href="work/apple.html" style="text-decoration:none;color:inherit">
+          <span class="ds-dossier__call">ENG-APPLE001</span>
+          <span class="ds-dossier__meta">global supplier network · 2024</span>
+          <span class="ds-dossier__h">251 suppliers. 31 countries. one standard.</span>
+        </a>
+      </div>
+    </div>
+    <div class="comp__item">
+      <h3>tags and stamps</h3>
+      <p>Mono pills for stacks and tags. Mono stamp rows for specimen labels. Both are chrome, both stay small.</p>
+      <div class="comp__stage" style="flex-direction:column;align-items:flex-start">
+        <ul class="ds-tags"><li>action mapping</li><li>articulate rise 360</li><li>localization</li></ul>
+        <div class="ds-stamp"><span>lab experiment</span><b>LAB-007</b><span>applied ai · 2026</span></div>
+      </div>
+    </div>
+    <div class="comp__item">
+      <h3>navigation link</h3>
+      <p>Lowercase DM Sans with an underline that wipes in from the left on hover. The nav CTA is the primary pill and never gets the underline. Mobile: a 44px hamburger opens a full-width paper panel.</p>
+      <div class="comp__stage" style="gap:1.75rem">
+        <a class="ds-navlink" href="approach.html">approach</a>
+        <a class="ds-navlink" href="work.html">work</a>
+        <a class="ds-navlink" href="labs.html">labs</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ds ds--dark" id="motion" data-log="007 · motion · house ease">
+  <div class="ds__inner">
+    <div class="ds__head">
+      <span class="ds__num" aria-hidden="true">06</span>
+      <div>
+        <span class="ds__kicker">motion</span>
+        <h2 class="ds__h">one ease. <em>three durations.</em></h2>
+        <p class="ds__p">Everything moves on the same curve, an ease-out-expo family, so the site feels like one hand made it. Nothing loops, nothing bounces, numbers sit still. When a visitor asks for reduced motion, reveals resolve instantly and view transitions are disabled.</p>
+      </div>
+    </div>
+    <div class="motion">
+      <div class="motion__item"><b>house ease</b><code>cubic-bezier(0.16, 1, 0.3, 1)</code><span>Default easing for every state change and reveal.</span></div>
+      <div class="motion__item"><b>micro</b><code>0.2s</code><span>Hovers, taps, the underline wipe.</span></div>
+      <div class="motion__item"><b>ui</b><code>0.4s</code><span>Nav, panels, button color flips.</span></div>
+      <div class="motion__item"><b>reveal</b><code>0.6s</code><span>Entrances and scroll reveals. The lime curtain bar lifting off the hero headline.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="ds" id="accessibility" data-log="008 · accessibility · the standard">
+  <div class="ds__head">
+    <span class="ds__num" aria-hidden="true">07</span>
+    <div>
+      <span class="ds__kicker">accessibility</span>
+      <h2 class="ds__h">wcag 2.2 aa, <em>checked, not claimed.</em></h2>
+      <p class="ds__p">The site targets WCAG 2.2 AA. The specific commitments, so you can hold it to them:</p>
+    </div>
+  </div>
+  <ul class="rules">
+    <li><b>text contrast</b><span>Graphite on paper is 12.8:1. Ash gray was deepened from #686868 (4.9:1) to #5c5c5c (5.8:1) so secondary text clears 4.5:1 everywhere, including tinted panels.</span></li>
+    <li><b>brand color discipline</b><span>Lime never carries text on paper. Bright magenta never sets text below 24px. Both rules exist because the ratios above say they have to.</span></li>
+    <li><b>focus</b><span>Every interactive element shows a 2px magenta focus ring at 2px offset on keyboard focus. On dark grounds the ring is magenta lift or lime.</span></li>
+    <li><b>skip link</b><span>The first focusable element on every page is a skip link to the main content, visible on focus.</span></li>
+    <li><b>motion</b><span>prefers-reduced-motion is honored in CSS and in script: reveals resolve at once, view transitions are turned off, autoplaying media is not relied on.</span></li>
+    <li><b>images and media</b><span>Meaningful images carry alt text, decorative ones are hidden from assistive tech, below-the-fold images lazy-load with explicit dimensions so nothing shifts. Video demos ship with captions.</span></li>
+    <li><b>targets and structure</b><span>Mobile tap targets are 44px or larger. One h1 per page, and every skip link lands on the first content section.</span></li>
+  </ul>
+</section>
+
+<section class="ds ds--alt" id="rules" data-log="009 · do and don't">
+  <div class="ds__inner">
+    <div class="ds__head">
+      <span class="ds__num" aria-hidden="true">08</span>
+      <div>
+        <span class="ds__kicker">do and don't</span>
+        <h2 class="ds__h">the short list.</h2>
+      </div>
+    </div>
+    <div class="dodont">
+      <div class="dodont--do">
+        <h3>do</h3>
+        <ul>
+          <li>Ground every page in warm ash paper with the grain layer. Tint every neutral warm.</li>
+          <li>Keep JetBrains Mono to small chrome: kickers, stamps, call numbers, captions.</li>
+          <li>Set the display lowercase and oversized, and let a lime curtain bar reveal it.</li>
+          <li>File work under call numbers with mono metadata, the field-journal way.</li>
+          <li>Use magenta ink or magenta lift for small magenta text. Reserve bright magenta for display.</li>
+          <li>Lift surfaces with long, soft, negative-spread shadows, only on hover or focus.</li>
+        </ul>
+      </div>
+      <div class="dodont--dont">
+        <h3>don't</h3>
+        <ul>
+          <li>Write "passionate about learning" energy, or any generic L&amp;D filler.</li>
+          <li>Use the AI-hype voice: bare-category headlines, reinvention frames, trademarked-framework theater.</li>
+          <li>Ship a SaaS-cream portfolio, or the hero-metric template of a big number plus supporting stats.</li>
+          <li>Build identical card grids of icon plus heading plus text.</li>
+          <li>Use gradient text or glassmorphism. Emphasis comes from weight, size, and the brand colors.</li>
+          <li>Use an em dash anywhere except the official tagline.</li>
+          <li>Use pure #fff as a page ground or pure #000 for text.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Closing card -->
+<section class="closing" id="contact" data-log="010 · end of system · chain to next">
+  <div class="closing__card">
+    <div class="closing__stamp" aria-hidden="true">
+      <svg class="cd-stamp-mark" viewBox="0 0 90 60" aria-hidden="true">
+        <path class="cd-stamp-mark__fill" fill-rule="evenodd"
+          d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>
+      </svg>
+      <small>end of system</small>
+      <small>DS-002</small>
+    </div>
+    <div class="closing__body">
+      <span class="closing__kicker">next field note</span>
+      <h2 class="closing__h">
+        see it <em>in use.</em>
+      </h2>
+      <p class="closing__p">
+        The system exists to make the work legible. The labs are where the components get powered on, the case studies are where they carry evidence.
+      </p>
+      <a class="closing__cta" href="labs.html">
+        <span>go to the labs</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+      <span class="closing__email">hello@caboodledesign.info</span>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot__row">
+    <span class="foot__mark">caboodle design</span>
+    <span class="foot__tag">strategy, media, and behavioral science — it's the whole caboodle</span>
+  </div>
+  <div class="foot__cols">
+    <div>
+      <h3>navigation</h3>
+      <ul>
+        <li><a href="approach.html">approach</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="labs.html">labs</a></li>
+        <li><a href="about.html">about emily</a></li>
+        <li><a href="field-notes.html">field notes</a></li>
+        <li><a href="resources.html">free resources</a></li>
+        <li><a href="design-system.html">design system</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>get in touch</h3>
+      <ul>
+        <li><a href="contact.html">let's talk</a></li>
+        <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
+        <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot__row foot__row--small">
+    <span>&copy; 2026 caboodle design</span>
+    <span class="foot__credit">built by emily green in claude code</span>
+    <span class="foot__location">grand rapids, mi</span>
+  </div>
+</footer>
+
+<script src="script.js?v=20260618o" defer></script>
+</body>
+</html>

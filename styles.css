@@ -105,6 +105,17 @@
   --maxw: 1440px;
 }
 
+/* Skip link: first focusable element on every page (WCAG 2.4.1). */
+.skip {
+  position: absolute; left: 1rem; top: -100px; z-index: 1000;
+  padding: 0.7rem 1.1rem;
+  background: var(--ink); color: var(--lime);
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+  border-radius: var(--r-pill);
+  text-decoration: none;
+}
+.skip:focus { top: 1rem; outline: 2px solid var(--magenta); outline-offset: 2px; }
+
 /* ---------- Reset ---------------------------------------------------------- */
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -3276,6 +3287,48 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   .casehero__stamp { position: static; margin-bottom: 2rem; }
 }
 
+/* Try-it CTA: the live artefact, one click from the headline. */
+.casehero__try {
+  display: inline-flex; align-items: center; gap: 0.7rem;
+  margin: -1.25rem 0 2.75rem;
+  padding: 0.8rem 1.35rem 0.8rem 1.1rem;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--r-pill);
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1;
+  text-decoration: none;
+  transition: background var(--t-ui) var(--ease), color var(--t-ui) var(--ease);
+}
+.casehero__try:hover,
+.casehero__try:focus-visible { background: var(--lime); color: var(--ink); }
+.casehero__try:focus-visible { outline: 2px solid var(--magenta); outline-offset: 3px; }
+.casehero__try-dot {
+  flex: none; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 0 3px rgba(150,230,80,0.25);
+  transition: background var(--t-ui) var(--ease), box-shadow var(--t-ui) var(--ease);
+}
+.casehero__try:hover .casehero__try-dot,
+.casehero__try:focus-visible .casehero__try-dot { background: var(--ink); box-shadow: 0 0 0 3px rgba(40,40,40,0.15); }
+.casehero__try small {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.72;
+  margin-left: 0.15rem;
+}
+.casehero__try > span:not(.casehero__try-dot) { line-height: 1.15; }
+.casehero__try svg { flex: none; transition: transform var(--t-ui) var(--ease); }
+.casehero__try:hover svg { transform: translateY(3px); }
+@media (max-width: 680px) {
+  .casehero__try { margin-top: -0.75rem; }
+  .casehero__try small { display: none; }
+}
+
 /* ==========================================================================
    DEEP PAGE — CASE BODY (three editorial blocks, alternating)
    ========================================================================== */
@@ -3831,6 +3884,20 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   border: 1px solid var(--rule);
   color: var(--ink-2);
 }
+
+/* Standards line under the results stack: what the build was held to. */
+.results__standards {
+  margin: 1.5rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--rule);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1.25rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.results__standards b { font-weight: 500; color: var(--ink); }
 
 @media (max-width: 820px) {
   .results__head { grid-template-columns: 1fr; }

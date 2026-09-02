@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=20260715b" />
+<link rel="stylesheet" href="styles.css?v=20260902a" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <style>
 /* The family hairline: every page in the system wears its badge —
@@ -39,9 +39,98 @@
   height: 4px; background: var(--lime);
   z-index: 2000; pointer-events: none;
 }
+
+/* Run one yourself: greenroom, framed for the buyer */
+.rundemo {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--pad-x) clamp(3rem, 6vw, 5rem);
+}
+.rundemo__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: center;
+  background: var(--dark);
+  color: var(--paper);
+  border-radius: var(--r-card);
+  padding: clamp(2rem, 4vw, 3.5rem);
+  box-shadow: 0 30px 70px -20px rgba(0,0,0,0.55);
+}
+.rundemo__kicker {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lime);
+  padding-top: 0.6rem;
+  border-top: 2px solid var(--lime);
+  margin-bottom: 1.25rem;
+}
+.rundemo__h {
+  margin: 0 0 1rem;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.9rem, 3.4vw, 2.9rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--white);
+}
+.rundemo__h em { font-style: italic; color: var(--magenta-lift); }
+.rundemo__p { margin: 0 0 0.9rem; max-width: 52ch; line-height: 1.55; color: var(--paper); }
+.rundemo__p--muted { color: rgba(242,239,232,0.72); }
+.rundemo__ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin: 1.5rem 0 1.5rem; }
+.rundemo__cta {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.85rem 1.4rem;
+  background: var(--lime); color: var(--ink);
+  border-radius: var(--r-pill);
+  font-weight: 600; text-decoration: none; line-height: 1;
+  transition: background var(--t-ui) var(--ease), color var(--t-ui) var(--ease);
+}
+.rundemo__cta:hover, .rundemo__cta:focus-visible { background: var(--white); }
+.rundemo__cta:focus-visible { outline: 2px solid var(--magenta-lift); outline-offset: 3px; }
+.rundemo__cta svg { transition: transform var(--t-ui) var(--ease); }
+.rundemo__cta:hover svg { transform: translate(2px, -2px); }
+.rundemo__link {
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--paper); text-decoration: none; border-bottom: 1px solid rgba(242,239,232,0.35);
+  padding-bottom: 0.15rem;
+}
+.rundemo__link:hover { color: var(--lime); border-color: var(--lime); }
+.rundemo__facts { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; }
+.rundemo__facts li {
+  font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 0.35rem 0.75rem; border: 1px solid rgba(242,239,232,0.25); color: rgba(242,239,232,0.8);
+}
+.rundemo__window {
+  display: block; text-decoration: none; color: inherit;
+  border-radius: 8px; overflow: hidden;
+  background: var(--dark-2);
+  box-shadow: 0 30px 70px -20px rgba(0,0,0,0.6);
+  transition: transform var(--t-ui) var(--ease);
+}
+.rundemo__window:hover { transform: translateY(-4px); }
+.rundemo__window:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+.rundemo__chrome {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.55rem 0.8rem;
+  background: #1b1b1b; border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.rundemo__dots { display: inline-flex; gap: 0.35rem; }
+.rundemo__dots i { width: 9px; height: 9px; border-radius: 50%; background: #4a4a5a; }
+.rundemo__dots i:nth-child(1) { background: var(--magenta); }
+.rundemo__dots i:nth-child(2) { background: var(--lime); }
+.rundemo__url { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; color: rgba(242,239,232,0.6); }
+.rundemo__window img { display: block; width: 100%; height: auto; }
+@media (max-width: 900px) {
+  .rundemo__inner { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
+<a class="skip" href="#main">skip to content</a>
 
 <div class="family-edge" aria-hidden="true"></div>
 
@@ -67,7 +156,7 @@
 </header>
 
 <!-- Work hero -->
-<section class="labshero" data-log="001 — case files opened">
+<section id="main" class="labshero" data-log="001 — case files opened">
   <div class="labshero__stamp">
     <span>case files</span>
     <span>selected client engagements</span>
@@ -273,6 +362,42 @@
   </div>
 </section>
 
+<!-- Run one yourself: greenroom, the public example of the AI enablement work -->
+<section class="rundemo" id="run" data-log="009 · run one yourself · greenroom live">
+  <div class="rundemo__inner">
+    <div class="rundemo__text">
+      <span class="rundemo__kicker">try it with your own question</span>
+      <h2 class="rundemo__h">greenroom. <em>ask it something real.</em></h2>
+      <p class="rundemo__p">
+        A development copilot I scoped, built, and evaluated solo, in parallel to the performance-task modules for Airbnb's AI101 program. Ask it a real talent-development question. Watch it retrieve, cite its sources, refuse the ones out of scope, and hand back a next step you could try on Monday.
+      </p>
+      <p class="rundemo__p rundemo__p--muted">
+        This is the shape of AI enablement I bring to Fortune 500 work: grounded answers, honest refusals, a behavior instead of a catalog. No signup. Open it and type.
+      </p>
+      <div class="rundemo__ctas">
+        <a class="rundemo__cta" href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener">
+          <span>open the live demo</span>
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </a>
+        <a class="rundemo__link" href="labs/greenroom.html">read the build log</a>
+      </div>
+      <ul class="rundemo__facts">
+        <li>real rag with citations</li>
+        <li>agentic routing loop</li>
+        <li>22 of 22 evals pass</li>
+        <li>guardrails from the first commit</li>
+      </ul>
+    </div>
+    <a class="rundemo__window" href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener" aria-label="Open the live Greenroom demo in a new tab">
+      <span class="rundemo__chrome">
+        <span class="rundemo__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="rundemo__url">greenroom-strand.netlify.app</span>
+      </span>
+      <img src="assets/greenroom-poster.png" alt="Greenroom, the development copilot, answering a talent-development question with cited sources" loading="lazy" width="1440" height="900" />
+    </a>
+  </div>
+</section>
+
 <!-- Closing card -->
 <section class="closing" id="contact" data-log="010 — end of case files">
   <div class="closing__card">
@@ -319,6 +444,7 @@
         <li><a href="about.html">about emily</a></li>
         <li><a href="field-notes.html">field notes</a></li>
         <li><a href="resources.html">free resources</a></li>
+        <li><a href="design-system.html">design system</a></li>
       </ul>
     </div>
     <div>

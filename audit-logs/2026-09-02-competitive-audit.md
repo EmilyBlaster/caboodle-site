@@ -65,3 +65,28 @@
 ## Verdict
 
 They are not a competitor for the consulting buyer. They are a well-built junior portfolio with one very good idea: make the work playable and show the build. We win on every proof, positioning, and brand dimension. The three things to steal are the try-it-first case study layout, one published build document, and the WCAG claim stated out loud. Do those and there is nothing on their page we do not do better.
+
+---
+
+## Shipped 2026-09-02 (same day, branch `claude/competitive-site-audit-2it2av`)
+
+- [x] **Try-it CTA above the fold** on all seven case studies (apple, gitlab, airbnb, intuit, t-mobile, trust20, people's professors). New `.casehero__try` pill jumps to the live artefact section, which now carries an id. Mobile verified.
+- [x] **Build log on the Apple case** (`work/apple.html`, `.buildlog` ledger): action map, delivery decisions, measurement plan by Kirkpatrick level, accessibility checklist. Uses only facts already on the page; the confidentiality note is explicit.
+- [x] **Standards line** (`.results__standards`) under every results stack. Says "built to wcag aa" plus the page-specific requirement (localization, accreditation). *Emily to confirm the WCAG version and level per engagement before it goes live if she wants a version number.*
+- [x] **Greenroom promoted to a buyer-facing demo** on `work.html` (`.rundemo`): "try it with your own question", live link, build-log link, poster with browser chrome.
+- [x] **Design system published** at `design-system.html`: north star, every color token with computed WCAG contrast on paper and on ink, type specimens, elevation, live components, motion, the accessibility standard, do and don't. Linked from every footer.
+- [x] **Skip link on all 25 public pages**, visible on focus, targeting the first content section.
+- [x] **robots.txt, sitemap.xml** (25 URLs with git lastmod), **JSON-LD** (Organization, Person, WebSite on home; ProfilePage on about).
+- [x] Stylesheet cache token bumped to `20260902a` everywhere; RECOVERY.md updated.
+
+### Already handled before this audit (found while implementing)
+- Mobile nav `aria-expanded` and `aria-controls`: present in `script.js`.
+- Reduced motion for view transitions: handled in `styles.css` `@media (prefers-reduced-motion)`.
+- WORK PEEK dead IIFE: already removed. `.planning/codebase/CONCERNS.md` section 1.1 is stale.
+- Heavy IIFEs (field guide, cursor glow, touch ripple) already skip inside preview iframes.
+- `engagement-arc.html` and `fig-02-ladder.html` load lazily via `data-src`, so they sit off the critical path. Still 1.4 MB gzipped each; worth shrinking later, not blocking.
+
+### Still open
+- Field-notes subscribe form still posts to `mailto:`.
+- Testimonials on about.html still use `<div>` instead of `<blockquote>` and `<cite>`.
+- Carousel slide changes are not announced (`aria-live`).

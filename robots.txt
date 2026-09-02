@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /work/embeds/
+Disallow: /work-preview.html
+Disallow: /engagement-arc.html
+Disallow: /fig-02-ladder.html
+Disallow: /contact-thanks.html
+
+Sitemap: https://caboodledesign.info/sitemap.xml
