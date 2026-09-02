@@ -221,6 +221,15 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
     let idx = 0;
 
+    /* Announce slide changes: the caption is the live region, each slide
+       carries a role description and its position for screen readers. */
+    if (caption) { caption.setAttribute('aria-live', 'polite'); caption.setAttribute('aria-atomic', 'true'); }
+    slides.forEach((s, i) => {
+      s.setAttribute('role', 'group');
+      s.setAttribute('aria-roledescription', 'slide');
+      s.setAttribute('aria-label', `${i + 1} of ${total}`);
+    });
+
     slides.forEach((_, i) => {
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -233,7 +242,8 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     function go(n) {
       idx = (n + total) % total;
       track.style.transform = `translateX(-${idx * 100}%)`;
-      if (dots) Array.from(dots.children).forEach((d, i) => d.classList.toggle('is-active', i === idx));
+      if (dots) Array.from(dots.children).forEach((d, i) => { d.classList.toggle('is-active', i === idx); d.setAttribute('aria-current', i === idx ? 'true' : 'false'); });
+      slides.forEach((sl, i) => sl.setAttribute('aria-hidden', i === idx ? 'false' : 'true'));
       const s = slides[idx];
       const pad = String(idx + 1).padStart(2, '0');
       const tot = String(total).padStart(2, '0');

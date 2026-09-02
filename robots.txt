@@ -5,5 +5,6 @@ Disallow: /work-preview.html
 Disallow: /engagement-arc.html
 Disallow: /fig-02-ladder.html
 Disallow: /contact-thanks.html
+Disallow: /field-notes-thanks.html
 
 Sitemap: https://caboodledesign.info/sitemap.xml

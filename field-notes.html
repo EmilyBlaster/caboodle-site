@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=20260902a" />
+<link rel="stylesheet" href="styles.css?v=20260902b" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <style>
 /* The family hairline: every page in the system wears its badge —
@@ -152,8 +152,14 @@
       get notified when a new<br />
       field note lands.
     </h2>
-    <form class="subscribe__form" action="mailto:hello@caboodledesign.info" method="post" enctype="text/plain">
-      <input type="email" name="email" placeholder="your email" required />
+    <form class="subscribe__form" method="POST" action="https://formsubmit.co/hello@caboodledesign.info">
+      <input type="hidden" name="_next" value="https://caboodledesign.info/field-notes-thanks.html" />
+      <input type="hidden" name="_subject" value="New field notes subscriber from caboodledesign.info" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="text" name="_honey" class="subscribe__hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <label class="sr-only" for="subscribe-email">your email</label>
+      <input type="email" id="subscribe-email" name="email" placeholder="your email" required autocomplete="email" />
       <button type="submit">notify me</button>
     </form>
     <span class="subscribe__note">No spam. Notes only.</span>
@@ -214,6 +220,7 @@
         <li><a href="contact.html">let's talk</a></li>
         <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
         <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
+        <li><a href="https://www.linkedin.com/in/emilygreen77/" target="_blank" rel="noopener">linkedin</a></li>
       </ul>
     </div>
   </div>
@@ -224,6 +231,6 @@
   </div>
 </footer>
 
-<script src="script.js?v=20260618o" defer></script>
+<script src="script.js?v=20260902a" defer></script>
 </body>
 </html>
