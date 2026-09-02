@@ -80,3 +80,7 @@ Write down where each lives and which login it uses:
 ## If you had to hand this to another developer
 
 Point them at this file and a `git clone` of both repos. The site is standard static HTML, CSS, and JS: no framework, no build. The reel is a standard Remotion project (`npm install`, then the render commands above). Nothing here is locked to any one AI tool, any developer can pick it up.
+
+## Field-notes subscribe form
+
+The subscribe form on `field-notes.html` is a Netlify Form named `field-notes-subscribe`. Submissions live in the Netlify dashboard under Forms (CSV export there). Form detection has to be switched on once per site: Netlify > Site configuration > Forms > Enable form detection. Without that, submissions 404. The contact form still uses FormSubmit.

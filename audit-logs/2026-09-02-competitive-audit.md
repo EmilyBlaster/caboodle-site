@@ -87,7 +87,7 @@ They are not a competitor for the consulting buyer. They are a well-built junior
 - `engagement-arc.html` and `fig-02-ladder.html` load lazily via `data-src`, so they sit off the critical path. Still 1.4 MB gzipped each; worth shrinking later, not blocking.
 
 ### Shipped later the same day
-- [x] Field-notes subscribe form now posts to FormSubmit (same flow as contact), with a honeypot, a labeled field, and a new `field-notes-thanks.html` landing page. Kept out of search via robots.txt.
+- [x] Field-notes subscribe form now posts to Netlify Forms (`field-notes-subscribe`), with a honeypot, a labeled field, and a new `field-notes-thanks.html` landing page. Submissions collect in the Netlify dashboard with CSV export. Kept out of search via robots.txt. Form detection must be enabled once in Netlify site settings.
 - [x] Design-files carousel: caption is an `aria-live` region, slides carry `role="group"`, `aria-roledescription="slide"`, position labels, and `aria-hidden` on off-screen slides; dots carry `aria-current`.
 - [x] LinkedIn added to the "get in touch" footer on every page.
 - Testimonials on about.html were already `<blockquote>` + `<cite>`; the May note was stale.
