@@ -54,6 +54,19 @@
 .wb a { text-decoration: none; color: inherit; }
 .wb em { font-style: italic; color: var(--magenta); }
 .wb figure { margin: 0; }
+/* the mark: two circles come together once on load, part and snap back on hover (the assemble gesture) */
+.cd-logo__lens { fill: var(--paper); }
+.cd-logo__c1 { animation: wbAssembleL .7s var(--ease) .1s backwards; }
+.cd-logo__c2 { animation: wbAssembleR .7s var(--ease) .1s backwards; }
+@keyframes wbAssembleL { from { transform: translateX(-14px); } to { transform: none; } }
+@keyframes wbAssembleR { from { transform: translateX(14px); } to { transform: none; } }
+@media (hover: hover) {
+  .nav__mark:hover .cd-logo__c1 { animation: wbPartL .55s var(--ease); }
+  .nav__mark:hover .cd-logo__c2 { animation: wbPartR .55s var(--ease); }
+  @keyframes wbPartL { 30% { transform: translateX(-10px); } 100% { transform: none; } }
+  @keyframes wbPartR { 30% { transform: translateX(10px); } 100% { transform: none; } }
+}
+@media (prefers-reduced-motion: reduce) { .cd-logo__c1, .cd-logo__c2, .nav__mark:hover .cd-logo__c1, .nav__mark:hover .cd-logo__c2 { animation: none; } }
 .wb .wb-btn { color: var(--paper); }
 .wb .wb-btn:hover { color: var(--ink); }
 .wb .wb-btn--ghost { color: var(--ink); }
@@ -84,7 +97,8 @@
 /* ---------- beat 1 · claim + working wall ---------- */
 .wb-hero { padding-top: clamp(5.5rem, 9vw, 7.5rem); padding-bottom: clamp(2.5rem, 6vw, 5rem); display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(2rem, 4vw, 4rem); align-items: start; }
 @media (max-width: 1000px) { .wb-hero { grid-template-columns: 1fr; } }
-.wb-hero__copy { display: grid; gap: 1.5rem; position: sticky; top: 5.5rem; }
+.wb-hero__copy { display: grid; gap: 1.5rem; }
+@media (min-width: 1001px) { .wb-hero__copy { position: sticky; top: 5.5rem; } }
 .wb-hero__copy .wb-k { color: var(--ink-2); }
 .wb-hero h1 { font-size: clamp(2.6rem, 5.2vw, 4.6rem); line-height: .98; }
 .wb-hero h1 .wb-line { display: block; position: relative; overflow: visible; }
@@ -254,8 +268,7 @@ body.wb-has-full { overflow: hidden; }
 <header class="nav">
   <a class="nav__mark" href="#top">
     <svg class="cd-logo" viewBox="0 0 260 56" xmlns="http://www.w3.org/2000/svg" aria-label="caboodle design" role="img">
-      <path class="cd-logo__mark" fill-rule="evenodd"
-        d="M 5 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0 M 33 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0"/>
+      <g class="cd-logo__live"><circle class="cd-logo__mark cd-logo__c1" cx="28" cy="28" r="23"/><circle class="cd-logo__mark cd-logo__c2" cx="56" cy="28" r="23"/><path class="cd-logo__lens" d="M 42 9.75 a 23 23 0 0 0 0 36.5 a 23 23 0 0 0 0 -36.5 z"/></g>
       <text class="cd-logo__word" x="95" y="26" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">caboodle</text>
       <text class="cd-logo__word" x="95" y="50" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">design</text>
     </svg>
