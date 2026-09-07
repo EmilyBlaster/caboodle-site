@@ -42,299 +42,209 @@
      starting their HTTP request only when the IntersectionObserver fires. -->
 
 <style>
-/* real iPhones rasterize the headline glyphs a few px higher in the
-   curtain clip window than desktop engines (the "ai" tops were getting
-   shaved on device, unreproducible in Chrome or desktop WebKit). Swap
-   the clip mechanism: clip-path with a negative top inset extends the
-   window 0.15em further above the border box with ZERO layout effect —
-   padding/margins stay exactly as styles.css ships them. */
-.hero__line { overflow: visible; clip-path: inset(-0.15em 0 0 0); }
-/* the bars SHRINK upward instead of sliding up and out. Same visual
-   (the bottom edge sweeps up, uncovering the ink), but the bar never
-   leaves its own box — Safari lets animating layers escape a parent's
-   clip mid-flight, which sent the lime bar sailing over the FIELD
-   NOTE stamp. Nothing to clip means nothing to escape. */
-.hero__line::after { transform: scaleY(0); transform-origin: top; }
-@keyframes barLift {
-  from { transform: scaleY(1); }
-  to   { transform: scaleY(0); }
+/* ============================================================
+   THE WORKBENCH — homepage. Promoted from workbench-demo.html.
+   Every class is namespaced wb- so nothing collides with styles.css.
+   Color roles: lime = live / on / touch. magenta = the accent word.
+   blue = wordmark + method. paper + graphite do the structural work.
+   ============================================================ */
+.wb { --lime-2: #B6EE85; --blue-deep: #024378; --paper-2: #e8e3d8; --dark: #141414; --snap: cubic-bezier(0.2, 0.9, 0.1, 1); --maxw: 1440px; --pad: clamp(1.25rem, 5vw, 5rem); }
+.wb h1, .wb h2, .wb h3 { font-family: var(--display); font-weight: 700; letter-spacing: -0.02em; line-height: 1.02; margin: 0; text-transform: lowercase; text-wrap: balance; }
+.wb p { margin: 0; text-wrap: pretty; }
+.wb a { text-decoration: none; color: inherit; }
+.wb em { font-style: italic; color: var(--magenta); }
+.wb figure { margin: 0; }
+.wb .wb-btn { color: var(--paper); }
+.wb .wb-btn:hover { color: var(--ink); }
+.wb .wb-btn--ghost { color: var(--ink); }
+.wb .wb-btn--ghost:hover { color: var(--paper); }
+.wb .wb-start .wb-btn { color: var(--ink); }
+.wb .wb-start .wb-btn:hover { color: var(--ink); }
+
+/* ============================================================
+   THE WORKBENCH — homepage direction demo
+   ------------------------------------------------------------
+   Standalone throwaway. Nothing live is touched. Five beats:
+   claim + working wall, who trusts it, selected work, how i
+   work, start. The only graphics are Emily's real components,
+   running. Whimsy budget: the curtain reveal on the headline,
+   the "power on" lift on each tile, the mark assembling once
+   in the nav, and the copy voice. No ornament.
+   Color roles: lime = live / on / touch. magenta = the accent
+   word. blue = wordmark + method. paper + graphite do the work.
+   ============================================================ */
+
+.wb-k { font-family: var(--mono); font-size: .68rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); }
+.wb-wrap { max-width: var(--maxw); margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+.wb-btn { display: inline-flex; align-items: center; gap: .6rem; font: 500 .95rem/1 var(--body); padding: .85rem 1.4rem; border-radius: 999px; background: var(--ink); color: var(--paper); transition: background .2s, color .2s; }
+.wb-btn:hover { background: var(--lime); color: var(--ink); }
+.wb-btn--ghost { background: none; color: var(--ink); border: 1.5px solid var(--ink); }
+.wb-btn--ghost:hover { background: var(--ink); color: var(--paper); }
+
+/* ---------- beat 1 · claim + working wall ---------- */
+.wb-hero { padding-top: clamp(5.5rem, 9vw, 7.5rem); padding-bottom: clamp(2.5rem, 6vw, 5rem); display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(2rem, 4vw, 4rem); align-items: start; }
+@media (max-width: 1000px) { .wb-hero { grid-template-columns: 1fr; } }
+.wb-hero__copy { display: grid; gap: 1.5rem; position: sticky; top: 5.5rem; }
+.wb-hero__copy .wb-k { color: var(--ink-2); }
+.wb-hero h1 { font-size: clamp(2.6rem, 5.2vw, 4.6rem); line-height: .98; }
+.wb-hero h1 .wb-line { display: block; position: relative; overflow: visible; }
+.wb-hero h1 .wb-line span { display: inline-block; }
+/* curtain reveal: a solid brand bar covers each line and lifts away */
+.wb-hero h1 .wb-line::after { content: ""; position: absolute; left: -.06em; right: -.06em; top: -.02em; bottom: -.02em; background: var(--lime); transform-origin: top; animation: lift .7s var(--ease) forwards; }
+.wb-hero h1 .wb-line:nth-child(2)::after { background: var(--blue); animation-delay: .18s; }
+.wb-hero h1 .wb-line:nth-child(3)::after { background: var(--magenta); animation-delay: .36s; }
+.wb-hero h1 .wb-line span { animation: rise .7s var(--ease) both; }
+.wb-hero h1 .wb-line:nth-child(2) span { animation-delay: .18s; } .wb-hero h1 .wb-line:nth-child(3) span { animation-delay: .36s; }
+@keyframes lift { 0% { transform: scaleY(1); } 55% { transform: scaleY(1); } 100% { transform: scaleY(0); } }
+@keyframes rise { 0% { transform: translateY(.25em); opacity: 0; } 50% { transform: translateY(.25em); opacity: 0; } 100% { transform: none; opacity: 1; } }
+.wb-hero__lede { font-size: 1.12rem; max-width: 40ch; color: var(--ink); }
+.wb-hero__ctas { display: flex; gap: .75rem; flex-wrap: wrap; }
+.wb-hero__hint { display: flex; align-items: center; gap: .6rem; }
+.wb-hero__hint i { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 0 var(--lime); animation: ping 2s ease-out infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(150,230,80,.7); } 100% { box-shadow: 0 0 0 10px rgba(150,230,80,0); } }
+
+.wb-wall { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+@media (max-width: 640px) { .wb-wall { grid-template-columns: 1fr; } }
+.wb-tile { position: relative; background: var(--paper-2); aspect-ratio: 16 / 10; overflow: hidden; display: grid; }
+.wb-tile--wide { grid-column: 1 / -1; aspect-ratio: 16 / 7; }
+.wb-tile__stage { position: absolute; inset: 0; overflow: hidden; }
+.wb-tile__stage iframe { position: absolute; left: 0; top: 0; width: 100%; height: 100%; border: 0; display: block; background: var(--paper-2); }
+.wb-tile__stage iframe.wb-fit { transform-origin: 0 0; }
+.wb-tile__loop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; background: var(--paper-2); transition: transform .6s var(--ease); }
+.wb-tile:hover .wb-tile__loop { transform: scale(1.03); }
+.wb-tile.wb-is-full .wb-tile__loop { display: none; }
+.wb-tile__label { position: absolute; left: .9rem; top: .8rem; z-index: 3; display: flex; align-items: center; gap: .6rem; pointer-events: none; }
+.wb-tile__label .wb-k { color: var(--ink); background: color-mix(in srgb, var(--paper) 82%, transparent); padding: .3rem .55rem; border-radius: 999px; backdrop-filter: blur(6px); }
+.wb-tile__label i { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-2); flex: none; transition: background .2s; }
+.wb-tile.wb-is-live .wb-tile__label i { background: var(--lime); box-shadow: 0 0 0 3px rgba(150,230,80,.35); }
+/* the power switch: a big quiet target over the poster; on click a lime bar lifts and the component is there */
+.wb-tile__power { position: absolute; inset: 0; z-index: 2; display: grid; place-items: end start; padding: .9rem; background: none; border: 0; cursor: pointer; text-align: left; }
+.wb-tile__power b { font: 500 .95rem/1 var(--body); background: var(--ink); color: var(--paper); padding: .75rem 1.1rem; border-radius: 999px; display: inline-flex; gap: .5rem; align-items: center; transition: background .2s, color .2s; }
+.wb-tile__power:hover b, .wb-tile__power:focus-visible b { background: var(--lime); color: var(--ink); }
+.wb-tile__curtain { position: absolute; inset: 0; z-index: 4; background: var(--lime); transform: scaleY(0); transform-origin: bottom; pointer-events: none; }
+.wb-tile.wb-is-switching .wb-tile__curtain { animation: sweep .75s var(--ease) forwards; }
+@keyframes sweep { 0% { transform: scaleY(0); transform-origin: bottom; } 45% { transform: scaleY(1); transform-origin: bottom; } 55% { transform: scaleY(1); transform-origin: top; } 100% { transform: scaleY(0); transform-origin: top; } }
+.wb-tile.wb-is-live .wb-tile__power { display: none; }
+.wb-tile__open { position: absolute; right: .8rem; bottom: .7rem; z-index: 3; font: 500 .68rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); background: color-mix(in srgb, var(--paper) 85%, transparent); padding: .35rem .6rem; border-radius: 999px; opacity: 0; transition: opacity .2s; }
+.wb-tile:hover .wb-tile__open, .wb-tile:focus-within .wb-tile__open { opacity: 1; }
+.wb-wall__foot { grid-column: 1 / -1; background: var(--paper); padding: .8rem 1rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+
+/* ---------- stage mode: one tile takes the wall, the rest become a strip ---------- */
+.wb-wall.wb-has-stage { grid-template-columns: repeat(3, 1fr); }
+.wb-wall.wb-has-stage .wb-tile { aspect-ratio: 16 / 7; }
+.wb-wall.wb-has-stage .wb-tile.wb-is-stage { grid-column: 1 / -1; order: -1; aspect-ratio: 16 / 10; }
+.wb-wall.wb-has-stage .wb-tile:not(.wb-is-stage) { cursor: pointer; }
+.wb-wall.wb-has-stage .wb-tile:not(.wb-is-stage) .wb-tile__label { left: .6rem; top: .55rem; }
+.wb-wall.wb-has-stage .wb-tile:not(.wb-is-stage) .wb-tile__label .wb-k { font-size: .58rem; letter-spacing: .1em; padding: .22rem .45rem; }
+.wb-wall.wb-has-stage .wb-tile:not(.wb-is-stage) .wb-tile__power b, .wb-wall.wb-has-stage .wb-tile:not(.wb-is-stage) .wb-tile__open, .wb-wall.wb-has-stage .wb-tile:not(.wb-is-stage) .wb-tile__expand { display: none; }
+.wb-wall.wb-has-stage .wb-tile:not(.wb-is-stage) .wb-tile__power { z-index: 2; }
+
+.wb-tile.wb-is-stage .wb-tile__label { display: none; }
+.wb-tile__bar { display: none; grid-column: 1 / -1; order: -1; background: var(--paper); padding: .7rem 1rem; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.wb-wall.wb-has-stage .wb-tile__bar { display: flex; }
+.wb-tile__bar .wb-k { color: var(--ink); margin-right: auto; }
+.wb-tile__bar button, .wb-tile__bar a { font: 500 .68rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); background: none; border: 1.5px solid var(--ink); border-radius: 999px; padding: .4rem .75rem; cursor: pointer; transition: background .2s, color .2s; }
+.wb-tile__bar button:hover, .wb-tile__bar a:hover { background: var(--lime); }
+.wb-tile__bar .wb-live { display: inline-flex; align-items: center; gap: .5rem; margin-right: 1rem; }
+.wb-tile__bar .wb-live i { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 3px rgba(150,230,80,.35); }
+/* expand pill on live tiles that are still small */
+.wb-tile__expand { position: absolute; right: .8rem; bottom: .7rem; z-index: 3; font: 500 .68rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); background: var(--lime); border: 0; padding: .45rem .7rem; border-radius: 999px; cursor: pointer; opacity: 0; transform: translateY(4px); transition: opacity .2s, transform .2s; }
+.wb-tile.wb-is-live:not(.wb-is-stage):hover .wb-tile__expand, .wb-tile.wb-is-live:not(.wb-is-stage):focus-within .wb-tile__expand { opacity: 1; transform: none; }
+.wb-tile.wb-is-stage .wb-tile__open, .wb-tile.wb-is-stage .wb-tile__expand { display: none; }
+/* full screen: the stage tile lifts out of the page */
+.wb-tile.wb-is-full { position: fixed; inset: 0; z-index: 500; aspect-ratio: auto; background: var(--dark); }
+.wb-tile.wb-is-full .wb-tile__stage { inset: 3.25rem 0 0 0; }
+.wb-tile.wb-is-full .wb-tile__label { display: none; }
+.wb-tile__fullbar { display: none; position: absolute; left: 0; right: 0; top: 0; height: 3.25rem; z-index: 6; background: var(--dark); color: var(--paper); padding: 0 1.25rem; align-items: center; gap: 1rem; border-bottom: 1px solid #2a2a2a; }
+.wb-tile.wb-is-full .wb-tile__fullbar { display: flex; }
+.wb-tile__fullbar .wb-k { color: var(--lime-2); margin-right: auto; }
+.wb-tile__fullbar a { font: 500 .68rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #bdbdbd; }
+.wb-tile__fullbar button { font: 500 .68rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--paper); background: none; border: 1.5px solid var(--paper); border-radius: 999px; padding: .45rem .8rem; cursor: pointer; }
+.wb-tile__fullbar button:hover { background: var(--lime); color: var(--ink); border-color: var(--lime); }
+body.wb-has-full { overflow: hidden; }
+
+/* ---------- hover motion (desktop pointers only) ---------- */
+@media (hover: hover) {
+  /* the mark parts and snaps back: the assemble gesture, again */
+  /* the accent word replays its curtain */
+  .wb-hero h1 em { position: relative; display: inline-block; cursor: default; }
+  .wb-hero h1 em::after { content: ""; position: absolute; inset: -.02em -.06em; background: var(--magenta); transform: scaleY(0); transform-origin: top; pointer-events: none; }
+  .wb-hero h1 em:hover::after { animation: relift .7s var(--ease); }
+  @keyframes relift { 0% { transform: scaleY(0); transform-origin: bottom; } 40% { transform: scaleY(1); transform-origin: bottom; } 50% { transform: scaleY(1); transform-origin: top; } 100% { transform: scaleY(0); transform-origin: top; } }
+  /* tiles: lime frame + poster nudge; the pill leans in */
+  .wb-tile::after { content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none; box-shadow: inset 0 0 0 0 var(--lime); transition: box-shadow .25s var(--ease); }
+  .wb-tile:hover::after { box-shadow: inset 0 0 0 3px var(--lime); }
+  .wb-tile__poster { transition: transform .6s var(--ease); }
+  
+  .wb-tile__power b { transition: transform .3s var(--ease), background .2s, color .2s; }
+  .wb-tile:hover .wb-tile__power b { transform: translateX(6px); }
+  /* case cards: a lime rule runs across the top, the title picks up blue */
+  .wb-case { position: relative; }
+  .wb-case::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--lime); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease); z-index: 1; }
+  .wb-case:hover::before { transform: scaleX(1); }
+  .wb-case h3 { transition: color .2s; } .wb-case:hover h3 { color: var(--blue); }
+  /* steps: the number fills a lime disc */
+  .wb-step .wb-k { position: relative; width: 2rem; height: 2rem; display: grid; place-items: center; border-radius: 50%; transition: background .2s, color .2s; padding: 0; }
+  .wb-step:hover .wb-k { background: var(--lime); color: var(--ink); }
+  /* trust names take the accent on hover, quietly */
+  .wb-trust__logo { transition: color .2s; } .wb-trust__logo:hover { color: var(--blue); }
+}
+
+/* ---------- beat 2 · who trusts it ---------- */
+.wb-trust { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.wb-trust__in { display: flex; flex-wrap: wrap; align-items: baseline; gap: .75rem 2.5rem; padding-top: 1.4rem; padding-bottom: 1.4rem; }
+.wb-trust__in .wb-k { margin-right: auto; }
+.wb-trust__logo { font-family: var(--display); font-size: 1.35rem; color: var(--ink); text-transform: lowercase; letter-spacing: -.01em; }
+
+/* ---------- beat 3 · selected work ---------- */
+.wb-sec { padding-top: clamp(3rem, 7vw, 6rem); padding-bottom: clamp(3rem, 7vw, 6rem); display: grid; gap: 2rem; }
+.wb-sec__head { display: flex; justify-content: space-between; align-items: end; gap: 2rem; flex-wrap: wrap; }
+.wb-sec__head h2 { font-size: clamp(1.9rem, 3.8vw, 3.1rem); max-width: 22ch; }
+.wb-sec__head .wb-k { padding-bottom: .5rem; }
+.wb-cases { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+@media (max-width: 1000px) { .wb-cases { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .wb-cases { grid-template-columns: 1fr; } }
+.wb-case { background: var(--paper); display: grid; gap: .9rem; padding: 1rem 1rem 1.25rem; transition: background .2s; }
+.wb-case:hover { background: var(--paper-2); }
+.wb-case__img { aspect-ratio: 4 / 3; overflow: hidden; background: var(--paper-2); }
+.wb-case__img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s var(--ease); }
+.wb-case:hover .wb-case__img img { transform: scale(1.03); }
+.wb-case h3 { font-size: 1.2rem; line-height: 1.08; }
+.wb-case .wb-k { color: var(--ink-2); }
+
+/* ---------- beat 4 · how i work ---------- */
+.wb-how { border-top: 1px solid var(--rule); }
+.wb-how__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 4vw, 4rem); align-items: center; }
+@media (max-width: 900px) { .wb-how__grid { grid-template-columns: 1fr; } }
+.wb-steps { display: grid; gap: 0; border-top: 1px solid var(--rule); }
+.wb-step { display: grid; grid-template-columns: 3.5rem 1fr; gap: 1rem; padding: 1.25rem 0; border-bottom: 1px solid var(--rule); align-items: start; }
+.wb-step .wb-k { color: var(--blue); padding-top: .35rem; }
+.wb-step h3 { font-size: 1.35rem; margin-bottom: .3rem; }
+.wb-step p { color: var(--ink-2); font-size: .98rem; max-width: 46ch; }
+.wb-fig { border: 1px solid var(--rule); background: var(--paper-2); aspect-ratio: 16 / 10; position: relative; overflow: hidden; }
+.wb-fig iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: var(--paper-2); }
+.wb-step { cursor: default; }
+.wb-fig iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.wb-fig .wb-k { position: absolute; left: .9rem; bottom: .8rem; color: var(--ink); background: color-mix(in srgb, var(--paper) 82%, transparent); padding: .3rem .55rem; border-radius: 999px; }
+
+/* ---------- beat 5 · start ---------- */
+.wb-start { background: var(--dark); color: var(--paper); }
+.wb-start__in { padding-top: clamp(3rem, 8vw, 7rem); padding-bottom: clamp(3rem, 8vw, 7rem); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: end; }
+@media (max-width: 800px) { .wb-start__in { grid-template-columns: 1fr; } }
+.wb-start h2 { font-size: clamp(2.2rem, 5vw, 4.2rem); color: var(--paper); max-width: 16ch; }
+.wb-start h2 em { color: var(--lime); }
+.wb-start p { color: #bdbdbd; max-width: 46ch; margin-top: 1rem; }
+.wb-start .wb-k { color: var(--lime-2); }
+.wb-start .wb-btn { background: var(--lime); color: var(--ink); font-size: 1.05rem; padding: 1rem 1.6rem; }
+.wb-start .wb-btn:hover { background: var(--paper); }
+
+@media (prefers-reduced-motion: reduce) {
+  .wb-hero h1 .wb-line::after { animation: none; transform: scaleY(0); }
+  .wb-hero h1 .wb-line span { animation: none; }
+    .wb-tile.wb-is-switching .wb-tile__curtain { animation: none; }
+  .wb-hero__hint i { animation: none; }
 }
 </style>
-<style>
-/* ---------- the bench (homepage hands-on specimens) ----------------------
-   One stage, three operable specimens on a tab switcher: the AI copilot
-   leads, then the 3D trainer, then the behavioral experiment. Only one
-   is powered at a time. Fixed compositions contain-fit (no scrollbars);
-   living apps get browser chrome + both-axis scrollbar clipping. */
-.bench {
-  background: var(--ink);
-  color: var(--paper);
-  padding: 9vh clamp(20px, 7vw, 110px) 11vh;
-}
-.bench__kicker {
-  font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  color: var(--lime);
-  display: block;
-  margin-bottom: 2.5vh;
-}
-.bench__h {
-  font-family: var(--display, 'Bauhaus Bool', 'Futura', 'Century Gothic', sans-serif);
-  font-weight: 700;
-  font-size: clamp(1.9rem, 3.8vw, 3.1rem);
-  line-height: 1.1;
-  margin: 0 0 2vh;
-  max-width: 20ch;
-}
-.bench__h em { font-style: normal; color: var(--lime); }
-.bench__lede {
-  font-size: 17px;
-  line-height: 1.6;
-  color: rgba(242, 239, 232, 0.75);
-  max-width: 54ch;
-  margin-bottom: 4vh;
-}
-.bench__tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 18px;
-  max-width: 1060px;
-}
-.bench-tab {
-  font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  color: rgba(242, 239, 232, 0.75);
-  background: none;
-  border: 1px solid rgba(242, 239, 232, 0.3);
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 10px 16px;
-  cursor: pointer;
-  transition: border-color var(--t-micro) var(--ease), color var(--t-micro) var(--ease), background var(--t-micro) var(--ease);
-}
-.bench-tab:hover, .bench-tab:focus-visible { border-color: var(--lime); color: var(--paper); }
-.bench-tab.is-on { border-color: var(--lime); color: var(--ink); background: var(--lime); }
-.bench-spec {
-  position: relative;
-  background: #fbf9f4;
-  padding: 10px 10px 0;
-  box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.55);
-  max-width: 1060px;
-  margin: 0;
-}
-.bench-spec__stage {
-  position: relative;
-  display: block;
-  aspect-ratio: 16 / 9.6;
-  background: #e9e5da;
-  overflow: hidden;
-}
-.bench-spec__stage iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-.bench-spec__stage iframe.iframe--fit { inset: auto; transform-origin: top left; }
-.bench-spec__chrome {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 34px;
-  display: none;
-  align-items: center;
-  gap: 10px;
-  padding: 0 12px;
-  background: var(--ink);
-  z-index: 2;
-}
-.bench-spec.is-live.has-chrome .bench-spec__chrome { display: flex; }
-.bench-spec.is-live.has-chrome iframe {
-  top: 34px;
-  height: calc(100% - 34px + 18px);
-  width: calc(100% + 18px);
-}
-.bench-spec__chrome i { width: 8px; height: 8px; border-radius: 50%; background: rgba(242, 239, 232, 0.3); }
-.bench-spec__chrome i:first-child { background: var(--lime); }
-.bench-spec__chrome span {
-  margin-left: 6px;
-  font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: rgba(242, 239, 232, 0.75);
-  background: rgba(242, 239, 232, 0.08);
-  padding: 4px 12px;
-}
-.bench-spec__chrome .chrome-hint {
-  margin-left: auto;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: rgba(242, 239, 232, 0.5);
-  background: none;
-  padding: 0;
-}
-.bench-spec__poster {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 25%;
-  filter: grayscale(0.85) brightness(0.92);
-  transition: filter var(--t-ui) var(--ease);
-}
-.bench-spec:hover .bench-spec__poster { filter: grayscale(0.35) brightness(0.97); }
-.bench-spec__run {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  background: rgba(40, 40, 40, 0.28);
-  border: 0;
-  cursor: pointer;
-  transition: background var(--t-ui) var(--ease);
-}
-.bench-spec__run:hover, .bench-spec__run:focus-visible { background: rgba(40, 40, 40, 0.16); }
-.bench-spec__run b {
-  font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  font-weight: 500;
-  color: var(--ink);
-  background: var(--lime);
-  padding: 14px 26px;
-}
-.bench-spec__run span {
-  font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  color: rgba(242, 239, 232, 0.95);
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
-}
-.bench-spec.is-live .bench-spec__run, .bench-spec.is-live .bench-spec__poster { display: none; }
-.bench-spec__caption {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding: 12px 6px;
-  font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 10.5px;
-  letter-spacing: 0.1em;
-  color: var(--ink-2);
-}
-.bench-spec__caption i { font-style: normal; color: var(--magenta-ink); }
-.bench__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
-  gap: clamp(26px, 5vw, 70px);
-  align-items: start;
-}
-.bench__notes { display: flex; flex-direction: column; gap: 30px; padding-top: 2vh; }
-.bench-note {
-  font-family: var(--mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 12px;
-  letter-spacing: 0.05em;
-  line-height: 1.75;
-  color: rgba(242, 239, 232, 0.85);
-  border-top: 1px solid rgba(242, 239, 232, 0.18);
-  padding-top: 12px;
-}
-.bench-note b { font-weight: 500; display: block; letter-spacing: 0.14em; margin-bottom: 2px; }
-.bench-note:nth-child(1) b { color: var(--lime); }
-.bench-note:nth-child(2) b { color: var(--blue-lift); }
-.bench-note:nth-child(3) b { color: var(--magenta-lift); }
-@media (max-width: 900px) {
-  .bench__grid { grid-template-columns: 1fr; }
-}
-/* phones: a taller stage so inline apps have room to breathe */
-@media (max-width: 700px) {
-  .bench-spec__stage { aspect-ratio: 4 / 5; }
-}
-</style>
-<script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@graph": [
-  {
-   "@type": "Organization",
-   "@id": "https://caboodledesign.info/#org",
-   "name": "caboodle design",
-   "url": "https://caboodledesign.info/",
-   "logo": "https://caboodledesign.info/assets/og/og-home.png",
-   "email": "hello@caboodledesign.info",
-   "description": "Learning experience design with AI built in. 15 years of behavior change and learning systems for Fortune 500s.",
-   "founder": {
-    "@id": "https://caboodledesign.info/#emily"
-   },
-   "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Grand Rapids",
-    "addressRegion": "MI",
-    "addressCountry": "US"
-   },
-   "sameAs": [
-    "https://www.tiktok.com/@caboodledesign",
-    "https://www.linkedin.com/in/emilygreen77/"
-   ]
-  },
-  {
-   "@type": "Person",
-   "@id": "https://caboodledesign.info/#emily",
-   "name": "Emily Green",
-   "jobTitle": "Learning Experience Designer and AI Enablement Lead",
-   "url": "https://caboodledesign.info/about.html",
-   "worksFor": {
-    "@id": "https://caboodledesign.info/#org"
-   },
-   "email": "hello@caboodledesign.info",
-   "alumniOf": {
-    "@type": "CollegeOrUniversity",
-    "name": "Full Sail University"
-   },
-   "hasCredential": [
-    {
-     "@type": "EducationalOccupationalCredential",
-     "name": "M.S. Instructional Design & Technology"
-    },
-    {
-     "@type": "EducationalOccupationalCredential",
-     "name": "Google UX Design Professional Certificate"
-    }
-   ],
-   "knowsAbout": [
-    "AI enablement",
-    "learning experience design",
-    "behavior change design",
-    "learning systems",
-    "Action Mapping",
-    "Kirkpatrick evaluation",
-    "instructional design"
-   ],
-   "sameAs": [
-    "https://www.linkedin.com/in/emilygreen77/",
-    "https://www.tiktok.com/@caboodledesign"
-   ]
-  },
-  {
-   "@type": "WebSite",
-   "@id": "https://caboodledesign.info/#site",
-   "url": "https://caboodledesign.info/",
-   "name": "caboodle design",
-   "publisher": {
-    "@id": "https://caboodledesign.info/#org"
-   }
-  }
- ]
-}
-</script>
 </head>
 <body>
 <a class="skip" href="#top">skip to content</a>
@@ -359,708 +269,107 @@
   </nav>
 </header>
 
-<!-- 01 — Field-note hero -->
-<section class="hero" id="top">
-  <div class="hero__frame">
-    <div class="hero__stamp">
-      <span>field note</span>
-      <span>grand rapids, mi · 2026</span>
-    </div>
-
-    <div class="hero__meta">
-      <span class="hero__eyebrow">learning experience design · ai built in · behavior change</span>
-    </div>
-
-    <h1 class="hero__headline">
-      <span class="hero__line"><span class="hero__line-inner">ai rollouts</span></span>
-      <span class="hero__line"><span class="hero__line-inner">that humans</span></span>
-      <span class="hero__line"><span class="hero__line-inner">actually <em>adopt.</em></span></span>
+<main class="wb">
+<section class="wb-wrap wb-hero" id="top">
+  <div class="wb-hero__copy">
+    <span class="wb-k">learning experience design · ai built in · behavior change</span>
+    <h1>
+      <span class="wb-line"><span>ai rollouts</span></span>
+      <span class="wb-line"><span>that humans</span></span>
+      <span class="wb-line"><span>actually <em>adopt.</em></span></span>
     </h1>
-
-    <div class="hero__foot">
-      <p class="hero__lede">
-        Most AI rollouts change nothing. I lead the kind that do.
-        I'm Emily Green. 15 years of behavior change and learning
-        systems for Fortune 500s. Now leading AI programs the same way.
-        The&nbsp;whole&nbsp;caboodle.
-      </p>
-      <a href="#bench" class="hero__run" aria-label="Run the work live: three specimens powered on, on the bench below">
-        <span class="hero__run-stack" aria-hidden="true">
-          <img src="assets/hero/greenroom-thumb.webp" alt="" width="40" height="40" decoding="async" />
-          <img src="assets/hero/extinguisher-thumb.webp" alt="" width="40" height="40" decoding="async" />
-          <img src="assets/hero/skipwatch-thumb.webp" alt="" width="40" height="40" decoding="async" />
-        </span>
-        <span class="hero__run-text">
-          <b>run the work live</b>
-          <small><i aria-hidden="true"></i>3 specimens powered on &middot; no signup</small>
-        </span>
-        <span class="hero__run-arrow" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 5v14m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-      </a>
-    </div>
+    <p class="wb-hero__lede">Most AI rollouts change nothing. I lead the kind that do. Fifteen years of behavior change and learning systems for Fortune 500s, now with AI built into the programs. Don't read about the work. Run it.</p>
+    <div class="wb-hero__ctas"><a class="wb-btn" href="contact.html">let's talk</a><a class="wb-btn wb-btn--ghost" href="work.html">see the case files</a></div>
+    <span class="wb-hero__hint wb-k"><i></i>four real pieces. watch them run, then run them yourself.</span>
   </div>
-</section>
 
-<!-- 02 — Field reel removed (too much going on up top). The reel mp4s stay in
-     assets/, and the .reel CSS + fieldReelMotion() JS sit inert (no .reel
-     element), so the section above can be restored verbatim to bring it back. -->
-
-<!-- 03 — Trust band -->
-<section class="trustband">
-  <div class="trustband__inner">
-    <span class="trustband__kicker">log 02 · trusted by fortune 500</span>
-    <ul class="trustband__list">
-      <li>apple</li>
-      <li>airbnb</li>
-      <li>gitlab</li>
-      <li>johnson &amp; johnson</li>
-      <li>t-mobile</li>
-      <li>intuit</li>
-    </ul>
-    <span class="trustband__note">8+ enterprise teams</span>
-  </div>
-  <figure class="trustband__voice">
-    <blockquote class="trustband__quote">
-      &ldquo;She does a fantastic job interpreting the technical and dense
-      content and simplifying interactions when needed while still
-      <em>preserving the core messaging.&rdquo;</em>
-    </blockquote>
-    <figcaption class="trustband__cite">liz medhi-kashi &middot; safer design &amp; manufacturing &middot; apple</figcaption>
-  </figure>
-</section>
-
-<!-- (static proof strip removed — the field reel above is its motion replacement) -->
-
-<!-- The bench: three real pieces, operable in place. AI copilot leads
-     (it is the positioning), then the 3D trainer, then the behavioral
-     experiment. Only one specimen is powered at a time. -->
-<section class="bench" id="bench">
-  <span class="bench__kicker">log 03 · the bench · run the work live</span>
-  <h2 class="bench__h">don't read about the work, <em>run it.</em></h2>
-  <p class="bench__lede">
-    Three real pieces, powered on in place: a working AI copilot,
-    an interactive 3D trainer, a behavioral experiment. Pick one
-    and put your hands on it.
-  </p>
-
-  <div class="bench__tabs" id="benchTabs" role="tablist" aria-label="Choose a specimen"></div>
-
-  <div class="bench__grid">
-    <figure class="bench-spec" id="benchSpec">
-      <span class="bench-spec__stage" id="benchStage">
-        <span class="bench-spec__chrome" aria-hidden="true"><i></i><i></i><i></i><span id="benchChromeUrl"></span><span class="chrome-hint">scroll to explore ↓</span></span>
-        <img class="bench-spec__poster" id="benchPoster" src="" alt="" loading="lazy" decoding="async" />
-        <button class="bench-spec__run" id="benchRun" type="button">
-          <b>run specimen →</b>
-          <span id="benchRunSub"></span>
-        </button>
-      </span>
-      <figcaption class="bench-spec__caption">
-        <span id="benchCaption"></span>
-        <span><i>◉ live</i> when powered</span>
-      </figcaption>
+  <div class="wb-wall" id="wall">
+    <!-- each tile: a short silent loop of the piece being used (poster fallback), power on = full screen live -->
+    <figure class="wb-tile" data-src="assets/pp-hook-interactive.html" data-fit="1200x540">
+      <div class="wb-tile__label"><i></i><span class="wb-k">behavioral experiment · people's professors · 2025</span></div>
+      <video class="wb-tile__loop" src="assets/demos/loops/loop-skip.mp4" poster="assets/pp-skip-or-watch.webp" muted loop playsinline autoplay preload="metadata"></video>
+      <div class="wb-tile__stage"></div>
+      <button class="wb-tile__power" type="button"><b>run it →</b></button>
+      <div class="wb-tile__fullbar"><span class="wb-k"></span><a href="assets/pp-hook-interactive.html" target="_blank" rel="noopener">open in a tab ↗</a><button type="button" data-unfull>back to the page · esc</button></div>
+      <div class="wb-tile__curtain"></div>
+    </figure>
+    <figure class="wb-tile" data-src="assets/3d/fire-extinguisher.html">
+      <div class="wb-tile__label"><i></i><span class="wb-k">3d trainer · global supplier program · 2025</span></div>
+      <video class="wb-tile__loop" src="assets/demos/loops/loop-3d.mp4" poster="assets/demos/fire-extinguisher-3d.webp" muted loop playsinline autoplay preload="metadata"></video>
+      <div class="wb-tile__stage"></div>
+      <button class="wb-tile__power" type="button"><b>run it →</b></button>
+      <div class="wb-tile__fullbar"><span class="wb-k"></span><a href="assets/3d/fire-extinguisher.html" target="_blank" rel="noopener">open in a tab ↗</a><button type="button" data-unfull>back to the page · esc</button></div>
+      <div class="wb-tile__curtain"></div>
+    </figure>
+    <figure class="wb-tile" data-src="https://greenroom-strand.netlify.app">
+      <div class="wb-tile__label"><i></i><span class="wb-k">ai copilot · greenroom · rag + evals · 2026</span></div>
+      <video class="wb-tile__loop" src="assets/demos/loops/loop-greenroom.mp4" poster="assets/greenroom-poster.png" muted loop playsinline autoplay preload="metadata"></video>
+      <div class="wb-tile__stage"></div>
+      <button class="wb-tile__power" type="button"><b>run it →</b></button>
+      <div class="wb-tile__fullbar"><span class="wb-k"></span><a href="https://greenroom-strand.netlify.app" target="_blank" rel="noopener">open in a tab ↗</a><button type="button" data-unfull>back to the page · esc</button></div>
+      <div class="wb-tile__curtain"></div>
+    </figure>
+    <figure class="wb-tile" data-src="labs/reading-the-rainforest-live/" data-descend>
+      <div class="wb-tile__label"><i></i><span class="wb-k">click-to-explore · lab-001 · 2026</span></div>
+      <video class="wb-tile__loop" src="assets/demos/loops/loop-forest.mp4" poster="assets/labs/figs/reading-the-rainforest.webp" muted loop playsinline autoplay preload="metadata"></video>
+      <div class="wb-tile__stage"></div>
+      <button class="wb-tile__power" type="button"><b>run it →</b></button>
+      <div class="wb-tile__fullbar"><span class="wb-k"></span><a href="labs/reading-the-rainforest.html" target="_blank" rel="noopener">open in a tab ↗</a><button type="button" data-unfull>back to the page · esc</button></div>
+      <div class="wb-tile__curtain"></div>
     </figure>
 
-    <aside class="bench__notes" id="benchNotes" aria-label="Field notes on this specimen"></aside>
-  </div>
-</section>
-
-<!-- Work: real case studies as dossiers
-     (testimonial section moved to about.html as a consolidated grid) -->
-
-<section class="work" id="work">
-  <header class="work__head">
-    <span class="work__kicker">log 04 · selected work</span>
-    <h2 class="work__title">
-      engagements.<br />
-      filed and catalogued.
-    </h2>
-    <p class="work__dek">
-      Programs and learning systems that drive measurable behavior
-      change, and the artifacts to prove it.
-    </p>
-  </header>
-
-  <div class="dossiers">
-
-    <a class="dossier dossier--link dossier--accent-blue dossier--withpreview" href="work/intuit.html">
-      <div class="dossier__tab">
-        <span class="dossier__code">ENG-INTUIT</span>
-        <span class="dossier__year">10K+ employees</span>
-      </div>
-      <div class="dossier__body">
-        <div class="dossier__text">
-          <div class="dossier__meta">
-            <span class="dossier__client">intuit · career growth</span>
-            <span class="dossier__role">ai recommendations + structured learning paths</span>
-          </div>
-          <h3 class="dossier__h">ai-powered career growth for 10k+ employees.</h3>
-          <p class="dossier__p">
-            A comprehensive career growth program integrating AI
-            recommendations with structured learning paths, helping
-            employees navigate their professional development journey.
-          </p>
-          <div class="dossier__cta">open case file →</div>
-        </div>
-        <div class="dossier__preview">
-          <div class="dossier__preview-chrome">
-            <div class="dossier__preview-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-            <span class="dossier__preview-url">caboodledesign.info/work/intuit.html</span>
-          </div>
-          <div class="dossier__preview-viewport">
-            <iframe data-src="work/intuit.html" class="dossier__preview-iframe" tabindex="-1" aria-hidden="true" title="Intuit case study preview"></iframe>
-            <img class="dossier__preview-poster" src="assets/work-covers/previews/intuit.webp" alt="" width="960" height="600" loading="lazy" decoding="async" />
-            <span class="dossier__preview-hint" aria-hidden="true">hover to run it live</span>
-          </div>
-        </div>
-      </div>
-    </a>
-
-    <a class="dossier dossier--link dossier--accent-lime dossier--withpreview" href="work/airbnb.html" data-preview-start="0.44">
-      <div class="dossier__tab">
-        <span class="dossier__code">ENG-AIRBNB</span>
-        <span class="dossier__year">5 modules · 90 days</span>
-      </div>
-      <div class="dossier__body">
-        <div class="dossier__text">
-          <div class="dossier__meta">
-            <span class="dossier__client">airbnb · ai enablement</span>
-            <span class="dossier__role">greenroom methodology · ai enablement design</span>
-          </div>
-          <h3 class="dossier__h">5 modules in 90 days, built for adoption.</h3>
-          <p class="dossier__p">
-            Five performance-task modules I designed and built for
-            AI101, Airbnb's AI enablement program. Built around how
-            humans actually adopt AI tools, not how training assumes
-            they should.
-          </p>
-          <div class="dossier__cta">open case file &rarr;</div>
-        </div>
-        <div class="dossier__preview">
-          <div class="dossier__preview-chrome">
-            <div class="dossier__preview-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-            <span class="dossier__preview-url">caboodledesign.info/work/airbnb.html</span>
-          </div>
-          <div class="dossier__preview-viewport">
-            <iframe data-src="work/airbnb.html" class="dossier__preview-iframe" tabindex="-1" aria-hidden="true" title="Airbnb case study preview"></iframe>
-            <img class="dossier__preview-poster" src="assets/work-covers/previews/airbnb.webp" alt="" width="960" height="600" loading="lazy" decoding="async" />
-            <span class="dossier__preview-hint" aria-hidden="true">hover to run it live</span>
-          </div>
-        </div>
-      </div>
-    </a>
-
-    <a class="dossier dossier--link dossier--accent-magenta dossier--withpreview" href="work/apple.html">
-      <div class="dossier__tab">
-        <span class="dossier__code">ENG-APPLE</span>
-        <span class="dossier__year">251 suppliers · 31 countries</span>
-      </div>
-      <div class="dossier__body">
-        <div class="dossier__text">
-          <div class="dossier__meta">
-            <span class="dossier__client">apple · supplier code of conduct</span>
-            <span class="dossier__role">ethical, environmental, innovation standards</span>
-          </div>
-          <h3 class="dossier__h">supplier training across 251 companies, 31 countries.</h3>
-          <p class="dossier__p">
-            A global training program for Apple's supplier network
-            covering ethical standards, environmental compliance, and
-            innovation requirements. Built to translate, measure, and scale.
-          </p>
-          <div class="dossier__cta">open case file →</div>
-        </div>
-        <div class="dossier__preview">
-          <div class="dossier__preview-chrome">
-            <div class="dossier__preview-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-            <span class="dossier__preview-url">caboodledesign.info/work/apple.html</span>
-          </div>
-          <div class="dossier__preview-viewport">
-            <iframe data-src="work/apple.html" class="dossier__preview-iframe" tabindex="-1" aria-hidden="true" title="Apple case study preview"></iframe>
-            <img class="dossier__preview-poster" src="assets/work-covers/previews/apple.webp" alt="" width="960" height="600" loading="lazy" decoding="async" />
-            <span class="dossier__preview-hint" aria-hidden="true">hover to run it live</span>
-          </div>
-        </div>
-      </div>
-    </a>
-
-    <a class="dossier dossier--link dossier--accent-blue dossier--withpreview" href="work/gitlab.html" data-preview-desktop>
-      <div class="dossier__tab">
-        <span class="dossier__code">ENG-GITLAB</span>
-        <span class="dossier__year">2 months · nl · de · fr</span>
-      </div>
-      <div class="dossier__body">
-        <div class="dossier__text">
-          <div class="dossier__meta">
-            <span class="dossier__client">gitlab · works council compliance</span>
-            <span class="dossier__role">interactive decision tools · lms-embedded html</span>
-          </div>
-          <h3 class="dossier__h">works council training delivered in 2 months.</h3>
-          <p class="dossier__p">
-            Interactive decision tools and contact guides for Netherlands,
-            Germany, and France. HTML-based learning components embedded
-            in the LMS with localized content for each region.
-          </p>
-          <div class="dossier__cta">open case file →</div>
-        </div>
-        <div class="dossier__preview">
-          <div class="dossier__preview-chrome">
-            <div class="dossier__preview-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-            <span class="dossier__preview-url">caboodledesign.info/work/gitlab.html</span>
-          </div>
-          <div class="dossier__preview-viewport">
-            <iframe data-src="work/gitlab.html" class="dossier__preview-iframe" tabindex="-1" aria-hidden="true" title="GitLab case study preview"></iframe>
-            <img class="dossier__preview-poster" src="assets/work-covers/previews/gitlab.webp" alt="" width="960" height="600" loading="lazy" decoding="async" />
-            <span class="dossier__preview-hint" aria-hidden="true">hover to run it live</span>
-          </div>
-        </div>
-      </div>
-    </a>
-
-    <a class="dossier dossier--link dossier--accent-lime dossier--withpreview" href="work/tmobile.html" data-preview-start="0.55">
-      <div class="dossier__tab">
-        <span class="dossier__code">ENG-TMOBILE</span>
-        <span class="dossier__year">corporate legal</span>
-      </div>
-      <div class="dossier__body">
-        <div class="dossier__text">
-          <div class="dossier__meta">
-            <span class="dossier__client">t-mobile · legal affairs</span>
-            <span class="dossier__role">branching simulation · regulatory clarity</span>
-          </div>
-          <h3 class="dossier__h">legal training that cut inquiries 40%.</h3>
-          <p class="dossier__p">
-            Interactive legal compliance training for T-Mobile's corporate
-            teams. Regulatory requirements translated into clear,
-            actionable scenarios practiced as branching simulations.
-          </p>
-          <div class="dossier__cta">open case file →</div>
-        </div>
-        <div class="dossier__preview">
-          <div class="dossier__preview-chrome">
-            <div class="dossier__preview-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-            <span class="dossier__preview-url">caboodledesign.info/work/tmobile.html</span>
-          </div>
-          <div class="dossier__preview-viewport">
-            <iframe data-src="work/tmobile.html" class="dossier__preview-iframe" tabindex="-1" aria-hidden="true" title="T-Mobile case study preview"></iframe>
-            <img class="dossier__preview-poster" src="assets/work-covers/previews/tmobile.webp" alt="" width="960" height="600" loading="lazy" decoding="async" />
-            <span class="dossier__preview-hint" aria-hidden="true">hover to run it live</span>
-          </div>
-        </div>
-      </div>
-    </a>
-
-    <a class="dossier dossier--link dossier--accent-magenta dossier--withpreview" href="work/trust20.html">
-      <div class="dossier__tab">
-        <span class="dossier__code">ENG-TRUST20</span>
-        <span class="dossier__year">5 weeks · multi-state</span>
-      </div>
-      <div class="dossier__body">
-        <div class="dossier__text">
-          <div class="dossier__meta">
-            <span class="dossier__client">trust20 · gordon food services</span>
-            <span class="dossier__role">scenario-based · multi-state accreditation</span>
-          </div>
-          <h3 class="dossier__h">accredited alcohol server training in 5 weeks.</h3>
-          <p class="dossier__p">
-            Scalable, scenario-based alcohol server training meeting
-            multi-state accreditation requirements for Gordon Food
-            Services within a five-week timeline.
-          </p>
-          <div class="dossier__cta">open case file →</div>
-        </div>
-        <div class="dossier__preview">
-          <div class="dossier__preview-chrome">
-            <div class="dossier__preview-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-            <span class="dossier__preview-url">caboodledesign.info/work/trust20.html</span>
-          </div>
-          <div class="dossier__preview-viewport">
-            <iframe data-src="work/trust20.html" class="dossier__preview-iframe" tabindex="-1" aria-hidden="true" title="Trust20 case study preview"></iframe>
-            <img class="dossier__preview-poster" src="assets/work-covers/previews/trust20.webp" alt="" width="960" height="600" loading="lazy" decoding="async" />
-            <span class="dossier__preview-hint" aria-hidden="true">hover to run it live</span>
-          </div>
-        </div>
-      </div>
-    </a>
-
-    <a class="dossier dossier--link dossier--accent-ink dossier--withpreview" href="work/peoples-professors.html" data-preview-desktop>
-      <div class="dossier__tab">
-        <span class="dossier__code">PROJ-PP001</span>
-        <span class="dossier__year">self-initiated · 2026</span>
-      </div>
-      <div class="dossier__body">
-        <div class="dossier__text">
-          <div class="dossier__meta">
-            <span class="dossier__client">the people's professors · capstone research</span>
-            <span class="dossier__role">graphic design · custom code · tiktok</span>
-          </div>
-          <h3 class="dossier__h">a thesis about tiktok. so i built the proof.</h3>
-          <p class="dossier__p">
-            A capstone project using graphic design and custom code
-            to deliver a one-of-a-kind learning experience. Three
-            conference keynotes followed.
-          </p>
-          <div class="dossier__cta">open case file →</div>
-        </div>
-        <div class="dossier__preview">
-          <div class="dossier__preview-chrome">
-            <div class="dossier__preview-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-            <span class="dossier__preview-url">caboodledesign.info/work/peoples-professors.html</span>
-          </div>
-          <div class="dossier__preview-viewport">
-            <iframe data-src="work/peoples-professors.html" class="dossier__preview-iframe" tabindex="-1" aria-hidden="true" title="The People's Professors project preview"></iframe>
-            <img class="dossier__preview-poster" src="assets/work-covers/previews/peoples-professors.webp" alt="" width="960" height="600" loading="lazy" decoding="async" />
-            <span class="dossier__preview-hint" aria-hidden="true">hover to run it live</span>
-          </div>
-        </div>
-      </div>
-    </a>
-
-  </div>
-
-  <div class="workclose">
-    <p class="workclose__line">See a problem here that looks like yours? Let's talk.</p>
-    <div class="workclose__actions">
-      <a class="workclose__cta" href="contact.html">
-        <span>start a conversation</span>
-        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-      </a>
-      <a class="workclose__resume" href="about.html#resume">
-        <span>see the full work history</span>
-        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-      </a>
+    <div class="wb-wall__foot">
+      <span class="wb-k">everything on this wall shipped to a client or a classroom. click one and it opens full screen, live.</span>
+      <a class="wb-k" href="labs.html" style="color:var(--blue)">the labs</a>
     </div>
   </div>
 </section>
 
-<!-- 03 — Approach: three pillars -->
-<section class="approach" id="approach">
-  <header class="approach__head">
-    <h2 class="approach__title">
-      the whole caboodle.
-    </h2>
-    <p class="approach__dek">
-      Where strategy, media, and behavioral science converge. Three
-      methods, applied in order, borrowed from anthropology,
-      behavioral science, and editorial media. Not from the LMS
-      vendor catalog.
-    </p>
-  </header>
-
-  <!-- Pillar 01 — left weight -->
-  <article class="pillar pillar--left">
-    <div class="pillar__num" aria-hidden="true">01</div>
-    <div class="pillar__body">
-      <span class="pillar__tag">ethnographic research</span>
-      <h3 class="pillar__h">I observe what people actually do before I design anything.</h3>
-      <p class="pillar__p">
-        Before a single storyboard, I study what people actually do in
-        their workplace context. This anthropological approach ensures
-        training addresses real behavior, not assumptions. I watch. I
-        listen. I ask the uncomfortable questions.
-      </p>
-      <ul class="pillar__list">
-        <li>contextual inquiry · stakeholder interviews · artifact analysis</li>
-        <li>global &amp; compliance: localization, wcag, regulatory standards</li>
-        <li>curriculum architecture: outcome-driven learning paths</li>
-      </ul>
-    </div>
-  </article>
-
-  <!-- Pillar 02 — right weight -->
-  <article class="pillar pillar--right">
-    <div class="pillar__num" aria-hidden="true">02</div>
-    <div class="pillar__body">
-      <span class="pillar__tag">behavioral strategy</span>
-      <h3 class="pillar__h">I design for behavior change. Then I measure it.</h3>
-      <p class="pillar__p">
-        Action Mapping for design. A layered Kirkpatrick-Phillips
-        evaluation model for measurement, from learner reaction all
-        the way to demonstrated ROI for the business. Nudges,
-        motivation design, habit loops, AI integration. The thinking
-        is the job.
-      </p>
-      <ul class="pillar__list">
-        <li>action mapping · kirkpatrick-phillips · choice architecture</li>
-        <li>measurement instrumented before launch, not after</li>
-        <li>ai as a field tool, never as a substitution</li>
-      </ul>
-    </div>
-  </article>
-
-  <!-- Pillar 03 — left weight -->
-  <article class="pillar pillar--left">
-    <div class="pillar__num" aria-hidden="true">03</div>
-    <div class="pillar__body">
-      <span class="pillar__tag">creative media</span>
-      <h3 class="pillar__h">Scalable learning systems, not one-off decks.</h3>
-      <p class="pillar__p">
-        Interaction design, video, motion graphics, visual
-        storytelling. Design systems and media libraries and
-        interactive experiences. Every asset is built to evolve with
-        your organization, so the training investment future-proofs
-        itself.
-      </p>
-      <ul class="pillar__list">
-        <li>remotion · three.js · storyline · rise · editorial web</li>
-        <li>single source of truth asset systems</li>
-        <li>accessibility and retention measured, not assumed</li>
-      </ul>
-    </div>
-  </article>
-</section>
-
-<!-- Action Mapping × Kirkpatrick editorial table -->
-<section class="matrix">
-  <header class="matrix__head">
-    <span class="matrix__kicker">log 05 · design meets measurement</span>
-    <h2 class="matrix__title">
-      design with action mapping.<br />
-      measure with kirkpatrick.
-    </h2>
-    <p class="matrix__dek">
-      Every engagement ladders up through the same four rungs. The
-      business goal lines up with the Kirkpatrick level, and a real
-      client proves the row.
-    </p>
-  </header>
-
-  <div class="matrix__grid">
-    <article class="matrix__row">
-      <div class="matrix__cell matrix__cell--am">
-        <span class="matrix__lv">01</span>
-        <h3>business goal</h3>
-        <p>What outcome must change?</p>
-      </div>
-      <div class="matrix__link">proves</div>
-      <div class="matrix__cell matrix__cell--kp">
-        <span class="matrix__lv">L4</span>
-        <h3>results</h3>
-        <p>Did it matter?</p>
-      </div>
-      <aside class="matrix__proof">
-        <span class="matrix__client">apple</span>
-        <p>95% completion across 251 suppliers in 31 countries. Every
-          training element mapped back to a measurable outcome, not
-          seat time.</p>
-      </aside>
-    </article>
-
-    <article class="matrix__row">
-      <div class="matrix__cell matrix__cell--am">
-        <span class="matrix__lv">02</span>
-        <h3>critical actions</h3>
-        <p>What must people do differently?</p>
-      </div>
-      <div class="matrix__link">tracks</div>
-      <div class="matrix__cell matrix__cell--kp">
-        <span class="matrix__lv">L3</span>
-        <h3>behavior</h3>
-        <p>Are they doing it?</p>
-      </div>
-      <aside class="matrix__proof">
-        <span class="matrix__client">intuit</span>
-        <p>3× increase in internal mobility applications. We identified
-          the 5 manager behaviors that predicted mobility. Training
-          rehearsed those actions. Everything else was cut.</p>
-      </aside>
-    </article>
-
-    <article class="matrix__row">
-      <div class="matrix__cell matrix__cell--am">
-        <span class="matrix__lv">03</span>
-        <h3>practice activities</h3>
-        <p>How do they rehearse it?</p>
-      </div>
-      <div class="matrix__link">reveals</div>
-      <div class="matrix__cell matrix__cell--kp">
-        <span class="matrix__lv">L2</span>
-        <h3>learning</h3>
-        <p>Did they learn it?</p>
-      </div>
-      <aside class="matrix__proof">
-        <span class="matrix__client">t-mobile</span>
-        <p>100% completion, Legal Affairs compliance training. Real
-          scenarios in branching simulations. Not multiple-choice
-          quizzes. It felt relevant, so it got finished.</p>
-      </aside>
-    </article>
-
-    <article class="matrix__row">
-      <div class="matrix__cell matrix__cell--am">
-        <span class="matrix__lv">04</span>
-        <h3>essential info</h3>
-        <p>What's the minimum to act?</p>
-      </div>
-      <div class="matrix__link">drives</div>
-      <div class="matrix__cell matrix__cell--kp">
-        <span class="matrix__lv">L1</span>
-        <h3>reaction</h3>
-        <p>Did they like it?</p>
-      </div>
-      <aside class="matrix__proof">
-        <span class="matrix__client">ppfa / bayer</span>
-        <p>180M women reached. Complex medical guidance distilled into the
-          minimum essential information patients needed to act.</p>
-      </aside>
-    </article>
-  </div>
-
-  <p class="matrix__kicker matrix__closing">completion is the metric everyone reports; behavior is the one that matters.</p>
-</section>
-
-<!-- 08 — Labs preview -->
-<section class="labs" id="labs">
-  <header class="labs__head">
-    <h2 class="labs__title">
-      where behavior design meets ai experimentation.
-    </h2>
-    <p class="labs__dek">
-      Personal projects, prototypes, and proofs-of-concept. Each one
-      exploring whether AI can solve a real L&amp;D workflow problem,
-      not just build features.
-    </p>
-  </header>
-
-  <!-- Instruction strip: two distinct action chips so the mechanic is unmistakable -->
-  <p class="labs__guide" role="note">
-    <span class="labs__guide-action labs__guide-action--hover">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 15l-2 5L9 9l11 6-5 2zm0 0l5 5"/></svg>
-      hover to preview
-    </span>
-    <span class="labs__guide-action labs__guide-action--click">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      click to open
-    </span>
-  </p>
-
-  <!-- Side-by-side layout: cards left, live preview pinned right -->
-  <div class="labs__layout">
-
-    <!-- Left: scrollable card list -->
-    <div class="labs__grid">
-      <a class="lab" href="labs/greenroom.html"
-         data-lab-src="labs/greenroom.html"
-         data-lab-name="greenroom">
-        <span class="lab__tag">ai prototype · applied llm + rag</span>
-        <h3>greenroom: a&nbsp;development copilot</h3>
-        <p>
-          A development copilot built around behavior change, not just
-          content. Real RAG with citations, an agentic routing loop, and a
-          22-case eval harness. Scoped, built, and evaluated solo.
-        </p>
-        <span class="lab__tools">claude code · rag · eval harness</span>
-        <span class="lab__cta">view experiment →</span>
-      </a>
-      <a class="lab" href="labs/stakeholder-review.html"
-         data-lab-src="labs/stakeholder-review.html"
-         data-lab-name="stakeholder review system">
-        <span class="lab__tag">ai prototype · workflow</span>
-        <h3>inline stakeholder review system</h3>
-        <p>
-          A feedback workspace built directly into a client landing
-          page. Pins, color-coded reviewers, a slide-out panel grouping
-          comments by section with resolve tracking. No email threads.
-          No annotated screenshots.
-        </p>
-        <span class="lab__tools">claude code · vibe coding</span>
-        <span class="lab__cta">view experiment →</span>
-      </a>
-
-      <a class="lab" href="labs/reading-the-rainforest.html"
-         data-lab-src="labs/reading-the-rainforest.html"
-         data-lab-name="reading the rainforest">
-        <span class="lab__tag">experiment · scroll-driven motion</span>
-        <h3>reading the rainforest</h3>
-        <p>
-          Three layers of rainforest, canopy to floor, stacked into one
-          continuous scroll. The whole scene runs on a single input: how
-          far down the page you are. Testing what motion does to how
-          people move through, and remember, an experience.
-        </p>
-        <span class="lab__tools">parallax · scrollytelling · claude code</span>
-        <span class="lab__cta">scroll it →</span>
-      </a>
-
-      <a class="lab lab--more" href="labs.html">
-        <span class="lab__tag">the shelf</span>
-        <h3>five more experiments</h3>
-        <p>Emotion-aware feedback, a content ops dashboard, programmatic video, context-aware microlearning, and a field-tested homepage.</p>
-        <span class="lab__cta">see the whole bench →</span>
-      </a>
-    </div>
-
-    <!-- Right: live preview, sticky so it stays level with any hovered card -->
-    <div class="labs-stage">
-      <div class="labs-stage__chrome">
-        <div class="labs-stage__dots" aria-hidden="true">
-          <span></span><span></span><span></span>
-        </div>
-        <span class="labs-stage__label">stakeholder review system</span>
-        <span class="labs-stage__url">labs/stakeholder-review.html</span>
-      </div>
-      <div class="labs-stage__viewport">
-        <iframe class="labs-stage__iframe" tabindex="-1" aria-hidden="true" title="Lab experiment preview"></iframe>
-        <div class="labs-stage__fade" aria-hidden="true"></div>
-        <span class="labs-stage__hint" aria-hidden="true">hover a card to switch</span>
-      </div>
-    </div>
-
+<!-- ============ beat 2 · who trusts it ============ -->
+<section class="wb-trust">
+  <div class="wb-wrap wb-trust__in">
+    <span class="wb-k">trusted by</span>
+    <span class="wb-trust__logo">apple</span><span class="wb-trust__logo">airbnb</span><span class="wb-trust__logo">gitlab</span><span class="wb-trust__logo">johnson &amp; johnson</span><span class="wb-trust__logo">t-mobile</span><span class="wb-trust__logo">intuit</span>
   </div>
 </section>
 
-<!-- 09 — About -->
-<section class="about" id="about">
-  <div class="about__grid">
-    <div class="about__portrait">
-      <div class="about__disc">
-        <img src="assets/EmilyGreenPortrait.webp" alt="Emily Green, founder of caboodle design" loading="lazy" decoding="async" width="800" height="800" />
-      </div>
-      <span class="about__portraitcap">subject · emily green · founder</span>
+<!-- ============ beat 3 · selected work ============ -->
+<section class="wb-wrap wb-sec" id="work">
+  <div class="wb-sec__head">
+    <h2>outcomes, not completions.</h2>
+    <a class="wb-k" href="work.html" style="color:var(--blue)">all seven case files →</a>
+  </div>
+  <div class="wb-cases">
+    <a class="wb-case" href="work/airbnb.html"><div class="wb-case__img"><img src="assets/og/og-airbnb.png" alt="" style="object-fit:contain"></div><span class="wb-k">airbnb · ai 101 · 2026</span><h3>5 modules in 90 days, built for adoption.</h3></a>
+    <a class="wb-case" href="work/tmobile.html"><div class="wb-case__img"><img src="assets/work-covers/tmobile.jpg" alt=""></div><span class="wb-k">t-mobile · legal + privacy</span><h3>legal training that cut inquiries 40%.</h3></a>
+    <a class="wb-case" href="work/apple.html"><div class="wb-case__img"><img src="assets/work-covers/apple.jpg" alt=""></div><span class="wb-k">apple · supplier responsibility</span><h3>supplier training across 251 companies, 31 countries.</h3></a>
+    <a class="wb-case" href="work/intuit.html"><div class="wb-case__img"><img src="assets/work-covers/intuit.jpg" alt=""></div><span class="wb-k">intuit · career growth</span><h3>ai-powered career growth for 10k+ employees.</h3></a>
+  </div>
+</section>
+
+<!-- ============ beat 4 · how i work ============ -->
+<section class="wb-how">
+  <div class="wb-wrap wb-sec">
+    <div class="wb-sec__head">
+      <h2>i study how people actually change, <em>then</em> i design.</h2>
+      <a class="wb-k" href="approach.html" style="color:var(--blue)">the approach, in one sentence →</a>
     </div>
-    <div class="about__body">
-      <h2 class="about__h">
-        15 years designing for behavior change.<br />
-        one stubborn conviction: ai programs fail without it.
-      </h2>
-      <p class="about__p">
-        I started caboodle design because I was tired of seeing
-        organizations pour resources into programs that checked a box
-        but never changed a behavior. The same trap is happening with
-        AI rollouts right now. My work sits at the intersection of
-        behavioral science, learning experience design, and AI enablement.
-        It's the whole caboodle.
-      </p>
-
-      <dl class="about__stats">
-        <div>
-          <dt>years designing for behavior change</dt>
-          <dd>15<span>+</span></dd>
-        </div>
-        <div>
-          <dt>enterprise clients</dt>
-          <dd>8<span>+</span></dd>
-        </div>
-        <div>
-          <dt>avg completion</dt>
-          <dd>95<span>%</span></dd>
-        </div>
-        <div>
-          <dt>countries reached</dt>
-          <dd>31<span>+</span></dd>
-        </div>
-      </dl>
-
-      <a class="workclose__resume about__more" href="about.html">
-        <span>more about emily · speaking, full bio, capabilities</span>
-        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-      </a>
+    <div class="wb-how__grid">
+      <div class="wb-steps">
+        <div class="wb-step" data-rows="1"><span class="wb-k">01</span><div><h3>observe.</h3><p>What people actually do on the job, not what the deck says they should. Interviews, shadowing, the real workflow.</p></div></div>
+        <div class="wb-step" data-rows="2,3"><span class="wb-k">02</span><div><h3>design for the behavior.</h3><p>Action Mapping. Every screen, module, or prompt exists because a specific behavior has to change. Content that doesn't earn its place gets cut.</p></div></div>
+        <div class="wb-step" data-rows="0,1"><span class="wb-k">03</span><div><h3>measure whether it moved.</h3><p>Kirkpatrick, level three. Completion is the metric everyone reports. Behavior is the one that matters.</p></div></div>
+      </div>
+      <div class="wb-fig">
+        <iframe id="ladder" src="fig-02-ladder.html?v=20260617b" title="The ladder: every row of action mapping has a kirkpatrick partner" loading="eager"></iframe>
+        <span class="wb-k">fig. the ladder · hover a step</span>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- How we'd work together: the commercial layer. Shape and duration,
-     no dollars. Durations are typical, not fixed. -->
+</main>
+
 <section class="availability availability--home" id="engage" data-log="log 09 · how we'd work together">
   <header class="availability__head">
     <span class="availability__kicker">how we'd work together · currently open to</span>
@@ -1120,37 +429,19 @@
   <p class="availability__foot">durations are typical rather than fixed, and a number comes after the scope, never before it.</p>
 </section>
 
-<!-- 10 — Closing card -->
-<section class="closing" id="contact">
-  <div class="closing__card">
-    <div class="closing__stamp" aria-hidden="true">
-      <svg class="cd-stamp-mark" viewBox="0 0 90 60" aria-hidden="true">
-        <path class="cd-stamp-mark__fill" fill-rule="evenodd"
-          d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>
-      </svg>
-      <small>caboodle design</small>
-      <small>grand rapids · mi</small>
+<main class="wb">
+<!-- ============ beat 5 · start ============ -->
+<section class="wb-start" id="contact">
+  <div class="wb-wrap wb-start__in">
+    <div>
+      <span class="wb-k">next field note</span>
+      <h2>ready to change <em>behavior?</em></h2>
+      <p>Send the shape of the problem. I'll send back whether training is the answer, and what might work better if it isn't.</p>
     </div>
-    <div class="closing__body">
-      <span class="closing__kicker">next field note</span>
-      <h2 class="closing__h">
-        ready to create<br />
-        learning that actually<br />
-        <em>changes behavior?</em>
-      </h2>
-      <p class="closing__p">
-        Send the shape of the problem. I'll send back whether training
-        is actually the answer, and what might work better if it
-        isn't.
-      </p>
-      <a class="closing__cta" href="contact.html">
-        <span>start a conversation</span>
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-      </a>
-      <a class="closing__email" href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a>
-    </div>
+    <a class="wb-btn" href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a>
   </div>
 </section>
+</main>
 
 <footer class="foot">
   <div class="foot__row">
@@ -1219,153 +510,97 @@
 <script src="script.js?v=20260903a" defer></script>
 
 <script>
-
-</script>
-
-<script>
-/* ============================================================
-   THE BENCH — one stage, three specimens. AI leads because AI
-   is the positioning; craft and behavior follow. Only one
-   specimen is ever powered; switching powers down the last.
-   Same-origin specimens get their scrollbars hidden by style
-   injection; cross-origin apps clip theirs outside the stage.
-   ============================================================ */
+/* ---------- the wall: video loops at rest; "run it" opens the real piece full screen, live ---------- */
 (function () {
-  const SPECIMENS = [
-    {
-      id: 'greenroom',
-      tab: '001 · ai copilot',
-      caption: 'specimen 001 · greenroom · a working ai development copilot: rag, citations, evals',
-      poster: 'assets/greenroom-poster.png',
-      alt: 'Greenroom AI copilot interface: a grounded answer with inline citations and a visible eval panel',
-      src: 'https://greenroom-strand.netlify.app',
-      chrome: 'greenroom-strand.netlify.app',
-      runSub: 'live app · real model calls · loads in place',
-      notes: [
-        ['what it is', 'a working AI copilot for a talent team: ask in plain words, get a grounded answer with citations and a next step'],
-        ['why it matters', 'this is the ai-rollout thesis running live: retrieval, guardrails and a visible eval layer you can inspect'],
-        ['the point', 'ai adoption is shipped here, and you’re using it']
-      ]
-    },
-    {
-      id: 'extinguisher',
-      tab: '002 · 3d trainer',
-      caption: 'specimen 002 · 3d inspection trainer · built for a global supplier program',
-      poster: 'assets/demos/fire-extinguisher-3d.webp',
-      alt: 'Browser-native 3D fire-extinguisher inspection trainer with numbered inspection points',
-      src: 'assets/3d/fire-extinguisher.html',
-      runSub: 'interactive 3d training · loads in place',
-      notes: [
-        ['what it is', 'a browser-native 3d trainer: orbit the extinguisher, open the numbered inspection points, learn by handling'],
-        ['why it matters', 'people practice on the thing itself instead of reading bullet points about it'],
-        ['the point', 'every engagement ships working material like this: modules people actually use on the job']
-      ]
-    },
-    {
-      id: 'skipwatch',
-      tab: '003 · skip or watch?',
-      caption: 'specimen 003 · skip or watch? · the hook experiment from people’s professors',
-      poster: 'assets/pp-skip-or-watch.webp',
-      alt: 'Skip or watch? attention experiment from People’s Professors, showing how a caption change flips viewers from skipping to watching',
-      src: 'assets/pp-hook-interactive.html',
-      fit: { w: 1200, h: 540 },
-      runSub: 'behavioral experiment · loads in place',
-      notes: [
-        ['what it is', 'a live experiment in attention: see how one caption change flips viewers from skipping to watching'],
-        ['why it matters', 'behavior change starts in the first three seconds, and it’s testable'],
-        ['the point', 'the science under every module: observe the behavior, change the design, measure again']
-      ]
-    }
-  ];
+  const wall = document.getElementById('wall');
+  const tiles = [...wall.querySelectorAll('.wb-tile')];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  tiles.forEach(t => { t.querySelector('.wb-tile__fullbar .wb-k').textContent = t.querySelector('.wb-tile__label .wb-k').textContent; });
 
-  const tabsEl = document.getElementById('benchTabs');
-  const spec = document.getElementById('benchSpec');
-  const stage = document.getElementById('benchStage');
-  const poster = document.getElementById('benchPoster');
-  const runBtn = document.getElementById('benchRun');
-  const runSub = document.getElementById('benchRunSub');
-  const captionEl = document.getElementById('benchCaption');
-  const notesEl = document.getElementById('benchNotes');
-  let current = null;
-
-  function powerDown() {
-    const f = stage.querySelector('iframe');
-    if (f) f.remove();
-    spec.classList.remove('is-live');
-    spec.classList.remove('has-chrome');
+  // loops: play only while on screen (and not at all under reduced motion, where the poster stands in)
+  const loops = tiles.map(t => t.querySelector('.wb-tile__loop'));
+  if (reduce) loops.forEach(v => { v.removeAttribute('autoplay'); v.pause(); });
+  else {
+    const tick = () => loops.forEach(v => { const r = v.getBoundingClientRect(); const on = r.bottom > 0 && r.top < innerHeight; on ? v.play().catch(() => {}) : v.pause(); });
+    addEventListener('scroll', tick, { passive: true }); addEventListener('resize', tick); setTimeout(tick, 100);
   }
 
-  function select(s) {
-    current = s;
-    powerDown();
-    poster.src = s.poster;
-    poster.alt = s.alt || '';
-    runSub.textContent = s.runSub;
-    captionEl.textContent = s.caption;
-    runBtn.setAttribute('aria-label', 'Power on: ' + s.caption);
-    notesEl.innerHTML = s.notes.map(function (n) {
-      return '<p class="bench-note"><b>' + n[0] + '</b>' + n[1] + '</p>';
-    }).join('');
-    tabsEl.querySelectorAll('.bench-tab').forEach(function (t) {
-      t.classList.toggle('is-on', t.dataset.id === s.id);
-    });
+  function fit(tile) {
+    const iframe = tile.querySelector('iframe'); const spec = tile.dataset.fit;
+    if (!iframe || !spec) return;
+    const [w, h] = spec.split('x').map(Number);
+    const r = tile.querySelector('.wb-tile__stage').getBoundingClientRect();
+    const s = Math.min(r.width / w, r.height / h);            // contain: the whole piece, always
+    iframe.classList.add('wb-fit');
+    iframe.style.width = w + 'px'; iframe.style.height = h + 'px';
+    iframe.style.transform = `translate(${(r.width - w * s) / 2}px, ${(r.height - h * s) / 2}px) scale(${s})`;
+  }
+  const refit = () => tiles.forEach(fit);
+
+  // the rainforest is scroll-driven: park it in the canopy once it loads
+  function park(tile, iframe) {
+    iframe.addEventListener('load', () => setTimeout(() => { try { const w = iframe.contentWindow; w.scrollTo(0, w.innerHeight * 1.15); } catch (e) {} }, 250));
   }
 
-  SPECIMENS.forEach(function (s) {
-    const b = document.createElement('button');
-    b.className = 'bench-tab';
-    b.type = 'button';
-    b.dataset.id = s.id;
-    b.textContent = s.tab;
-    b.addEventListener('click', function () { select(s); });
-    tabsEl.appendChild(b);
+  let open = null;
+  function run(tile) {
+    if (open) return;
+    open = tile;
+    document.body.classList.add('wb-has-full'); tile.classList.add('wb-is-full');
+    const stage = tile.querySelector('.wb-tile__stage');
+    const iframe = document.createElement('iframe');
+    iframe.title = tile.querySelector('.wb-tile__label .wb-k').textContent;
+    iframe.src = tile.dataset.src;
+    if (tile.hasAttribute('data-descend')) park(tile, iframe);
+    const go = () => { stage.appendChild(iframe); fit(tile); tile.classList.add('wb-is-live'); tile.querySelector('[data-unfull]').focus(); };
+    if (reduce) { go(); return; }
+    tile.classList.add('wb-is-switching');
+    setTimeout(go, 340);                                        // swap under the lime bar at full cover
+    setTimeout(() => tile.classList.remove('wb-is-switching'), 800);
+  }
+  function close() {
+    if (!open) return;
+    const t = open; open = null;
+    const f = t.querySelector('iframe'); if (f) f.remove();
+    t.classList.remove('wb-is-live', 'wb-is-full'); document.body.classList.remove('wb-has-full');
+  }
+
+  tiles.forEach(t => {
+    t.querySelector('.wb-tile__power').addEventListener('click', () => run(t));
+    t.querySelector('[data-unfull]').addEventListener('click', close);
+    t.querySelector('.wb-tile__loop').addEventListener('click', () => run(t));
   });
-  select(SPECIMENS[0]);
+  addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  addEventListener('resize', refit);
+})();
 
-  function layoutFit() {
-    const f = stage.querySelector('iframe.iframe--fit');
-    if (!f || !current || !current.fit) return;
-    const w = current.fit.w, h = current.fit.h;
-    const s = Math.min(stage.clientWidth / w, stage.clientHeight / h);
-    f.style.width = w + 'px';
-    f.style.height = h + 'px';
-    f.style.transform = 'scale(' + s + ')';
-    f.style.left = (stage.clientWidth - w * s) / 2 + 'px';
-    f.style.top = (stage.clientHeight - h * s) / 2 + 'px';
-  }
-  addEventListener('resize', layoutFit);
-
-  runBtn.addEventListener('click', function () {
-    /* fixed-width compositions are unreadable at phone scale — open
-       them full screen instead, where pinch and native zoom work */
-    if (current.fit && window.innerWidth < 700) {
-      window.open(current.src, '_blank', 'noopener');
-      return;
-    }
-    const frame = document.createElement('iframe');
-    frame.src = current.src;
-    frame.title = current.caption;
-    if (current.fit) {
-      frame.className = 'iframe--fit';
-      frame.setAttribute('scrolling', 'no');
-    }
-    if (!/^https?:/.test(current.src)) {
-      frame.addEventListener('load', function () {
-        try {
-          const doc = frame.contentDocument;
-          const st = doc.createElement('style');
-          st.textContent = '*{scrollbar-width:none!important;-ms-overflow-style:none!important}*::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}';
-          doc.head.appendChild(st);
-        } catch (e) {}
-      });
-    }
-    stage.appendChild(frame);
-    spec.classList.add('is-live');
-    if (current.chrome) {
-      document.getElementById('benchChromeUrl').textContent = current.chrome;
-      spec.classList.add('has-chrome');
-    }
-    layoutFit();
+/* ---------- the ladder: draw in when it scrolls into view; steps light their rows ---------- */
+(function () {
+  const iframe = document.getElementById('ladder'); if (!iframe) return;
+  const fig = iframe.closest('.wb-fig'); const steps = [...document.querySelectorAll('.wb-step')];
+  let doc = null, played = false;
+  const grid = () => { try { return doc && doc.querySelector('.arc-embed-canvas > div > div'); } catch (e) { return null; } };
+  // the compiled figure measures itself once; nudge it after it has real dimensions (first-view mis-scale fix)
+  const nudge = () => { iframe.style.width = 'calc(100% - 1px)'; requestAnimationFrame(() => requestAnimationFrame(() => { iframe.style.width = ''; try { iframe.contentWindow.dispatchEvent(new Event('resize')); } catch (e) {} })); };
+  const replay = () => { try { const b = [...doc.querySelectorAll('button')].find(x => /replay/i.test(x.textContent)); b && b.click(); } catch (e) {} };
+  const check = () => {
+    if (played || !doc) return;
+    const r = fig.getBoundingClientRect();
+    if (r.top < innerHeight * .75 && r.bottom > 0) { played = true; nudge(); setTimeout(replay, 150); }
+  };
+  iframe.addEventListener('load', () => { doc = iframe.contentDocument; nudge(); setTimeout(nudge, 400); check(); });
+  addEventListener('scroll', check, { passive: true }); addEventListener('resize', () => { nudge(); check(); });
+  // rows: the grid is a flat list — header (4 cells), then 4 rows of 4 cells (card, connector, label, card), then footer
+  const rowCells = k => { const g = grid(); if (!g) return []; return [...g.children].slice(4 + 4 * k, 8 + 4 * k); };
+  const light = keep => {
+    for (let k = 0; k < 4; k++) rowCells(k).forEach(el => { el.style.transition = 'opacity .25s'; el.style.opacity = (keep === null || keep.includes(k)) ? '' : '.22'; });
+  };
+  steps.forEach(st => {
+    const rows = st.dataset.rows.split(',').map(Number);
+    st.addEventListener('mouseenter', () => light(rows));
+    st.addEventListener('mouseleave', () => light(null));
+    st.addEventListener('focusin', () => light(rows)); st.addEventListener('focusout', () => light(null));
+    st.tabIndex = 0;
   });
 })();
 </script>
