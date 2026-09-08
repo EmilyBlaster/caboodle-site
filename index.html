@@ -132,7 +132,7 @@
 .wb-tile__label i { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-2); flex: none; transition: background .2s; }
 .wb-tile.wb-is-live .wb-tile__label i { background: var(--lime); box-shadow: 0 0 0 3px rgba(150,230,80,.35); }
 /* the power switch: a big quiet target over the poster; on click a lime bar lifts and the component is there */
-.wb-tile__power { position: absolute; inset: 0; z-index: 2; display: grid; place-items: end start; padding: .9rem; background: none; border: 0; cursor: pointer; text-align: left; }
+.wb-tile__power { position: absolute; inset: 0; z-index: 2; display: grid; place-items: end end; padding: .9rem; background: none; border: 0; cursor: pointer; text-align: left; }
 .wb-tile__power b { font: 500 .95rem/1 var(--body); background: var(--ink); color: var(--paper); padding: .75rem 1.1rem; border-radius: 999px; display: inline-flex; gap: .5rem; align-items: center; transition: background .2s, color .2s; }
 .wb-tile__power:hover b, .wb-tile__power:focus-visible b { background: var(--lime); color: var(--ink); }
 .wb-tile__curtain { position: absolute; inset: 0; z-index: 4; background: var(--lime); transform: scaleY(0); transform-origin: bottom; pointer-events: none; }
