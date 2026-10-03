@@ -5251,12 +5251,16 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   margin-bottom: 1.5rem;
   width: fit-content;
 }
+.aboutpage__head { container-type: inline-size; }
 .aboutpage__h {
   margin: 0 0 1.75rem;
   padding-top: 0.1em;
   font-family: var(--display);
   font-weight: 800;
-  font-size: clamp(2.5rem, 6.5vw, 5.25rem);
+  /* Sized to its column (cqi) so each of the three phrases holds one line
+     on desktop instead of breaking word by word. 5.4cqi fits the longest
+     phrase ("the mind behind caboodle design.", ~17.9em) with room to spare. */
+  font-size: clamp(2.5rem, 5.4cqi, 4.5rem);
   /* 1.2: at this display size Bauhaus Bool's deep descenders (program / lead /
      design) graze the tall ascenders on the line below (behavioral's b/h/l/d).
      1.05 only left ~4px of leading; 1.2 gives ~17px so the lines read clearly
