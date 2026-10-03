@@ -5218,11 +5218,12 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 }
 .aboutpage__notes > div {
   display: grid;
-  grid-template-columns: 7.5rem 1fr;
+  grid-template-columns: 8rem 1fr;
   gap: 0.75rem;
   padding: 0.6rem 0;
   border-bottom: 1px solid var(--rule);
 }
+.aboutpage__portraitcap .nowrap { white-space: nowrap; }
 .aboutpage__notes dt {
   font-family: var(--mono);
   font-size: 0.66rem;
@@ -5230,6 +5231,7 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   text-transform: uppercase;
   color: var(--ink-2);
   padding-top: 0.15rem;
+  white-space: nowrap;
 }
 .aboutpage__notes dd {
   margin: 0;
