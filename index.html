@@ -100,11 +100,11 @@
 .wb-hero__copy { display: grid; gap: 1.2rem; }
 @media (min-width: 1001px) { .wb-hero__copy { position: sticky; top: 5.5rem; } }
 .wb-hero__copy .wb-k { color: var(--ink-2); }
-.wb-hero h1 { font-size: clamp(2.6rem, 5.2vw, 4.75rem); line-height: 1.08; }
+.wb-hero h1 { font-size: clamp(2.6rem, 5.2vw, 4.75rem); line-height: 1.04; }
 .wb-hero h1 .wb-line { display: block; position: relative; overflow: visible; }
 .wb-hero h1 .wb-line span { display: inline-block; }
-/* optical nudge: line 2 has no descenders and line 3 is mostly x-height, so the even gap reads wide there */
-.wb-hero h1 .wb-line:nth-child(3) { margin-top: -.07em; }
+/* optical nudge: the "g" in line 1 eats into the gap below it, so give line 2 extra room */
+.wb-hero h1 .wb-line:nth-child(2) { margin-top: .1em; }
 /* curtain reveal: a solid brand bar covers each line and lifts away */
 .wb-hero h1 .wb-line::after { content: ""; position: absolute; left: -.06em; right: -.06em; top: -.02em; bottom: -.02em; background: var(--lime); transform-origin: top; animation: lift .7s var(--ease) forwards; }
 .wb-hero h1 .wb-line:nth-child(2)::after { background: var(--blue); animation-delay: .18s; }
