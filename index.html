@@ -222,8 +222,12 @@ body.wb-has-full { overflow: hidden; }
 @media (max-width: 560px) { .wb-cases { grid-template-columns: 1fr; } }
 .wb-case { background: var(--paper); display: grid; gap: .9rem; padding: 1rem 1rem 1.25rem; transition: background .2s; }
 .wb-case:hover { background: var(--paper-2); }
-.wb-case__img { aspect-ratio: 4 / 3; overflow: hidden; background: var(--paper-2); }
-.wb-case__img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s var(--ease); }
+/* covers are wide interface screenshots (~16:10); frame matches them so no UI edge gets sliced off.
+   top-left anchor means any leftover crop drops empty bottom margin, never the left edge of the interface.
+   a cover wider than the frame opts into object-fit: contain and sits on the paper-2 mat instead of cropping. */
+.wb-case__img { aspect-ratio: 16 / 10; overflow: hidden; background: var(--paper-2); }
+.wb-case__img img { width: 100%; height: 100%; object-fit: cover; object-position: left top; display: block; transition: transform .5s var(--ease); }
+.wb-case__img img.is-contain { object-fit: contain; object-position: center; }
 .wb-case:hover .wb-case__img img { transform: scale(1.03); }
 .wb-case h3 { font-size: 1.2rem; line-height: 1.08; }
 .wb-case .wb-k { color: var(--ink-2); }
@@ -355,9 +359,9 @@ body.wb-has-full { overflow: hidden; }
     <a class="wb-k" href="work.html" style="color:var(--blue)">all seven case files →</a>
   </div>
   <div class="wb-cases">
-    <a class="wb-case" href="work/airbnb.html"><div class="wb-case__img"><img src="assets/greenroom-poster.png" alt="" style="object-position:left top"></div><span class="wb-k">airbnb · ai 101 · 2026</span><h3>5 modules in 90 days, built for adoption.</h3></a>
+    <a class="wb-case" href="work/airbnb.html"><div class="wb-case__img"><img src="assets/greenroom-poster.png" alt=""></div><span class="wb-k">airbnb · ai 101 · 2026</span><h3>5 modules in 90 days, built for adoption.</h3></a>
     <a class="wb-case" href="work/tmobile.html"><div class="wb-case__img"><img src="assets/work-covers/tmobile.jpg" alt=""></div><span class="wb-k">t-mobile · legal + privacy</span><h3>legal training that cut inquiries 40%.</h3></a>
-    <a class="wb-case" href="work/apple.html"><div class="wb-case__img"><img src="assets/work-covers/apple.jpg" alt=""></div><span class="wb-k">apple · supplier responsibility</span><h3>supplier training across 251 companies, 31 countries.</h3></a>
+    <a class="wb-case" href="work/apple.html"><div class="wb-case__img"><img src="assets/work-covers/apple.jpg" alt="" class="is-contain"></div><span class="wb-k">apple · supplier responsibility</span><h3>supplier training across 251 companies, 31 countries.</h3></a>
     <a class="wb-case" href="work/intuit.html"><div class="wb-case__img"><img src="assets/work-covers/intuit.jpg" alt=""></div><span class="wb-k">intuit · career growth</span><h3>ai-powered career growth for 10k+ employees.</h3></a>
   </div>
 </section>
