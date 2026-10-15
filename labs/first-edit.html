@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-404B8P6ZLK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-404B8P6ZLK');
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>First edit · caboodle design labs</title>
+<meta name="description" content="A take-home for a Lead Learning Experience Designer role at the Wikimedia Foundation. The question: how might learning help more people go from interested to a first edit, and come back for a second? Six pages, one prototype, about two hours of thinking and a few more of building." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
+<link rel="stylesheet" href="../styles.css?v=20260903e" />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+
+<style>
+/* ==========================================================================
+   Lab pages — shared base styles (same block as the other lab entries)
+   ========================================================================== */
+
+.labero {
+  background: var(--ink);
+  color: var(--white);
+  padding: clamp(6rem, 12vw, 9rem) var(--pad-x) clamp(4rem, 8vw, 6rem);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--dark-2);
+}
+.labero__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lime);
+  text-decoration: none;
+  margin-bottom: 2.5rem;
+  transition: gap 0.3s var(--ease), opacity 0.3s var(--ease), color var(--t-micro) var(--ease);
+  opacity: 0.85;
+}
+.labero__back:hover, .labero__back:focus-visible { gap: 0.8rem; opacity: 1; color: var(--link-hover); }
+.labero__stamp {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 2rem;
+}
+.labero__stamp b { color: var(--lime); font-weight: 500; }
+.labero__watermark {
+  font-family: var(--display);
+  font-size: clamp(8rem, 20vw, 16rem);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  color: rgba(255,255,255,0.04);
+  position: absolute;
+  right: var(--pad-x);
+  bottom: -0.1em;
+  pointer-events: none;
+  user-select: none;
+}
+.labero__inner { max-width: var(--maxw); margin: 0 auto; position: relative; }
+.labero__h {
+  font-family: var(--display);
+  font-size: clamp(2.75rem, 6vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--white);
+  text-transform: lowercase;
+  max-width: 18ch;
+  margin: 0 0 1.25rem;
+}
+.labero__h em { color: var(--lime); font-style: normal; }
+.labero__lede {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.6;
+  color: rgba(255,255,255,0.6);
+  max-width: 52ch;
+  margin-bottom: 2rem;
+  text-wrap: pretty;
+}
+.labero__tags {
+  list-style: none;
+  padding: 0; margin: 2rem 0 0;
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+}
+.labero__tags li {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3em 0.65em;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.4);
+}
+
+/* Hero CTA row — primary lime demo button on the dark hero */
+.labero__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.85rem 1.5rem; }
+.labero__demo {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.85rem 1.4rem;
+  background: var(--lime);
+  color: var(--ink);
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: var(--r-pill);
+  text-decoration: none;
+  transition: transform var(--t-ui) var(--ease), background var(--t-ui) var(--ease);
+}
+.labero__demo:hover, .labero__demo:focus-visible { background: var(--white); }
+.labero__demo svg { transition: transform var(--t-ui) var(--ease); }
+.labero__demo:hover svg { transform: translate(2px, -2px); }
+
+/* Section base */
+.lab-s {
+  padding: clamp(3.5rem, 7vw, 5.5rem) var(--pad-x);
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+}
+.lab-s--alt { background: var(--paper-2); }
+.lab-s__inner { max-width: var(--maxw); margin: 0 auto; }
+.lab-s__kicker {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--magenta);
+  display: block;
+  margin-bottom: 0.75rem;
+}
+.lab-s__h {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  line-height: 1.05;
+  margin: 0 0 0.75rem;
+}
+.lab-s__h em { font-style: italic; }
+.lab-s__p {
+  max-width: 62ch;
+  line-height: 1.65;
+  color: var(--ink-2);
+  margin: 0 0 1.5rem;
+}
+.lab-s__p:last-child { margin-bottom: 0; }
+
+/* Field photograph: the one exhibit figure, framed like the index cards.
+   The caption is the specimen label. */
+.lab-fig { margin: 2rem 0 1.75rem; max-width: 1040px; }
+.lab-fig img {
+  display: block; width: 100%; height: auto;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--white);
+}
+.lab-fig figcaption {
+  margin-top: 0.55rem;
+  font-family: var(--mono);
+  font-size: 0.66rem; letter-spacing: 0.08em;
+  color: var(--ink-2);
+}
+
+/* In-section CTA: ink pill on paper, lime on hover, same shape as the hero button */
+.lab-cta {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.85rem 1.4rem;
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: var(--r-pill);
+  text-decoration: none;
+  transition: background var(--t-ui) var(--ease), color var(--t-ui) var(--ease);
+}
+.lab-cta:hover, .lab-cta:focus-visible { background: var(--lime); color: var(--ink); }
+.lab-cta svg { transition: transform var(--t-ui) var(--ease); }
+.lab-cta:hover svg { transform: translate(2px, -2px); }
+
+/* Thesis callout */
+.thesis {
+  border-left: 3px solid var(--magenta);
+  padding: 1.5rem 2rem;
+  background: var(--paper-2);
+  margin-bottom: 2rem;
+}
+.lab-s--alt .thesis { background: var(--paper); }
+.thesis p {
+  font-family: var(--display);
+  font-size: clamp(1rem, 1.8vw, 1.35rem);
+  font-weight: 700;
+  text-transform: lowercase;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  color: var(--ink);
+  margin: 0;
+}
+.thesis p em { font-style: italic; color: var(--magenta); }
+
+/* Tools */
+.tool-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.5rem; }
+.tool-pill {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3em 0.65em;
+  border: 1px solid var(--rule);
+  color: var(--ink-2);
+  background: var(--paper);
+}
+
+/* Live prototype embed, framed like a browser window (same component as the
+   Greenroom page). The iframe is a visual; the overlay link opens the real
+   thing. Loaded lazily, and only when this page is top-level. */
+.demo-frame {
+  border: 1px solid var(--rule);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: var(--white);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  margin-bottom: 1rem;
+}
+.demo-frame__chrome {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.7rem 1rem;
+  background: var(--ink);
+}
+.demo-frame__dots { display: flex; gap: 0.4rem; flex-shrink: 0; }
+.demo-frame__dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.18); }
+.demo-frame__dots span:nth-child(1) { background: var(--magenta); }
+.demo-frame__dots span:nth-child(2) { background: var(--lime); }
+.demo-frame__url {
+  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.5);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.demo-frame__expand {
+  margin-left: auto; flex-shrink: 0;
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--lime); text-decoration: none;
+  transition: opacity 0.3s var(--ease);
+}
+.demo-frame__expand:hover { opacity: 0.7; }
+/* Sized to the tallest step so the prototype never scrolls inside the frame;
+   the page scrolls instead. Desktop scales the walkthrough down a notch. */
+.demo-frame__viewport { position: relative; height: 890px; background: #f8f9fa; overflow: hidden; }
+.demo-frame__viewport iframe { transform: scale(0.85); transform-origin: 0 0; width: 117.65%; height: 1050px; }
+@media (max-width: 640px) {
+  .demo-frame__viewport { height: 1580px; }
+  .demo-frame__viewport iframe { transform: none; width: 100%; height: 100%; }
+}
+.demo-frame__viewport iframe {
+  position: absolute; top: 0; left: 0; border: 0;
+  display: none; /* revealed by JS once the live prototype loads (top-level only) */
+}
+.demo-frame__placeholder { position: absolute; inset: 0; background: #f8f9fa; }
+.demo-frame__placeholder img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+@media (max-width: 640px) { .demo-frame__placeholder img { object-fit: contain; object-position: top center; } }
+.demo-frame__viewport.is-live .demo-frame__placeholder { display: none; }
+
+/* Field-guide plates: hairline figures built from the copy. One repeated
+   format, mono labels, lime only where the bet is. */
+.plate { margin: 2.25rem 0 0; }
+.plate__cap {
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-2); margin-bottom: 0.9rem;
+}
+.plate__cap b { color: var(--ink); font-weight: 500; margin-right: 0.6rem; }
+.plate__grid {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; gap: 0 1.25rem;
+  border-top: 1px solid var(--ink);
+}
+.plate__grid--5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.plate__grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 760px) {
+  .plate__grid--5, .plate__grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 440px) {
+  .plate__grid--5, .plate__grid--4 { grid-template-columns: minmax(0, 1fr); }
+}
+.plate__cell { padding: 0.9rem 0 1.4rem; border-bottom: 1px solid var(--rule); position: relative; }
+.plate__n {
+  display: block;
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-2); margin-bottom: 0.55rem;
+}
+.plate__stage {
+  display: block;
+  font-family: var(--display); font-weight: 700; font-size: 1.1rem; letter-spacing: -0.01em;
+  text-transform: lowercase; line-height: 1.1; color: var(--ink);
+  margin-bottom: 0.7rem;
+}
+.plate__leak { font-size: 0.86rem; line-height: 1.5; color: var(--ink-2); margin: 0; padding-left: 0.9rem; position: relative; }
+.plate__leak::before {
+  content: ''; position: absolute; left: 0; top: 0.1em; bottom: 0.1em;
+  border-left: 1px dotted var(--ink-2);
+}
+.plate__leak small {
+  display: block; margin-top: 0.35rem;
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2);
+}
+.plate__cell--bet .plate__leak::before { border-left: 3px solid var(--lime); left: -1px; }
+.plate__cell--bet .plate__leak small { color: var(--ink); }
+.plate__cell--bet .plate__leak small::before {
+  content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--lime); margin-right: 0.4rem; vertical-align: 1px;
+}
+.plate__list { list-style: none; padding: 0 0 0 0.9rem; margin: 0; display: grid; gap: 0.3rem; position: relative; font-size: 0.86rem; line-height: 1.45; color: var(--ink-2); }
+.plate__list::before { content: ''; position: absolute; left: 0; top: 0.2em; bottom: 0.2em; border-left: 1px dotted var(--ink-2); }
+.plate__note {
+  margin: 1rem 0 0; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2);
+}
+.plate__note b { color: var(--ink); font-weight: 500; }
+
+/* Three directions: the lab feature grid, with the bet marked */
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; border: 1px solid var(--rule); background: var(--rule); margin-top: 2rem; }
+.feature { padding: 1.75rem; background: var(--paper); position: relative; }
+.lab-s--alt .feature { background: var(--paper-2); }
+.feature__num { font-family: var(--display); font-weight: 800; font-size: 3rem; line-height: 0.9; letter-spacing: -0.06em; color: rgba(40,40,40,0.1); margin-bottom: 0.75rem; }
+.feature__h { font-family: var(--display); font-weight: 700; font-size: 1.05rem; text-transform: lowercase; letter-spacing: -0.01em; margin: 0 0 0.5rem; }
+.feature__p { font-size: 0.86rem; line-height: 1.55; color: var(--ink-2); margin: 0; }
+.feature--bet .feature__num { color: var(--lime); }
+.feature__tag {
+  position: absolute; top: 1.75rem; right: 1.75rem;
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink); padding: 0.25em 0.55em; border: 1px solid var(--ink);
+}
+
+
+/* Split section: prose left, one exhibit right */
+.lab-s__inner--split { display: grid; grid-template-columns: minmax(0, 62ch) minmax(0, 1fr); gap: 2.5rem 4rem; align-items: start; }
+@media (max-width: 900px) { .lab-s__inner--split { grid-template-columns: minmax(0, 1fr); } }
+.lab-s__inner--split .lab-fig { margin: 0.4rem 0 0; max-width: 400px; justify-self: end; }
+@media (max-width: 900px) { .lab-s__inner--split .lab-fig { justify-self: start; margin-top: 0; } }
+
+/* The two moments: a pair of screens from the walkthrough */
+.moments { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; margin: 0; }
+@media (max-width: 640px) { .moments { grid-template-columns: minmax(0, 1fr); } }
+.moments figure { margin: 0; }
+.moments img { display: block; width: 100%; max-width: 400px; height: auto; border: 1px solid var(--rule); border-radius: 4px; background: var(--white); }
+.moments figcaption { margin-top: 0.55rem; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); }
+.moments figcaption b { color: var(--ink); font-weight: 500; margin-right: 0.5rem; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">skip to content</a>
+
+
+<header class="nav">
+  <a class="nav__mark" href="../index.html">
+    <svg class="cd-logo" viewBox="0 0 260 56" xmlns="http://www.w3.org/2000/svg" aria-label="caboodle design" role="img">
+      <path class="cd-logo__mark" fill-rule="evenodd"
+        d="M 5 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0 M 33 28 a 23 23 0 1 0 46 0 a 23 23 0 1 0 -46 0"/>
+      <text class="cd-logo__word" x="95" y="26" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">caboodle</text>
+      <text class="cd-logo__word" x="95" y="50" font-family="Bauhaus Bool, Futura, sans-serif" font-weight="700" font-size="23">design</text>
+    </svg>
+  </a>
+  <nav class="nav__links">
+    <a href="../approach.html">approach</a>
+    <a href="../work.html">work</a>
+    <a href="../labs.html">labs</a>
+    <a href="../about.html">about emily</a>
+    <a href="../contact.html" class="nav__cta">let's talk</a>
+  </nav>
+</header>
+
+<!-- Lab hero -->
+<section id="main" class="labero">
+  <div class="labero__inner">
+    <a class="labero__back" href="../labs.html">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      <span>back to labs</span>
+    </a>
+    <div class="labero__stamp">
+      <span>lab</span>
+      <b>field exercise</b>
+      <span>sep 2026</span>
+    </div>
+    <h1 class="labero__h">first edit<em>.</em></h1>
+    <p class="labero__lede">
+      A take-home for a Lead Learning Experience Designer role at the Wikimedia Foundation. The question: how might learning help more people go from interested to a first edit, and come back for a second? Six pages, one prototype, about two hours of thinking and a few more of building.
+    </p>
+    <div class="labero__cta">
+      <a class="labero__demo" href="https://firstedit-walkthrough.netlify.app" target="_blank" rel="noopener">
+        <span>Step through the prototype</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+    </div>
+    <ul class="labero__tags">
+      <li>action mapping</li>
+      <li>learning experience design</li>
+      <li>experiment design</li>
+      <li>codex design system</li>
+      <li>claude code</li>
+    </ul>
+  </div>
+  <span class="labero__watermark" aria-hidden="true">009</span>
+</section>
+
+<!-- The live prototype, first -->
+<section class="lab-s lab-s--alt">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">the prototype</span>
+    <h2 class="lab-s__h">step through it.</h2>
+    <p class="lab-s__p">
+      The clickable walkthrough, embedded live. Five steps, as a newcomer would see them. Open it full screen if you would rather use it at full size.
+    </p>
+    <div class="demo-frame">
+      <div class="demo-frame__chrome">
+        <div class="demo-frame__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+        <span class="demo-frame__url">firstedit-walkthrough.netlify.app</span>
+        <a class="demo-frame__expand" href="https://firstedit-walkthrough.netlify.app" target="_blank" rel="noopener">open full screen ↗</a>
+      </div>
+      <div class="demo-frame__viewport">
+        <div class="demo-frame__placeholder" aria-hidden="true">
+          <picture>
+            <source media="(max-width: 640px)" srcset="../assets/labs/figs/first-edit-poster-mobile.webp" />
+            <img src="../assets/labs/figs/first-edit-poster.webp" alt="" width="1200" height="760" />
+          </picture>
+        </div>
+        <iframe data-src="https://firstedit-walkthrough.netlify.app" title="First Edit walkthrough, live prototype" loading="lazy" scrolling="no"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 1 — The problem, in my words -->
+<section class="lab-s">
+  <div class="lab-s__inner lab-s__inner--split">
+    <div>
+      <span class="lab-s__kicker">field exercise · 01</span>
+      <h2 class="lab-s__h">The problem, in my words</h2>
+      <p class="lab-s__p">
+        Hundreds of millions of people read Wikipedia. Only a small share ever click Edit. Of those who start typing, about half never publish. Of those who publish, more than a quarter have their edit undone within two days. Of those whose edit survives, most never come back. The brief asked what, if anything, a Community Development team should do about it, with four to six weeks, no new product features, and a note that the answer should not be a course.
+      </p>
+    </div>
+    <figure class="lab-fig">
+      <img src="../assets/labs/figs/first-edit-screen-editor.webp" alt="The mobile editor screen from the walkthrough. A newcomer has fixed one sentence in the Lake Michigan article, the changed words are highlighted, and Cancel and Publish buttons wait below." width="800" height="608" loading="lazy" />
+      <figcaption>fig. a · the mobile editor, one sentence fixed, publish not yet pressed</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 2 — What I did first: nothing -->
+<section class="lab-s lab-s--alt">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">field exercise · 02</span>
+    <h2 class="lab-s__h">What I did first: nothing</h2>
+    <p class="lab-s__p">
+      Action Mapping starts with the outcome, not the content. The outcome here was simple to state: more first edits still standing after 48 hours, and more people back for a second edit within two weeks. Then the question is what people would need to do differently, and whether the reason they are not doing it is something they do not know. Most of the time it is not.
+    </p>
+    <p class="lab-s__p">
+      The analytics came as a snapshot, each stage measured against the original readers. That hides where the losses are. I re-measured each step against the step before it. Three leaks stood out, and each had a different cause. Confusion inside the editor is an interface problem, and product owns it. A reverted edit with no explanation is a consequence with no information attached. That one, learning can fix.
+    </p>
+
+    <figure class="plate">
+      <figcaption class="plate__cap"><b>fig. b</b> the funnel, re-measured: each step against the step before it</figcaption>
+      <ol class="plate__grid plate__grid--5">
+        <li class="plate__cell">
+          <span class="plate__n">step 01</span>
+          <span class="plate__stage">read</span>
+          <p class="plate__leak">Hundreds of millions of people. Only a small share ever click Edit.</p>
+        </li>
+        <li class="plate__cell">
+          <span class="plate__n">step 02</span>
+          <span class="plate__stage">start typing</span>
+          <p class="plate__leak">About half never publish.<small>interface · product owns it</small></p>
+        </li>
+        <li class="plate__cell plate__cell--bet">
+          <span class="plate__n">step 03</span>
+          <span class="plate__stage">publish</span>
+          <p class="plate__leak">More than a quarter have their edit undone within two days.<small>no information attached · learning can fix</small></p>
+        </li>
+        <li class="plate__cell">
+          <span class="plate__n">step 04</span>
+          <span class="plate__stage">still standing after 48 hours</span>
+          <p class="plate__leak">Most never come back.</p>
+        </li>
+        <li class="plate__cell">
+          <span class="plate__n">step 05</span>
+          <span class="plate__stage">back for a second edit</span>
+          <p class="plate__leak">The outcome, within two weeks.</p>
+        </li>
+      </ol>
+    </figure>
+  </div>
+</section>
+
+<!-- 3 — Three directions, one bet -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">field exercise · 03</span>
+    <h2 class="lab-s__h">Three directions, one bet</h2>
+    <p class="lab-s__p">
+      The product team had asked whether people should learn before they edit or while they edit. I added a third: learn from what happens after. A short primer delivered through partner communities. Content behind the help panel the editor already has. Or two small pieces at the moments that matter most: a three-item check before Publish, and a message after a good-faith revert that says why, shows the fix in about a minute, and points to a person.
+    </p>
+    <p class="lab-s__p">
+      I chose the third. Every piece of evidence pointed at the revert. It serves the experienced editors' worry about quality and the product team's goal of activation at the same time. It ships with content and community partners only. And it can be tested in six weeks.
+    </p>
+
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="feature__num">01</div>
+        <h3 class="feature__h">before they edit</h3>
+        <p class="feature__p">A short primer delivered through partner communities.</p>
+      </div>
+      <div class="feature">
+        <div class="feature__num">02</div>
+        <h3 class="feature__h">while they edit</h3>
+        <p class="feature__p">Content behind the help panel the editor already has.</p>
+      </div>
+      <div class="feature feature--bet">
+        <div class="feature__num">03</div>
+        <span class="feature__tag">the bet</span>
+        <h3 class="feature__h">after they edit</h3>
+        <p class="feature__p">Two small pieces at the moments that matter most: a three-item check before Publish, and a message after a good-faith revert that says why, shows the fix in about a minute, and points to a person.</p>
+      </div>
+    </div>
+
+    <figure class="plate">
+      <figcaption class="plate__cap"><b>fig. c</b> the two moments, as built</figcaption>
+      <div class="moments">
+        <figure>
+          <img src="../assets/labs/figs/first-edit-screen-check.webp" alt="An edit notice headed 'Almost done' listing three quick checks before publishing: can a reader check it, is it neutral, and after you publish your change shows on the page right away. A line beneath says the check informs and never blocks Publish." width="800" height="900" loading="lazy" />
+          <figcaption><b>before publish</b> a three-item check</figcaption>
+        </figure>
+        <figure>
+          <img src="../assets/labs/figs/first-edit-screen-revert.webp" alt="A talk-page message headed 'Your edit to Lake Michigan was undone'. It says the fact had no source, shows how to add one and publish again in about a minute, offers a sixty-second how-to, says this happens to most people on a first edit, and points to a mentor or the Teahouse." width="800" height="1182" loading="lazy" />
+          <figcaption><b>after a good-faith revert</b> why, the fix, a person</figcaption>
+        </figure>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<!-- 4 — The experiment -->
+<section class="lab-s lab-s--alt">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">field exercise · 04</span>
+    <h2 class="lab-s__h">The experiment</h2>
+    <p class="lab-s__p">
+      Week one is diagnosis before anything gets built: revert data by reason, a handful of observed first edits, conversations with the volunteers who patrol new edits, and measures agreed with an analyst. Then a randomized cohort test. The guardrail is that patroller time per newcomer edit cannot go up. Every number is reported by segment, because the brief cared about women and younger people and the data did not say a word about either. The decision rules were written before the test: if nothing moves and the sessions point at the interface, hand product the notes and stop.
+    </p>
+
+    <figure class="plate">
+      <figcaption class="plate__cap"><b>fig. d</b> six weeks, in order</figcaption>
+      <ol class="plate__grid plate__grid--4">
+        <li class="plate__cell">
+          <span class="plate__n">week one</span>
+          <span class="plate__stage">diagnosis before anything gets built</span>
+          <ul class="plate__list">
+            <li>revert data by reason</li>
+            <li>a handful of observed first edits</li>
+            <li>conversations with the volunteers who patrol new edits</li>
+            <li>measures agreed with an analyst</li>
+          </ul>
+        </li>
+        <li class="plate__cell">
+          <span class="plate__n">then</span>
+          <span class="plate__stage">a randomized cohort test</span>
+          <p class="plate__leak">The guardrail: patroller time per newcomer edit cannot go up.</p>
+        </li>
+        <li class="plate__cell">
+          <span class="plate__n">reporting</span>
+          <span class="plate__stage">every number by segment</span>
+          <p class="plate__leak">The brief cared about women and younger people. The data did not say a word about either.</p>
+        </li>
+        <li class="plate__cell">
+          <span class="plate__n">written before the test</span>
+          <span class="plate__stage">decision rules</span>
+          <p class="plate__leak">If nothing moves and the sessions point at the interface, hand product the notes and stop.</p>
+        </li>
+      </ol>
+    </figure>
+  </div>
+</section>
+
+<!-- 5 — The artifact -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">field exercise · 05</span>
+    <h2 class="lab-s__h">The artifact</h2>
+    <p class="lab-s__p">
+      A design system built from Wikimedia's published Codex tokens, so the screens would be judged as content rather than as a mockup. Two screens in the document, and a clickable walkthrough so you can step through the moments as a newcomer would. The revert screen is the whole idea in one picture.
+    </p>
+    <figure class="lab-fig">
+      <img src="../assets/labs/figs/first-edit-step4.webp" alt="Step 4 of 5 in the First Edit walkthrough, 'If it is undone'. A Wikipedia talk-page panel headed 'Your edit to Lake Michigan was undone' explains that the fact had no source, tells the newcomer to reopen the sentence, add the link or book, and publish again, offers a 'Show me how, 60 seconds' link, notes that this happens to most people on a first edit, and points them to a mentor or the Teahouse. A toggle above it switches between the standard warning and the new message. Notes beside it say what the screen is, that it lives in a newcomer template patrollers opt into, and why it matters." width="1200" height="934" loading="lazy" />
+      <figcaption>The revert message, in a Codex-styled walkthrough</figcaption>
+    </figure>
+    <a class="lab-cta" href="https://firstedit-walkthrough.netlify.app" target="_blank" rel="noopener">
+      <span>Step through the prototype</span>
+      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- 6 — What changed in my thinking -->
+<section class="lab-s lab-s--alt">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">field exercise · 06</span>
+    <h2 class="lab-s__h">What changed in my thinking</h2>
+    <p class="lab-s__p">
+      I came in thinking about a course. The evidence kept dragging me to the moments after the edit. The prior course had a 4.9 rating and around sixty finishers, and could not tell anyone whether it changed editing. That was the number I had to stop looking at.
+    </p>
+  </div>
+</section>
+
+<!-- 7 — How AI was used -->
+<section class="lab-s">
+  <div class="lab-s__inner">
+    <span class="lab-s__kicker">field exercise · 07</span>
+    <h2 class="lab-s__h">How AI was used</h2>
+    <p class="lab-s__p">
+      Claude Code ran the whole way through. It converted the funnel, caught a mismatch between how the old course and the funnel measured returns, argued the experienced editor's side against my own diagnosis, pulled the Codex tokens, and built the walkthrough. The direction, the diagnosis, the copy and the decision rules are mine. Field tool, not a shortcut.
+    </p>
+    <div class="tool-list">
+      <span class="tool-pill">claude code</span>
+      <span class="tool-pill">action mapping</span>
+      <span class="tool-pill">codex tokens</span>
+      <span class="tool-pill">html / css / js</span>
+      <span class="tool-pill">netlify</span>
+    </div>
+  </div>
+</section>
+
+<!-- Closing card -->
+<section class="closing" id="next">
+  <div class="closing__card">
+    <div class="closing__stamp" aria-hidden="true">
+      <svg class="cd-stamp-mark" viewBox="0 0 90 60" aria-hidden="true">
+        <path class="cd-stamp-mark__fill" fill-rule="evenodd"
+          d="M 5 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0 M 35 30 a 25 25 0 1 0 50 0 a 25 25 0 1 0 -50 0"/>
+      </svg>
+      <small>next experiment</small>
+      <small>LAB-007</small>
+    </div>
+    <div class="closing__body">
+      <span class="closing__kicker">next in the lab</span>
+      <h2 class="closing__h">
+        greenroom: a<br />
+        <em>development copilot.</em>
+      </h2>
+      <p class="closing__p">
+        An employee asks a real question in plain words. Greenroom answers from a curated library with citations, proposes a next step, then follows up on whether the behavior actually changed.
+      </p>
+      <a class="closing__cta" href="greenroom.html">
+        <span>explore the experiment</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+      <a class="closing__email" href="../labs.html">← all experiments</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot__row">
+    <span class="foot__mark">caboodle design</span>
+    <span class="foot__tag">strategy, media, and behavioral science — it's the whole caboodle</span>
+  </div>
+  <div class="foot__cols">
+    <div>
+      <h4>navigation</h4>
+      <ul>
+        <li><a href="../approach.html">approach</a></li>
+        <li><a href="../work.html">work</a></li>
+        <li><a href="../labs.html">labs</a></li>
+        <li><a href="../about.html">about emily</a></li>
+        <li><a href="../field-notes.html">field notes</a></li>
+        <li><a href="../resources.html">free resources</a></li>
+        <li><a href="../design-system.html">design system</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>get in touch</h4>
+      <ul>
+        <li><a href="../contact.html">let's talk</a></li>
+        <li><a href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a></li>
+        <li><a href="https://www.tiktok.com/@caboodledesign" target="_blank" rel="noopener">@caboodledesign</a></li>
+        <li><a href="https://www.linkedin.com/in/emilygreen77/" target="_blank" rel="noopener">linkedin</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot__row foot__row--small">
+    <span>&copy; 2026 caboodle design</span>
+    <span class="foot__credit">built by emily green in claude code</span>
+    <span class="foot__location">grand rapids, mi</span>
+  </div>
+</footer>
+
+<!-- Lazy-load the live prototype, and only when this page is top-level, so it
+     never nests inside another preview frame. -->
+<script>
+(function () {
+  if (window.self !== window.top) return;
+  var f = document.querySelector('.demo-frame__viewport iframe');
+  if (!f || !f.dataset.src) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      f.addEventListener('load', function () { f.parentElement.classList.add('is-live'); });
+      f.style.display = 'block'; f.src = f.dataset.src; io.disconnect();
+    });
+  }, { rootMargin: '300px 0px' });
+  io.observe(f.parentElement);
+})();
+</script>
+
+<script src="../script.js?v=20260903a" defer></script>
+</body>
+</html>
