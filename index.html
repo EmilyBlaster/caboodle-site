@@ -623,5 +623,185 @@ body.wb-has-full { overflow: hidden; }
   });
 })();
 </script>
+<!-- ═══ Skill Set card ═══════════════════════════════════════════════════
+     A small corner card that points visitors to The Skill Set course.
+     Not a blocking pop-up: it slides in once, bottom-left (the field guide
+     owns bottom-right), and stays dismissed once closed.
+     Homepage only for now. Styles and script live here, inline, like the
+     rest of the workbench.
+     ═════════════════════════════════════════════════════════════════ -->
+<style>
+.ss-card {
+  position: fixed;
+  left: 1.75rem;
+  bottom: 1.75rem;
+  z-index: 190;                 /* under the field guide (200) and the intro (500) */
+  width: min(21.5rem, calc(100vw - 2rem));
+  overflow: hidden;             /* clips the image to the rounded corners */
+  background: var(--white);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-card);
+  box-shadow: 0 18px 40px -18px rgba(20, 20, 20, 0.35);
+  /* hidden state: faded and nudged down a little */
+  opacity: 0;
+  transform: translateY(12px);
+  visibility: hidden;
+  transition: opacity var(--t-ui) var(--ease), transform var(--t-ui) var(--ease), visibility 0s linear var(--t-ui);
+}
+.ss-card.is-open {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition: opacity var(--t-ui) var(--ease), transform var(--t-ui) var(--ease), visibility 0s;
+}
+.ss-card__media { display: block; background: #E9C6E6; }
+.ss-card__media img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
+.ss-card__in { padding: 1.1rem 1.4rem 1.2rem; }
+.ss-card__kicker {
+  display: block;
+  font: 500 0.6875rem/1 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--magenta-ink);
+  margin-bottom: 0.7rem;
+}
+.ss-card__title {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.45rem;
+  line-height: 1.12;
+  margin: 0 0 0.65rem;
+  text-wrap: balance;
+}
+.ss-card__body {
+  font: 400 0.9rem/1.5 var(--body);
+  color: var(--ink-2);
+  margin: 0 0 1.05rem;
+}
+.ss-card__body strong { color: var(--ink); font-weight: 600; }
+.ss-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.1rem;
+}
+.ss-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: 500 0.875rem/1 var(--body);
+  padding: 0.75rem 1.15rem;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+  transition: background var(--t-micro), color var(--t-micro);
+}
+.ss-card__cta:hover, .ss-card__cta:focus-visible { background: var(--lime); color: var(--ink); }
+.ss-card__link[hidden] { display: none; }
+.ss-card__link {
+  font: 500 0.8125rem/1.2 var(--body);
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--rule);
+  transition: text-decoration-color var(--t-micro);
+}
+.ss-card__link:hover, .ss-card__link:focus-visible { text-decoration-color: var(--magenta); }
+.ss-card__close {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  z-index: 1;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.92);   /* sits on the image, so it needs its own backing */
+  cursor: pointer;
+  transition: color var(--t-micro), background var(--t-micro);
+}
+.ss-card__close:hover, .ss-card__close:focus-visible { background: var(--lime); }
+/* Phones: sit above the field guide button instead of beside it */
+@media (max-width: 640px) {
+  .ss-card { left: 1rem; right: 1rem; width: auto; bottom: 5.25rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ss-card, .ss-card.is-open { transition: none; transform: none; }
+}
+</style>
+
+<aside class="ss-card" id="ssCard" aria-labelledby="ssCardTitle" hidden>
+  <button class="ss-card__close" id="ssCardClose" type="button" aria-label="Dismiss the course note">
+    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  </button>
+  <a class="ss-card__media" href="https://community.maestrolearning.com/the-skill-set" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+    <img src="assets/skill-set-card.webp" alt="" width="960" height="540" loading="lazy" decoding="async" />
+  </a>
+  <div class="ss-card__in">
+  <h2 class="ss-card__title" id="ssCardTitle">Only scratching the surface with AI?</h2>
+  <p class="ss-card__body">
+    Skills are plain-language instructions. No code.
+    <strong>They make sure your expertise shows up.</strong>
+  </p>
+  <div class="ss-card__actions">
+    <a class="ss-card__cta" href="https://community.maestrolearning.com/the-skill-set" target="_blank" rel="noopener">see the course <span aria-hidden="true">&rarr;</span></a>
+    <a class="ss-card__link" href="https://vimeo.com/1244929159/2dd311c0fd" target="_blank" rel="noopener">watch the first few minutes</a>
+  </div>
+  </div>
+</aside>
+
+<script>
+/* Skill Set card: show once, after the first scroll, and remember a dismissal.
+   Add ?card=1 to the address to force it open while reviewing. */
+(() => {
+  const card = document.getElementById('ssCard');
+  if (!card) return;
+  const KEY = 'cd_skillset_card_v1';
+  const force = new URLSearchParams(location.search).has('card');
+  let dismissed = false;
+  try { dismissed = localStorage.getItem(KEY) === '1'; } catch (e) { /* private window: just show it */ }
+  if (dismissed && !force) return;
+
+  // Safety: never show visitors a card whose buttons go nowhere.
+  const cta = card.querySelector('.ss-card__cta');
+  const more = card.querySelector('.ss-card__link');
+  const dead = (el) => !el || el.getAttribute('href') === '#';
+  if (dead(more)) more.hidden = true;
+  if (dead(cta) && !force) return;
+
+  const open = () => {
+    card.hidden = false;
+    // a beat later, so the slide-in transition actually runs
+    setTimeout(() => card.classList.add('is-open'), 40);
+  };
+  const close = () => {
+    card.classList.remove('is-open');
+    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    setTimeout(() => { card.hidden = true; }, 450);
+  };
+
+  document.getElementById('ssCardClose').addEventListener('click', close);
+  card.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  // Clicking through to the course counts as "seen it" too
+  card.querySelector('.ss-card__cta').addEventListener('click', () => {
+    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+  });
+
+  if (force) { setTimeout(open, 400); return; }
+  // Wait until the visitor has scrolled past the headline, so the card never
+  // covers the hero copy. If they never scroll, show it after 20 seconds.
+  let shown = false;
+  const show = () => { if (shown) return; shown = true; removeEventListener('scroll', onScroll); open(); };
+  const onScroll = () => { if (scrollY > innerHeight * 0.6) show(); };
+  addEventListener('scroll', onScroll, { passive: true });
+  setTimeout(show, 20000);
+})();
+</script>
+
 </body>
 </html>
