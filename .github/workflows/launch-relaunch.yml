@@ -1,0 +1,67 @@
+# ============================================================================
+# Launch the portfolio relaunch on November 30, 2026.
+#
+# What it does: on the morning of Nov 30 it merges the `relaunch-portfolio`
+# branch into `main`. Netlify sees the new commit on main and deploys it,
+# the same as a normal push.
+#
+# Think of it as a timed "git push" that GitHub does for you. It skips the
+# local "Deploy now? (y/N)" prompt, because that prompt only lives on
+# Emily's computer.
+#
+# Whatever is on the `relaunch-portfolio` branch ON GITHUB that morning is
+# what goes live. Local commits that were never pushed are not included.
+#
+# To launch early or retry: GitHub > Actions > "Launch portfolio relaunch" >
+# Run workflow.
+# To cancel: delete this file from main, or disable the workflow in the
+# Actions tab.
+# ============================================================================
+name: Launch portfolio relaunch
+
+on:
+  schedule:
+    # 12:17 UTC on Nov 30 = 7:17 AM Eastern. GitHub can start scheduled jobs
+    # late, sometimes by up to an hour.
+    - cron: '17 12 30 11 *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency: launch-relaunch
+
+jobs:
+  launch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Merge relaunch-portfolio into main
+        run: |
+          set -euo pipefail
+
+          # The cron line repeats every Nov 30. Only ever act in 2026.
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$(date -u +%Y)" != "2026" ]; then
+            echo "Not 2026. Nothing to do."
+            exit 0
+          fi
+
+          git fetch origin relaunch-portfolio
+
+          # Already launched? Then stop quietly.
+          if git merge-base --is-ancestor origin/relaunch-portfolio HEAD; then
+            echo "relaunch-portfolio is already in main. Nothing to do."
+            exit 0
+          fi
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Fast-forwards when main has not moved; otherwise makes a merge
+          # commit. A conflict fails the job, and GitHub emails the failure.
+          git merge --no-edit origin/relaunch-portfolio
+          git push origin HEAD:main
