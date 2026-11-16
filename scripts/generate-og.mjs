@@ -38,6 +38,10 @@ const PAGES = [
   { url: '/assets/og/og-about.html',       output: 'og-about.png' },
   { url: '/assets/og/og-field-notes.html', output: 'og-field-notes.png' },
   { url: '/assets/og/og-airbnb.html',      output: 'og-airbnb.png' },
+  { url: '/assets/og/og-approach.html',    output: 'og-approach.png' },
+  { url: '/assets/og/og-labs.html',        output: 'og-labs.png' },
+  { url: '/assets/og/og-resources.html',   output: 'og-resources.png' },
+  { url: '/assets/og/og-trust20.html',     output: 'og-trust20.png' },
 ];
 
 const OG_VIEWPORT = { width: 1200, height: 630 };
