@@ -876,15 +876,15 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
         { label: 'emily\'s background', next: 'background' },
         { label: 'clients + work',      next: 'clients'    },
         { label: 'methodology',         next: 'method'     },
-        { label: 'services',            next: 'services'   },
-        { label: 'contact + hire',      next: 'contact'    },
+        { label: 'what she does',       next: 'services'   },
+        { label: 'say hello',           next: 'contact'    },
         { label: 'fun stuff',           next: 'fun'        },
       ]
     },
 
     /* ── Background branch ── */
     background: {
-      msg: 'emily green is the founder of caboodle design. she designs learning that actually changes what people do, for apple, airbnb, gitlab, intuit, t-mobile, and j&j. behavioral science, instructional design, media production, and UX all in one place. ai is a field tool here, not a shortcut. <a class="guide-link" href="about.html">more about emily →</a>',
+      msg: 'emily green is a senior instructional designer at maestro, and this site is her portfolio. she designs learning that actually changes what people do, for apple, airbnb, gitlab, intuit, t-mobile, and j&j. behavioral science, instructional design, media production, and UX all in one place. ai is a field tool here, not a shortcut. <a class="guide-link" href="about.html">more about emily →</a>',
       chips: [
         { label: 'her approach',  next: 'approach'  },
         { label: 'where based?',  next: 'location'  },
@@ -920,7 +920,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     },
 
     location: {
-      msg: 'grand rapids, michigan. but she works remotely with clients everywhere: apple, airbnb, gitlab are all remote engagements. the zip code doesn\'t limit the work.',
+      msg: 'grand rapids, michigan. the work has always been remote: apple, airbnb, and gitlab were all remote projects. the zip code doesn\'t limit the work.',
       chips: [
         { label: '← back', next: 'background' }
       ]
@@ -945,7 +945,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
     /* ── Clients branch ── */
     clients: {
-      msg: 'apple, airbnb, gitlab, johnson & johnson, t-mobile, intuit. each engagement is scoped to actual behavior change, not "we need a course." she\'ll push back if the problem doesn\'t call for training. <a class="guide-link" href="work.html">see the case files →</a>',
+      msg: 'apple, airbnb, gitlab, johnson & johnson, t-mobile, intuit. each project was scoped to actual behavior change, not "we need a course." she pushes back when the problem doesn\'t call for training. <a class="guide-link" href="work.html">see the case files →</a>',
       chips: [
         { label: 'kind of work', next: 'worktype' },
         { label: 'results',      next: 'results'  },
@@ -970,35 +970,31 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
 
     /* ── Services branch ── */
     services: {
-      msg: 'learning strategy + curriculum architecture, behavioral science-informed program design, media production (video, 3D, interactive), UX and graphic design for L&D, AI-assisted content tools. she works as an embedded partner, not an order-taker.',
+      msg: 'learning strategy + curriculum architecture, behavioral science-informed program design, media production (video, 3D, interactive), UX and graphic design for L&D, AI-assisted content tools. she works like a partner, not an order-taker.',
       chips: [
-        { label: 'workshops?',    next: 'workshops' },
-        { label: 'the process',   next: 'process'   },
-        { label: 'contact emily', next: 'contact'   },
+        { label: 'how she works', next: 'process'   },
+        { label: 'the skill set', next: 'skillset'  },
         { label: '← main menu',  next: 'start'     },
       ]
     },
 
-    workshops: {
-      msg: 'yes. learning strategy workshops, action mapping diagnostic sessions, curriculum design sprints. usually half-day to two-day with L&D or HR leadership. she\'s good in a room.',
+    process: {
+      msg: 'diagnosis first. she finds what\'s actually causing the behavior gap, then designs and builds for that outcome. she won\'t call it a course before she understands the problem.',
       chips: [
-        { label: 'the process',   next: 'process'  },
-        { label: 'contact emily', next: 'contact'  },
         { label: '← back',       next: 'services' },
       ]
     },
 
-    process: {
-      msg: 'discovery conversation → proposal scoped to your actual outcomes → design and build. she\'s not going to quote you a course before she understands the problem. the diagnosis is part of the deliverable.',
+    skillset: {
+      msg: 'the skill set is her course on claude skills for learning designers, made with maestro. plain-language instructions, no code. about 90 minutes, and you build your first skill. <a class="guide-link" href="https://community.maestrolearning.com/the-skill-set" target="_blank" rel="noopener">see the course →</a>',
       chips: [
-        { label: 'contact emily', next: 'contact'  },
-        { label: '← back',       next: 'services' },
+        { label: '← main menu', next: 'start' }
       ]
     },
 
     /* ── Contact branch ── */
     contact: {
-      msg: 'open to new projects. best way in: <a class="guide-link" href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a>. grand rapids-based, works globally. <a class="guide-link" href="about.html">about emily →</a>',
+      msg: 'emily is a senior instructional designer at maestro and isn\'t looking for new work. questions, notes, and speaking invitations are welcome: <a class="guide-link" href="mailto:hello@caboodledesign.info">hello@caboodledesign.info</a>. she\'s also in the <a class="guide-link" href="https://community.maestrolearning.com/feed" target="_blank" rel="noopener">maestro community →</a> <a class="guide-link" href="about.html">about emily →</a>',
       chips: [
         { label: '← main menu', next: 'start' }
       ]
@@ -1061,7 +1057,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     loves: {
       msg: 'empowering people. when the right training actually changes what someone can do, when a manager has a conversation they couldn\'t have before, or a new hire gets up to speed in half the time, that\'s the whole point.',
       chips: [
-        { label: 'contact emily', next: 'contact' },
+        { label: 'say hello',     next: 'contact' },
         { label: '← fun stuff',  next: 'fun'     },
       ]
     },
@@ -1082,7 +1078,7 @@ if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
     /* Work stuff */
     { terms: ['action map', 'cathy moore'],                                        node: 'actionmap'    },
     { terms: ['kirkpatrick', 'level 3', 'level 4', 'evaluation'],                  node: 'kirkpatrick'  },
-    { terms: ['workshop', 'sprint', 'facilit'],                                    node: 'workshops'    },
+    { terms: ['skill set', 'skillset', 'course', 'claude skill', 'maestro'],        node: 'skillset'     },
     { terms: ['process', 'how work', 'engagement', 'scope', 'proposal'],           node: 'process'      },
     { terms: ['result', 'outcome', 'measur', 'roi', 'impact', 'data'],             node: 'results'      },
     { terms: ['tool', 'stack', 'software', 'articulate', 'figma', 'remotion'],     node: 'tools'        },

@@ -5240,6 +5240,9 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 }
 .aboutpage__notes dd {
   margin: 0;
+  /* short two-line notes: even out the lines so the last one is never a
+     stray word or two ("time with") */
+  text-wrap: balance;
   font-family: var(--body);
   font-size: 0.88rem;
   line-height: 1.45;
@@ -5266,8 +5269,11 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   font-weight: 800;
   /* Sized to its column (cqi) so each of the three phrases holds one line
      on desktop instead of breaking word by word. 5.4cqi fits the longest
-     phrase ("the mind behind caboodle design.", ~17.9em) with room to spare. */
-  font-size: clamp(2.5rem, 5.4cqi, 4.5rem);
+     phrase ("learning experience designer.", ~16em) with room to spare. Keep
+     any new phrase under ~17.9em or it wraps and leaves a one-word last line.
+     Floor is 1.875rem (30px) so on phones the phrases hold together: the
+     longest one splits once, the other two each keep a single line. */
+  font-size: clamp(1.875rem, 5.4cqi, 4.5rem);
   /* 1.2: at this display size Bauhaus Bool's deep descenders (program / lead /
      design) graze the tall ascenders on the line below (behavioral's b/h/l/d).
      1.05 only left ~4px of leading; 1.2 gives ~17px so the lines read clearly
@@ -5278,6 +5284,14 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
   text-transform: lowercase;
 }
 .aboutpage__h em { font-style: italic; color: var(--blue); }
+/* Phones: the column is too narrow for a whole phrase at display size, so
+   each phrase breaks as one word + a tied pair ("learning / experience
+   designer."). The pairs are tied with &nbsp; in about.html. 8.6cqi keeps the
+   widest pair ("experience designer.", ~11.4em) inside the column, capped at
+   30px, so no phrase ever ends on a single word. */
+@container (max-width: 34rem) {
+  .aboutpage__h { font-size: clamp(1.4rem, 8.6cqi, 1.875rem); }
+}
 .aboutpage__lede {
   margin: 0;
   font-size: clamp(1rem, 1.1vw + 0.7rem, 1.2rem);
