@@ -42,6 +42,10 @@ const PAGES = [
   { url: '/assets/og/og-labs.html',        output: 'og-labs.png' },
   { url: '/assets/og/og-resources.html',   output: 'og-resources.png' },
   { url: '/assets/og/og-trust20.html',     output: 'og-trust20.png' },
+  { url: '/assets/og/og-apple.html',    output: 'og-apple.png' },
+  { url: '/assets/og/og-gitlab.html',   output: 'og-gitlab.png' },
+  { url: '/assets/og/og-intuit.html',   output: 'og-intuit.png' },
+  { url: '/assets/og/og-tmobile.html',  output: 'og-tmobile.png' },
 ];
 
 const OG_VIEWPORT = { width: 1200, height: 630 };
