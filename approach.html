@@ -40,6 +40,52 @@
   height: 4px; background: var(--magenta);
   z-index: 2000; pointer-events: none;
 }
+
+/* ---------- native figures (replaced the two shrunk 1920px canvases, Nov 2026) ---------- */
+.ax-k { font-family: var(--body); font-size: .84rem; font-weight: 500; letter-spacing: 0; text-transform: lowercase; color: var(--ink-2); text-wrap: balance; }
+/* fig. 01, the engagement arc: five phases riding one curve */
+.ax-arc { --pad: clamp(1.25rem, 3vw, 2.5rem); position: relative; margin: 0 0 3rem; padding: var(--pad) var(--pad) 1.25rem; border: 1px solid var(--rule); background: var(--paper-2); container-type: inline-size; }
+.ax-arc__plot { position: relative; }
+.ax-arc__curve { position: absolute; left: 0; top: 0; width: 100%; height: 12rem; overflow: visible; pointer-events: none; }
+.ax-arc__curve path { fill: none; stroke: var(--ink); stroke-width: 1.25; vector-effect: non-scaling-stroke; }
+.ax-arc__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.ax-arc__list li { position: relative; padding: calc(var(--y) + .55rem) .4rem 0; display: grid; justify-items: center; align-content: start; text-align: center; }
+.ax-arc__note { position: absolute; left: .4rem; right: .4rem; top: calc(var(--y) - 1.25rem); transform: translateY(-100%); font-style: italic; font-size: .92rem; line-height: 1.25; color: var(--ink); text-wrap: balance; }
+.ax-arc__dot { position: absolute; left: 50%; top: var(--y); width: 1.05rem; height: 1.05rem; margin: -.525rem 0 0 -.525rem; border-radius: 50%; background: var(--c, var(--ink)); }
+.ax-arc__dot--ring { box-shadow: 0 0 0 .3rem var(--paper-2), 0 0 0 calc(.3rem + 1px) var(--ink); }
+.ax-arc__dot--goal { box-shadow: 0 0 0 .3rem var(--paper-2), 0 0 0 calc(.3rem + 1.5px) var(--lime), 0 0 0 .7rem var(--paper-2), 0 0 0 calc(.7rem + 1px) color-mix(in srgb, var(--lime) 55%, transparent); }
+.ax-arc__stem { width: 0; height: 1.15rem; border-left: 1px dotted var(--ink-2); margin-bottom: .3rem; }
+.ax-arc__list b { font-family: var(--display); font-weight: 700; font-size: clamp(1.45rem, 3.6cqw, 2.75rem); line-height: 1; letter-spacing: -.02em; color: var(--ink); }
+.ax-arc__tag { display: inline-flex; align-items: center; gap: .45rem; margin-top: .55rem; color: var(--ink); }
+.ax-arc__tag::before { content: ""; width: .6rem; height: .6rem; background: var(--lime); }
+.ax-arc figcaption { margin-top: clamp(1.25rem, 3vw, 2.25rem); padding-top: .9rem; border-top: 1px solid var(--rule); }
+/* fig. 02, the ladder: same build as the homepage, wider */
+.ax-ladder { margin: 0 auto; max-width: var(--maxw); border: 1px solid var(--rule); background: var(--paper); padding: clamp(1rem, 2.6vw, 2.25rem); display: grid; gap: .7rem; container-type: inline-size; }
+.ax-ladder__head, .ax-ladder__row { display: grid; grid-template-columns: minmax(0, 1fr) clamp(5.6rem, 17cqw, 11rem) minmax(0, 1fr); align-items: stretch; }
+.ax-ladder__head .ax-k { color: var(--ink); padding-bottom: .15rem; }
+.ax-ladder__head .ax-k:nth-child(2) { text-align: center; white-space: nowrap; }
+.ax-rung { border: 1.5px solid var(--blue); padding: clamp(.7rem, 2cqw, 1.25rem) clamp(.75rem, 2.2cqw, 1.5rem); display: grid; gap: .25rem; align-content: center; transition: opacity .2s; }
+.ax-rung--kp { border-color: var(--magenta); }
+.ax-rung .ax-k { color: var(--ink); text-transform: none; }
+.ax-rung b { font-family: var(--display); font-weight: 700; font-size: clamp(1.1rem, 3.1cqw, 2rem); line-height: 1.05; letter-spacing: -.02em; text-wrap: balance; }
+.ax-rung i { font-size: clamp(.86rem, 1.7cqw, 1.05rem); line-height: 1.3; color: var(--ink-2); text-wrap: balance; }
+.ax-ladder__verb { display: grid; place-items: center; color: var(--ink); background: linear-gradient(var(--ink), var(--ink)) center / 100% 1px no-repeat; transition: opacity .2s; }
+.ax-ladder__verb span { background: var(--paper); padding: 0 .6rem; }
+.ax-ladder figcaption { padding-top: .5rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.ax-ladder:hover .ax-ladder__row:not(:hover) > * { opacity: .28; }
+@media (prefers-reduced-motion: no-preference) {
+  .ax-will-draw .ax-arc__curve { clip-path: inset(-1rem 100% -1rem 0); }
+  .ax-drawn .ax-arc__curve { clip-path: inset(-1rem 0 -1rem 0); transition: clip-path 1.1s var(--ease); }
+  .ax-will-draw .ax-arc__list li { opacity: 0; transform: translateY(.6rem); }
+  .ax-drawn .ax-arc__list li { opacity: 1; transform: none; transition: opacity .5s var(--ease) var(--d, 0s), transform .5s var(--ease) var(--d, 0s); }
+  .ax-arc__list li:nth-child(1) { --d: .15s; } .ax-arc__list li:nth-child(2) { --d: .3s; } .ax-arc__list li:nth-child(3) { --d: .45s; } .ax-arc__list li:nth-child(4) { --d: .6s; } .ax-arc__list li:nth-child(5) { --d: .75s; }
+  .ax-will-draw .ax-ladder__verb, .ax-will-draw .ax-rung--kp { clip-path: inset(0 100% 0 0); }
+  .ax-drawn .ax-ladder__verb, .ax-drawn .ax-rung--kp { clip-path: inset(0 0 0 0); transition: clip-path .45s var(--ease) var(--d, 0s), opacity .2s; }
+  .ax-drawn .ax-rung--kp { transition-delay: calc(var(--d, 0s) + .2s), 0s; }
+  .ax-ladder__row:nth-of-type(3) { --d: .18s; } .ax-ladder__row:nth-of-type(4) { --d: .36s; } .ax-ladder__row:nth-of-type(5) { --d: .54s; }
+}
+/* phones keep the text versions that already sit under each figure */
+@media (max-width: 720px) { .ax-arc, .ax-ladder { display: none; } }
 </style>
 </head>
 <body>
@@ -102,90 +148,20 @@
     </p>
   </header>
 
-  <!-- Editorial SVG diagram -->
-  <figure class="phases__figure fig--ondemand" aria-label="The engagement arc" style="padding:0; border:none; background:transparent;">
-    <iframe id="arcFrame" data-src="/engagement-arc.html?v=20261117b"
-            scrolling="no"
-            title="The engagement arc: Caboodle methodology"
-            style="width:100%; aspect-ratio: 1920/1080; border:0; display:block; overflow:hidden; background:#fbfcf9;"></iframe>
-    <img class="fig__static"
-         src="/assets/arc-static.jpg"
-         alt="The engagement arc: five phases, discover, analyze, design, build, measure, each laddering to the next."
-         width="1456" height="816" />
-    <button class="fig__play" type="button"><i aria-hidden="true"></i>play the animated arc</button>
+  <!-- fig. 01: the engagement arc, built from real text so it stays sharp at any size -->
+  <figure class="ax-arc" data-ax-draw aria-label="The engagement arc: five phases, discover, analyze, design, build, measure, each laddering to the next.">
+    <div class="ax-arc__plot">
+      <svg class="ax-arc__curve" viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true"><path d="M1 8 Q50 -1.6 99 8"/></svg>
+      <ol class="ax-arc__list">
+        <li style="--y: 6.4rem; --c: var(--blue)"><span class="ax-arc__note">the real problem</span><i class="ax-arc__dot"></i><span class="ax-arc__stem"></span><span class="ax-k">01</span><b>discover</b></li>
+        <li style="--y: 4rem; --c: var(--magenta)"><span class="ax-arc__note">critical actions</span><i class="ax-arc__dot"></i><span class="ax-arc__stem"></span><span class="ax-k">02</span><b>analyze</b></li>
+        <li style="--y: 3.2rem"><span class="ax-arc__note">practice-first experiences</span><i class="ax-arc__dot ax-arc__dot--ring"></i><span class="ax-arc__stem"></span><span class="ax-k">03</span><b>design</b></li>
+        <li style="--y: 4rem; --c: var(--blue)"><span class="ax-arc__note">rapid prototyping</span><i class="ax-arc__dot"></i><span class="ax-arc__stem"></span><span class="ax-k">04</span><b>build</b></li>
+        <li style="--y: 6.4rem; --c: var(--lime)"><span class="ax-arc__note">the destination</span><i class="ax-arc__dot ax-arc__dot--goal"></i><span class="ax-arc__stem"></span><span class="ax-k">05</span><b>measure</b><span class="ax-arc__tag ax-k">behavior change</span></li>
+      </ol>
+    </div>
+    <figcaption class="ax-k">fig. 01 · the engagement arc. prototype throughout, measure behavior.</figcaption>
   </figure>
-
-  <script>
-  /* ── Engagement arc iframe: strip inner padding, overlay replay button ── */
-  (function () {
-    var iframe = document.getElementById('arcFrame');
-    if (!iframe) return;
-
-    var CSS = [
-      /* Remove body whitespace so arc fills the full iframe width */
-      'html, body { padding: 0 !important; margin: 0 !important; overflow: hidden !important; }',
-      'body { align-items: stretch !important; justify-content: flex-start !important; }',
-      /* Embed shell: full width, position:relative so controls can overlay */
-      '.embed-shell { position: relative !important; max-width: 100% !important; gap: 0 !important; }',
-      /* Remove height cap so arc scales naturally */
-      '.arc-embed { max-height: none !important; }',
-      /* Hide the note text — approach.html has its own caption */
-      '.note { display: none !important; }',
-      /* Overlay the controls in the bottom-right corner */
-      '.controls { position: absolute !important; bottom: 16px !important; right: 20px !important;',
-      '  z-index: 10 !important; justify-content: flex-end !important; }',
-      /* Hide fig/time meta, keep only the replay button */
-      '.controls .meta { display: none !important; }',
-    ].join('\n');
-
-    function rescale() {
-      var win = iframe.contentWindow;
-      if (!win) return;
-      try { win.dispatchEvent(new Event('resize')); } catch (e) {}
-    }
-
-    // The arc scales its fixed 1920x1080 stage to fit the frame but only measures
-    // on mount + resize. Our padding strip above widens the frame ~110px, and the
-    // iframe's aspect-ratio box + the figure's inlined webfonts settle a beat later;
-    // the figure never re-measures, so on a cold first view it can lock in a
-    // too-small scale and sit shrunk in the corner until a manual refresh. Nudge it
-    // to re-measure once everything has settled. (Same fix as the ladder figure.)
-    function scheduleRescales(doc) {
-      rescale();
-      requestAnimationFrame(rescale);
-      setTimeout(rescale, 300);
-      setTimeout(rescale, 800);
-      try { if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(rescale); } catch (e) {}
-    }
-
-    function inject(doc) {
-      if (!doc || !doc.body) return false;
-      if (!doc.querySelector('.embed-shell')) return false; /* bundle not rendered yet */
-      if (doc.getElementById('cd-arc-inject')) return true; /* already injected */
-      var s = doc.createElement('style');
-      s.id = 'cd-arc-inject';
-      s.textContent = CSS;
-      (doc.head || doc.documentElement).appendChild(s);
-      scheduleRescales(doc);
-      return true;
-    }
-
-    function poll() {
-      var attempts = 0;
-      var timer = setInterval(function () {
-        try {
-          if (inject(iframe.contentDocument)) { clearInterval(timer); return; }
-        } catch (e) {}
-        if (++attempts > 60) clearInterval(timer); /* give up after ~6s */
-      }, 100);
-    }
-
-    /* Start polling after the iframe's initial load fires */
-    iframe.addEventListener('load', poll);
-    /* Also try immediately in case it's already loaded (e.g. back/forward cache) */
-    try { if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') poll(); } catch (e) {}
-  })();
-  </script>
 
   <!-- Plain-text version for depth -->
   <dl class="phases__list">
@@ -227,87 +203,15 @@
     </p>
   </header>
 
-  <!-- fig-02-ladder.html: animated 1920×1080 canvas, plays on scroll-into-view.
-       background:#eff1ec on the iframe matches the animation's own bg so the
-       warm paper colour shows consistently during load and throughout playback. -->
-  <!-- Restore the figure's original CSS framing (padding + border + paper bg)
-       so the animation sits in the same lighter box as the old static SVG. -->
-  <figure class="ladder__figure fig--ondemand" aria-label="Action Mapping × Kirkpatrick ladder">
-    <iframe id="ladderFrame" data-src="/fig-02-ladder.html?v=20261117b"
-            scrolling="no"
-            aria-hidden="true"
-            style="width:100%; aspect-ratio: 1920/1080; border:0; display:block; background:#fbfcf9;"></iframe>
-    <img class="fig__static"
-         src="/assets/ladder-static.jpg"
-         alt="Action Mapping × Kirkpatrick ladder: four rungs pairing business goal with results, critical actions with behavior, practice activities with learning, and essential info with reaction."
-         width="1456" height="816" />
-    <button class="fig__play" type="button"><i aria-hidden="true"></i>play the animated ladder</button>
+  <!-- fig. 02: the ladder, the same native build as the homepage -->
+  <figure class="ax-ladder" data-ax-draw aria-label="Action Mapping × Kirkpatrick ladder: four rungs pairing business goal with results, critical actions with behavior, practice activities with learning, and essential info with reaction.">
+    <div class="ax-ladder__head"><span class="ax-k">action mapping</span><span class="ax-k">crosses into</span><span class="ax-k">kirkpatrick</span></div>
+    <div class="ax-ladder__row"><div class="ax-rung"><span class="ax-k">01</span><b>business goal</b><i>what outcome must change?</i></div><span class="ax-ladder__verb ax-k"><span>proves</span></span><div class="ax-rung ax-rung--kp"><span class="ax-k">L4</span><b>results</b><i>did it matter?</i></div></div>
+    <div class="ax-ladder__row"><div class="ax-rung"><span class="ax-k">02</span><b>critical actions</b><i>what must people do differently?</i></div><span class="ax-ladder__verb ax-k"><span>tracks</span></span><div class="ax-rung ax-rung--kp"><span class="ax-k">L3</span><b>behavior</b><i>are they doing it?</i></div></div>
+    <div class="ax-ladder__row"><div class="ax-rung"><span class="ax-k">03</span><b>practice activities</b><i>how do they rehearse it?</i></div><span class="ax-ladder__verb ax-k"><span>reveals</span></span><div class="ax-rung ax-rung--kp"><span class="ax-k">L2</span><b>learning</b><i>did they learn it?</i></div></div>
+    <div class="ax-ladder__row"><div class="ax-rung"><span class="ax-k">04</span><b>essential info</b><i>what's the minimum to act?</i></div><span class="ax-ladder__verb ax-k"><span>drives</span></span><div class="ax-rung ax-rung--kp"><span class="ax-k">L1</span><b>reaction</b><i>did they like it?</i></div></div>
+    <figcaption class="ax-k"><span>fig. 02 · every row of action mapping has a kirkpatrick partner.</span><span>cathy moore · donald kirkpatrick</span></figcaption>
   </figure>
-
-  <script>
-  /* ── Ladder iframe: strip inner body padding so animation fills full width ── */
-  (function () {
-    var iframe = document.getElementById('ladderFrame');
-    if (!iframe) return;
-
-    var CSS = [
-      /* Remove body whitespace so animation fills the figure box */
-      'html, body { padding: 0 !important; margin: 0 !important; overflow: hidden !important; }',
-      'body { align-items: stretch !important; justify-content: flex-start !important; }',
-      '.embed-shell { max-width: 100% !important; }',
-      '.arc-embed { max-height: none !important; }',
-      /* Hide the note text */
-      '.note { display: none !important; }',
-    ].join('\n');
-
-    function rescale() {
-      var win = iframe.contentWindow;
-      if (!win) return;
-      try { win.dispatchEvent(new Event('resize')); } catch (e) {}
-    }
-
-    // The figure scales its fixed 1920x1080 stage to fit the frame, but only
-    // measures on mount + resize. Things change the frame AFTER it mounts: our
-    // padding strip (above) widens it ~100px, and the iframe's aspect-ratio box
-    // plus the figure's own inlined webfonts settle a beat later. The figure never
-    // re-measures on its own, so on a cold first view it locks in a too-small scale
-    // and the columns/connectors don't line up until a manual refresh. Nudge it to
-    // re-measure once everything has settled (immediately, next frame, and after
-    // its fonts load).
-    function scheduleRescales(doc) {
-      rescale();
-      requestAnimationFrame(rescale);
-      setTimeout(rescale, 300);
-      setTimeout(rescale, 800);
-      try { if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(rescale); } catch (e) {}
-    }
-
-    function inject(doc) {
-      if (!doc || !doc.body) return false;
-      if (!doc.querySelector('.embed-shell')) return false;
-      if (doc.getElementById('cd-ladder-inject')) return true;
-      var s = doc.createElement('style');
-      s.id = 'cd-ladder-inject';
-      s.textContent = CSS;
-      (doc.head || doc.documentElement).appendChild(s);
-      scheduleRescales(doc);
-      return true;
-    }
-
-    function poll() {
-      var attempts = 0;
-      var timer = setInterval(function () {
-        try {
-          if (inject(iframe.contentDocument)) { clearInterval(timer); return; }
-        } catch (e) {}
-        if (++attempts > 60) clearInterval(timer); /* give up after ~6s */
-      }, 100);
-    }
-
-    iframe.addEventListener('load', poll);
-    try { if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') poll(); } catch (e) {}
-  })();
-  </script>
 
   <!-- Mobile-only: stacked card pairs so the AM ↔ KP relationship is
        readable without sideways scrolling. Hidden at desktop widths. -->
@@ -510,26 +414,19 @@
 <script src="script.js?v=20261116d" defer></script>
 
 <script>
-/* ── Scroll-triggered iframe loading ────────────────────────────────────────
-   The animated figures (arc + ladder) are 1920×1080 React bundles that start
-   playing the moment they mount. To keep the animation in sync with the
-   viewer, we don't set src until the iframe is about to enter the viewport.
-   rootMargin '200px' gives ~200px of pre-load runway so the bundle is ready
-   by the time the user actually sees it.
-────────────────────────────────────────────────────────────────────────── */
+/* The two figures draw in once, the first time they are on screen. */
 (function () {
-  /* The animated figures are 1.4 MB bundles each. The static render is the
-     default; the animation loads when someone presses play. */
-  document.querySelectorAll('.fig--ondemand').forEach(function (fig) {
-    var btn = fig.querySelector('.fig__play');
-    var frame = fig.querySelector('iframe[data-src]');
-    if (!btn || !frame) return;
-    btn.addEventListener('click', function () {
-      if (!frame.src) frame.src = frame.dataset.src;
-      frame.removeAttribute('aria-hidden');
-      fig.classList.add('is-live');
+  var figs = [].slice.call(document.querySelectorAll('[data-ax-draw]'));
+  figs.forEach(function (f) { f.classList.add('ax-will-draw'); });
+  function check() {
+    figs = figs.filter(function (f) {
+      var r = f.getBoundingClientRect();
+      if (r.top < innerHeight * 0.8 && r.bottom > 0) { f.classList.add('ax-drawn'); return false; }
+      return true;
     });
-  });
+    if (!figs.length) { removeEventListener('scroll', check); removeEventListener('resize', check); }
+  }
+  addEventListener('scroll', check, { passive: true }); addEventListener('resize', check); check();
 })();
 </script>
 </body>
