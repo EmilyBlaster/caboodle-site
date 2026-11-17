@@ -19,14 +19,14 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
-<link rel="stylesheet" href="../styles.css?v=20261117a" />
+<link rel="stylesheet" href="../styles.css?v=20261117b" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 
 <style>
 .labero { background: var(--ink); color: var(--white); padding: clamp(6rem,12vw,9rem) var(--pad-x) clamp(4rem,8vw,6rem); position: relative; overflow: hidden; border-bottom: 1px solid var(--dark-2); }
-.labero__back { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); text-decoration: none; margin-bottom: 2.5rem; transition: gap 0.3s var(--ease), opacity 0.3s var(--ease), color var(--t-micro) var(--ease); opacity: 0.85; }
+.labero__back { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--body); font-size: 0.83rem; letter-spacing: 0; text-transform: lowercase; color: var(--lime); text-decoration: none; margin-bottom: 2.5rem; transition: gap 0.3s var(--ease), opacity 0.3s var(--ease), color var(--t-micro) var(--ease); opacity: 0.85; }
 .labero__back:hover, .labero__back:focus-visible { gap: 0.8rem; opacity: 1; color: var(--link-hover); }
-.labero__stamp { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 2rem; }
+.labero__stamp { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase; color: rgba(255,255,255,0.3); margin-bottom: 2rem; }
 .labero__stamp b { color: var(--lime); font-weight: 500; }
 .labero__watermark { font-family: var(--display); font-size: clamp(8rem,20vw,16rem); font-weight: 800; line-height: 0.85; letter-spacing: -0.06em; color: rgba(255,255,255,0.04); position: absolute; right: var(--pad-x); bottom: -0.1em; pointer-events: none; user-select: none; }
 .labero__inner { max-width: var(--maxw); margin: 0 auto; position: relative; }
@@ -34,12 +34,12 @@
 .labero__h em { color: var(--lime); font-style: normal; }
 .labero__lede { font-size: clamp(1rem,1.4vw,1.15rem); line-height: 1.6; color: rgba(255,255,255,0.6); max-width: 52ch; margin-bottom: 2rem; }
 .labero__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.labero__tags li { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3em 0.65em; border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.4); }
+.labero__tags li { font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase; padding: 0.3em 0.65em; border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.4); }
 
 .lab-s { padding: clamp(3.5rem,7vw,5.5rem) var(--pad-x); background: var(--paper); border-top: 1px solid var(--rule); }
 .lab-s--alt { background: var(--paper-2); }
 .lab-s__inner { max-width: var(--maxw); margin: 0 auto; }
-.lab-s__kicker { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--magenta); display: block; margin-bottom: 0.75rem; }
+.lab-s__kicker { font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase; color: var(--magenta); display: block; margin-bottom: 0.75rem; }
 .lab-s__h { font-family: var(--display); font-weight: 700; font-size: clamp(1.6rem,2.8vw,2.4rem); letter-spacing: -0.03em; text-transform: lowercase; line-height: 1.05; margin: 0 0 0.75rem; }
 .lab-s__h em { font-style: italic; }
 .lab-s__p { max-width: 60ch; line-height: 1.65; color: var(--ink-2); margin: 0 0 2.5rem; }
@@ -86,12 +86,12 @@
   display: none;
 }
 .ml-context.visible { display: block; }
-.ml-context strong { color: var(--ink); font-weight: 600; display: block; margin-bottom: 0.3rem; font-size: 0.72rem; font-family: var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+.ml-context strong { color: var(--ink); font-weight: 600; display: block; margin-bottom: 0.3rem; font-size: 0.87rem; font-family: var(--body); letter-spacing: 0; text-transform: lowercase; }
 
 /* Comparison toggle */
 .ml-compare-btn {
   margin-top: 1.25rem; width: 100%; padding: 0.65rem 1rem;
-  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase;
   border: 1px solid var(--magenta); color: var(--magenta); background: transparent;
   cursor: pointer; transition: background 0.2s var(--ease), color 0.2s var(--ease);
   display: none;
@@ -104,7 +104,7 @@
 .ml-comp-row { padding: 1rem 1.25rem; border: 1px solid var(--rule); }
 .ml-comp-row--old { background: var(--paper-2); }
 .ml-comp-row--new { background: rgba(150,230,80,0.06); border-color: rgba(150,230,80,0.3); }
-.ml-comp-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 0.4rem; }
+.ml-comp-label { font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase; display: block; margin-bottom: 0.4rem; }
 .ml-comp-row--old .ml-comp-label { color: var(--ink-2); }
 .ml-comp-row--new .ml-comp-label { color: #4a9c20; }
 .ml-comp-text { font-size: 0.825rem; line-height: 1.5; color: var(--ink-2); }

@@ -22,7 +22,7 @@ brand — this IS the product. Design is positioning.
 
 ## Brand
 - **Colors**: Lime Green #96E650 (primary), Deep Blue #03599B (secondary), Magenta #EC008C (tertiary), Dark text #282828, Mid text #686868, Paper/bg #fbfcf9
-- **Type**: Bauhaus Bool 600 for display/headings, DM Sans 400–600 for body/UI, JetBrains Mono for kickers/labels
+- **Type**: Bauhaus Bool 600 for display/headings, DM Sans 400–600 for body/UI, DM Sans lowercase for kickers/labels, JetBrains Mono only inside software mockups
 - **Voice**: Direct, confident, slightly edgy, credibility-forward. Short sentences. Active voice. No em dashes (except the official tagline).
 - **Cadence rule**: Two-beat headings ("251 suppliers. 31 countries. one standard.") are a stamp, not a template. Use them when the fragments are facts. Do not template "N things. one thing." across sections, and do not open body copy with two clipped sentences in a row; that reads as machine-written. One clause with a comma usually wins.
 - **Tagline**: "Strategy, media, and behavioral science — it's the whole caboodle"
