@@ -11,9 +11,9 @@ colors:
   blue-lift: "#6FA3CC"
   graphite-ink: "#282828"
   ash-gray: "#5c5c5c"
-  hairline: "#d6d3cc"
-  warm-ash-paper: "#f2efe8"
-  paper-shadow: "#e8e3d8"
+  hairline: "#d9dcd5"
+  tinted-paper: "#fbfcf9"
+  paper-shadow: "#eff1ec"
   night-ground: "#141414"
   white: "#ffffff"
 typography:
@@ -58,7 +58,7 @@ spacing:
 components:
   button-primary:
     backgroundColor: "{colors.graphite-ink}"
-    textColor: "{colors.warm-ash-paper}"
+    textColor: "{colors.tinted-paper}"
     rounded: "{rounded.pill}"
     padding: "0.85rem 1.4rem"
   button-primary-hover:
@@ -67,7 +67,7 @@ components:
     rounded: "{rounded.pill}"
     padding: "0.85rem 1.4rem"
   input:
-    backgroundColor: "{colors.warm-ash-paper}"
+    backgroundColor: "{colors.tinted-paper}"
     textColor: "{colors.graphite-ink}"
     rounded: "0px"
     padding: "0.75rem 0.9rem"
@@ -84,14 +84,14 @@ components:
 
 **Creative North Star: "The Field Journal"**
 
-This is the field journal of a learning designer who studies how humans actually change before she designs anything. The page is warm paper, not a screen: an off-white ground (#f2efe8) carrying a faint multiply grain, the way a notebook page carries tooth. On top of it, two voices work in tension. Bauhaus Bool sets the display, lowercase and enormous, the confident hand-lettered headline of someone who has an opinion. JetBrains Mono sets the chrome: field-note stamps, call numbers, specimen labels, timestamps. The mono is the anthropologist's marginalia, the evidence that the work was observed and catalogued, not asserted.
+This is the field journal of a learning designer who studies how humans actually change before she designs anything. The page is paper, not a screen: a near-white ground (#fbfcf9) carrying a faint multiply grain, the way a notebook page carries tooth. On top of it, two voices work in tension. Bauhaus Bool sets the display, lowercase and enormous, the confident hand-lettered headline of someone who has an opinion. JetBrains Mono sets the chrome: field-note stamps, call numbers, specimen labels, timestamps. The mono is the anthropologist's marginalia, the evidence that the work was observed and catalogued, not asserted.
 
 The system is editorial and dense with rigor, never a portfolio brochure. Work is filed, not displayed: engagements carry call numbers (ENG-INTUIT, PROJ-PP001), lab experiments are specimens you power on in place. Color is used with discipline: the paper and graphite carry the page, and the three brand colors (lime, blue, magenta) arrive as signal, on small percentages of any given surface. The result should read as credible, direct, and slightly edgy: the translation layer between learning science and language that gets funded.
 
 It explicitly rejects the aesthetics of its neighbors. Not "passionate about learning" generic L&D. Not the AI-hype voice of bare-category headlines and trademarked-framework theater. Not the SaaS-cream portfolio (Notion white plus one accent). Not the hero-metric template. The proof here is the work and the client list, framed as field evidence.
 
 **Key Characteristics:**
-- Warm paper ground with tactile grain, never stark white
+- Near-white paper ground, tinted toward the lime, with tactile grain; never pure #fff
 - Bauhaus display, lowercase, oversized; JetBrains Mono for all small chrome
 - Work catalogued under call numbers, not laid out as cards
 - Three brand colors as signal, disciplined to small surface percentages
@@ -99,7 +99,7 @@ It explicitly rejects the aesthetics of its neighbors. Not "passionate about lea
 
 ## 2. Colors
 
-A warm-neutral paper system carrying three high-signal brand colors used sparingly, with a graphite-and-lime backbone.
+A near-white paper system carrying three high-signal brand colors used sparingly, with a graphite-and-lime backbone.
 
 ### Primary
 - **Signal Lime** (#96E650): The brand's charge. Confirmation and payoff, the color the page resolves to. Used on button hover, the logo mark accent, the "is-live" specimen dot, and the lime bar that lifts to reveal the hero headline. High-energy, so it earns its rarity.
@@ -113,15 +113,15 @@ A warm-neutral paper system carrying three high-signal brand colors used sparing
   - **Magenta Lift** (#F24DAF) and **Blue Lift** (#6FA3CC): The dark-panel variants. On the dark bench ground, small magenta and blue labels lift lighter rather than darker, so they clear contrast.
 
 ### Neutral
-- **Warm Ash Paper** (#f2efe8): The page ground. Never #fff. Carries a faint grain via a fixed multiply-blend noise layer.
-- **Paper Shadow** (#e8e3d8): The recessed panel tone, for stat blocks, lab cards, and inset surfaces one step below the page.
+- **Tinted Paper** (#fbfcf9): The page ground. Never #fff. Carries a faint grain via a fixed multiply-blend noise layer.
+- **Paper Shadow** (#eff1ec): The recessed panel tone, for stat blocks, lab cards, and inset surfaces one step below the page.
 - **Graphite Ink** (#282828): Primary text, dark section grounds, and the resting fill of pill buttons. Not pure black.
 - **Ash Gray** (#5c5c5c): Secondary text, captions, metadata, placeholders. Deepened from #686868 to clear WCAG AA on paper and tinted panels.
-- **Hairline** (#d6d3cc): 1px rules, input borders, dashed dividers.
+- **Hairline** (#d9dcd5): 1px rules, input borders, dashed dividers.
 - **Night Ground** (#141414): The deepest section grounds (the bench and dark editorial blocks).
 
 ### Named Rules
-**The Paper Rule.** The page ground is Warm Ash Paper (#f2efe8), never #fff and never pure #000. Every neutral is tinted warm. Pure white appears only as an input's focused state, a lifted surface deliberately brighter than the page.
+**The Paper Rule.** The page ground is Tinted Paper (#fbfcf9), never #fff and never pure #000. Every neutral is tinted a hair toward the lime. Pure white appears only as an input's focused state, a lifted surface deliberately brighter than the page.
 
 **The Small-Magenta Rule.** Bright Editorial Magenta (#EC008C) is for display and true accents only, at ~24px and up. Any magenta text below that uses Magenta Ink (#BC006B) on light grounds or Magenta Lift (#F24DAF) on dark grounds. The bright magenta never sets a kicker, caption, or label.
 
@@ -149,7 +149,7 @@ A warm-neutral paper system carrying three high-signal brand colors used sparing
 
 ## 4. Elevation
 
-A flat paper world where surfaces lift with long, soft, low-opacity shadows. There is no 2014-app drop shadow anywhere: shadows are large in blur, negative in spread, and low in alpha, so a lifted dossier or the bench specimen reads as a physical card resting on paper, catching a diffuse light. Depth is also carried tonally, Paper Shadow (#e8e3d8) recesses a panel below the page without any shadow at all.
+A flat paper world where surfaces lift with long, soft, low-opacity shadows. There is no 2014-app drop shadow anywhere: shadows are large in blur, negative in spread, and low in alpha, so a lifted dossier or the bench specimen reads as a physical card resting on paper, catching a diffuse light. Depth is also carried tonally, Paper Shadow (#eff1ec) recesses a panel below the page without any shadow at all.
 
 ### Shadow Vocabulary
 - **Resting lift** (`box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 10px 30px -16px rgba(40,40,40,.35)`): Dossier cards and panels at rest.
@@ -164,19 +164,19 @@ A flat paper world where surfaces lift with long, soft, low-opacity shadows. The
 
 ### Buttons
 - **Shape:** Full pill (border-radius 999px). No sharp-cornered buttons.
-- **Primary:** Graphite Ink (#282828) fill, Warm Ash Paper text, DM Sans 600, padding 0.85rem 1.4rem.
+- **Primary:** Graphite Ink (#282828) fill, Tinted Paper text, DM Sans 600, padding 0.85rem 1.4rem.
 - **Hover / Focus:** Fill flips to Signal Lime with Graphite Ink text over 0.4s on the house ease; any inline arrow slides 4px right. Keyboard focus adds a 2px Editorial Magenta ring at 2px offset.
 - **Nav CTA:** The same pill, smaller (0.6rem 1.25rem), pinned in the header.
 
 ### Cards / Dossiers
 - **Corner Style:** 10px (var(--r-card)). One signature variant uses an asymmetric dog-ear (10px 10px 3px 10px) to read as a filed folder tab.
-- **Background:** Warm Ash Paper or Paper Shadow; white only for a deliberately lifted preview surface.
+- **Background:** Tinted Paper or Paper Shadow; white only for a deliberately lifted preview surface.
 - **Shadow Strategy:** Resting lift at rest, Hover lift on hover with a small translateY (see Elevation).
 - **Border:** 1px Hairline or none; never a colored side-stripe.
 - **Distinctive behavior:** Each entry leads with a mono call number (ENG-INTUIT), a metadata line, then a lowercase Bauhaus title. Work is catalogued, not captioned.
 
 ### Inputs / Fields
-- **Style:** 1px Hairline (#d6d3cc) border, square corners, Warm Ash Paper background, DM Sans 1rem, Ash Gray placeholder.
+- **Style:** 1px Hairline (#d9dcd5) border, square corners, Tinted Paper background, DM Sans 1rem, Ash Gray placeholder.
 - **Focus:** Border shifts to Editorial Magenta and background lifts to white. No glow.
 
 ### Navigation
@@ -189,7 +189,7 @@ A dark-ground stage (#282828) holding operable specimens on a tab switcher. Each
 ## 6. Do's and Don'ts
 
 ### Do:
-- **Do** ground every page in Warm Ash Paper (#f2efe8) with the grain layer. Tint every neutral warm.
+- **Do** ground every page in Tinted Paper (#fbfcf9) with the grain layer. Tint every neutral a hair toward the lime.
 - **Do** keep JetBrains Mono to small chrome: kickers, stamps, call numbers, captions.
 - **Do** set the display lowercase and oversized, and let a lime curtain bar reveal it.
 - **Do** file work under call numbers with mono metadata, the field-journal way.

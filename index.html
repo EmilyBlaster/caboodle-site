@@ -34,7 +34,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="preload" as="font" type="font/woff2" href="fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
-<link rel="stylesheet" href="styles.css?v=20261116c" />
+<link rel="stylesheet" href="styles.css?v=20261117a" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
 <!-- Prefetch case study HTML on browser idle so the dossier preview
@@ -48,7 +48,7 @@
    Color roles: lime = live / on / touch. magenta = the accent word.
    blue = wordmark + method. paper + graphite do the structural work.
    ============================================================ */
-.wb { --lime-2: #B6EE85; --blue-deep: #024378; --paper-2: #e8e3d8; --dark: #141414; --snap: cubic-bezier(0.2, 0.9, 0.1, 1); --maxw: 1440px; --pad: clamp(1.25rem, 5vw, 5rem); }
+.wb { --lime-2: #B6EE85; --blue-deep: #024378; --paper-2: #eff1ec; --dark: #141414; --snap: cubic-bezier(0.2, 0.9, 0.1, 1); --maxw: 1440px; --pad: clamp(1.25rem, 5vw, 5rem); }
 .wb h1, .wb h2, .wb h3 { font-family: var(--display); font-weight: 700; letter-spacing: -0.02em; line-height: 1.02; margin: 0; text-transform: lowercase; text-wrap: balance; }
 .wb p { margin: 0; text-wrap: pretty; }
 .wb a { text-decoration: none; color: inherit; }
@@ -121,7 +121,10 @@
 
 .wb-wall { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
 @media (max-width: 640px) { .wb-wall { grid-template-columns: 1fr; } }
-.wb-tile { position: relative; background: var(--paper-2); aspect-ratio: 16 / 10; overflow: hidden; display: grid; }
+.wb-tile { position: relative; background: var(--paper); overflow: hidden; display: grid; grid-template-rows: auto 1fr; margin: 0; }
+/* row 1 is the artwork (the ::before holds its 16:10 shape); row 2 is the caption. The layers below pin to row 1. */
+.wb-tile::before { content: ""; grid-area: 1 / 1; aspect-ratio: 16 / 10; background: var(--paper-2); }
+.wb-tile__stage, .wb-tile__loop, .wb-tile__power, .wb-tile__curtain { grid-area: 1 / 1 / 2 / 2; }
 .wb-tile--wide { grid-column: 1 / -1; aspect-ratio: 16 / 7; }
 .wb-tile__stage { position: absolute; inset: 0; overflow: hidden; }
 .wb-tile__stage iframe { position: absolute; left: 0; top: 0; width: 100%; height: 100%; border: 0; display: block; background: var(--paper-2); }
@@ -129,9 +132,9 @@
 .wb-tile__loop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; background: var(--paper-2); transition: transform .6s var(--ease); }
 .wb-tile:hover .wb-tile__loop { transform: scale(1.03); }
 .wb-tile.wb-is-full .wb-tile__loop { display: none; }
-.wb-tile__label { position: absolute; left: .9rem; top: .8rem; z-index: 3; display: flex; align-items: center; gap: .6rem; pointer-events: none; }
-.wb-tile__label .wb-k { color: var(--ink); background: color-mix(in srgb, var(--paper) 82%, transparent); padding: .3rem .55rem; border-radius: 999px; backdrop-filter: blur(6px); }
-.wb-tile__label i { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-2); flex: none; transition: background .2s; }
+.wb-tile__label { grid-area: 2 / 1; position: relative; z-index: 3; display: flex; align-items: flex-start; gap: .6rem; padding: .65rem .9rem .7rem; background: var(--paper); border-top: 1px solid var(--rule); pointer-events: none; }
+.wb-tile__label .wb-k { color: var(--ink); line-height: 1.45; text-wrap: balance; }
+.wb-tile__label i { width: 8px; height: 8px; margin-top: .28rem; border-radius: 50%; background: var(--ink-2); flex: none; transition: background .2s; }
 .wb-tile.wb-is-live .wb-tile__label i { background: var(--lime); box-shadow: 0 0 0 3px rgba(150,230,80,.35); }
 /* the power switch: a big quiet target over the poster; on click a lime bar lifts and the component is there */
 .wb-tile__power { position: absolute; inset: 0; z-index: 2; display: grid; place-items: end end; padding: .9rem; background: none; border: 0; cursor: pointer; text-align: left; }
@@ -168,7 +171,8 @@
 .wb-tile.wb-is-live:not(.wb-is-stage):hover .wb-tile__expand, .wb-tile.wb-is-live:not(.wb-is-stage):focus-within .wb-tile__expand { opacity: 1; transform: none; }
 .wb-tile.wb-is-stage .wb-tile__open, .wb-tile.wb-is-stage .wb-tile__expand { display: none; }
 /* full screen: the stage tile lifts out of the page */
-.wb-tile.wb-is-full { position: fixed; inset: 0; z-index: 500; aspect-ratio: auto; background: var(--dark); }
+.wb-tile.wb-is-full { position: fixed; inset: 0; z-index: 500; grid-template-rows: 1fr; background: var(--dark); }
+.wb-tile.wb-is-full::before { display: none; }
 .wb-tile.wb-is-full .wb-tile__stage { inset: 3.25rem 0 0 0; }
 .wb-tile.wb-is-full .wb-tile__label { display: none; }
 .wb-tile__fullbar { display: none; position: absolute; left: 0; right: 0; top: 0; height: 3.25rem; z-index: 6; background: var(--dark); color: var(--paper); padding: 0 1.25rem; align-items: center; gap: 1rem; border-bottom: 1px solid #2a2a2a; }
@@ -194,11 +198,6 @@ body.wb-has-full { overflow: hidden; }
   
   .wb-tile__power b { transition: transform .3s var(--ease), background .2s, color .2s; }
   .wb-tile:hover .wb-tile__power b { transform: translateX(6px); }
-  /* case cards: a lime rule runs across the top, the title picks up blue */
-  .wb-case { position: relative; }
-  .wb-case::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--lime); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease); z-index: 1; }
-  .wb-case:hover::before { transform: scaleX(1); }
-  .wb-case h3 { transition: color .2s; } .wb-case:hover h3 { color: var(--blue); }
   /* steps: the number fills a lime disc */
   .wb-step .wb-k { position: relative; width: 2rem; height: 2rem; display: grid; place-items: center; border-radius: 50%; transition: background .2s, color .2s; padding: 0; }
   .wb-step:hover .wb-k { background: var(--lime); color: var(--ink); }
@@ -217,20 +216,23 @@ body.wb-has-full { overflow: hidden; }
 .wb-sec__head { display: flex; justify-content: space-between; align-items: end; gap: 2rem; flex-wrap: wrap; }
 .wb-sec__head h2 { font-size: clamp(1.9rem, 3.8vw, 3.1rem); max-width: 22ch; }
 .wb-sec__head .wb-k { padding-bottom: .5rem; }
-.wb-cases { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
-@media (max-width: 1000px) { .wb-cases { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .wb-cases { grid-template-columns: 1fr; } }
-.wb-case { background: var(--paper); display: grid; gap: .9rem; padding: 1rem 1rem 1.25rem; transition: background .2s; }
-.wb-case:hover { background: var(--paper-2); }
-/* covers are wide interface screenshots (~16:10); frame matches them so no UI edge gets sliced off.
-   top-left anchor means any leftover crop drops empty bottom margin, never the left edge of the interface.
-   a cover wider than the frame opts into object-fit: contain and sits on the paper-2 mat instead of cropping. */
-.wb-case__img { aspect-ratio: 16 / 10; overflow: hidden; background: var(--paper-2); }
-.wb-case__img img { width: 100%; height: 100%; object-fit: cover; object-position: left top; display: block; transition: transform .5s var(--ease); }
-.wb-case__img img.is-contain { object-fit: contain; object-position: center; }
+/* the case gallery: seven covers on a 6-column grid. halves span 3 columns, thirds span 2. */
+.wb-cases { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(1.75rem, 3vw, 2.75rem) clamp(1rem, 2vw, 1.75rem); }
+/* each case spans an image row and a caption row of the shared grid, so captions in a row line up */
+.wb-case { display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: .95rem; color: inherit; text-decoration: none; }
+.wb-case--half { grid-column: span 3; }
+.wb-case--third { grid-column: span 2; }
+.wb-case__img { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--paper-2); border: 1px solid var(--rule); }
+.wb-case__img--wide { aspect-ratio: 1.91; }
+.wb-case__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease); }
 .wb-case:hover .wb-case__img img { transform: scale(1.03); }
-.wb-case h3 { font-size: 1.2rem; line-height: 1.08; }
+.wb-case__cap { display: grid; gap: .45rem; align-content: start; }
+.wb-case h3 { font-size: 1.2rem; line-height: 1.1; transition: color .2s; }
+.wb-case--half h3 { font-size: clamp(1.3rem, 1.9vw, 1.65rem); line-height: 1.06; }
+.wb-case:hover h3, .wb-case:focus-visible h3 { color: var(--blue); }
 .wb-case .wb-k { color: var(--ink-2); }
+@media (max-width: 900px) { .wb-case--third { grid-column: span 3; } .wb-case:first-of-type { grid-column: span 6; } }
+@media (max-width: 560px) { .wb-case, .wb-case:first-of-type { grid-column: span 6; } }
 
 /* ---------- beat 4 · how i work ---------- */
 .wb-how { border-top: 1px solid var(--rule); }
@@ -241,11 +243,29 @@ body.wb-has-full { overflow: hidden; }
 .wb-step .wb-k { color: var(--blue); padding-top: .35rem; }
 .wb-step h3 { font-size: 1.35rem; margin-bottom: .3rem; }
 .wb-step p { color: var(--ink-2); font-size: .98rem; max-width: 46ch; }
-.wb-fig { border: 1px solid var(--rule); background: var(--paper-2); aspect-ratio: 16 / 10; position: relative; overflow: hidden; }
-.wb-fig iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: var(--paper-2); }
 .wb-step { cursor: default; }
-.wb-fig iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-.wb-fig .wb-k { position: absolute; left: .9rem; bottom: .8rem; color: var(--ink); background: color-mix(in srgb, var(--paper) 82%, transparent); padding: .3rem .55rem; border-radius: 999px; }
+/* the ladder: 4 rows of (action mapping rung, verb, kirkpatrick rung). Type sizes follow the figure's own width. */
+.wb-ladder { margin: 0; border: 1px solid var(--rule); background: var(--paper-2); padding: clamp(.9rem, 2.2vw, 1.6rem); display: grid; gap: .6rem; container-type: inline-size; }
+.wb-ladder__head, .wb-ladder__row { display: grid; grid-template-columns: minmax(0, 1fr) clamp(4.6rem, 21cqw, 8rem) minmax(0, 1fr); align-items: stretch; }
+.wb-ladder__head .wb-k { color: var(--ink); padding-bottom: .15rem; }
+.wb-ladder__head .wb-k:nth-child(2) { text-align: center; }
+.wb-rung { border: 1.5px solid var(--blue); padding: clamp(.55rem, 2.4cqw, .9rem) clamp(.6rem, 2.6cqw, 1rem); display: grid; gap: .2rem; align-content: center; transition: opacity .2s; }
+.wb-rung--kp { border-color: var(--magenta); }
+.wb-rung .wb-k { color: var(--ink); }
+.wb-rung b { font-family: var(--display); font-weight: 700; font-size: clamp(1rem, 4.1cqw, 1.45rem); line-height: 1.05; letter-spacing: -.02em; }
+.wb-rung i { font-size: clamp(.8rem, 2.5cqw, .9rem); line-height: 1.3; color: var(--ink-2); text-wrap: balance; }
+.wb-rung b { text-wrap: balance; }
+.wb-ladder__verb { display: grid; place-items: center; color: var(--ink); background: linear-gradient(var(--ink), var(--ink)) center / 100% 1px no-repeat; transition: opacity .2s; }
+.wb-ladder__verb span { background: var(--paper-2); padding: 0 .5rem; }
+.wb-ladder figcaption { padding-top: .35rem; }
+.wb-ladder.wb-is-lit .wb-ladder__row:not(.wb-on) > * { opacity: .22; }
+/* draw-in: each rung pair connects in turn, top to bottom (solid wipe, no fade) */
+@media (prefers-reduced-motion: no-preference) {
+  .wb-ladder.wb-will-draw .wb-ladder__verb, .wb-ladder.wb-will-draw .wb-rung--kp { clip-path: inset(0 100% 0 0); }
+  .wb-ladder.wb-drawn .wb-ladder__verb, .wb-ladder.wb-drawn .wb-rung--kp { clip-path: inset(0 0 0 0); transition: clip-path .45s var(--ease) var(--d, 0s), opacity .2s; }
+  .wb-ladder.wb-drawn .wb-rung--kp { transition-delay: calc(var(--d, 0s) + .2s), 0s; }
+  .wb-ladder__row:nth-of-type(3) { --d: .18s; } .wb-ladder__row:nth-of-type(4) { --d: .36s; } .wb-ladder__row:nth-of-type(5) { --d: .54s; }
+}
 
 /* ---------- beat 5 · start ---------- */
 .wb-start { background: var(--dark); color: var(--paper); }
@@ -291,13 +311,12 @@ body.wb-has-full { overflow: hidden; }
 <main class="wb">
 <section class="wb-wrap wb-hero" id="top">
   <div class="wb-hero__copy">
-    <span class="wb-k">the portfolio of emily green · learning experience design, ai built in</span>
     <h1>
       <span class="wb-line"><span>design for</span></span>
       <span class="wb-line"><span>how humans</span></span>
       <span class="wb-line"><span><em>change.</em></span></span>
     </h1>
-    <p class="wb-hero__lede">Most training changes nothing. I design the kind that does. Fifteen years of behavioral science, learning systems, and human-centered design for Fortune 500s. Lately that includes AI rollouts people actually adopt. Don't read about the work. Run it.</p>
+    <p class="wb-hero__lede">I'm Emily Green, a learning experience designer. Most training changes nothing. I design the kind that does. Fifteen years of behavioral science, learning systems, and human-centered design for Fortune 500s. Lately that includes AI rollouts people actually adopt. Don't read about the work. Run it.</p>
     <div class="wb-hero__ctas"><a class="wb-btn" href="work.html">see the case files</a><a class="wb-btn wb-btn--ghost" href="about.html">about emily</a></div>
     <span class="wb-hero__hint wb-k"><i></i>four real pieces. watch them run, then run them yourself.</span>
   </div>
@@ -359,10 +378,14 @@ body.wb-has-full { overflow: hidden; }
     <a class="wb-k" href="work.html" style="color:var(--blue)">all seven case files →</a>
   </div>
   <div class="wb-cases">
-    <a class="wb-case" href="work/airbnb.html"><div class="wb-case__img"><img src="assets/greenroom-poster.png" alt=""></div><span class="wb-k">airbnb · ai 101 · 2026</span><h3>5 modules in 90 days, built for adoption.</h3></a>
-    <a class="wb-case" href="work/tmobile.html"><div class="wb-case__img"><img src="assets/work-covers/tmobile.jpg" alt=""></div><span class="wb-k">t-mobile · legal + privacy</span><h3>legal training that cut inquiries 40%.</h3></a>
-    <a class="wb-case" href="work/apple.html"><div class="wb-case__img"><img src="assets/work-covers/apple.jpg" alt="" class="is-contain"></div><span class="wb-k">apple · supplier responsibility</span><h3>supplier training across 251 companies, 31 countries.</h3></a>
-    <a class="wb-case" href="work/intuit.html"><div class="wb-case__img"><img src="assets/work-covers/intuit.jpg" alt=""></div><span class="wb-k">intuit · career growth</span><h3>ai-powered career growth for 10k+ employees.</h3></a>
+    <!-- seven case covers on a strict grid: two large, three medium, two large. each cover is a tight crop of the work itself. -->
+    <a class="wb-case wb-case--half" href="work/tmobile.html"><div class="wb-case__img"><img src="assets/work-covers/gallery/tmobile.webp" alt="" loading="lazy"></div><div class="wb-case__cap"><h3>legal training that cut inquiries 40%.</h3><span class="wb-k">t-mobile · legal + privacy</span></div></a>
+    <a class="wb-case wb-case--half" href="work/gitlab.html"><div class="wb-case__img"><img src="assets/work-covers/gallery/gitlab.webp" alt="" loading="lazy"></div><div class="wb-case__cap"><h3>works council training delivered in 2 months.</h3><span class="wb-k">gitlab · works council</span></div></a>
+    <a class="wb-case wb-case--third" href="work/apple.html"><div class="wb-case__img"><img src="assets/work-covers/gallery/apple.webp" alt="" loading="lazy"></div><div class="wb-case__cap"><h3>supplier training across 251 companies, 31 countries.</h3><span class="wb-k">apple · supplier responsibility</span></div></a>
+    <a class="wb-case wb-case--third" href="work/peoples-professors.html"><div class="wb-case__img"><img src="assets/work-covers/gallery/pp.webp" alt="" loading="lazy"></div><div class="wb-case__cap"><h3>a thesis about tiktok. so i built the proof.</h3><span class="wb-k">the people's professors · 2026</span></div></a>
+    <a class="wb-case wb-case--third" href="work/trust20.html"><div class="wb-case__img"><img src="assets/work-covers/gallery/trust20.webp" alt="" loading="lazy"></div><div class="wb-case__cap"><h3>accredited alcohol server training in 5 weeks.</h3><span class="wb-k">trust20 · gordon food services</span></div></a>
+    <a class="wb-case wb-case--half" href="work/airbnb.html"><div class="wb-case__img wb-case__img--wide"><img src="assets/work-covers/gallery/airbnb.webp" alt="" loading="lazy"></div><div class="wb-case__cap"><h3>5 modules in 90 days, built for adoption.</h3><span class="wb-k">airbnb · ai 101 · 2026</span></div></a>
+    <a class="wb-case wb-case--half" href="work/intuit.html"><div class="wb-case__img wb-case__img--wide"><img src="assets/work-covers/gallery/intuit.webp" alt="" loading="lazy"></div><div class="wb-case__cap"><h3>ai-powered career growth for 10k+ employees.</h3><span class="wb-k">intuit · career growth</span></div></a>
   </div>
 </section>
 
@@ -379,10 +402,15 @@ body.wb-has-full { overflow: hidden; }
         <div class="wb-step" data-rows="2,3"><span class="wb-k">02</span><div><h3>design for the behavior.</h3><p>Action Mapping. Every screen, module, or prompt exists because a specific behavior has to change. Content that doesn't earn its place gets cut.</p></div></div>
         <div class="wb-step" data-rows="0,1"><span class="wb-k">03</span><div><h3>measure whether it moved.</h3><p>Kirkpatrick, level three. Completion is the metric everyone reports. Behavior is the one that matters.</p></div></div>
       </div>
-      <div class="wb-fig">
-        <iframe id="ladder" src="fig-02-ladder.html?v=20260617b" title="The ladder: every row of action mapping has a kirkpatrick partner" loading="eager"></iframe>
-        <span class="wb-k">fig. the ladder · hover a step</span>
-      </div>
+      <!-- the ladder, built in the page at real type sizes (the animated 1920px figure lives on approach.html) -->
+      <figure class="wb-ladder" id="ladder" aria-label="The ladder: every row of action mapping has a kirkpatrick partner">
+        <div class="wb-ladder__head"><span class="wb-k">action mapping</span><span class="wb-k">crosses into</span><span class="wb-k">kirkpatrick</span></div>
+        <div class="wb-ladder__row"><div class="wb-rung wb-rung--am"><span class="wb-k">01</span><b>business goal</b><i>what outcome must change?</i></div><span class="wb-ladder__verb wb-k"><span>proves</span></span><div class="wb-rung wb-rung--kp"><span class="wb-k">L4</span><b>results</b><i>did it matter?</i></div></div>
+        <div class="wb-ladder__row"><div class="wb-rung wb-rung--am"><span class="wb-k">02</span><b>critical actions</b><i>what must people do differently?</i></div><span class="wb-ladder__verb wb-k"><span>tracks</span></span><div class="wb-rung wb-rung--kp"><span class="wb-k">L3</span><b>behavior</b><i>are they doing it?</i></div></div>
+        <div class="wb-ladder__row"><div class="wb-rung wb-rung--am"><span class="wb-k">03</span><b>practice activities</b><i>how do they rehearse it?</i></div><span class="wb-ladder__verb wb-k"><span>reveals</span></span><div class="wb-rung wb-rung--kp"><span class="wb-k">L2</span><b>learning</b><i>did they learn it?</i></div></div>
+        <div class="wb-ladder__row"><div class="wb-rung wb-rung--am"><span class="wb-k">04</span><b>essential info</b><i>what's the minimum to act?</i></div><span class="wb-ladder__verb wb-k"><span>drives</span></span><div class="wb-rung wb-rung--kp"><span class="wb-k">L1</span><b>reaction</b><i>did they like it?</i></div></div>
+        <figcaption class="wb-k">fig. the ladder · hover a step</figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -532,32 +560,27 @@ body.wb-has-full { overflow: hidden; }
   addEventListener('resize', refit);
 })();
 
-/* ---------- the ladder: draw in when it scrolls into view; steps light their rows ---------- */
+/* ---------- the ladder: connect the rungs when it scrolls into view; steps light their rows ---------- */
 (function () {
-  const iframe = document.getElementById('ladder'); if (!iframe) return;
-  const fig = iframe.closest('.wb-fig'); const steps = [...document.querySelectorAll('.wb-step')];
-  let doc = null, played = false;
-  const grid = () => { try { return doc && doc.querySelector('.arc-embed-canvas > div > div'); } catch (e) { return null; } };
-  // the compiled figure measures itself once; nudge it after it has real dimensions (first-view mis-scale fix)
-  const nudge = () => { iframe.style.width = 'calc(100% - 1px)'; requestAnimationFrame(() => requestAnimationFrame(() => { iframe.style.width = ''; try { iframe.contentWindow.dispatchEvent(new Event('resize')); } catch (e) {} })); };
-  const replay = () => { try { const b = [...doc.querySelectorAll('button')].find(x => /replay/i.test(x.textContent)); b && b.click(); } catch (e) {} };
+  const fig = document.getElementById('ladder'); if (!fig) return;
+  const rows = [...fig.querySelectorAll('.wb-ladder__row')];
+  // draw in once, the first time the figure is on screen (same scroll check the old figure used)
+  fig.classList.add('wb-will-draw');
   const check = () => {
-    if (played || !doc) return;
     const r = fig.getBoundingClientRect();
-    if (r.top < innerHeight * .75 && r.bottom > 0) { played = true; nudge(); setTimeout(replay, 150); }
+    if (r.top < innerHeight * .75 && r.bottom > 0) { fig.classList.add('wb-drawn'); removeEventListener('scroll', check); removeEventListener('resize', check); }
   };
-  iframe.addEventListener('load', () => { doc = iframe.contentDocument; nudge(); setTimeout(nudge, 400); check(); });
-  addEventListener('scroll', check, { passive: true }); addEventListener('resize', () => { nudge(); check(); });
-  // rows: the grid is a flat list — header (4 cells), then 4 rows of 4 cells (card, connector, label, card), then footer
-  const rowCells = k => { const g = grid(); if (!g) return []; return [...g.children].slice(4 + 4 * k, 8 + 4 * k); };
+  addEventListener('scroll', check, { passive: true }); addEventListener('resize', check); check();
+  // hovering or focusing a step dims the rows it does not touch
   const light = keep => {
-    for (let k = 0; k < 4; k++) rowCells(k).forEach(el => { el.style.transition = 'opacity .25s'; el.style.opacity = (keep === null || keep.includes(k)) ? '' : '.22'; });
+    fig.classList.toggle('wb-is-lit', keep !== null);
+    rows.forEach((r, k) => r.classList.toggle('wb-on', keep !== null && keep.includes(k)));
   };
-  steps.forEach(st => {
-    const rows = st.dataset.rows.split(',').map(Number);
-    st.addEventListener('mouseenter', () => light(rows));
+  document.querySelectorAll('.wb-step').forEach(st => {
+    const keep = st.dataset.rows.split(',').map(Number);
+    st.addEventListener('mouseenter', () => light(keep));
     st.addEventListener('mouseleave', () => light(null));
-    st.addEventListener('focusin', () => light(rows)); st.addEventListener('focusout', () => light(null));
+    st.addEventListener('focusin', () => light(keep)); st.addEventListener('focusout', () => light(null));
     st.tabIndex = 0;
   });
 })();

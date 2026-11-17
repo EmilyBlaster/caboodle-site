@@ -26,13 +26,13 @@
         "role": "neutral",
         "displayName": "Graphite Ink",
         "canonical": "#282828",
-        "tonalRamp": ["#141414", "#1e1e1e", "#282828", "#3e3e3e", "#686868", "#9a9a9a", "#c9c6bf", "#e8e3d8"]
+        "tonalRamp": ["#141414", "#1e1e1e", "#282828", "#3e3e3e", "#686868", "#9a9a9a", "#c9c6bf", "#eff1ec"]
       },
-      "warm-ash-paper": {
+      "tinted-paper": {
         "role": "neutral",
-        "displayName": "Warm Ash Paper",
-        "canonical": "#f2efe8",
-        "tonalRamp": ["#282828", "#4a463d", "#6f6a5d", "#a39d8c", "#d6d3cc", "#e8e3d8", "#f2efe8", "#fbf9f4"]
+        "displayName": "Tinted Paper",
+        "canonical": "#fbfcf9",
+        "tonalRamp": ["#282828", "#4a463d", "#6f6a5d", "#a39d8c", "#d9dcd5", "#eff1ec", "#fbfcf9", "#fbf9f4"]
       }
     },
     "typographyMeta": {
@@ -64,7 +64,7 @@
       "refersTo": "button-primary",
       "description": "The house pill CTA. Graphite at rest, flips to lime on hover.",
       "html": "<button class=\"ds-btn-primary\">start a conversation <svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M4 12h15M13 6l6 6-6 6\"/></svg></button>",
-      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 0.6rem; background: #282828; color: #f2efe8; font-family: 'DM Sans', system-ui, sans-serif; font-weight: 600; font-size: 0.95rem; padding: 0.85rem 1.4rem; border: none; border-radius: 999px; cursor: pointer; transition: background 0.4s cubic-bezier(0.16,1,0.3,1), color 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary svg { transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:hover { background: #96E650; color: #282828; } .ds-btn-primary:hover svg { transform: translateX(4px); } .ds-btn-primary:focus-visible { outline: 2px solid #EC008C; outline-offset: 2px; }"
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 0.6rem; background: #282828; color: #fbfcf9; font-family: 'DM Sans', system-ui, sans-serif; font-weight: 600; font-size: 0.95rem; padding: 0.85rem 1.4rem; border: none; border-radius: 999px; cursor: pointer; transition: background 0.4s cubic-bezier(0.16,1,0.3,1), color 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary svg { transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:hover { background: #96E650; color: #282828; } .ds-btn-primary:hover svg { transform: translateX(4px); } .ds-btn-primary:focus-visible { outline: 2px solid #EC008C; outline-offset: 2px; }"
     },
     {
       "name": "Field Kicker",
@@ -80,7 +80,7 @@
       "refersTo": "input",
       "description": "Square-cornered field on paper; focus shifts border to magenta and lifts to white.",
       "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"or type a question...\" />",
-      "css": ".ds-input { font-family: 'DM Sans', system-ui, sans-serif; font-size: 1rem; color: #282828; background: #f2efe8; border: 1px solid #d6d3cc; border-radius: 0; padding: 0.75rem 0.9rem; width: 100%; transition: border-color 0.3s cubic-bezier(0.16,1,0.3,1), background 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-input::placeholder { color: #686868; opacity: 0.7; } .ds-input:focus { outline: none; border-color: #EC008C; background: #ffffff; }"
+      "css": ".ds-input { font-family: 'DM Sans', system-ui, sans-serif; font-size: 1rem; color: #282828; background: #fbfcf9; border: 1px solid #d9dcd5; border-radius: 0; padding: 0.75rem 0.9rem; width: 100%; transition: border-color 0.3s cubic-bezier(0.16,1,0.3,1), background 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-input::placeholder { color: #686868; opacity: 0.7; } .ds-input:focus { outline: none; border-color: #EC008C; background: #ffffff; }"
     },
     {
       "name": "Dossier Card",
@@ -88,7 +88,7 @@
       "refersTo": "button-primary",
       "description": "A filed engagement: call number, metadata, lowercase Bauhaus title. Lifts on hover.",
       "html": "<a class=\"ds-dossier\"><span class=\"ds-dossier__code\">ENG-INTUIT</span><span class=\"ds-dossier__meta\">intuit &middot; career growth</span><h3 class=\"ds-dossier__title\">ai-powered career growth for 10k+ employees.</h3><span class=\"ds-dossier__cta\">open case file &rarr;</span></a>",
-      "css": ".ds-dossier { display: block; text-decoration: none; background: #f2efe8; border: 1px solid #d6d3cc; border-radius: 10px 10px 3px 10px; padding: 1.6rem; box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 10px 30px -16px rgba(40,40,40,.35); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s cubic-bezier(0.16,1,0.3,1); } .ds-dossier:hover { transform: translateY(-4px); box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 26px 50px -22px rgba(40,40,40,.45); } .ds-dossier__code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: #bc006b; } .ds-dossier__meta { display: block; margin-top: 0.75rem; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: #686868; } .ds-dossier__title { margin: 0.4rem 0 1rem; font-family: 'Bauhaus Bool', Futura, 'Century Gothic', sans-serif; font-weight: 700; font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.05; text-transform: lowercase; letter-spacing: -0.02em; color: #282828; } .ds-dossier__cta { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: #bc006b; }"
+      "css": ".ds-dossier { display: block; text-decoration: none; background: #fbfcf9; border: 1px solid #d9dcd5; border-radius: 10px 10px 3px 10px; padding: 1.6rem; box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 10px 30px -16px rgba(40,40,40,.35); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s cubic-bezier(0.16,1,0.3,1); } .ds-dossier:hover { transform: translateY(-4px); box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 26px 50px -22px rgba(40,40,40,.45); } .ds-dossier__code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: #bc006b; } .ds-dossier__meta { display: block; margin-top: 0.75rem; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: #686868; } .ds-dossier__title { margin: 0.4rem 0 1rem; font-family: 'Bauhaus Bool', Futura, 'Century Gothic', sans-serif; font-weight: 700; font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.05; text-transform: lowercase; letter-spacing: -0.02em; color: #282828; } .ds-dossier__cta { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: #bc006b; }"
     },
     {
       "name": "Nav Link",
@@ -103,14 +103,14 @@
     "northStar": "The Field Journal",
     "overview": "This is the field journal of a learning designer who studies how humans actually change before she designs anything. The page is warm paper, not a screen. Bauhaus Bool sets the display, lowercase and enormous; JetBrains Mono sets the chrome, the field-note stamps and call numbers that prove the work was observed and catalogued. Color is used with discipline: paper and graphite carry the page, and the three brand colors arrive as signal on small percentages of any surface. It rejects generic L&D voice, the AI-hype register, SaaS-cream portfolios, and the hero-metric template.",
     "keyCharacteristics": [
-      "Warm paper ground with tactile grain, never stark white",
+      "Near-white paper ground, tinted toward the lime, with tactile grain; never pure #fff",
       "Bauhaus display, lowercase, oversized; JetBrains Mono for all small chrome",
       "Work catalogued under call numbers, not laid out as cards",
       "Three brand colors as signal, disciplined to small surface percentages",
       "Direct, credibility-forward, slightly edgy; no filler, no jargon"
     ],
     "rules": [
-      { "name": "The Paper Rule", "body": "The page ground is Warm Ash Paper (#f2efe8), never #fff and never pure #000. Every neutral is tinted warm. Pure white appears only as an input's focused state.", "section": "colors" },
+      { "name": "The Paper Rule", "body": "The page ground is Tinted Paper (#fbfcf9), never #fff and never pure #000. Every neutral is tinted a hair toward the lime. Pure white appears only as an input's focused state.", "section": "colors" },
       { "name": "The Small-Magenta Rule", "body": "Bright Editorial Magenta (#EC008C) is for display and true accents only, ~24px and up. Smaller magenta uses Magenta Ink (#BC006B) on light or Magenta Lift (#F24DAF) on dark.", "section": "colors" },
       { "name": "The Signal Rule", "body": "Lime, blue, and magenta are signal, not surface. On any screen they occupy a small percentage; paper and graphite do the structural work.", "section": "colors" },
       { "name": "The Mono-Chrome Rule", "body": "JetBrains Mono is only small editorial chrome: kickers, stamps, codes, captions. Forbidden for display and body copy.", "section": "typography" },
@@ -118,7 +118,7 @@
       { "name": "The Long-Throw Rule", "body": "Shadows are long, soft, and low-opacity with negative spread. Surfaces are flat at rest and lift only on hover or focus.", "section": "elevation" }
     ],
     "dos": [
-      "Do ground every page in Warm Ash Paper (#f2efe8) with the grain layer. Tint every neutral warm.",
+      "Do ground every page in Tinted Paper (#fbfcf9) with the grain layer. Tint every neutral a hair toward the lime.",
       "Do keep JetBrains Mono to small chrome: kickers, stamps, call numbers, captions.",
       "Do set the display lowercase and oversized, and let a lime curtain bar reveal it.",
       "Do file work under call numbers with mono metadata.",
