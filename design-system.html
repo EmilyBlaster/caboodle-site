@@ -31,7 +31,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="preload" as="font" type="font/woff2" href="fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
-<link rel="stylesheet" href="styles.css?v=20261117a" />
+<link rel="stylesheet" href="styles.css?v=20261117b" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
 <style>
@@ -48,7 +48,7 @@
 .dshero__inner { max-width: var(--maxw); margin: 0 auto; position: relative; z-index: 1; }
 .dshero__stamp {
   display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; align-items: baseline;
-  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+  font-family: var(--body); font-size: 0.83rem; letter-spacing: 0; text-transform: lowercase;
   color: rgba(251,252,249,0.6); margin-bottom: 2rem;
 }
 .dshero__stamp b { color: var(--lime); font-weight: 500; }
@@ -61,7 +61,7 @@
 .dshero__lede { max-width: 58ch; font-size: clamp(1.05rem, 1.2vw + 0.7rem, 1.25rem); line-height: 1.5; color: var(--paper); margin: 0 0 2rem; }
 .dshero__toc { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; }
 .dshero__toc a {
-  font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase;
+  font-family: var(--body); font-size: 0.81rem; letter-spacing: 0; text-transform: lowercase;
   color: var(--paper); text-decoration: none;
   padding: 0.4rem 0.8rem; border: 1px solid rgba(251,252,249,0.3); border-radius: var(--r-pill);
   transition: border-color var(--t-micro) var(--ease), color var(--t-micro) var(--ease);
@@ -85,7 +85,7 @@
 .ds--alt .ds__num { color: var(--magenta); }
 .ds--dark .ds__num { color: var(--lime); }
 .ds__kicker {
-  display: inline-block; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase;
+  display: inline-block; font-family: var(--body); font-size: 0.85rem; letter-spacing: 0; text-transform: lowercase;
   color: var(--ink-2); padding-top: 0.6rem; border-top: 2px solid var(--ink); margin-bottom: 1rem;
 }
 .ds--dark .ds__kicker { color: rgba(251,252,249,0.7); border-color: var(--lime); }
@@ -99,7 +99,7 @@
 /* rules (named) */
 .rules { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--ink); }
 .rules li { display: grid; grid-template-columns: minmax(0, 12rem) minmax(0, 1fr); gap: 0.5rem 1.5rem; padding: 1rem 0; border-bottom: 1px dashed var(--rule); }
-.rules b { font-family: var(--mono); font-weight: 500; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; padding-top: 0.3rem; }
+.rules b { font-family: var(--body); font-weight: 500; font-size: 0.83rem; letter-spacing: 0; text-transform: lowercase; padding-top: 0.3rem; }
 .rules span { line-height: 1.5; max-width: 62ch; }
 .ds--dark .rules { border-top-color: rgba(251,252,249,0.4); }
 .ds--dark .rules li { border-bottom-color: rgba(251,252,249,0.2); }
@@ -107,7 +107,7 @@
 /* color table */
 .ctab { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
 .ctab th {
-  text-align: left; font-family: var(--mono); font-weight: 500; font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; font-family: var(--body); font-weight: 500; font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase; color: var(--ink-2);
   padding: 0 0.75rem 0.75rem 0; border-bottom: 1px solid var(--ink);
 }
 .ctab td { padding: 0.9rem 0.75rem 0.9rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
@@ -115,30 +115,30 @@
 .sw__chip { display: block; width: 2.75rem; height: 2.75rem; border-radius: var(--r-sm); border: 1px solid var(--rule); }
 .nm b { display: block; font-family: var(--display); font-weight: 700; font-size: 1.05rem; line-height: 1.1; }
 .nm code { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em; color: var(--ink-2); }
-.rl { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); padding-top: 1.1rem !important; }
+.rl { font-family: var(--body); font-size: 0.81rem; letter-spacing: 0; text-transform: lowercase; color: var(--ink-2); padding-top: 1.1rem !important; }
 .ct { white-space: nowrap; }
-.ct__num { display: block; font-family: var(--mono); font-size: 0.78rem; }
-.ct__badge { display: inline-block; margin-top: 0.3rem; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.15rem 0.45rem; border: 1px solid currentColor; border-radius: var(--r-sm); }
+.ct__num { display: block; font-family: var(--body); font-size: 0.88rem; }
+.ct__badge { display: inline-block; margin-top: 0.3rem; font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase; padding: 0.15rem 0.45rem; border: 1px solid currentColor; border-radius: var(--r-sm); }
 .ct__badge--ok { color: #2f6a12; }
 .ct__badge--warn { color: var(--blue-deep); }
 .ct__badge--bad { color: var(--magenta-ink); }
 .ct__badge--na { color: var(--ink-2); border-style: dashed; }
-.ct--na span { font-family: var(--mono); font-size: 0.66rem; color: var(--ink-2); }
+.ct--na span { font-family: var(--body); font-size: 0.88rem; color: var(--ink-2); }
 .ctab .dsc { padding: 0.9rem 0 0.9rem 0; border-bottom: 1px solid var(--rule); color: var(--ink-2); font-size: 0.88rem; line-height: 1.45; }
 .ctab-wrap { overflow-x: auto; }
-.ctab-note { margin: 1rem 0 0; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; color: var(--ink-2); }
+.ctab-note { margin: 1rem 0 0; font-family: var(--body); font-size: 0.88rem; letter-spacing: 0; color: var(--ink-2); }
 
 /* type specimens */
 .spec { display: grid; gap: 0; border-top: 1px solid var(--ink); }
 .spec__row { display: grid; grid-template-columns: minmax(0, 14rem) minmax(0, 1fr); gap: 1rem 2rem; padding: clamp(1.25rem, 2.5vw, 2rem) 0; border-bottom: 1px solid var(--rule); align-items: center; }
-.spec__meta { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); line-height: 1.7; }
+.spec__meta { font-family: var(--body); font-size: 0.81rem; letter-spacing: 0; text-transform: lowercase; color: var(--ink-2); line-height: 1.7; }
 .spec__meta b { display: block; color: var(--ink); font-weight: 500; font-size: 0.72rem; }
 .spec__display { font-family: var(--display); font-weight: 700; font-size: clamp(3.5rem, 13vw, 11rem); line-height: 0.92; letter-spacing: -0.02em; margin: 0; }
 .spec__display em { font-style: italic; color: var(--magenta); }
 .spec__headline { font-family: var(--display); font-weight: 700; font-size: clamp(1.9rem, 3.8vw, 3.1rem); line-height: 1.1; letter-spacing: -0.01em; margin: 0; }
 .spec__title { font-family: var(--display); font-weight: 700; font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.05; letter-spacing: -0.02em; margin: 0; }
 .spec__body { font-family: var(--body); font-size: 1.1rem; line-height: 1.55; margin: 0; max-width: 58ch; }
-.spec__label { font-family: var(--mono); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; margin: 0; color: var(--ink-2); }
+.spec__label { font-family: var(--body); font-size: 0.83rem; font-weight: 500; letter-spacing: 0; text-transform: lowercase; margin: 0; color: var(--ink-2); }
 .spec__label b { color: var(--ink); font-weight: 500; }
 
 /* elevation */
@@ -185,17 +185,17 @@
   transition: transform var(--t-ui) var(--ease), box-shadow var(--t-ui) var(--ease);
 }
 .ds-dossier:hover, .ds-dossier:focus-visible { transform: translateY(-4px); box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 26px 50px -22px rgba(40,40,40,.45); }
-.ds-dossier__call { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); display: block; margin-bottom: 0.4rem; }
-.ds-dossier__meta { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; color: var(--ink-2); display: block; margin-bottom: 0.6rem; }
+.ds-dossier__call { font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase; color: var(--ink-2); display: block; margin-bottom: 0.4rem; }
+.ds-dossier__meta { font-family: var(--body); font-size: 0.88rem; letter-spacing: 0; color: var(--ink-2); display: block; margin-bottom: 0.6rem; }
 .ds-dossier__h { font-family: var(--display); font-weight: 700; font-size: 1.25rem; line-height: 1.05; letter-spacing: -0.02em; margin: 0; }
 .ds-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; }
-.ds-tags li { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.35rem 0.75rem; border: 1px solid var(--rule); border-radius: var(--r-pill); color: var(--ink-2); }
+.ds-tags li { font-family: var(--body); font-size: 0.85rem; letter-spacing: 0; text-transform: lowercase; padding: 0.35rem 0.75rem; border: 1px solid var(--rule); border-radius: var(--r-pill); color: var(--ink-2); }
 .ds-navlink { position: relative; font-family: var(--body); font-weight: 500; color: var(--ink); text-decoration: none; padding-bottom: 0.15rem; }
 .ds-navlink::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 1px; background: var(--ink); transition: right var(--t-ui) var(--ease); }
 .ds-navlink:hover::after, .ds-navlink:focus-visible::after { right: 0; }
-.ds-stamp { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; }
+.ds-stamp { font-family: var(--body); font-size: 0.81rem; letter-spacing: 0; text-transform: lowercase; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; }
 .ds-stamp b { color: var(--ink); font-weight: 500; }
-.ds-live { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper); }
+.ds-live { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--body); font-size: 0.81rem; letter-spacing: 0; text-transform: lowercase; color: var(--paper); }
 .ds-live i { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 3px rgba(150,230,80,0.25); }
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
@@ -211,10 +211,10 @@
 .dodont { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: clamp(1.5rem, 3vw, 3rem); }
 .dodont ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
 .dodont li { padding: 0.8rem 0; border-bottom: 1px dashed var(--rule); line-height: 1.5; display: grid; grid-template-columns: 1.5rem 1fr; gap: 0.5rem; }
-.dodont li::before { font-family: var(--mono); font-size: 0.72rem; padding-top: 0.2rem; }
+.dodont li::before { font-family: var(--body); font-size: 0.88rem; padding-top: 0.2rem; }
 .dodont--do li::before { content: "✓"; color: #2f6a12; }
 .dodont--dont li::before { content: "✕"; color: var(--magenta-ink); }
-.dodont h3 { margin: 0 0 0.75rem; font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-2); }
+.dodont h3 { margin: 0 0 0.75rem; font-family: var(--body); font-weight: 500; font-size: 0.85rem; letter-spacing: 0; text-transform: lowercase; color: var(--ink-2); }
 
 @media (max-width: 760px) {
   .ds__head { grid-template-columns: 1fr; }
@@ -441,7 +441,7 @@
       <span class="ds__kicker">typography</span>
       <h2 class="ds__h">big statements, <em>quiet argument,</em> precise stamps.</h2>
       <p class="ds__p">
-        A geometric, almost cartoonishly confident display face against a clean humanist sans, with a technical monospace doing all the marginalia. Bauhaus Bool is loaded locally from a .woff. DM Sans and JetBrains Mono come from Google Fonts with system fallbacks.
+        A geometric, almost cartoonishly confident display face against a clean humanist sans, with labels set small and lowercase in the same sans. A monospace appears only inside software mockups. Bauhaus Bool is loaded locally from a .woff. DM Sans and JetBrains Mono come from Google Fonts with system fallbacks.
       </p>
     </div>
   </div>
@@ -463,12 +463,12 @@
       <p class="spec__body">Most training measures completion. I measure change. Before I design anything, I watch what people actually do at work, then map every element back to a decision that matters.</p>
     </div>
     <div class="spec__row">
-      <div class="spec__meta"><b>label · field stamp</b>jetbrains mono 500<br />0.68rem · track 0.14em<br />uppercase · small only<br />kickers, call numbers, captions</div>
+      <div class="spec__meta"><b>label</b>dm sans 500<br />0.83rem · no tracking<br />lowercase · small only<br />kickers, call numbers, captions</div>
       <p class="spec__label">specimen s.003 · <b>ENG-APPLE001</b> · global supplier network · 2024</p>
     </div>
   </div>
   <ul class="rules">
-    <li><b>the mono-chrome rule</b><span>JetBrains Mono is only ever small editorial chrome. It is forbidden for display and body copy. It carries the field-journal voice and loses it the moment it gets large.</span></li>
+    <li><b>the mockup-only mono rule</b><span>JetBrains Mono appears only inside pictures of software: address bars, chat windows, code. Labels, kickers, stamps, and captions are DM Sans, lowercase.</span></li>
     <li><b>the lowercase rule</b><span>The display face and the wordmark are always lowercase. "caboodle design." "design for how humans change." Lowercase is the house voice, not a bug.</span></li>
   </ul>
 </section>
@@ -544,7 +544,7 @@
     </div>
     <div class="comp__item">
       <h3>tags and stamps</h3>
-      <p>Mono pills for stacks and tags. Mono stamp rows for specimen labels. Both are chrome, both stay small.</p>
+      <p>Lowercase pills for stacks and tags. Lowercase stamp rows for specimen labels. Both are chrome, both stay small.</p>
       <div class="comp__stage" style="flex-direction:column;align-items:flex-start">
         <ul class="ds-tags"><li>action mapping</li><li>articulate rise 360</li><li>localization</li></ul>
         <div class="ds-stamp"><span>lab experiment</span><b>LAB-007</b><span>applied ai · 2026</span></div>
@@ -615,9 +615,9 @@
         <h3>do</h3>
         <ul>
           <li>Ground every page in tinted paper with the grain layer. Tint every neutral a hair toward the lime.</li>
-          <li>Keep JetBrains Mono to small chrome: kickers, stamps, call numbers, captions.</li>
+          <li>Keep JetBrains Mono inside software mockups only. Set labels in DM Sans, lowercase.</li>
           <li>Set the display lowercase and oversized, and let a lime curtain bar reveal it.</li>
-          <li>File work under call numbers with mono metadata, the field-journal way.</li>
+          <li>File work under call numbers with small lowercase metadata, the field-journal way.</li>
           <li>Use magenta ink or magenta lift for small magenta text. Reserve bright magenta for display.</li>
           <li>Lift surfaces with long, soft, negative-spread shadows, only on hover or focus.</li>
         </ul>

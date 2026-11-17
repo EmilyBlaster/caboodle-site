@@ -82,8 +82,8 @@ body {
 .controls {
   position: fixed; top: 34px; right: 40px; z-index: 20;
   display: flex; gap: 14px;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.66rem; letter-spacing: 0.08em;
+  font-family: var(--body);
+  font-size: 0.88rem; letter-spacing: 0;
 }
 .controls button {
   font: inherit; color: var(--mid);
@@ -97,13 +97,13 @@ body {
 
 .caption {
   position: fixed; bottom: 34px; left: 40px; z-index: 20;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.66rem; letter-spacing: 0.08em; color: var(--mid);
+  font-family: var(--body);
+  font-size: 0.88rem; letter-spacing: 0; color: var(--mid);
 }
 .concepts {
   position: fixed; bottom: 34px; right: 40px; z-index: 20;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.62rem; letter-spacing: 0.08em; color: #b5b5b5;
+  font-family: var(--body);
+  font-size: 0.88rem; letter-spacing: 0; color: #b5b5b5;
 }
 .concepts a { color: inherit; text-decoration: none; }
 .concepts a:hover, .concepts a.here { color: var(--ink); }
@@ -134,8 +134,8 @@ h1 .w { display: inline-block; }
 .stage__inner { display: grid; justify-items: center; }
 .home {
   margin-top: 34px;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.74rem; letter-spacing: 0.1em; color: var(--ink);
+  font-family: var(--body);
+  font-size: 0.88rem; letter-spacing: 0; color: var(--ink);
   text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 3px;
   pointer-events: auto;   /* the stage swallows input; the link takes it back */
 }

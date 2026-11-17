@@ -19,7 +19,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
-<link rel="stylesheet" href="../styles.css?v=20261117a" />
+<link rel="stylesheet" href="../styles.css?v=20261117b" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 
 <style>
@@ -39,10 +39,10 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--body);
+  font-size: 0.83rem;
+  letter-spacing: 0;
+  text-transform: lowercase;
   color: var(--lime);
   text-decoration: none;
   margin-bottom: 2.5rem;
@@ -54,10 +54,10 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 1.5rem;
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: var(--body);
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  text-transform: lowercase;
   color: rgba(255,255,255,0.3);
   margin-bottom: 2rem;
 }
@@ -102,10 +102,10 @@
   display: flex; flex-wrap: wrap; gap: 0.4rem;
 }
 .labero__tags li {
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--body);
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  text-transform: lowercase;
   padding: 0.3em 0.65em;
   border: 1px solid rgba(255,255,255,0.12);
   color: rgba(255,255,255,0.4);
@@ -138,10 +138,10 @@
 .lab-s--alt { background: var(--paper-2); }
 .lab-s__inner { max-width: var(--maxw); margin: 0 auto; }
 .lab-s__kicker {
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: var(--body);
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  text-transform: lowercase;
   color: var(--magenta);
   display: block;
   margin-bottom: 0.75rem;
@@ -175,8 +175,8 @@
 }
 .lab-fig figcaption {
   margin-top: 0.55rem;
-  font-family: var(--mono);
-  font-size: 0.66rem; letter-spacing: 0.08em;
+  font-family: var(--body);
+  font-size: 0.88rem; letter-spacing: 0;
   color: var(--ink-2);
 }
 
@@ -220,10 +220,10 @@
 /* Tools */
 .tool-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.5rem; }
 .tool-pill {
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--body);
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  text-transform: lowercase;
   padding: 0.3em 0.65em;
   border: 1px solid var(--rule);
   color: var(--ink-2);
@@ -257,7 +257,7 @@
 }
 .demo-frame__expand {
   margin-left: auto; flex-shrink: 0;
-  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase;
   color: var(--lime); text-decoration: none;
   transition: opacity 0.3s var(--ease);
 }
@@ -283,7 +283,7 @@
    format, mono labels, lime only where the bet is. */
 .plate { margin: 2.25rem 0 0; }
 .plate__cap {
-  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase;
   color: var(--ink-2); margin-bottom: 0.9rem;
 }
 .plate__cap b { color: var(--ink); font-weight: 500; margin-right: 0.6rem; }
@@ -303,7 +303,7 @@
 .plate__cell { padding: 0.9rem 0 1.4rem; border-bottom: 1px solid var(--rule); position: relative; }
 .plate__n {
   display: block;
-  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase;
   color: var(--ink-2); margin-bottom: 0.55rem;
 }
 .plate__stage {
@@ -319,7 +319,7 @@
 }
 .plate__leak small {
   display: block; margin-top: 0.35rem;
-  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2);
+  font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase; color: var(--ink-2);
 }
 .plate__cell--bet .plate__leak::before { border-left: 3px solid var(--lime); left: -1px; }
 .plate__cell--bet .plate__leak small { color: var(--ink); }
@@ -330,7 +330,7 @@
 .plate__list { list-style: none; padding: 0 0 0 0.9rem; margin: 0; display: grid; gap: 0.3rem; position: relative; font-size: 0.86rem; line-height: 1.45; color: var(--ink-2); }
 .plate__list::before { content: ''; position: absolute; left: 0; top: 0.2em; bottom: 0.2em; border-left: 1px dotted var(--ink-2); }
 .plate__note {
-  margin: 1rem 0 0; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2);
+  margin: 1rem 0 0; font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase; color: var(--ink-2);
 }
 .plate__note b { color: var(--ink); font-weight: 500; }
 
@@ -344,7 +344,7 @@
 .feature--bet .feature__num { color: var(--lime); }
 .feature__tag {
   position: absolute; top: 1.75rem; right: 1.75rem;
-  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase;
   color: var(--ink); padding: 0.25em 0.55em; border: 1px solid var(--ink);
 }
 
@@ -360,7 +360,7 @@
 @media (max-width: 640px) { .moments { grid-template-columns: minmax(0, 1fr); } }
 .moments figure { margin: 0; }
 .moments img { display: block; width: 100%; max-width: 400px; height: auto; border: 1px solid var(--rule); border-radius: 4px; background: var(--white); }
-.moments figcaption { margin-top: 0.55rem; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); }
+.moments figcaption { margin-top: 0.55rem; font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase; color: var(--ink-2); }
 .moments figcaption b { color: var(--ink); font-weight: 500; margin-right: 0.5rem; }
 </style>
 </head>

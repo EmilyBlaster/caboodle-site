@@ -42,11 +42,11 @@ typography:
     lineHeight: 1.55
     letterSpacing: "normal"
   label:
-    fontFamily: "JetBrains Mono, ui-monospace, monospace"
-    fontSize: "0.68rem"
+    fontFamily: "DM Sans, system-ui, sans-serif"
+    fontSize: "0.83rem"
     fontWeight: 500
     lineHeight: 1.4
-    letterSpacing: "0.14em"
+    letterSpacing: "0"
 rounded:
   sm: "4px"
   card: "10px"
@@ -92,7 +92,7 @@ It explicitly rejects the aesthetics of its neighbors. Not "passionate about lea
 
 **Key Characteristics:**
 - Near-white paper ground, tinted toward the lime, with tactile grain; never pure #fff
-- Bauhaus display, lowercase, oversized; JetBrains Mono for all small chrome
+- Bauhaus display, lowercase, oversized; DM Sans lowercase for all small labels; JetBrains Mono only inside software mockups
 - Work catalogued under call numbers, not laid out as cards
 - Three brand colors as signal, disciplined to small surface percentages
 - Direct, credibility-forward, slightly edgy; no filler, no jargon
@@ -131,19 +131,19 @@ A near-white paper system carrying three high-signal brand colors used sparingly
 
 **Display Font:** Bauhaus Bool 600/700 (with Futura, Century Gothic fallback). Loaded locally from a .woff, not Google Fonts.
 **Body Font:** DM Sans 400-600 (with system-ui fallback).
-**Label/Mono Font:** JetBrains Mono 400-500 (with ui-monospace fallback).
+**Label Font:** DM Sans 500, lowercase. **Mockup Font:** JetBrains Mono 400-500 (with ui-monospace fallback), only inside pictures of software.
 
-**Character:** A geometric, almost cartoonishly confident display face against a clean humanist sans, with a technical monospace doing all the marginalia. The pairing reads as an opinionated designer's notebook: big lettered statements, quiet legible argument, precise field stamps.
+**Character:** A geometric, almost cartoonishly confident display face against a clean humanist sans, with labels set small and lowercase in the same sans. The pairing reads as an opinionated designer's notebook: big lettered statements, quiet legible argument, plain lowercase labels.
 
 ### Hierarchy
 - **Display** (700, clamp(3.5rem, 13vw, 11rem), line-height 0.92, lowercase, -0.02em): Hero headlines only. Oversized, tight, lowercase. Often revealed by a lime curtain bar that lifts away.
 - **Headline** (700, clamp(1.9rem, 3.8vw, 3.1rem), line-height 1.1): Section titles ("engagements. filed and catalogued.").
 - **Title** (700, clamp(1.25rem, 2vw, 1.65rem), line-height 1.05, lowercase): Card and dossier names, specimen headings.
 - **Body** (400-500, ~1.1rem, line-height 1.55): Running text. Capped at 54-75ch. `text-wrap: pretty` on paragraphs, `balance` on headings.
-- **Label** (500, 0.68rem, letter-spacing 0.14em, UPPERCASE): Mono kickers, field-note stamps, call numbers, captions, timestamps. The field-journal chrome.
+- **Label** (DM Sans 500, 0.8 to 0.88rem, no letter-spacing, lowercase): kickers, stamps, call numbers, captions, timestamps.
 
 ### Named Rules
-**The Mono-Chrome Rule.** JetBrains Mono is only ever small editorial chrome: kickers, metadata stamps, codes, captions, field-journal labels. It is forbidden for display and body copy. It carries the anthropology-field-journal voice and loses it the moment it gets large.
+**The Mockup-Only Mono Rule.** JetBrains Mono appears only inside pictures of software: address bars, chat windows, code. Labels, kickers, stamps, and captions are DM Sans, lowercase (changed November 2026).
 
 **The Lowercase Rule.** The display face and the brand wordmark are always lowercase. "caboodle design", "ai rollouts that humans actually adopt." Lowercase is the house voice, not a bug.
 
@@ -190,9 +190,9 @@ A dark-ground stage (#282828) holding operable specimens on a tab switcher. Each
 
 ### Do:
 - **Do** ground every page in Tinted Paper (#fbfcf9) with the grain layer. Tint every neutral a hair toward the lime.
-- **Do** keep JetBrains Mono to small chrome: kickers, stamps, call numbers, captions.
+- **Do** keep JetBrains Mono inside software mockups only. Set labels in DM Sans, lowercase.
 - **Do** set the display lowercase and oversized, and let a lime curtain bar reveal it.
-- **Do** file work under call numbers with mono metadata, the field-journal way.
+- **Do** file work under call numbers with small lowercase metadata, the field-journal way.
 - **Do** use Magenta Ink (#BC006B) / Magenta Lift (#F24DAF) for small magenta text; reserve bright #EC008C for display.
 - **Do** lift surfaces with long, soft, negative-spread shadows, only on hover or focus.
 

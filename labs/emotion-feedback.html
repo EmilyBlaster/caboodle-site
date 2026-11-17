@@ -19,7 +19,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-ExtraBold.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/BauhausBoolDisplay-Bold.woff2" crossorigin />
-<link rel="stylesheet" href="../styles.css?v=20261117a" />
+<link rel="stylesheet" href="../styles.css?v=20261117b" />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 
 <style>
@@ -31,15 +31,15 @@
 }
 .labero__back {
   display: inline-flex; align-items: center; gap: 0.5rem;
-  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: var(--body); font-size: 0.83rem; letter-spacing: 0; text-transform: lowercase;
   color: var(--lime); text-decoration: none; margin-bottom: 2.5rem;
   transition: gap 0.3s var(--ease), opacity 0.3s var(--ease), color var(--t-micro) var(--ease); opacity: 0.85;
 }
 .labero__back:hover, .labero__back:focus-visible { gap: 0.8rem; opacity: 1; color: var(--link-hover); }
 .labero__stamp {
   display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem;
-  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em;
-  text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 2rem;
+  font-family: var(--body); font-size: 0.8rem; letter-spacing: 0;
+  text-transform: lowercase; color: rgba(255,255,255,0.3); margin-bottom: 2rem;
 }
 .labero__stamp b { color: var(--lime); font-weight: 500; }
 .labero__watermark {
@@ -61,8 +61,8 @@
 }
 .labero__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .labero__tags li {
-  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em;
-  text-transform: uppercase; padding: 0.3em 0.65em;
+  font-family: var(--body); font-size: 0.8rem; letter-spacing: 0;
+  text-transform: lowercase; padding: 0.3em 0.65em;
   border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.4);
 }
 
@@ -70,7 +70,7 @@
 .lab-s { padding: clamp(3.5rem, 7vw, 5.5rem) var(--pad-x); background: var(--paper); border-top: 1px solid var(--rule); }
 .lab-s--alt { background: var(--paper-2); }
 .lab-s__inner { max-width: var(--maxw); margin: 0 auto; }
-.lab-s__kicker { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--magenta); display: block; margin-bottom: 0.75rem; }
+.lab-s__kicker { font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase; color: var(--magenta); display: block; margin-bottom: 0.75rem; }
 .lab-s__h { font-family: var(--display); font-weight: 700; font-size: clamp(1.6rem, 2.8vw, 2.4rem); letter-spacing: -0.03em; text-transform: lowercase; line-height: 1.05; margin: 0 0 0.75rem; }
 .lab-s__h em { font-style: italic; }
 .lab-s__p { max-width: 60ch; line-height: 1.65; color: var(--ink-2); margin: 0 0 2rem; }
@@ -90,8 +90,8 @@
 /* Scenario tabs */
 .scenario-tabs { display: flex; gap: 0; border: 1px solid var(--rule); margin-bottom: 2rem; }
 .scenario-tab {
-  flex: 1; padding: 0.7rem 1rem; font-family: var(--mono); font-size: 0.62rem;
-  letter-spacing: 0.08em; text-transform: uppercase; background: var(--paper-2);
+  flex: 1; padding: 0.7rem 1rem; font-family: var(--body); font-size: 0.8rem;
+  letter-spacing: 0; text-transform: lowercase; background: var(--paper-2);
   border: none; border-right: 1px solid var(--rule); cursor: pointer; color: var(--ink-2);
   transition: background 0.2s var(--ease), color 0.2s var(--ease);
 }
@@ -106,7 +106,7 @@
 }
 
 /* Textarea */
-.demo-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); display: block; margin-bottom: 0.5rem; }
+.demo-label { font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase; color: var(--ink-2); display: block; margin-bottom: 0.5rem; }
 .demo-textarea {
   width: 100%; min-height: 100px; padding: 0.85rem 1rem;
   font-family: var(--body); font-size: 0.9rem; line-height: 1.55;
@@ -119,7 +119,7 @@
 /* Slider section */
 .slider-wrap { margin-bottom: 2rem; }
 .slider-labels { display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
-.slider-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+.slider-label { font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase; color: var(--ink-2); }
 .emotion-track {
   position: relative; height: 8px;
   background: linear-gradient(to right, #EC008C 0%, #EC008C 33%, #03599B 33%, #03599B 66%, #96E650 66%, #96E650 100%);
@@ -135,16 +135,16 @@
   border: 2px solid var(--ink); pointer-events: none; transition: left var(--t-micro) var(--ease);
 }
 .slider-zone-label {
-  text-align: center; font-family: var(--mono); font-size: 0.62rem;
-  letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+  text-align: center; font-family: var(--body); font-size: 0.8rem;
+  letter-spacing: 0; text-transform: lowercase; font-weight: 600;
   transition: color var(--t-micro) var(--ease);
 }
 
 /* Submit */
 .demo-submit {
   display: inline-flex; align-items: center; gap: 0.6rem;
-  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em;
-  text-transform: uppercase; padding: 0.75em 1.5em;
+  font-family: var(--body); font-size: 0.83rem; letter-spacing: 0;
+  text-transform: lowercase; padding: 0.75em 1.5em;
   background: var(--ink); color: var(--lime); border: none; cursor: pointer;
   transition: background 0.2s var(--ease), transform 0.2s var(--ease);
   margin-bottom: 2.5rem;
@@ -161,7 +161,7 @@
 }
 .result-card--active { background: var(--white); }
 .result-card__state {
-  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+  font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase;
   display: block; margin-bottom: 0.75rem; font-weight: 600;
 }
 .result-card--distressed .result-card__state { color: var(--magenta); }
@@ -184,12 +184,12 @@
 .result-card--confident .result-card__highlight { border-color: var(--lime); }
 .results-empty {
   grid-column: 1 / -1; padding: 2.5rem; text-align: center;
-  font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--rule); background: var(--paper);
+  font-family: var(--body); font-size: 0.8rem; letter-spacing: 0;
+  text-transform: lowercase; color: var(--rule); background: var(--paper);
 }
 
 /* Reset link */
-.demo-reset { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); cursor: pointer; background: none; border: none; padding: 0; text-decoration: underline; text-underline-offset: 3px; }
+.demo-reset { font-family: var(--body); font-size: 0.8rem; letter-spacing: 0; text-transform: lowercase; color: var(--ink-2); cursor: pointer; background: none; border: none; padding: 0; text-decoration: underline; text-underline-offset: 3px; }
 .demo-reset:hover { color: var(--ink); }
 
 /* Desperation notice */
