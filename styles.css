@@ -1999,8 +1999,13 @@ body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
 .dossier--panel:has(> .dossier__cover):last-child {
   border-bottom: 1px solid var(--rule);
 }
-.dossier--panel:has(> .dossier__cover):hover {
-  background: rgba(40, 40, 40, 0.02);
+/* Rows have no side padding, so the card lift and shadow made the text look
+   cut off at the edges. A row stays flat; the thumbnail lift and the code color are the hover. */
+.dossier--panel:has(> .dossier__cover):hover,
+.dossier--panel:has(> .dossier__cover):focus-visible {
+  background: transparent;
+  transform: none;
+  box-shadow: none;
 }
 
 /* Uniform cover thumbnail (overrides the absolute v1 cover) */
