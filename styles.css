@@ -242,13 +242,28 @@ em { font-style: italic; color: var(--blue); }
 .cd-logo__mark { fill: var(--logo-mark); }
 .cd-logo__word { fill: var(--logo-word); }
 
+/* The name mark (Nov 2026): the header is Emily's name set in the display face,
+   closed with the same magenta period the headlines use. No symbol. */
+.cd-name {
+  font-family: var(--display); font-weight: 700; font-size: 1.4rem; line-height: 1;
+  letter-spacing: -0.02em; text-transform: lowercase; white-space: nowrap; color: var(--ink);
+  transition: color 0.6s var(--ease);
+}
+.cd-name__dot { color: var(--magenta); }
+body:has(.labero) .nav:not(.is-scrolled):not(.is-open) .cd-name { color: var(--white); }
+/* same for the phone menu icon, which was dark on the dark lab heroes */
+body:has(.labero) .nav:not(.is-scrolled):not(.is-open) .nav__toggle span,
+body:has(.labero) .nav:not(.is-scrolled):not(.is-open) .nav__toggle span::before,
+body:has(.labero) .nav:not(.is-scrolled):not(.is-open) .nav__toggle span::after { background: var(--white); }
+@media (max-width: 760px) { .cd-name { font-size: 1.25rem; } }
+
 /* On dark-hero pages, keep wordmark white until the nav frosts on scroll */
 body:has(.labero) .nav:not(.is-scrolled) .cd-logo {
   --logo-word: var(--white);
 }
 /* ...and light the nav links too, so they aren't dark-on-dark over the dark
    page. When scrolled, the nav frosts to light and links revert to ink. */
-body:has(.labero) .nav:not(.is-scrolled) .nav__links a:not(.nav__cta) {
+body:has(.labero) .nav:not(.is-scrolled):not(.is-open) .nav__links a:not(.nav__cta) {
   color: var(--white);
 }
 
